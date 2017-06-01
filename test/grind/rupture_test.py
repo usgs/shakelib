@@ -10,6 +10,11 @@ import io
 import numpy as np
 import pytest
 from impactutils.io.cmd import get_command_output
+import shapely
+from openquake.hazardlib.geo.geodetic import azimuth
+from openquake.hazardlib.geo.utils import get_orthographic_projection
+from shapely.geometry.polygon import Polygon
+from shapely.geometry.point import Point
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
@@ -80,6 +85,30 @@ def test_QuadRupture():
     np.testing.assert_allclose(rupj.lons, rupt.lons, atol=1e-5)
     np.testing.assert_allclose(rupj._depth, rupt._depth, atol=1e-5)
 
+def test_single_quad_rupture_depth():
+    DIP = 17.0
+    WIDTH = 20.0
+    #xp0 = np.array([118.3,118.6])
+    #xp1 = np.array([118.6,118.9])
+    xp0 = np.array([118.3])
+    xp1 = np.array([118.3])
+    yp0 = np.array([34.2])
+    yp1 = np.array([34.5])
+    zp = np.zeros(xp0.shape)
+    strike = azimuth(xp0[0],yp0[0],xp1[-1],yp1[-1])
+    widths = np.ones(xp0.shape)*WIDTH
+    dips = np.ones(xp0.shape)*DIP
+    strike = [strike]
+    origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
+    rupture = QuadRupture.fromTrace(xp0,yp0,xp1,yp1,zp,widths,dips,origin,strike=strike)
+    lat = np.mean([yp1[-1],yp0[0]]) #halfway up
+    xhalf_distance = np.cos(np.radians(DIP))*(WIDTH/2.0)
+    lon = xp0[0] + xhalf_distance * (1/(111 * np.cos(np.radians(lat))))
+
+    depth_check = np.sin(np.radians(DIP))*(WIDTH/2.0)
+    depth = rupture.getDepthAtPoint(lat,lon)
+    np.testing.assert_almost_equal(depth,depth_check,decimal=2)
+    
 def test_slip():
     # Rupture requires an origin even when not used:
     origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
@@ -313,11 +342,12 @@ def test_fromTrace():
 
 
 if __name__ == "__main__":
-     test_EdgeRupture()
-     test_QuadRupture()
-     test_slip()
-     test_northridge()
-     test_parse_complicated_rupture()
-     test_incorrect()
-     test_fromTrace()
-    
+    test_single_quad_rupture_depth()
+    test_EdgeRupture()
+    test_QuadRupture()
+    test_slip()
+    test_northridge()
+    test_parse_complicated_rupture()
+    test_incorrect()
+    test_fromTrace()
+     

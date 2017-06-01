@@ -1835,7 +1835,78 @@ class QuadRupture(Rupture):
 
 #        return cls(d, origin)
 
+    def getDepthAtPoint(self,lat,lon):
+        SMALL_DISTANCE = 2e-03 #2 meters
+        depth = np.nan
+        
+        if self.computeRjb(np.array([lon]),np.array([lat]),np.array([0])) > SMALL_DISTANCE:
+            return depth
 
+        i = 0
+        imin = -1
+        dmin = 9999999999999999
+        for quad in self.getQuadrilaterals():
+            pX = Vector.fromPoint(Point(lon,lat,0))
+            points = np.reshape(np.array([pX.x,pX.y,pX.z]),(1,3))
+            rjb = _quad_distance(quad,points,horizontal=True)
+            if rjb[0][0] < dmin:
+                dmin = rjb[0][0]
+                imin = i
+            i += 1
+
+        quad = self._quadrilaterals[imin]
+        P0,P1,P2,P3 = quad
+        #project the quad and the point in question to orthographic defined by quad
+        xmin = np.min([P0.x,P1.x,P2.x,P3.x])
+        xmax = np.max([P0.x,P1.x,P2.x,P3.x])
+        ymin = np.min([P0.y,P1.y,P2.y,P3.y])
+        ymax = np.max([P0.y,P1.y,P2.y,P3.y])
+        proj = get_orthographic_projection(xmin,xmax,ymax,ymin)
+
+        #project each vertex of quad (at 0 depth)
+        s0x,s0y = proj(P0.x,P0.y)
+        s1x,s1y = proj(P1.x,P1.y)
+        s2x,s2y = proj(P2.x,P2.y)
+        s3x,s3y = proj(P3.x,P3.y)
+        sxx,sxy = proj(lon,lat)
+
+        #turn these to vectors
+        s0 = Vector(s0x,s0y,0)
+        s1 = Vector(s1x,s1y,0)
+        s2 = Vector(s2x,s2y,0)
+        s3 = Vector(s3x,s3y,0)
+        sx = Vector(sxx,sxy,0)
+
+        #Compute vector from s0 to s1
+        s0s1 = s1 - s0
+        #Compute the vector from s0 to s3
+        s0s3 = s3 - s0
+        #Compute the vector from s0 to sx
+        s0sx = sx - s0
+
+        #cross products
+        s0normal = s0s3.cross(s0s1)
+        dd = s0s1.cross(s0normal)
+        #normalize dd (down dip direction)
+        ddn = dd.norm()
+        #dot product
+        sxdd = ddn.dot(s0sx)
+
+        #get width of quad
+        w = get_quad_width(quad)
+
+        #Get weights for top and bottom edge depths
+        N = get_quad_normal(quad)
+        V = get_vertical_vector(quad)
+        dip = np.degrees(np.arccos(Vector.dot(N, V)))
+        ws = (w * np.cos(np.radians(dip)))
+        wtt = (ws-sxdd)/ws
+        wtb = sxdd/ws
+
+        # #Compute the depth of of the plane at Px:
+        depth = wtt * P0.z + wtb * P3.z * 1000
+
+        return depth
 
     def getLength(self):
         """
@@ -2622,7 +2693,7 @@ class QuadRupture(Rupture):
             S2.depth = 0.0
             S3.depth = 0.0
             squad = [S0, S1, S2, S3]
-            rjbdist = _quad_distance(squad, sites_ecef)
+            rjbdist = _quad_distance(squad, sites_ecef,horizontal=True)
             minrjb = np.minimum(minrjb, rjbdist)
 
         minrjb = minrjb.reshape(oldshape)
@@ -3298,7 +3369,7 @@ def get_vertical_vector(q):
     v1 = (p1 - p0).norm()
     return v1
 
-def _quad_distance(q, points):
+def _quad_distance(q, points,horizontal=False):
     """
     Calculate the shortest distance from a set of points to a rupture surface.
 
@@ -3306,6 +3377,7 @@ def _quad_distance(q, points):
         q (list): A quadrilateral; list of four points.
         points (array): Numpy array Nx3 of points (ECEF) to calculate distance 
             from.
+        horizontal:  Boolean indicating whether to treat points inside quad as 0 distance.
 
     Returns:
         float: Array of size N of distances (in km) from input points to rupture
@@ -3313,6 +3385,13 @@ def _quad_distance(q, points):
     """
     P0, P1, P2, P3 = q
 
+    if horizontal:
+        #project this quad to the surface
+        P0 = Point(P0.x,P0.y,0)
+        P1 = Point(P1.x,P1.y,0)
+        P2 = Point(P2.x,P2.y,0)
+        P3 = Point(P3.x,P3.y,0)
+    
     # Convert to ecef
     p0 = Vector.fromPoint(P0)
     p1 = Vector.fromPoint(P1)
@@ -3341,8 +3420,11 @@ def _quad_distance(q, points):
     sgn3 = np.signbit(np.sum(n3 * p3d, axis=1))
 
     inside_idx = (sgn0 == sgn1) & (sgn1 == sgn2) & (sgn2 == sgn3)
-    dist[inside_idx] = np.power(np.abs(
-        np.sum(p0d[inside_idx, :] * normalVector.getArray(), axis=1)), 2)
+    if horizontal:
+        dist[inside_idx] = 0.0
+    else:
+        dist[inside_idx] = np.power(np.abs(
+            np.sum(p0d[inside_idx, :] * normalVector.getArray(), axis=1)), 2)
 
     outside_idx = np.logical_not(inside_idx)
     s0 = _distance_sq_to_segment(p0d, p1d)

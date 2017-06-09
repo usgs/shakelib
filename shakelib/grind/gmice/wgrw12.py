@@ -70,6 +70,8 @@ class WGRW12(object):
         SA
     ])
 
+    DEFINED_FOR_SA_PERIODS = set([0.3, 1.0, 3.0])
+
     def getMIfromGM(self, amps, imt, dists=None, mag=None):
         """
         Function to compute macroseismic intensity from ground-motion
@@ -167,10 +169,12 @@ class WGRW12(object):
 
         Returns:
             Ndarray of ground motion intensity in natural log of g for PGA
-            and PSA, and natural log cm/s for PGV;
+            and PSA, and natural log cm/s for PGV; ndarray of dln(amp) / dMMI 
+            (i.e., the slope of the relationship at the point in question).
         """
         lfact = np.log10(np.e)
         c, c2 = self.__getConsts(imt)
+        mmi = mmi.copy()
 
         if dists is not None and mag is not None:
             doresid = True

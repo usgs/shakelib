@@ -1,4 +1,5 @@
 import numpy as np
+import numexpr as ne
 
 
 class GodaAtkinson2010(object):
@@ -82,9 +83,14 @@ class GodaAtkinson2010(object):
             beta = 0.319
             gamma = 5.0
             pass
-        cor = np.sqrt(1.0 - np.maximum(gamma *
-                                       np.exp(-1.0 * alpha *
-                                              np.power(dists, beta)) -
-                                       gamma + 1,
-                                       0))
-        return cor
+        nal = -1.0 * alpha
+        gm1 = gamma - 1.0
+#        cor = 1.0 - np.sqrt(1.0 - np.maximum(
+#                gamma * np.exp(nal * np.power(dists, beta)) - gm1, 
+#                0))
+#        tmp = ne.evaluate("gamma * exp(nal * dists**beta) - gm1")
+#        tmp[tmp < 0] = 0
+#        cor = ne.evaluate("1.0 - sqrt(1.0 - tmp)")
+        cor = ne.evaluate("1.0 - sqrt(1.0 - (gamma * exp(nal * dists**beta) - gm1))")
+#        cor[cor < 0] = 0
+        return np.clip(cor, 0, 1)

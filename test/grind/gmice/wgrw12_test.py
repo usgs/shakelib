@@ -101,16 +101,17 @@ def test_wgrw12():
 
     amps, dadm = gmice.getGMfromMI(mmi_in, SA(3.0), dists=None, mag=5.0)
     amps_target = np.log(np.array(
-      [  7.84170397e-03,   4.01844000e-02,   2.87579777e-01,
-         1.59413407e+00,   4.95042961e+00,   1.33312946e+01,
-         2.45840289e+01]) / 100.0)
+        [  2.89282689e-03,   2.07025242e-02,   1.48157675e-01,
+           1.01936799e+00,   2.55271358e+00,   5.92175716e+00,
+           1.09202184e+01]) / 100.0)
     np.testing.assert_allclose(amps, amps_target)
     assert((set(dadm) - dadm_target[SA(3.0)]) == set())
 
     amps, dadm = gmice.getGMfromMI(mmi_in, PGA(), dists=None, mag=7.0)
     amps_target = np.log(np.array(
-      [  0.30003924,   1.03002347,   4.10133824,   8.91444065,
-        22.40984121,  50.16909188,  82.53771776]) / 100.0)
+        [  0.14134045,   0.6243495 ,   2.75796695,   6.19604804,
+           13.07492182,  25.92605261,  42.65329774]) / 100.0)
+    print(repr(100 * np.exp(amps)))
     np.testing.assert_allclose(amps, amps_target)
     assert((set(dadm) - dadm_target[PGA()]) == set())
 

@@ -19,20 +19,20 @@ class Boore2003(object):
         `[link] <http://www.bssaonline.org/content/93/6/2737.short>`__
     """
     @staticmethod
-    def getSpatialCorrelation(dists, imt=PGA()):
+    def getSpatialCorrelation(dists, imt='PGA'):
         """
         Method for evalulating spatial correlation model. 
 
         :param dists: 
             Numpy array of distances (km).
-        :param imt: 
-            Openquake intensity measure type instance. 
+        :param imt (string): 
+            Openquake intensity measure type instance string. 
             `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`__
             This model was developed specifically for PGA, and so this is the
             default value.
         :returns: 
             Numpy array of correlation values. 
         """
-        if imt != PGA():
+        if imt != 'PGA':
             raise Exception('PGA is the only supported IMT.')
-        return 1.0 - np.exp(-1.0 * np.sqrt(0.6 * dists))
+        return np.exp(-1.0 * np.sqrt(0.6 * dists))

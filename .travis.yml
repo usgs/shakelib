@@ -19,7 +19,7 @@ install:
     - conda update -q conda
     - conda info -a
     - bash setup_env.sh
-    - source activate shake
+    - source activate shakelib2
     #---------------------
     # Install shakelib
     #---------------------
@@ -32,6 +32,8 @@ before_script:
 script:
     - export PYTHONPATH="."
     - py.test --cov=shakelib
+    - echo `sphinx-build --version`
+
 after_success:
     - pip install codecov codacy-coverage
     - codecov

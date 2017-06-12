@@ -26,7 +26,7 @@ TABLES = {'station':
            'instrumented': 'int'},
           'imt':
           {'id': 'integer primary key',
-           'type': 'str'},
+           'imt_type': 'str'},
           'amp':
           {'id': 'integer primary key',
            'station_id': 'int',
@@ -91,7 +91,8 @@ class StationList(object):
 
     """
 
-    def __init__(self, dbfile):
+    #TODO - modify this so it takes a sqlite connection object??
+    def __init__(self, db):
         """
         The default constructor reads a pre-built SQLite database of
         station data.
@@ -106,14 +107,14 @@ class StationList(object):
 
         """
         self.IMT_TYPES = {}
-
-        self.db = sqlite3.connect(dbfile)
+        self.db = db
         self.cursor = self.db.cursor()
+        
 
         #
         # Fill in the IMT type lists/dicts
         #
-        query = 'SELECT id, type FROM imt'
+        query = 'SELECT id, imt_type FROM imt'
         self.cursor.execute(query)
         imt_rows = self.cursor.fetchall()
 
@@ -131,6 +132,20 @@ class StationList(object):
         #
         self.IMT_TYPES_ORDERED = OrderedDict(sorted(self.IMT_TYPES.items(), key=imt_sort))
 
+    @classmethod
+    def loadFromDBFile(self,dbfile):
+        """
+        Create a StationList object by reading a SQLite database file.
+
+        Args:
+            dbfile (string):
+                Path to a file which contains a SQLite database with station data.
+
+        Returns:
+            :class:`StationList` object
+        """
+        db = sqlite3.connect(dbfile)
+        return cls(db)
 
     def __len__(self):
         """
@@ -148,51 +163,6 @@ class StationList(object):
         self.db.commit()
         self.cursor.close()
         self.db.close()
-
-
-    @classmethod
-    def fromXML(cls, xmlfiles, dbfile, origin, sites, rupture):
-        """
-        Create a StationList object by reading one or more ShakeMap XML
-        input files and populate database tables with derived MMI/PGM
-        values and distances. This is a convenience method that calls
-        :meth:`loadFromXML` and :meth:`fillTables`.
-
-        Args:
-            xmlfiles (sequence of strings):
-                Sequence of ShakeMap XML input files to read.
-            dbfile (string):
-                Path to a file into which to write the SQLite database. If
-                the file exists, it will first be deleted.
-            origin:
-                ShakeMap Origin object containing information about the
-                origin and source of the earthquake.
-            sites:
-                ShakeMap Sites object containing grid of Vs30 values for the
-                region in question.
-            rupture:
-                ShakeMap Rupture object.
-
-        Returns:
-            :class:`StationList` object
-        """
-
-        #
-        # We're creating a new database from the XML inputs, so
-        # delete the existing dbfile if it exsits (yes, I can imagine
-        # use cases where you might want to add to an existing
-        # database, but we don't support that because our indexing
-        # scheme doesn't currently allow it.)
-        #
-        try:
-            os.remove(dbfile)
-        except OSError:
-            pass
-
-        this = cls.loadFromXML(xmlfiles, dbfile)
-        this.fillTables(origin, sites, rupture)
-        return this
-
 
     @classmethod
     def loadFromXML(cls, xmlfiles, dbfile):
@@ -243,7 +213,7 @@ class StationList(object):
         sorted_imtset = sorted(list(imtset), key=imt_sort)
         cls._createTables(db, cursor, sorted_imtset)
 
-        query = 'SELECT id, type FROM imt'
+        query = 'SELECT id, imt_type FROM imt'
         cursor.execute(query)
         imt_rows = cursor.fetchall()
 
@@ -310,80 +280,7 @@ class StationList(object):
             )
         db.commit()
         cursor.close()
-        db.close()
-        return cls(dbfile)
-
-
-    def fillTables(self, origin, sites, rupture):
-        """
-        Populate database tables with derived MMI/PGM values and distances.
-        This method should be called after :meth:`loadFromXML`.
-
-        Args:
-            origin:
-                ShakeMap Origin object containing information about the
-                origin and source of the earthquake.
-            sites:
-                ShakeMap Sites object containing grid of Vs30 values for the
-                region in question.
-            rupture:
-                ShakeMap Rupture object.
-
-        Returns:
-            nothing
-        """
-        emag = origin.mag
-        #
-        # Get a list of stations
-        #
-        query = 'SELECT id, lat, lon, code, network FROM station'
-        self.cursor.execute(query)
-        station_rows = self.cursor.fetchall()
-
-        #
-        # Do the distances for all of the stations
-        #
-        nrows = len(station_rows)
-        lats = np.empty((nrows))
-        lons = np.empty((nrows))
-        depths = np.zeros((nrows))
-        for irow, row in enumerate(station_rows):
-            lats[irow] = row[1]
-            lons[irow] = row[2]
-        ddict = get_distance(DISTANCES, lats, lons, depths, rupture)
-        dist_rows = []
-        for irow, row in enumerate(station_rows):
-            dist_rows.append(
-                    tuple(ddict[dt][irow] for dt in DISTANCES) +
-                    (row[0],)
-                )
-
-        query = 'UPDATE station set '
-        for dt in DISTANCES:
-            query += dt + '=?'
-            if dt == DISTANCES[-1]:
-                query += ' '
-            else:
-                query += ', '
-        query += 'WHERE id=?'
-        self.cursor.executemany(query, dist_rows)
-        self.db.commit()
-
-        #
-        # store the Vs30 for each station
-        #
-        lldict = {'lats': lats, 'lons': lons}
-        sx_soil = sites.getSitesContext(lldict)
-
-        vs30_rows = []
-        for irow, row in enumerate(station_rows):
-            vs30_rows.append((sx_soil.vs30[irow], row[0]))
-
-        self.cursor.executemany(
-                'UPDATE station SET vs30=? WHERE id=?', vs30_rows)
-
-        self.db.commit()
-
+        return cls(db)
 
     def getStationDataframe(self, instrumented, sort=False):
         """
@@ -624,6 +521,14 @@ class StationList(object):
                 break
         stations = root.getElementsByTagName('station')
         for station in stations:
+
+            #look at the station attributes to figure out if this is a DYFI-type station
+            #or a station with instruments measuring PGA, PGV, etc.
+            netid = station.getAttribute('netid')
+            instrumented = True
+            if netid.lower() in CIIM_TUPLE:
+                instrumented = False
+                
             code = station.getAttribute('code')
             attributes = StationList._getStationAttributes(station)
             comps = station.getElementsByTagName('comp')
@@ -646,9 +551,11 @@ class StationList(object):
                 # our growing dictionary
                 compdict[compname] = copy.deepcopy(pgmdict)
                 imtset |= ims
-            if 'intensity' in attributes:
-                compdict['mmi']['MMI'] = {
-                    'value': attributes['intensity'], 'flag': '0'}
+            if 'intensity' in attributes and not instrumented:
+                if 'mmi' not in compdict:
+                    compdict['mmi'] = {}
+                compdict['mmi']['MMI'] = {'value': attributes['intensity'],
+                                          'flag': '0'}
                 imtset.add('MMI')
             stationdict[code] = (attributes, copy.deepcopy(compdict))
         dom.unlink()
@@ -678,7 +585,7 @@ class StationList(object):
         rows = []
         for imt_id, imt_type in enumerate(imtset):
             rows.append((imt_id, imt_type))
-        cursor.executemany('INSERT INTO imt (id, type) VALUES (?, ?)',
+        cursor.executemany('INSERT INTO imt (id, imt_type) VALUES (?, ?)',
                 rows)
 
         # Soil types

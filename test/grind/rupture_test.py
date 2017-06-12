@@ -15,6 +15,8 @@ from openquake.hazardlib.geo.geodetic import azimuth
 from openquake.hazardlib.geo.utils import get_orthographic_projection
 from shapely.geometry.polygon import Polygon
 from shapely.geometry.point import Point
+from mapio.geodict import GeoDict
+import matplotlib.pyplot as plt
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
@@ -85,29 +87,100 @@ def test_QuadRupture():
     np.testing.assert_allclose(rupj.lons, rupt.lons, atol=1e-5)
     np.testing.assert_allclose(rupj._depth, rupt._depth, atol=1e-5)
 
-def test_single_quad_rupture_depth():
+def test_rupture_depth(interactive=False):
     DIP = 17.0
     WIDTH = 20.0
-    #xp0 = np.array([118.3,118.6])
-    #xp1 = np.array([118.6,118.9])
-    xp0 = np.array([118.3])
-    xp1 = np.array([118.3])
-    yp0 = np.array([34.2])
-    yp1 = np.array([34.5])
-    zp = np.zeros(xp0.shape)
-    strike = azimuth(xp0[0],yp0[0],xp1[-1],yp1[-1])
-    widths = np.ones(xp0.shape)*WIDTH
-    dips = np.ones(xp0.shape)*DIP
-    strike = [strike]
-    origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
-    rupture = QuadRupture.fromTrace(xp0,yp0,xp1,yp1,zp,widths,dips,origin,strike=strike)
-    lat = np.mean([yp1[-1],yp0[0]]) #halfway up
-    xhalf_distance = np.cos(np.radians(DIP))*(WIDTH/2.0)
-    lon = xp0[0] + xhalf_distance * (1/(111 * np.cos(np.radians(lat))))
+    GRIDRES = 0.1
 
-    depth_check = np.sin(np.radians(DIP))*(WIDTH/2.0)
-    depth = rupture.getDepthAtPoint(lat,lon)
-    np.testing.assert_almost_equal(depth,depth_check,decimal=2)
+    names = ['single','double','triple','concave','concave_simple','ANrvSA']
+    means = [3.0432719757967366,2.9973065932960385,2.965574077004633,2.79709300533401,2.9298856907070698]
+    stds = [1.638002652682061,1.7042373071141805,1.6818708593632576,1.7144371661600866,1.735985955287318]
+    xp0list = [np.array([118.3]),
+               np.array([10.1,10.1]),
+               np.array([10.1,10.1,10.3]),
+               np.array([10.9,10.5,10.9]),
+               np.array([10.9,10.6]),
+               np.array([-76.483, -76.626, -76.757, -76.99 , -77.024, -76.925, -76.65 ,
+       -76.321, -75.997, -75.958])]
+    xp1list = [np.array([118.3]),
+               np.array([10.1,10.3]),
+               np.array([10.1,10.3,10.1]),
+               np.array([10.5,10.9,11.3]),
+               np.array([10.6,10.9]),
+               np.array([-76.626, -76.757, -76.99 , -77.024, -76.925, -76.65 , -76.321,
+       -75.997, -75.958, -76.006])]
+    yp0list = [np.array([34.2]),
+               np.array([34.2,34.5]),
+               np.array([34.2,34.5,34.8]),
+               np.array([34.2,34.5,34.8]),
+               np.array([35.1,35.2]),
+               np.array([-52.068, -51.377, -50.729, -49.845, -49.192, -48.507, -47.875,
+       -47.478, -47.08 , -46.422])]
+    yp1list = [np.array([34.5]),
+               np.array([34.5,34.8]),
+               np.array([34.5,34.8,35.1]),
+               np.array([34.5,34.8,34.6]),
+               np.array([35.2,35.4]),
+               np.array([-51.377, -50.729, -49.845, -49.192, -48.507, -47.875, -47.478,
+       -47.08 , -46.422, -45.659])]
+
+    for i in range(0,len(xp0list)):
+        xp0 = xp0list[i]
+        xp1 = xp1list[i]
+        yp0 = yp0list[i]
+        yp1 = yp1list[i]
+        name = names[i]
+        # mean_value = means[i]
+        # std_value = stds[i]
+        
+        zp = np.zeros(xp0.shape)
+        strike = azimuth(xp0[0],yp0[0],xp1[-1],yp1[-1])
+        widths = np.ones(xp0.shape)*WIDTH
+        dips = np.ones(xp0.shape)*DIP
+        strike = [strike]
+        origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
+        rupture = QuadRupture.fromTrace(xp0,yp0,xp1,yp1,zp,widths,dips,origin,strike=strike)
+
+
+        #make a grid of points over both quads, ask for depths
+        ymin = np.nanmin(rupture.lats)
+        ymax = np.nanmax(rupture.lats)
+        xmin = np.nanmin(rupture.lons)
+        xmax = np.nanmax(rupture.lons)
+
+        xmin = np.floor(xmin*(1/GRIDRES))/(1/GRIDRES)
+        xmax = np.ceil(xmax*(1/GRIDRES))/(1/GRIDRES)
+        ymin = np.floor(ymin*(1/GRIDRES))/(1/GRIDRES)
+        ymax = np.ceil(ymax*(1/GRIDRES))/(1/GRIDRES)
+        geodict = GeoDict.createDictFromBox(xmin,xmax,ymin,ymax,GRIDRES,GRIDRES)
+        nx = geodict.nx
+        ny = geodict.ny
+        depths = np.zeros((ny,nx))
+        for row in range(0,ny):
+            for col in range(0,nx):
+                lat,lon = geodict.getLatLon(row,col)
+                depth = rupture.getDepthAtPoint(lat,lon)
+                depths[row,col] = depth
+
+        #np.testing.assert_almost_equal(np.nanmean(depths),mean_value)
+        #np.testing.assert_almost_equal(np.nanstd(depths),std_value)
+        if interactive:
+            fig,axes = plt.subplots(nrows=2,ncols=1)
+            ax1,ax2 = axes
+            xdata = np.append(xp0,xp1[-1])
+            ydata = np.append(yp0,yp1[-1])
+            plt.sca(ax1)
+            plt.plot(xdata,ydata,'b')
+            plt.sca(ax2)
+            im = plt.imshow(depths,cmap='viridis_r')
+            ch = plt.colorbar()
+            fname = os.path.join(os.path.expanduser('~'),'quad_%s_test.png' % name)
+            print('Saving image for %s quad test... %s' % (name,fname))
+            plt.savefig(fname)
+            plt.close()
+                    
+    
+
     
 def test_slip():
     # Rupture requires an origin even when not used:
@@ -342,7 +415,7 @@ def test_fromTrace():
 
 
 if __name__ == "__main__":
-    test_single_quad_rupture_depth()
+    test_rupture_depth(interactive=True)
     test_EdgeRupture()
     test_QuadRupture()
     test_slip()

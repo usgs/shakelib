@@ -24,7 +24,10 @@ source activate $VENV
 # do pip installs of those things that are not available via conda.
 #grab the bleeding edge for GEM hazardlib.  They have actual releases
 #we can resort to if this becomes a problem.
-pip -v install https://github.com/gem/oq-hazardlib/archive/master.zip
+curl --max-time 60 --retry 3 -L https://github.com/gem/oq-engine/archive/master.zip -o openquake.zip
+pip -v install --no-deps openquake.zip
+rm openquake.zip
+
 pip -v install https://github.com/usgs/MapIO/archive/master.zip
 pip -v install https://github.com/usgs/earthquake-impact-utils/archive/master.zip
 

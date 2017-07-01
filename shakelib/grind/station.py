@@ -164,6 +164,97 @@ class StationList(object):
         self.cursor.close()
         self.db.close()
 
+
+    def addData(self,xmlfiles):
+        """
+        Create a StationList object by reading one or more ShakeMap XML input
+        files.
+
+        Args:
+            xmlfiles (sequence of str):
+                Sequence of ShakeMap XML input files to read.
+        Returns:
+            :class:`StationList` object
+
+        """
+        stationdictlist = []
+        imtset = set()
+        for xmlfile in xmlfiles:
+            stationdict, ims = cls._filter_station(xmlfile)
+            stationdictlist.append(stationdict)
+            imtset |= ims
+
+        cursor = self.cursor
+        # create the tables we want
+        sorted_imtset = sorted(list(imtset), key=imt_sort)
+
+        query = 'SELECT id, imt_type FROM imt'
+        cursor.execute(query)
+        imt_rows = cursor.fetchall()
+
+        imt_types = {}
+        for row in imt_rows:
+            imt_types[row[1]] = row[0]
+
+        sid = 0
+        amp_rows = []
+        station_rows = []
+        for stationdict in stationdictlist:
+            for key, station_tpl in stationdict.items():
+                station_attributes, comp_dict = station_tpl
+                lat = station_attributes['lat']
+                lon = station_attributes['lon']
+                network = station_attributes['netid']
+                code = key
+                if key.startswith(network):
+                    code = key.replace(network + '.', '')
+                name = station_attributes['name']
+                # elevation?
+
+                #
+                # How to determine a station is instrumented?
+                #
+                instrumented = int(station_attributes['netid'].lower()
+                                   not in CIIM_TUPLE)
+
+                station_rows.append((sid, network, code, name, lat, lon,
+                                     instrumented))
+
+                for original_channel, pgm_dict in comp_dict.items():
+                    orientation = self._getOrientation(original_channel)
+                    for imt_type, imt_dict in pgm_dict.items():
+                        if imt_type not in imt_types:
+                            continue
+                        if (instrumented == 0) and (imt_type != 'MMI'):
+                            continue
+                        imtid = imt_types[imt_type]
+                        amp = imt_dict['value']
+                        flag = imt_dict['flag']
+                        if np.isnan(amp) or (amp <= 0):
+                            amp = 'NULL'
+                            flag = 'G'
+                        elif imt_type == 'MMI':
+                            pass
+                        elif imt_type == 'PGV':
+                            amp = np.log(amp)
+                        else:
+                            amp = np.log(amp / 100.0)
+
+                        amp_rows.append((sid, imtid, original_channel,
+                                         orientation, amp, flag))
+                sid += 1
+
+        cursor.executemany(
+                'INSERT INTO station (id, network, code, name, lat, lon, '
+                'instrumented) VALUES (?, ?, ?, ?, ?, ?, ?)', station_rows
+            )
+
+        cursor.executemany(
+                'INSERT INTO amp (station_id, imt_id, original_channel, '
+                'orientation, amp, flag) VALUES (?, ?, ?, ?, ?, ?)', amp_rows
+            )
+        db.commit()
+        
     @classmethod
     def loadFromXML(cls, xmlfiles, dbfile):
         """
@@ -190,7 +281,6 @@ class StationList(object):
         this = cls._loadFromDict(stationdictlist, dbfile, imtset)
         this.imtset = imtset
         return this
-
 
     @classmethod
     def _loadFromDict(cls, stationdictlist, dbfile, imtset):

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import copy
+from importlib import import_module
 
 import numpy as np
 
@@ -124,7 +125,6 @@ class DualDistanceWeights(GMPE):
             self.dist_cutoff = None
         return self
 
-
 class MultiGMPE(GMPE):
     """
     Implements a GMPE that is the combination of multiple GMPEs.
@@ -148,6 +148,27 @@ class MultiGMPE(GMPE):
         """
         See superclass `method <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.GroundShakingIntensityModel.get_mean_and_stddevs>`__. 
         """
+
+        # Evaluate MultiGMPE:
+        lnmu, lnsd = self.__get_mean_and_stddevs(
+            sites, rup, dists, imt, stddev_types)
+
+        # Check for large-distance cutoff/weights
+        if hasattr(self, 'CUTOFF_DISTANCE'):
+            lnmu_large, lnsd_large = self.__get_mean_and_stddevs(
+                sites, rup, dists, imt, stddev_types, large_dist=True)
+
+        return lnmu, lnsd
+
+    def __get_mean_and_stddevs(self, sites, rup, dists, imt, stddev_types, large_dist=False):
+
+        #-----------------------------------------------------------------------
+        # Sort out which set of weights to use
+        #-----------------------------------------------------------------------
+        if large_dist is False:
+            wts = self.WEIGHTS
+        else:
+            wts = self.WEIGHTS_LARGE_DISTANCE
 
         #-----------------------------------------------------------------------
         # Sort out shapes of sites and dists elements
@@ -224,7 +245,7 @@ class MultiGMPE(GMPE):
                         sites, rup, dists, imt, stddev_types)
                 else:
                     lamps = self.get_site_factors(
-                        sites, rup, dists, imt, default = True)
+                        sites, rup, dists, imt, default=True)
                     lmean, lsd = gmpe.get_mean_and_stddevs(
                         sites, rup, dists, imt, stddev_types)
                     lmean = lmean + lamps
@@ -244,12 +265,12 @@ class MultiGMPE(GMPE):
             # Compute weighted mean and sd
             #-------------------------------------------------------------------
 
-            lnmu = lnmu + self.WEIGHTS[i] * lmean
+            lnmu = lnmu + wts[i] * lmean
 
             # Note: the lnsd2 calculation isn't complete until we drop out of
             # this loop and substract lnmu**2
             for j in range(len(lnsd2)):
-                lnsd2[j] = lnsd2[j] + self.WEIGHTS[i] * (lmean**2 + lsd[j]**2)
+                lnsd2[j] = lnsd2[j] + wts[i] * (lmean**2 + lsd[j]**2)
 
         for j in range(len(lnsd2)):
             lnsd2[j] = lnsd2[j] - lnmu**2
@@ -271,6 +292,80 @@ class MultiGMPE(GMPE):
 
         return lnmu, lnsd
 
+
+    @classmethod
+    def from_config(cls, conf):
+        """
+        Construct a MultiGMPE from a config file.
+
+        Args:
+            conf (dict): Dictionary of config options.
+
+        Returns: 
+            MultiGMPE object.
+
+        """
+        selected_gmpe = conf['grind']['gmpe']
+        selected_gmpe_sets = conf['gmpe_sets'][selected_gmpe]['gmpes']
+        gmpe_set_weights = [float(w) for w in conf['gmpe_sets'][selected_gmpe]['weights']]
+
+        mgmpes = []
+        for s in selected_gmpe_sets:
+            selected_gmpes = conf['gmpe_sets'][s]['gmpes']
+            selected_gmpe_weights = [float(w) for w in conf['gmpe_sets'][s]['weights']]
+            if conf['gmpe_sets'][s]['weights_large_dist'] == 'None':
+                selected_weights_large_dist = None
+            else:
+                selected_weights_large_dist = [float(w) for w in conf['gmpe_sets'][s]['weights_large_dist']]
+            if conf['gmpe_sets'][s]['dist_cutoff'] == 'None':
+                selected_dist_cutoff = None
+            else:
+                selected_dist_cutoff = float(conf['gmpe_sets'][s]['dist_cutoff'])
+            if conf['gmpe_sets'][s]['site_gmpes'] == 'None':
+                selected_site_gmpes = None
+            else:
+                selected_site_gmpes = conf['gmpe_sets'][s]['site_gmpes']
+            if conf['gmpe_sets'][s]['weights_site_gmpes'] == 'None':
+                selected_weights_site_gmpes = None
+            else:
+                selected_weights_site_gmpes = [conf['gmpe_sets'][s]['weights_site_gmpes']]
+
+            # Import GMPE modules and initialize classes into list of objects
+            gmpes = []
+            for g in selected_gmpes:
+                mod = import_module(conf['gmpe_modules'][g][1])
+                tmpclass = getattr(mod, conf['gmpe_modules'][g][0])
+                gmpes.append(tmpclass())
+
+            # Same for site GMPEs
+            if selected_site_gmpes is not None:
+                if isinstance(selected_site_gmpes, str):
+                    selected_site_gmpes = [selected_site_gmpes]
+                site_gmpes = []
+                for g in selected_site_gmpes:
+                    mod = import_module(conf['gmpe_modules'][g][1])
+                    tmpclass = getattr(mod, conf['gmpe_modules'][g][0])
+                    site_gmpes.append(tmpclass())
+            else:
+                site_gmpes = None
+
+            mgmpes.append(MultiGMPE.from_list(
+                gmpes, selected_gmpe_weights,
+                default_gmpes_for_site = site_gmpes,
+                default_gmpes_for_site_weights = selected_weights_site_gmpes))
+
+            # Append large-distance info if specified
+            if selected_dist_cutoff is not None:
+                mgmpes[-1].CUTOFF_DISTANCE = selected_dist_cutoff
+                mgmpes[-1].WEIGHTS_LARGE_DISTANCE = selected_weights_large_dist
+                mgmpes[-1].DEFAULT_GMPES_FOR_SITE_LARGE_DISTANCE = site_gmpes
+                mgmpes[-1].DEFAULT_GMPES_FOR_SITE_WEIGHTS_LARGE_DISTANCE = \
+                    selected_weights_site_gmpes
+
+        # Make a MultiGMPE of MultiGMPEs
+        return MultiGMPE.from_list(mgmpes, gmpe_set_weights)
+
+
     @classmethod
     def from_list(cls, gmpes, weights, imc = const.IMC.GREATER_OF_TWO_HORIZONTAL,
                   default_gmpes_for_site = None,
@@ -279,42 +374,40 @@ class MultiGMPE(GMPE):
         """
         Construct a MultiGMPE instance from lists of GMPEs and weights.
 
-        :param gmpes:
-            List of OpenQuake 
-            `GMPE <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#built-in-gsims>`__ 
-            instances.
+        Args:
+            gmpes (list): List of OpenQuake 
+                `GMPE <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#built-in-gsims>`__ 
+                instances.
 
-        :param weights:
-            List of weights; must sum to 1.0.
+            weights (list): List of weights; must sum to 1.0.
 
-        :param imc: Requested intensity measure component. Must be one listed
-            `here <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__.
-            The amplitudes returned by the GMPEs will be converted to this IMT. 
-            Default is 'GREATER_OF_TWO_HORIZONTAL', which is used by ShakeMap. 
-            See discussion in `this section <http://usgs.github.io/shakemap/tg_choice_of_parameters.html#use-of-peak-values-rather-than-mean>`__
-            of the ShakeMap manual. 
+            imc: Requested intensity measure component. Must be one listed
+                `here <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__.
+                The amplitudes returned by the GMPEs will be converted to this IMT. 
+                Default is 'GREATER_OF_TWO_HORIZONTAL', which is used by ShakeMap. 
+                See discussion in `this section <http://usgs.github.io/shakemap/tg_choice_of_parameters.html#use-of-peak-values-rather-than-mean>`__
+                of the ShakeMap manual. 
 
-        :param default_gmpes_for_site:
-            Optional list of OpenQuake GMPE instance to use as a site term for
-            any of the GMPEs that do not have a site term. 
+            default_gmpes_for_site (list):
+                Optional list of OpenQuake GMPE instance to use as a site term for
+                any of the GMPEs that do not have a site term. 
 
-            Notes:
+                Notes:
 
-                * We do not check for consistency in the reference rock 
-                  defintion, so the user nees to be aware of this issue and holds
-                  responsibiilty for ensuring compatibility. 
-                * We check whether or not a GMPE has a site term by checking the
-                  REQUIRES_SITES_PARAMETERS slot for vs30.
+                    * We do not check for consistency in the reference rock 
+                      defintion, so the user nees to be aware of this issue and holds
+                      responsibiilty for ensuring compatibility. 
+                    * We check whether or not a GMPE has a site term by checking the
+                      REQUIRES_SITES_PARAMETERS slot for vs30.
 
-        :param default_gmpes_for_site_weights:
-            Weights for default_gmpes_for_site. Must sum to one and be same
-            length as default_gmpes_for_site. If None, then weights are set to
-            be equal. 
+            default_gmpes_for_site_weights: Weights for default_gmpes_for_site. Must 
+                sum to one and be same length as default_gmpes_for_site. If None, then 
+                weights are set to be equal. 
 
-        :param reference_vs30:
-            Reference rock Vs30 in m/s. We do not check that this matches the
-            reference rock in the GMPEs so this is the responsibility of the
-            user.
+            reference_vs30:
+                Reference rock Vs30 in m/s. We do not check that this matches the
+                reference rock in the GMPEs so this is the responsibility of the
+                user.
 
         """
 
@@ -345,18 +438,6 @@ class MultiGMPE(GMPE):
         self.WEIGHTS = weights
 
         #-----------------------------------------------------------------------
-        # Check that GMPEs all are for the same tectonic region,
-        # otherwise raise exception.
-        #-----------------------------------------------------------------------
-
-        tmp = set([i.DEFINED_FOR_TECTONIC_REGION_TYPE for i in gmpes])
-        if len(tmp) == 1:
-            self.DEFINED_FOR_TECTONIC_REGION_TYPE = \
-                gmpes[0].DEFINED_FOR_TECTONIC_REGION_TYPE
-        else:
-            raise Exception('gmpes are not all for the same tectonic region.')
-
-        #-----------------------------------------------------------------------
         # Combine the intensity measure types. This is problematic:
         #   - Logically, we should only include the intersection of the sets
         #     of imts for the different GMPEs.
@@ -379,7 +460,7 @@ class MultiGMPE(GMPE):
 
         #-----------------------------------------------------------------------
         # Store intensity measure types for conversion in get_mean_and_stddevs.
-        #---------------------------------------------------------
+        #-----------------------------------------------------------------------
         self.IMCs = [g.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT for g in gmpes]
 
         #-----------------------------------------------------------------------
@@ -428,6 +509,11 @@ class MultiGMPE(GMPE):
             if default_gmpes_for_site is None:
                 raise Exception('Must provide default_gmpes_for_site if one or'\
                                 ' more GMPE does not have site term.')
+
+            # If weights are unspecified, use equal weight
+            if default_gmpes_for_site_weights is None:
+                default_gmpes_for_site_weights = \
+                    [1/len(default_gmpes_for_site)]*len(default_gmpes_for_site)
 
             # check that length of default_gmpe_for_site matches length of
             # default_gmpe_for_site_weights
@@ -507,9 +593,9 @@ class MultiGMPE(GMPE):
             tmp = self
 
         lmean, lsd = tmp.get_mean_and_stddevs(sites,
-            rup, dists, imt, tmp.DEFINED_FOR_STANDARD_DEVIATION_TYPES)
+            rup, dists, imt, list(tmp.DEFINED_FOR_STANDARD_DEVIATION_TYPES))
         lmean_ref, lsd = tmp.get_mean_and_stddevs(ref_sites,
-            rup, dists, imt, tmp.DEFINED_FOR_STANDARD_DEVIATION_TYPES)
+            rup, dists, imt, list(tmp.DEFINED_FOR_STANDARD_DEVIATION_TYPES))
 
         lamps = lmean - lmean_ref
 

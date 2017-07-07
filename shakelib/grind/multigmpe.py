@@ -157,6 +157,12 @@ class MultiGMPE(GMPE):
         if hasattr(self, 'CUTOFF_DISTANCE'):
             lnmu_large, lnsd_large = self.__get_mean_and_stddevs(
                 sites, rup, dists, imt, stddev_types, large_dist=True)
+            # Stomp on lnmu and lnsd at large distances
+            dist_cutoff = self.CUTOFF_DISTANCE
+            lnmu[dists.rjb > dist_cutoff] = lnmu_large[dists.rjb > dist_cutoff]
+            for i in range(len(lnsd)):
+                lnsd[i][dists.rjb > dist_cutoff] = \
+                    lnsd_large[i][dists.rjb > dist_cutoff]
 
         return lnmu, lnsd
 
@@ -358,9 +364,6 @@ class MultiGMPE(GMPE):
             if selected_dist_cutoff is not None:
                 mgmpes[-1].CUTOFF_DISTANCE = selected_dist_cutoff
                 mgmpes[-1].WEIGHTS_LARGE_DISTANCE = selected_weights_large_dist
-                mgmpes[-1].DEFAULT_GMPES_FOR_SITE_LARGE_DISTANCE = site_gmpes
-                mgmpes[-1].DEFAULT_GMPES_FOR_SITE_WEIGHTS_LARGE_DISTANCE = \
-                    selected_weights_site_gmpes
 
         # Make a MultiGMPE of MultiGMPEs
         return MultiGMPE.from_list(mgmpes, gmpe_set_weights)

@@ -165,6 +165,74 @@ class StationList(object):
         self.db.close()
 
 
+    def createDict(self):
+        """Create a dictionary that maps to GeoJSON format for station data.
+
+        :returns:
+          Dictionary with fields:
+            - type 'Feature'
+            - id   'netid.code'
+            - geometry Dictionary with fields:
+              - coordinates: (X,Y) tuple
+              - type: 'Point'
+            - properties Dictionary with fields:
+              - name Station name
+              - intensity_flag ??
+              - distance Station distance
+              - location Station loc
+              - code Station code
+              - commType Station commtype
+              - source Station source
+              - network Station netid
+              - instrumentType Station insttype
+              - intensity Station intensity
+              - pga (may not be present) comp->pga->value
+              - pgv (may not be present) comp->pgv->value
+              - channels, list of dictionaries with fields:
+                - name station->comp->name
+                - amplitudes, list of dictionaries with fields:
+                  - name station->comp->component name
+                  - flag station->comp->component name->flag
+                  - value station->comp->component name->value
+                  - units ('%g' for pga or any psa, 'cm/s' for pgv)
+        """
+
+    def _load_features(xmlfile):
+        #each station is a feature in a geojson file
+        dom = minidom.parse(xmlfile)
+        for root in dom.childNodes:
+            if not isinstance(root, minidom.DocumentType):
+                break
+        stations = root.getElementsByTagName('station')
+        imt_translate = {}
+        for station in stations:
+            feature = {'type':'Feature'}
+            netid = station.getAttribute('netid')
+            code = station.getAttribute('code')
+            feature['id'] = '%s.%s' % (netid,code)
+            lat = code = float(station.getAttribute('lat'))
+            lon = code = float(station.getAttribute('lon'))
+            feature['geometry'] = {'type':'Point','coordinates':[lon,lat]}
+            properties = {}
+            properties['name'] = station.getAttribute('name')
+            properties['intensity_flag'] = station.getAttribute('')#??
+            properties['distance'] = float(station.getAttribute('distance'))
+            properties['location'] = station.getAttribute('loc')
+            properties['code'] = station.getAttribute('code')
+            properties['commType'] = station.getAttribute('commtype')
+            properties['source'] = station.getAttribute('source')
+            properties['network'] = station.getAttribute('netid')
+            properties['instrumentType'] = station.getAttribute('insttype')
+            properties['intensity'] = float(station.getAttribute('intensity'))
+            comps = station.getElementsByTagName('comp')
+            channels = []
+            for comp in comps:
+                channel = {'name':comp.getAttribute('name')}
+                for component in channel.childNodes:
+                    if not isinstance(component, minidom.DocumentType):
+                        break
+                    pgmdict,imtset = self._getGroundMotions(component,imt_translate)
+                    
     def addData(self,xmlfiles):
         """
         Create a StationList object by reading one or more ShakeMap XML input

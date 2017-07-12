@@ -246,6 +246,13 @@ class Sites(object):
         """
         return self._Vs30
 
+    def getNxNy(self):
+        """
+        :returns:
+            The number of grid points in x and y.
+        """
+        return self._GeoDict.nx, self._GeoDict.ny
+
     @staticmethod
     def _load(vs30File, samplegeodict=None, resample=False, method='linear',
               doPadding=False, padValue=np.nan):

@@ -1,73 +1,54 @@
 # stdlib imports
 import sqlite3
-from xml.dom import minidom
-import os.path
+import xml.etree.ElementTree as ET
 import copy
 from collections import OrderedDict
 import re
 
 # third party imports
-import pandas as pd
 import numpy as np
 
 # local imports
-from .distance import get_distance, get_distance_measures
 
 
-TABLES = {'station':
-          {'id': 'integer primary key',
-           'network': 'str',
-           'code': 'str',
-           'name': 'str',
-           'lat': 'float',
-           'lon': 'float',
-           'elev': 'float',
-           'vs30': 'float',
-           'instrumented': 'int'},
-          'imt':
-          {'id': 'integer primary key',
-           'imt_type': 'str'},
-          'amp':
-          {'id': 'integer primary key',
-           'station_id': 'int',
-           'imt_id': 'int',
-           'original_channel': 'str',
-           'orientation': 'str',
-           'amp': 'float',
-           'uncertainty': 'float',
-           'flag': 'str'},
-          'soiltype':
-          {'id': 'integer primary key',
-           'soil_type': 'str'},
-          'predicted':
-          {'id': 'integer primary key',
-           'station_id': 'int',
-           'imt_id': 'int',
-           'soiltype_id': 'int',
-           'amp': 'float',
-           'uncertainty_total': 'float',
-           'uncertainty_inter': 'float',
-           'uncertainty_intra': 'float'},
-          'siteamp':
-          {'id': 'integer primary key',
-           'station_id': 'int',
-           'imt_id': 'int',
-           'amp_factor': 'float'}
-          }
-
-SOIL_TYPES = {'rock': 0, 'soil': 1}
+TABLES = OrderedDict((
+        ('station',
+          OrderedDict((
+           ('id', 'str primary key'), # id is net.sta
+           ('network', 'str'),
+           ('code', 'str'),
+           ('name', 'str'),
+           ('lat', 'float'),
+           ('lon', 'float'),
+           ('elev', 'float'),
+           ('vs30', 'float'),
+           ('instrumented', 'int')
+           ))
+          ),
+         ('imt',
+          OrderedDict((
+           ('id', 'integer primary key'),
+           ('imt_type', 'str')
+           ))
+          ),
+         ('amp',
+          OrderedDict((
+           ('id', 'integer primary key'),
+           ('station_id', 'str'),
+           ('imt_id', 'int'),
+           ('original_channel', 'str'),
+           ('orientation', 'str'),
+           ('amp', 'float'),
+           ('uncertainty', 'float'),
+           ('flag', 'str')
+           ))
+          )
+         ))
 
 #
 # These are the netid's that indicate MMI data
 #
 CIIM_TUPLE = ('dyfi', 'mmi', 'intensity', 'ciim')
-
-#
-# This is the full list of distance measure that we can calculate in the
-# distance module. We compute all of them for all of the stations just
-# because we can.
-#
-DISTANCES = get_distance_measures()
 
 
 class StationList(object):
@@ -91,7 +72,6 @@ class StationList(object):
 
     """
 
-    #TODO - modify this so it takes a sqlite connection object??
     def __init__(self, db):
         """
         The default constructor reads a pre-built SQLite database of
@@ -106,55 +86,8 @@ class StationList(object):
             A :class:`StationList` object.
 
         """
-        self.IMT_TYPES = {}
         self.db = db
         self.cursor = self.db.cursor()
-        
-
-        #
-        # Fill in the IMT type lists/dicts
-        #
-        query = 'SELECT id, imt_type FROM imt'
-        self.cursor.execute(query)
-        imt_rows = self.cursor.fetchall()
-
-        for row in imt_rows:
-            self.IMT_TYPES[row[1]] = row[0]
-
-        #
-        # This flips the key/value pairs in the IMT_TYPES dictionary
-        #
-        self.IMT_LOOKUP = {value: key for key, value in self.IMT_TYPES.items()}
-
-        #
-        # This is an ordered version of IMT_TYPES just to help make the tables
-        # a little more human readable, and to keep them consistent for testing.
-        #
-        self.IMT_TYPES_ORDERED = OrderedDict(sorted(self.IMT_TYPES.items(), key=imt_sort))
-
-    @classmethod
-    def loadFromDBFile(self,dbfile):
-        """
-        Create a StationList object by reading a SQLite database file.
-
-        Args:
-            dbfile (string):
-                Path to a file which contains a SQLite database with station data.
-
-        Returns:
-            :class:`StationList` object
-        """
-        db = sqlite3.connect(dbfile)
-        return cls(db)
-
-    def __len__(self):
-        """
-        Returns the number of stations in the database.
-        """
-        squery = 'SELECT count(*) FROM station'
-        self.cursor.execute(squery)
-        return self.cursor.fetchone()[0]
-
 
     def __del__(self):
         """
@@ -164,6 +97,22 @@ class StationList(object):
         self.cursor.close()
         self.db.close()
 
+    @classmethod
+    def loadFromDBFile(cls, dbfile):
+        """
+        Create a StationList object by reading a SQLite database file.
+
+        Args:
+            dbfile (string):
+                Path to a file which contains a SQLite database with station 
+                data.
+
+        Returns:
+            :class:`StationList` object
+        """
+        db = sqlite3.connect(dbfile)
+        self = cls(db)
+        return self
 
     def createDict(self):
         """Create a dictionary that maps to GeoJSON format for station data.
@@ -196,43 +145,103 @@ class StationList(object):
                   - value station->comp->component name->value
                   - units ('%g' for pga or any psa, 'cm/s' for pgv)
         """
+        pass
 
-    def _load_features(xmlfile):
+    def _load_features(self, xmlfile):
         #each station is a feature in a geojson file
-        dom = minidom.parse(xmlfile)
-        for root in dom.childNodes:
-            if not isinstance(root, minidom.DocumentType):
-                break
-        stations = root.getElementsByTagName('station')
-        imt_translate = {}
-        for station in stations:
-            feature = {'type':'Feature'}
-            netid = station.getAttribute('netid')
-            code = station.getAttribute('code')
-            feature['id'] = '%s.%s' % (netid,code)
-            lat = code = float(station.getAttribute('lat'))
-            lon = code = float(station.getAttribute('lon'))
-            feature['geometry'] = {'type':'Point','coordinates':[lon,lat]}
-            properties = {}
-            properties['name'] = station.getAttribute('name')
-            properties['intensity_flag'] = station.getAttribute('')#??
-            properties['distance'] = float(station.getAttribute('distance'))
-            properties['location'] = station.getAttribute('loc')
-            properties['code'] = station.getAttribute('code')
-            properties['commType'] = station.getAttribute('commtype')
-            properties['source'] = station.getAttribute('source')
-            properties['network'] = station.getAttribute('netid')
-            properties['instrumentType'] = station.getAttribute('insttype')
-            properties['intensity'] = float(station.getAttribute('intensity'))
-            comps = station.getElementsByTagName('comp')
-            channels = []
-            for comp in comps:
-                channel = {'name':comp.getAttribute('name')}
-                for component in channel.childNodes:
-                    if not isinstance(component, minidom.DocumentType):
-                        break
-                    pgmdict,imtset = self._getGroundMotions(component,imt_translate)
+#        tree = ET.parse(xmlfile)
+#        root = tree.getroot()
+#        imt_translate = {}
+#        for sl in root.iter('stationlist'):
+#            for station in sl:
+#                feature = {'type':'Feature'}
+#                netid = station.attrib['netid']
+#                code = station.attrib['code']
+#                feature['id'] = '%s.%s' % (netid,code)
+#                lat = code = float(station.attrib['lat'])
+#                lon = code = float(station.attrib['lon'])
+#                feature['geometry'] = {'type':'Point','coordinates':[lon,lat]}
+#                properties = {}
+#                properties['name'] = station.attrib['name']
+#                properties['intensity_flag'] = station.attrib['']#??
+#                properties['distance'] = float(station.attrib['distance'])
+#                properties['location'] = station.attrib['loc']
+#                properties['code'] = station.attrib['code']
+#                properties['commType'] = station.attrib['commtype']
+#                properties['source'] = station.attrib['source']
+#                properties['network'] = station.attrib['netid']
+#                properties['instrumentType'] = station.attrib['insttype']
+#                properties['intensity'] = float(station.attrib['intensity'])
+#                channels = []
+#                for comp in station:
+#                    channel = {'name':comp.attrib['name']}
+#                    for component in comp:
+#                        pgmdict, imtset = self._getGroundMotions(component, 
+#                                                                 imt_translate)
+        pass
                     
+    @classmethod
+    def loadFromSQL(cls, sql, dbfile=':memory:'):
+        """
+        Create a new object from saved SQL code (see :meth:`dumpToSQL`).
+        
+        Args:
+            sql (str):
+                SQL code to create and populate the database           
+            dbfile (str):
+                The path to a file in which the database will reside.
+                The default is ':memory:' for an in-memory database.
+                
+        Returns:
+            :class:`Stationlist` object.
+        """
+        
+        db = sqlite3.connect(dbfile)
+        self = cls(db)
+        self.cursor.executescript(sql)
+        return self
+    
+    def dumpToSQL(self):
+        """
+        Dump the database as a string of SQL code (see :meth:`loadFromSQL`).
+        
+        Args:
+            None
+            
+        Returns:
+            A string of SQL sufficient to restore and repopulate the 
+            database.
+        """
+        
+        sqlstr = []
+        for line in self.db.iterdump():
+            sqlstr.append(line)
+        result = "\n".join(sqlstr)
+        return result
+       
+    @classmethod
+    def loadFromXML(cls, xmlfiles, dbfile=':memory:'):
+        """
+        Create a StationList object by reading one or more ShakeMap XML input
+        files.
+
+        Args:
+            xmlfiles (sequence of str):
+                Sequence of ShakeMap XML input files to read.
+            dbfile (str):
+                Path to a file into which to write the SQLite database.
+                The default is ':memory:' for an in-memory database.
+
+        Returns:
+            :class:`StationList` object
+
+        """
+        # Create the database and tables
+        db = sqlite3.connect(dbfile)
+        self = cls(db)
+        self._createTables()
+        return self.addData(xmlfiles)
+
     def addData(self,xmlfiles):
         """
         Create a StationList object by reading one or more ShakeMap XML input
@@ -245,113 +254,17 @@ class StationList(object):
             :class:`StationList` object
 
         """
-        stationdictlist = []
+        # Parse the xml into a dictionary
+        stationdict = {}
         imtset = set()
         for xmlfile in xmlfiles:
-            stationdict, ims = cls._filter_station(xmlfile)
-            stationdictlist.append(stationdict)
+            stationdict, ims = self._filter_station(xmlfile, stationdict)
             imtset |= ims
+        # fill the database and create the object from it   
+        self._loadFromDict(stationdict, imtset)
+        return self
 
-        cursor = self.cursor
-        # create the tables we want
-        sorted_imtset = sorted(list(imtset), key=imt_sort)
-
-        query = 'SELECT id, imt_type FROM imt'
-        cursor.execute(query)
-        imt_rows = cursor.fetchall()
-
-        imt_types = {}
-        for row in imt_rows:
-            imt_types[row[1]] = row[0]
-
-        sid = 0
-        amp_rows = []
-        station_rows = []
-        for stationdict in stationdictlist:
-            for key, station_tpl in stationdict.items():
-                station_attributes, comp_dict = station_tpl
-                lat = station_attributes['lat']
-                lon = station_attributes['lon']
-                network = station_attributes['netid']
-                code = key
-                if key.startswith(network):
-                    code = key.replace(network + '.', '')
-                name = station_attributes['name']
-                # elevation?
-
-                #
-                # How to determine a station is instrumented?
-                #
-                instrumented = int(station_attributes['netid'].lower()
-                                   not in CIIM_TUPLE)
-
-                station_rows.append((sid, network, code, name, lat, lon,
-                                     instrumented))
-
-                for original_channel, pgm_dict in comp_dict.items():
-                    orientation = self._getOrientation(original_channel)
-                    for imt_type, imt_dict in pgm_dict.items():
-                        if imt_type not in imt_types:
-                            continue
-                        if (instrumented == 0) and (imt_type != 'MMI'):
-                            continue
-                        imtid = imt_types[imt_type]
-                        amp = imt_dict['value']
-                        flag = imt_dict['flag']
-                        if np.isnan(amp) or (amp <= 0):
-                            amp = 'NULL'
-                            flag = 'G'
-                        elif imt_type == 'MMI':
-                            pass
-                        elif imt_type == 'PGV':
-                            amp = np.log(amp)
-                        else:
-                            amp = np.log(amp / 100.0)
-
-                        amp_rows.append((sid, imtid, original_channel,
-                                         orientation, amp, flag))
-                sid += 1
-
-        cursor.executemany(
-                'INSERT INTO station (id, network, code, name, lat, lon, '
-                'instrumented) VALUES (?, ?, ?, ?, ?, ?, ?)', station_rows
-            )
-
-        cursor.executemany(
-                'INSERT INTO amp (station_id, imt_id, original_channel, '
-                'orientation, amp, flag) VALUES (?, ?, ?, ?, ?, ?)', amp_rows
-            )
-        db.commit()
-        
-    @classmethod
-    def loadFromXML(cls, xmlfiles, dbfile):
-        """
-        Create a StationList object by reading one or more ShakeMap XML input
-        files.
-
-        Args:
-            xmlfiles (sequence of str):
-                Sequence of ShakeMap XML input files to read.
-            dbfile (str):
-                Path to a file into which to write the SQLite database.
-
-        Returns:
-            :class:`StationList` object
-
-        """
-
-        stationdictlist = []
-        imtset = set()
-        for xmlfile in xmlfiles:
-            stationdict, ims = cls._filter_station(xmlfile)
-            stationdictlist.append(stationdict)
-            imtset |= ims
-        this = cls._loadFromDict(stationdictlist, dbfile, imtset)
-        this.imtset = imtset
-        return this
-
-    @classmethod
-    def _loadFromDict(cls, stationdictlist, dbfile, imtset):
+    def _loadFromDict(self, stationdict, imtset):
         """
         Internal method to turn the station dictionary created from the
         ShakeMap XML input files into a SQLite database.
@@ -365,127 +278,168 @@ class StationList(object):
         Returns:
             :class:`StationList` object
         """
-        db = sqlite3.connect(dbfile)
-        cursor = db.cursor()
-        # create the tables we want
-        sorted_imtset = sorted(list(imtset), key=imt_sort)
-        cls._createTables(db, cursor, sorted_imtset)
+        #
+        # Get the current IMTs and their IDs and add any new ones
+        #
+        imts_in_db = self.getIMTtypes()
+        new_imts = imtset - imts_in_db
+        if any(new_imts):
+            self.cursor.executemany('INSERT INTO imt (imt_type) VALUES (?)', 
+                                zip(new_imts))
+            self.db.commit()
 
-        query = 'SELECT id, imt_type FROM imt'
-        cursor.execute(query)
-        imt_rows = cursor.fetchall()
+        # Now get the updated list of IMTs and their IDs
+        query = 'SELECT imt_type, id FROM imt'
+        self.cursor.execute(query)
+        imt_hash = dict(self.cursor.fetchall())
 
-        imt_types = {}
-        for row in imt_rows:
-            imt_types[row[1]] = row[0]
+        #
+        # Get the station codes for all the stations in the db            
+        #
+        query = 'SELECT id FROM station'
+        self.cursor.execute(query)
+        sta_set = set([z[0] for z in self.cursor.fetchall()])
 
-        sid = 0
-        amp_rows = []
+        #
+        # Insert any new stations into the station table
+        #
         station_rows = []
-        for stationdict in stationdictlist:
-            for key, station_tpl in stationdict.items():
-                station_attributes, comp_dict = station_tpl
-                lat = station_attributes['lat']
-                lon = station_attributes['lon']
-                network = station_attributes['netid']
-                code = key
-                if key.startswith(network):
-                    code = key.replace(network + '.', '')
+        for sta_id, station_tpl in stationdict.items():
+            if sta_id in sta_set:
+                continue
+            else:
+                sta_set.add(sta_id)
+            station_attributes, comp_dict = station_tpl
+            lat = station_attributes['lat']
+            lon = station_attributes['lon']
+            network = station_attributes['netid']
+            code = station_attributes['code']
+            if 'name' in station_attributes:
                 name = station_attributes['name']
-                # elevation?
+            else:
+                name = None
+            if 'elev' in station_attributes:
+                elev = station_attributes['elev']
+            else:
+                elev = None
+            if 'vs30' in station_attributes:
+                vs30 = station_attributes['vs30']
+            else:
+                vs30 = None
 
-                #
-                # How to determine a station is instrumented?
-                #
-                instrumented = int(station_attributes['netid'].lower()
-                                   not in CIIM_TUPLE)
+            instrumented = int(network.lower() not in CIIM_TUPLE)
 
-                station_rows.append((sid, network, code, name, lat, lon,
-                                     instrumented))
-
-                for original_channel, pgm_dict in comp_dict.items():
-                    orientation = cls._getOrientation(original_channel)
-                    for imt_type, imt_dict in pgm_dict.items():
-                        if imt_type not in imt_types:
-                            continue
-                        if (instrumented == 0) and (imt_type != 'MMI'):
-                            continue
-                        imtid = imt_types[imt_type]
-                        amp = imt_dict['value']
-                        flag = imt_dict['flag']
-                        if np.isnan(amp) or (amp <= 0):
-                            amp = 'NULL'
-                            flag = 'G'
-                        elif imt_type == 'MMI':
-                            pass
-                        elif imt_type == 'PGV':
-                            amp = np.log(amp)
-                        else:
-                            amp = np.log(amp / 100.0)
-
-                        amp_rows.append((sid, imtid, original_channel,
-                                         orientation, amp, flag))
-                sid += 1
-
-        cursor.executemany(
+            station_rows.append((sta_id, network, code, name, lat, lon,
+                                 elev, vs30, instrumented))
+                
+        self.cursor.executemany(
                 'INSERT INTO station (id, network, code, name, lat, lon, '
-                'instrumented) VALUES (?, ?, ?, ?, ?, ?, ?)', station_rows
+                'elev, vs30, instrumented) VALUES '
+                '(?, ?, ?, ?, ?, ?, ?, ?, ?)', station_rows
             )
+        self.db.commit()
 
-        cursor.executemany(
+        #
+        # Now add the amps, first get the current set so we don't add
+        # any duplicates; a unique amp will be (station_id, imt_id, 
+        # original_channel)
+        #
+        query = 'SELECT station_id, imt_id, original_channel FROM amp'
+        self.cursor.execute(query)
+        amp_rows = self.cursor.fetchall()
+        # Create a unique identifier for each amp so we don't repeat any
+        amp_set = set([str(v[0]) + '.' + str(v[1]) + '.' + str(v[2]) 
+                        for v in amp_rows])
+                
+        #
+        # Insert the amps for each component
+        #
+        amp_rows = []
+        for sta_id, station_tpl in stationdict.items():
+            station_attributes, comp_dict = station_tpl
+            instrumented = int(station_attributes['netid'].lower()
+                               not in CIIM_TUPLE)
+            for original_channel, pgm_dict in comp_dict.items():
+                orientation = self._getOrientation(original_channel)
+                for imt_type, imt_dict in pgm_dict.items():
+                    if (instrumented == 0) and (imt_type != 'MMI'):
+                        continue
+                    imtid = imt_hash[imt_type]
+                    amp_id = str(sta_id) + '.' + str(imtid) + '.' + \
+                             str(original_channel)
+                    if amp_id in amp_set:
+                        continue
+                    else:
+                        amp_set.add(amp_id)
+                    amp = imt_dict['value']
+                    flag = imt_dict['flag']
+                    if np.isnan(amp) or (amp <= 0):
+                        amp = 'NULL'
+                        flag = 'G'
+                    elif imt_type == 'MMI':
+                        pass
+                    elif imt_type == 'PGV':
+                        amp = np.log(amp)
+                    else:
+                        amp = np.log(amp / 100.0)
+
+                    amp_rows.append((sta_id, imtid, original_channel,
+                                     orientation, amp, flag))
+
+        self.cursor.executemany(
                 'INSERT INTO amp (station_id, imt_id, original_channel, '
                 'orientation, amp, flag) VALUES (?, ?, ?, ?, ?, ?)', amp_rows
             )
-        db.commit()
-        cursor.close()
-        return cls(db)
+        self.db.commit()
+        return
 
-    def getStationDataframe(self, instrumented, sort=False):
+    def getIMTtypes(self):
         """
-        Return a Pandas dataframe of the instrumented or non-instrumented
-        stations.
+        Return a set of IMT types found in the database
+        
+        Args:
+            None
+            
+        Returns:
+            A set of IMT types
+        """
+        self.cursor.execute('SELECT imt_type FROM imt')
+        return set([z[0] for z in self.cursor.fetchall()])
+            
+    def getStationDataframe(self, instrumented):
+        """
+        Return a dictionary of the instrumented or non-instrumented
+        stations. The keys describe the parameter, the values are Numpy
+        arrays of the parameter in question.
 
         For the standard set of ShakeMap IMTs (mmi, pga, pgv, psa03, psa10,
-        psa30), the columns in the dataframe would be:
+        psa30), the keys in the dictionary would be:
 
-        'id', 'lat', 'lon', 'code', 'network', 'vs30', 'repi', 'rhypo', 'rjb',
-        'rrup', 'rx', 'ry', 'ry0', 'U', 'T', 'SA(0.3)', 'SA(3.0)', 'PGA', 'PGV',
-        'SA(1.0)', 'name'
+        'id', 'network', 'code', 'name', 'lat', 'lon', 'elev', 'vs30', 
+        'instrumented', 'PGA', 'PGV', 'SA(0.3)', 'SA(1.0)', 'SA(3.0)'
 
-        For the non-instrumented dataframe, the columns would be:
+        For the non-instrumented dictionary, the keys would be:
 
-        'id', 'lat', 'lon', 'code', 'network', 'vs30', 'repi', 'rhypo', 'rjb',
-        'rrup', 'rx', 'ry', 'ry0', 'U', 'T', 'MMI', 'name'
+        'id', 'network', 'code', 'name', 'lat', 'lon', 'elev', 'vs30', 
+        'instrumented', 'MMI'
 
-        The **name** column is **network** and **code** concatenated with a
+        The **id** column is **network** and **code** concatenated with a
         period (".") between them.
-        All ground motion
-        units are natural log units. Distances are in km.
-
+        
+        All ground motion units are natural log units. Distances are in km.
 
         Args:
             instrumented (integer):
-                Set to 1 (one) if the dataframe is to contain the instrumented
-                stations, or to 0 (zero) if the dataframe is to contain the
+                Set to 1 (one) if the dictionary is to contain the instrumented
+                stations, or to 0 (zero) if the dictionary is to contain the
                 non-instrumented (MMI) stations.
-            sort (bool):
-                If True, the dataframe will be sorted by the **name** column.
-                The default if False (unsorted).
 
         Returns:
-            A Pandas dataframe.
+            A dictionary of Numpy arrays.
         """
 
-        dstr = ''
-        columns = []
-        basic_columns = ['id', 'lat', 'lon', 'code', 'network', 'vs30']
-        for mm in basic_columns + DISTANCES:
-            if mm == basic_columns[0]:
-                dstr = '%s' % (mm)
-            else:
-                dstr += ", %s" % (mm)
-            columns.append(mm)
-
+        columns = list(TABLES['station'].keys())
+        dstr = ', '.join(columns)
         self.cursor.execute(
                 'SELECT %s FROM station where instrumented = %d' %
                 (dstr, instrumented)
@@ -493,33 +447,27 @@ class StationList(object):
 
         station_rows = self.cursor.fetchall()
         nstation_rows = len(station_rows)
-        try:
-            df = pd.DataFrame(station_rows, columns=columns)
-        except:
-            print('Exception in creating data frame')
-            raise
+        station_columns = list(zip(*station_rows))
+        df = OrderedDict()
+        for ic, col in enumerate(columns):
+            df[col] = np.array(station_columns[ic])
 
-        ncols_amp = 0
-        new_cols = []
-        for imt in self.IMT_TYPES_ORDERED.keys():
+        for imt in self.getIMTtypes():
             if (instrumented and 'MMI' in imt) or \
                (not instrumented and 'MMI' not in imt):
                 continue
-            new_cols.append(imt)
-            ncols_amp += 1
-        if ncols_amp > 0:
-            app = np.empty((np.shape(station_rows)[0], ncols_amp))
-            app[:] = np.nan
+            df[imt] = np.full(nstation_rows, np.nan)
 
-        col_dict = dict(zip(new_cols, range(ncols_amp)))
         id_dict = dict(zip(df['id'], range(nstation_rows)))
 
         #
         # Get all of the unflagged amps with the proper orientation
         #
         self.cursor.execute(
-                'SELECT a.amp, a.imt_id, a.station_id FROM '
-                'amp a, station s WHERE a.flag = "0" AND s.id = a.station_id '
+                'SELECT a.amp, i.imt_type, a.station_id FROM '
+                'amp a, station s, imt i WHERE a.flag = "0" '
+                'AND s.id = a.station_id '
+                'AND a.imt_id = i.id '
                 'AND s.instrumented = %d AND a.orientation NOT IN ("Z", "U") '
                 'AND a.amp IS NOT NULL' % (instrumented)
             )
@@ -529,46 +477,16 @@ class StationList(object):
         # Go through all the amps and put them into the data frame
         #
         for this_row in amp_rows:
-            imt_id = this_row[1]
-            if imt_id not in self.IMT_LOOKUP:
-                continue
             #
             # Set the cell to the peak amp
             #
-            imt = self.IMT_LOOKUP[imt_id]
             rowidx = id_dict[this_row[2]]
-            cval = app[rowidx, col_dict[imt]]
+            cval = df[this_row[1]][rowidx]
             amp = this_row[0]
             if np.isnan(cval) or (cval < amp):
-                app[rowidx, col_dict[imt]] = amp
-
-        if ncols_amp > 0:
-            df2 = pd.DataFrame(app, columns=new_cols)
-            df = pd.concat([df, df2], axis=1)
-
-        del amp_rows, new_cols, col_dict, id_dict
-
-        df['name'] = df.network.map(str) + '.' + df.code.map(str)
-
-        if sort is True:
-            if pd.__version__ >= '0.17.0':
-                df = df.sort_values('name')
-            else:
-                df = df.sort('name')
+                df[this_row[1]][rowidx] = amp
 
         return df
-
-
-    def getIMTset(self):
-        """
-        Return a set of IMTs in the StationList.
-
-        Returns:
-            Set of IMTs
-        """
-
-        return self.imtset.copy()
-
 
     @staticmethod
     def _getOrientation(orig_channel):
@@ -584,7 +502,9 @@ class StationList(object):
             Character representing the channel orientation. One of 'N',
             'E', 'Z', 'H' (for horizontal), or 'U' (for unknown).
         """
-        if orig_channel[-1] in ('N', 'E', 'Z'):
+        if orig_channel == 'mmi':
+            orientation = 'H'           # mmi is arbitrarily horizontal
+        elif orig_channel[-1] in ('N', 'E', 'Z'):
             orientation = orig_channel[-1]
         elif orig_channel[-1] == "K":   # Channel is "UNK"; assume horizontal
             orientation = 'H'
@@ -603,18 +523,14 @@ class StationList(object):
         """
         pgmdict = {}
         imtset = set()
-        for pgm in comp.childNodes:
-            if pgm.nodeName == '#text':
+        for pgm in comp:
+            if pgm.tag == '#text':
                 continue
-            key = pgm.nodeName
-            if key == 'acc':
-                key = 'pga'
-            elif key == 'vel':
-                key = 'pgv'
+            key = pgm.tag
             if key not in imt_translate:
-                if 'pga' in key:
+                if key in ('acc', 'pga'):
                     new_key = 'PGA'
-                elif 'pgv' in key:
+                elif key in ('vel', 'pgv'):
                     new_key = 'PGV'
                 elif 'mmi' in key:
                     new_key = 'MMI'
@@ -623,42 +539,30 @@ class StationList(object):
                     new_key = 'SA(' + str(pp) + ')'
                 else:
                     raise ValueError('Unknown amp type in input: %s' % key)
-#                    new_key = key
                 imt_translate[key] = new_key
             else:
                 new_key = imt_translate[key]
             key = new_key
 
-            value = float(pgm.getAttribute('value'))
-            if pgm.hasAttribute('flag'):
-                flag = pgm.getAttribute('flag')
+            if 'value' in pgm.attrib:
+                try:
+                    value = float(pgm.attrib['value'])
+                except ValueError:
+                    print('Unknown value in XML: ', pgm.attrib['value'],
+                          ' for amp ', pgm.tag)
+                    continue
+            else:
+                print('No value for amp ', pgm.tag)
+                continue
+            if 'flag' in pgm.attrib and pgm.attrib['flag'] != '':
+                flag = pgm.attrib['flag']
             else:
                 flag = '0'
             pgmdict[key] = {'value': value, 'flag': flag}
             imtset.add(key)
         return pgmdict, imtset
 
-
-    @staticmethod
-    def _getStationAttributes(station):
-        """
-        Get a dictionary of the station attributes
-        """
-        attrdict = {}
-        for attr in list(station.attributes.items()):
-            key = attr[0]
-            value = attr[1]
-            # is this value a float or str?
-            try:
-                value = float(value)
-            except:
-                pass
-            attrdict[key] = value
-        return attrdict
-
-
-    @staticmethod
-    def _filter_station(xmlfile):
+    def _filter_station(self, xmlfile, stationdict):
         """
         Filter individual xmlfile into a stationdict data structure.
 
@@ -670,58 +574,58 @@ class StationList(object):
         Returns:
             stationdict data structure
         """
-        stationdict = OrderedDict()
         imt_translate = {}
         imtset = set()
-        dom = minidom.parse(xmlfile)
-        for root in dom.childNodes:
-            if not isinstance(root, minidom.DocumentType):
-                break
-        stations = root.getElementsByTagName('station')
-        for station in stations:
-
-            #look at the station attributes to figure out if this is a DYFI-type station
-            #or a station with instruments measuring PGA, PGV, etc.
-            netid = station.getAttribute('netid')
-            instrumented = True
-            if netid.lower() in CIIM_TUPLE:
-                instrumented = False
-                
-            code = station.getAttribute('code')
-            attributes = StationList._getStationAttributes(station)
-            comps = station.getElementsByTagName('comp')
-            if code in stationdict:
-                compdict = stationdict[code]
-            else:
-                compdict = {}
-            for comp in comps:
-                compname = comp.getAttribute('name')
-                if 'Intensity Questionnaire' in str(compname):
-                    compdict['mmi'] = {}
+        tree = ET.parse(xmlfile)
+        root = tree.getroot()
+        for sl in root.iter('stationlist'):
+            for station in sl:
+                if station.tag != 'station':
                     continue
-                tpgmdict, ims = StationList._getGroundMotions(comp, imt_translate)
-                if compname in compdict:
-                    pgmdict = compdict[compname]
+                #look at the station attributes to figure out if this is a DYFI-type station
+                #or a station with instruments measuring PGA, PGV, etc.
+                attributes = station.attrib.copy()
+                netid = attributes['netid']
+                instrumented = int(netid.lower() not in CIIM_TUPLE)
+                    
+                code = attributes['code']
+                if code.startswith(netid + '.'):
+                    sta_id = code
+                    code = code.replace(netid + '.', '')
                 else:
-                    pgmdict = {}
-                pgmdict.update(tpgmdict)
-                # copy the VALUES, not REFERENCES, of the component list into
-                # our growing dictionary
-                compdict[compname] = copy.deepcopy(pgmdict)
-                imtset |= ims
-            if 'intensity' in attributes and not instrumented:
-                if 'mmi' not in compdict:
-                    compdict['mmi'] = {}
-                compdict['mmi']['MMI'] = {'value': attributes['intensity'],
-                                          'flag': '0'}
-                imtset.add('MMI')
-            stationdict[code] = (attributes, copy.deepcopy(compdict))
-        dom.unlink()
+                    sta_id = netid + '.' + code   
+    
+                if sta_id in stationdict:
+                    compdict = stationdict[sta_id]
+                else:
+                    compdict = {}
+                for comp in station:
+                    compname = comp.attrib['name']
+                    if 'Intensity Questionnaire' in str(compname):
+                        compdict['mmi'] = {}
+                        continue
+                    tpgmdict, ims = self._getGroundMotions(comp, imt_translate)
+                    if compname in compdict:
+                        pgmdict = compdict[compname]
+                    else:
+                        pgmdict = {}
+                    pgmdict.update(tpgmdict)
+                    # copy the VALUES, not REFERENCES, of the component list into
+                    # our growing dictionary
+                    compdict[compname] = copy.copy(pgmdict)
+                    imtset |= ims
+                if ('intensity' in attributes) and (instrumented == 0):
+                    if 'mmi' not in compdict:
+                        compdict['mmi'] = {}
+                    compdict['mmi']['MMI'] = \
+                        {'value': float(attributes['intensity']),
+                         'flag': '0'}
+                    imtset.add('MMI')
+                stationdict[sta_id] = (attributes, copy.copy(compdict))
         return stationdict, imtset
 
 
-    @staticmethod
-    def _createTables(db, cursor, imtset):
+    def _createTables(self):
         """
         Build the database tables.
         """
@@ -731,45 +635,12 @@ class StationList(object):
             for column, ctype in TABLES[table].items():
                 nuggets.append('%s %s' % (column, ctype))
             sql += ','.join(nuggets) + ')'
-            cursor.execute(sql)
-            db.commit()
+            self.cursor.execute(sql)
 
-        # Add distance measures to the station table
-        for col in DISTANCES:
-            cursor.execute('ALTER TABLE station ADD COLUMN %s float' % (col))
-        db.commit()
-
-        # IMT types
-        rows = []
-        for imt_id, imt_type in enumerate(imtset):
-            rows.append((imt_id, imt_type))
-        cursor.executemany('INSERT INTO imt (id, imt_type) VALUES (?, ?)',
-                rows)
-
-        # Soil types
-        for soiltype, sid in SOIL_TYPES.items():
-            cursor.execute(
-                    'INSERT INTO soiltype (soil_type, id) VALUES '
-                    '("%s", %d)' % (soiltype, sid)
-                )
-        db.commit()
+        self.db.commit()
+        return
 
 def get_imt_period(imt):
 
     p = re.search('(?<=psa)\d+', imt)
     return float(p.group(0)[:-1] + '.' + p.group(0)[-1])
-
-def imt_sort(key):
-
-    if isinstance(key, tuple):
-        key = key[0]
-    if key == 'MMI':
-        return 0
-    elif key == 'PGA':
-        return 1
-    elif key == 'PGV':
-        return 2
-    elif 'SA' in key:
-        return 2 + float(key[3:-1])
-    else:
-        raise ValueError('Error in imt_sort, unknown key=%s' % str(key))

@@ -4,7 +4,6 @@ import xml.etree.ElementTree as ET
 import copy
 from collections import OrderedDict
 import re
-import time as time
 
 # third party imports
 import numpy as np
@@ -115,15 +114,6 @@ class StationList(object):
         self = cls(db)
         return self
 
-    def __del__(self):
-        """
-        Closes out the database when the object is destroyed.
-        """
-        self.db.commit()
-        self.cursor.close()
-        self.db.close()
-
-
     def createDict(self):
         """Create a dictionary that maps to GeoJSON format for station data.
 
@@ -155,52 +145,82 @@ class StationList(object):
                   - value station->comp->component name->value
                   - units ('%g' for pga or any psa, 'cm/s' for pgv)
         """
+        pass
 
-    def _load_features(xmlfile):
+    def _load_features(self, xmlfile):
         #each station is a feature in a geojson file
-        dom = minidom.parse(xmlfile)
-        for root in dom.childNodes:
-            if not isinstance(root, minidom.DocumentType):
-                break
-        stations = root.getElementsByTagName('station')
-        imt_translate = {}
-        for station in stations:
-            feature = {'type':'Feature'}
-            netid = station.getAttribute('netid')
-            code = station.getAttribute('code')
-            feature['id'] = '%s.%s' % (netid,code)
-            lat = code = float(station.getAttribute('lat'))
-            lon = code = float(station.getAttribute('lon'))
-            feature['geometry'] = {'type':'Point','coordinates':[lon,lat]}
-            properties = {}
-            properties['name'] = station.getAttribute('name')
-            properties['intensity_flag'] = station.getAttribute('')#??
-            properties['distance'] = float(station.getAttribute('distance'))
-            properties['location'] = station.getAttribute('loc')
-            properties['code'] = station.getAttribute('code')
-            properties['commType'] = station.getAttribute('commtype')
-            properties['source'] = station.getAttribute('source')
-            properties['network'] = station.getAttribute('netid')
-            properties['instrumentType'] = station.getAttribute('insttype')
-            properties['intensity'] = float(station.getAttribute('intensity'))
-            comps = station.getElementsByTagName('comp')
-            channels = []
-            for comp in comps:
-                channel = {'name':comp.getAttribute('name')}
-                for component in channel.childNodes:
-                    if not isinstance(component, minidom.DocumentType):
-                        break
-                    pgmdict,imtset = self._getGroundMotions(component,imt_translate)
+#        tree = ET.parse(xmlfile)
+#        root = tree.getroot()
+#        imt_translate = {}
+#        for sl in root.iter('stationlist'):
+#            for station in sl:
+#                feature = {'type':'Feature'}
+#                netid = station.attrib['netid']
+#                code = station.attrib['code']
+#                feature['id'] = '%s.%s' % (netid,code)
+#                lat = code = float(station.attrib['lat'])
+#                lon = code = float(station.attrib['lon'])
+#                feature['geometry'] = {'type':'Point','coordinates':[lon,lat]}
+#                properties = {}
+#                properties['name'] = station.attrib['name']
+#                properties['intensity_flag'] = station.attrib['']#??
+#                properties['distance'] = float(station.attrib['distance'])
+#                properties['location'] = station.attrib['loc']
+#                properties['code'] = station.attrib['code']
+#                properties['commType'] = station.attrib['commtype']
+#                properties['source'] = station.attrib['source']
+#                properties['network'] = station.attrib['netid']
+#                properties['instrumentType'] = station.attrib['insttype']
+#                properties['intensity'] = float(station.attrib['intensity'])
+#                channels = []
+#                for comp in station:
+#                    channel = {'name':comp.attrib['name']}
+#                    for component in comp:
+#                        pgmdict, imtset = self._getGroundMotions(component, 
+#                                                                 imt_translate)
+        pass
                     
     @classmethod
-    def loadFromSQL(cls, sql):
-        pass
+    def loadFromSQL(cls, sql, dbfile=':memory:'):
+        """
+        Create a new object from saved SQL code (see :meth:`dumpToSQL`).
+        
+        Args:
+            sql (str):
+                SQL code to create and populate the database           
+            dbfile (str):
+                The path to a file in which the database will reside.
+                The default is ':memory:' for an in-memory database.
+                
+        Returns:
+            :class:`Stationlist` object.
+        """
+        
+        db = sqlite3.connect(dbfile)
+        self = cls(db)
+        self.cursor.executescript(sql)
+        return self
     
     def dumpToSQL(self):
-        pass
+        """
+        Dump the database as a string of SQL code (see :meth:`loadFromSQL`).
+        
+        Args:
+            None
+            
+        Returns:
+            A string of SQL sufficient to restore and repopulate the 
+            database.
+        """
+        
+        sqlstr = []
+        for line in self.db.iterdump():
+            sqlstr.append(line)
+        result = "\n".join(sqlstr)
+        return result
        
     @classmethod
-    def loadFromXML(cls, xmlfiles, dbfile):
+    def loadFromXML(cls, xmlfiles, dbfile=':memory:'):
         """
         Create a StationList object by reading one or more ShakeMap XML input
         files.
@@ -210,6 +230,7 @@ class StationList(object):
                 Sequence of ShakeMap XML input files to read.
             dbfile (str):
                 Path to a file into which to write the SQLite database.
+                The default is ':memory:' for an in-memory database.
 
         Returns:
             :class:`StationList` object
@@ -234,19 +255,13 @@ class StationList(object):
 
         """
         # Parse the xml into a dictionary
-        t1 = time.time()
         stationdict = {}
         imtset = set()
         for xmlfile in xmlfiles:
             stationdict, ims = self._filter_station(xmlfile, stationdict)
             imtset |= ims
-        t2 = time.time()
-        print('filter time %f sec' % (t2 - t1))
         # fill the database and create the object from it   
-        t1 = time.time()
         self._loadFromDict(stationdict, imtset)
-        t2 = time.time()
-        print('load from dict time %f sec' % (t2 - t1))
         return self
 
     def _loadFromDict(self, stationdict, imtset):
@@ -629,18 +644,3 @@ def get_imt_period(imt):
 
     p = re.search('(?<=psa)\d+', imt)
     return float(p.group(0)[:-1] + '.' + p.group(0)[-1])
-
-def imt_sort(key):
-
-    if isinstance(key, tuple):
-        key = key[0]
-    if key == 'MMI':
-        return 0
-    elif key == 'PGA':
-        return 1
-    elif key == 'PGV':
-        return 2
-    elif 'SA' in key:
-        return 2 + float(key[3:-1])
-    else:
-        raise ValueError('Error in imt_sort, unknown key=%s' % str(key))

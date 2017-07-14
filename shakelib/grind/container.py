@@ -134,11 +134,7 @@ class InputContainer(object):
         if 'station_string' not in self._hdfobj:
             return None
         station_string = self._hdfobj['station'].attrs['station_string']
-        db = sqlite3.connect(':memory:')
-        cursor = db.cursor()
-        cursor.executescript(station_string)
-        station = StationList(db)
-        return station
+        return StationList.loadFromSQL(station_string)
 
     def getOrigin(self):
         """Return an Origin object for this earthquake.
@@ -166,9 +162,8 @@ class InputContainer(object):
         :param station:
           StationList object.
         """
-        station_string = '\n'.join(list(station.db.iterdump()))
         station_group = self._hdfobj.create_group('station')
-        station_group.attrs['station_string'] = station_string
+        station_group.attrs['station_string'] = station.dumpToSQL()
         
     def changeConfig(self):
         pass
@@ -215,13 +210,20 @@ class InputContainer(object):
             tvalue = type(value)
             if tvalue not in ALLOWED:
                 raise TypeError('Unsupported metadata value type "%s"' % tvalue)
-            if not isinstance(value,dict):
-                if isinstance(value,datetime):
-                    value = time.mktime(value.timetuple())
-                group.attrs[key] = value
-            else:
+
+            if isinstance(value,dict):
                 subgroup = group.create_group(key)
                 self._saveDict(subgroup,value)
+                continue
+            elif isinstance(value,datetime):
+                value = time.mktime(value.timetuple())
+            elif isinstance(value, list):
+                for i, val in enumerate(value):
+                    if isinstance(val, str):
+                        value[i] = val.encode('utf8')
+            else:
+                pass
+            group.attrs[key] = value
 
 class OutputContainer(object):
     def __init__(self,hdfobj):

@@ -213,11 +213,7 @@ class StationList(object):
             database.
         """
         
-        sqlstr = []
-        for line in self.db.iterdump():
-            sqlstr.append(line)
-        result = "\n".join(sqlstr)
-        return result
+        return "\n".join(list(self.db.iterdump()))
        
     @classmethod
     def loadFromXML(cls, xmlfiles, dbfile=':memory:'):

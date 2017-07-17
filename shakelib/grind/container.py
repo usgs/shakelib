@@ -18,7 +18,7 @@ from shakelib.grind.station import StationList
 from shakelib.grind.sites import Sites
 
 #list of allowed data types in dictionaries
-ALLOWED = [str,int,float,
+ALLOWED = [str,int,float,bool,
            type(None),
            list,tuple,np.ndarray,
            dict,datetime,

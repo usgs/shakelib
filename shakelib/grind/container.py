@@ -211,6 +211,7 @@ class InputContainer(object):
             if tvalue not in ALLOWED:
                 raise TypeError('Unsupported metadata value type "%s"' % tvalue)
 
+#            print("key: ", key, " value ", value, " type ", tvalue)
             if isinstance(value,dict):
                 subgroup = group.create_group(key)
                 self._saveDict(subgroup,value)
@@ -219,6 +220,7 @@ class InputContainer(object):
                 value = time.mktime(value.timetuple())
             elif isinstance(value, list):
                 for i, val in enumerate(value):
+#                    print("key: ", key, " value ", val, " type ", type(val))
                     if isinstance(val, str):
                         value[i] = val.encode('utf8')
             else:

@@ -107,7 +107,7 @@ class InputContainer(object):
         :returns:
           Dictionary of configuration information.
         """
-        config = self._loadDict('config')
+        config = self._loadDict(self._hdfobj['config'])
         return config
     
     def getRupture(self):
@@ -131,7 +131,8 @@ class InputContainer(object):
         :returns:
           StationList object if data files were supplied, or None.
         """
-        if 'station_string' not in self._hdfobj:
+        if 'station_string' not in self._hdfobj['station'].attrs:
+            print('No station list in object')
             return None
         station_string = self._hdfobj['station'].attrs['station_string']
         return StationList.loadFromSQL(station_string)
@@ -180,7 +181,7 @@ class InputContainer(object):
         if self._hdfobj:
             self._hdfobj.close()
 
-    def _loadDict(cls,group):
+    def _loadDict(self, group):
         """Recursively load dictionaries from groups in an HDF file.
         
         :param group:
@@ -190,12 +191,13 @@ class InputContainer(object):
         """
         tdict = {}
         for (key,value) in group.attrs.items(): #attrs are NOT subgroups
+#            print('key ', key, ' value ', value)
             if key.find('time') > -1:
-                value = value = datetime.datetime.utcfromtimestamp(value)
+                value = datetime.datetime.utcfromtimestamp(value)
             tdict[key] = value
         for (key,value) in group.items(): #these are going to be the subgroups
-            tdict[key] = cls._loadDict(value)
-        return tdict
+            tdict[key] = self._loadDict(value)
+        return self.__convert(tdict)
 
     def _saveDict(self,group,mydict):
         """
@@ -226,6 +228,15 @@ class InputContainer(object):
             else:
                 pass
             group.attrs[key] = value
+        
+    def __convert(self, data):
+        if isinstance(data, bytes): return data.decode('ascii')
+        if isinstance(data, dict):  return dict(map(self.__convert, 
+                                                    data.items()))
+        if isinstance(data, tuple): return tuple(map(self.__convert, data))
+        if type(data) in (np.ndarray, list):  return list(map(self.__convert, 
+                                                              data))
+        return data
 
 class OutputContainer(object):
     def __init__(self,hdfobj):
@@ -236,6 +247,3 @@ class OutputContainer(object):
         hdfobj = h5py.File(hdffile, "r+")
         #probably should do some validating to make sure relevant data exists
         return cls(hdfobj)
-
-    
-        

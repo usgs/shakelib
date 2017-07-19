@@ -134,7 +134,7 @@ def test_from_config():
                 'weights_large_dist':[0, 1.0],
                 'dist_cutoff':500,
                 'site_gmpes':['ASK14'],
-                'weights_site_gmpes':'None'
+                'weights_site_gmpes':[]
             },
             'active_crustal_80_stable_continental_20':{
                 'gmpes':['active_crustal', 'stable_continental'],

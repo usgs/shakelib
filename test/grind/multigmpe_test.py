@@ -14,8 +14,9 @@ from openquake.hazardlib.gsim.boore_2014 import BooreEtAl2014
 from openquake.hazardlib.gsim.campbell_bozorgnia_2014 import CampbellBozorgnia2014
 from openquake.hazardlib.gsim.chiou_youngs_2014 import ChiouYoungs2014
 from openquake.hazardlib.gsim.campbell_2003 import Campbell2003
+from openquake.hazardlib.gsim.campbell_2003 import Campbell2003MwNSHMP2008
 from openquake.hazardlib.gsim.atkinson_boore_2006 import AtkinsonBoore2006
-from openquake.hazardlib.gsim.pezeshk_2011 import PezeshkEtAl2011
+from openquake.hazardlib.gsim.pezeshk_2011 import PezeshkEtAl2011NEHRPBC
 from openquake.hazardlib.gsim.zhao_2006 import ZhaoEtAl2006Asc
 from openquake.hazardlib.gsim.campbell_bozorgnia_2008 import CampbellBozorgnia2008
 from openquake.hazardlib.gsim.chiou_youngs_2008 import ChiouYoungs2008
@@ -37,13 +38,171 @@ from shakelib.grind.origin import Origin
 from shakelib.grind.rupture import QuadRupture
 from shakelib.grind.distance import Distance
 
+def test_basic():
+    # Most basic possible test of MultiGMPE
+    ASK14 = AbrahamsonEtAl2014()
 
+    IMT = imt.SA(1.0)
+    rctx = RuptureContext()
+    dctx = DistancesContext()
+    sctx = SitesContext()
+    sctx_rock = SitesContext()
 
+    rctx.rake = 0.0
+    rctx.dip = 90.0
+    rctx.ztor = 0.0
+    rctx.mag = 8.0
+    rctx.width = 10.0
+    rctx.hypo_depth = 8.0
 
+    dctx.rjb = np.logspace(1, np.log10(800), 100)
+    dctx.rrup = dctx.rjb
+    dctx.rhypo = dctx.rjb
+    dctx.rx = dctx.rjb
+    dctx.ry0 = dctx.rjb
 
-@pytest.mark.mpl_image_compare
+    sctx.vs30 = np.ones_like(dctx.rjb)*275.0
+    sctx.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+    sctx = MultiGMPE.set_sites_depth_parameters(sctx, ASK14)
+
+    mgmpe = MultiGMPE.from_list([ASK14], [1.0], imc = const.IMC.RotD50)
+
+    lmean_ask14, sd_ask14 = ASK14.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_mgmpe, sd_mgmpe = mgmpe.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+
+    np.testing.assert_allclose(lmean_ask14, lmean_mgmpe)
+    np.testing.assert_allclose(sd_ask14, sd_mgmpe)
+
+    # Two similar GMPEs, both with site terms
+    CY14 = ChiouYoungs2014()
+    mgmpe = MultiGMPE.from_list([ASK14, CY14], [0.6, 0.4], imc = const.IMC.RotD50)
+    sctx = MultiGMPE.set_sites_depth_parameters(sctx, CY14)
+    lmean_cy14, sd_cy14 = CY14.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_mgmpe, sd_mgmpe = mgmpe.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_target = 0.6*lmean_ask14 + 0.4*lmean_cy14
+    np.testing.assert_allclose(lmean_target, lmean_mgmpe)
+
+    # Two GMPEs, one without a site term
+    C03 = Campbell2003MwNSHMP2008()
+    mgmpe = MultiGMPE.from_list([ASK14, C03], [0.6, 0.4], imc = const.IMC.RotD50,
+                                default_gmpes_for_site = [ASK14])
+    lmean_c03, sd_c03 = C03.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    sctx_rock.vs30 = np.ones_like(dctx.rjb)*760.0
+    sctx_rock.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+    sctx_rock = MultiGMPE.set_sites_depth_parameters(sctx_rock, ASK14)
+    lmean_ask14_rock, sd_ask14_rock = ASK14.get_mean_and_stddevs(
+        sctx_rock, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lamp = lmean_ask14 - lmean_ask14_rock
+    lmean_target = 0.6*lmean_ask14 + 0.4*(lmean_c03 + lamp)
+    lmean_mgmpe, sd_mgmpe = mgmpe.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    np.testing.assert_allclose(lmean_target, lmean_mgmpe)
+
+    # Two multi-GMPEs
+    mgmpe1 = MultiGMPE.from_list([ASK14, CY14], [0.6, 0.4], imc = const.IMC.RotD50)
+    mgmpe2 = MultiGMPE.from_list([ASK14, C03], [0.6, 0.4], imc = const.IMC.RotD50,
+                                 default_gmpes_for_site = [ASK14])
+    mgmpe = MultiGMPE.from_list([mgmpe1, mgmpe2], [0.3, 0.7], imc = const.IMC.RotD50)
+    lmean_mgmpe, sd_mgmpe = mgmpe.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    tmp1 = 0.6*lmean_ask14 + 0.4*lmean_cy14
+    tmp2 = 0.6*lmean_ask14 + 0.4*(lmean_c03 + lamp)
+    lmean_target = 0.3*tmp1 + 0.7*tmp2
+    np.testing.assert_allclose(lmean_target, lmean_mgmpe)
+
+def test_from_config():
+    # Mock up a minimal config dictionary
+    conf = {
+        'gmpe_modules':{
+            'ASK14':['AbrahamsonEtAl2014', 'openquake.hazardlib.gsim.abrahamson_2014'],
+            'C03':['Campbell2003MwNSHMP2008', 'openquake.hazardlib.gsim.campbell_2003'],
+            'Pea11':['PezeshkEtAl2011NEHRPBC','openquake.hazardlib.gsim.pezeshk_2011']
+        },
+        'gmpe_sets':{
+            'active_crustal':{
+                'gmpes':['ASK14'],
+                'weights':[1.0],
+            },
+            'stable_continental':{
+                'gmpes':['C03', 'Pea11'],
+                'weights':[0.5, 0.5],
+                'weights_large_dist':[0, 1.0],
+                'dist_cutoff':500,
+                'site_gmpes':['ASK14'],
+                'weights_site_gmpes':'None'
+            },
+            'active_crustal_80_stable_continental_20':{
+                'gmpes':['active_crustal', 'stable_continental'],
+                'weights':[0.8, 0.2]
+            }
+        },
+        'grind':{
+            'gmpe':'active_crustal_80_stable_continental_20',
+            'component':'RotD50'
+        }
+    }
+
+    # Get multigmpe from config
+    test = MultiGMPE.from_config(conf)
+
+    # Compute "by hand"
+    ASK14 = AbrahamsonEtAl2014()
+    C03 = Campbell2003MwNSHMP2008()
+    Pea11 = PezeshkEtAl2011NEHRPBC()
+
+    IMT = imt.SA(1.0)
+    rctx = RuptureContext()
+    dctx = DistancesContext()
+    sctx = SitesContext()
+    sctx_rock = SitesContext()
+
+    rctx.rake = 0.0
+    rctx.dip = 90.0
+    rctx.ztor = 0.0
+    rctx.mag = 8.0
+    rctx.width = 10.0
+    rctx.hypo_depth = 8.0
+
+    dctx.rjb = np.logspace(1, np.log10(800), 100)
+    dctx.rrup = dctx.rjb
+    dctx.rhypo = dctx.rjb
+    dctx.rx = dctx.rjb
+    dctx.ry0 = dctx.rjb
+
+    sctx.vs30 = np.ones_like(dctx.rjb)*275.0
+    sctx.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+    sctx_rock.vs30 = np.ones_like(dctx.rjb)*760.0
+    sctx_rock.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+
+    sctx = MultiGMPE.set_sites_depth_parameters(sctx, ASK14)
+    sctx_rock = MultiGMPE.set_sites_depth_parameters(sctx_rock, ASK14)
+
+    lmean_ask14, dummy = ASK14.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_ask14_rock, dummy = ASK14.get_mean_and_stddevs(
+        sctx_rock, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_c03, dummy = C03.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_pea11, dummy = Pea11.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+
+    lmean_acr = copy.copy(lmean_ask14)
+    lamp = lmean_ask14 - lmean_ask14_rock
+    lmean_scr = 0.5*(lmean_c03 + lamp) + 0.5*(lmean_pea11 + lamp)
+    lmean_scr[dctx.rjb > 500] = (lmean_pea11 + lamp)[dctx.rjb > 500]
+    lmean_target = 0.8*lmean_acr + 0.2*lmean_scr
+
+    lmean, sd = test.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    np.testing.assert_allclose(lmean_target, lmean)
+
 def test_nga_w2_m8():
-    # Try to reproduce Gregor et al. (2014) Fig 2 (lower right)
+    # Test based on Gregor et al. (2014) Fig 2 (lower right)
     # This also tests
     #    - use of the multigmpe class with only a single GMPE 
     #    - Some of the sites class depth methods.
@@ -95,11 +254,6 @@ def test_nga_w2_m8():
     #                                                           Important ^^^^^^^
     cb14, sd_cb14 = gmpe.get_mean_and_stddevs(sctx, rctx, dctx, IMT,
         [const.StdDev.TOTAL])
-
-    # For this test, we'll first test the numerical values in the arrays
-    # but also a figure. I anticipate that the figure may be helpful when
-    # trying to debug. Also, it can be compared to the published figure,
-    # whereas the assert statements are just a test of self consistency.
 
     bea14t = np.array(
       [-0.04706931, -0.04831454, -0.04970724, -0.05126427, -0.05300426,
@@ -301,25 +455,8 @@ def test_nga_w2_m8():
     np.testing.assert_allclose(sd_ask14[0], sd_ask14t)
 
 
-    #---------------------------------------------------------------------------
-    # Make figure
-    #---------------------------------------------------------------------------
-    
-    fig = plt.figure(figsize = (5, 6) )
-    lwd = 1.5
-    plt.loglog(dctx.rjb, np.exp(ask14), 'r', label = 'ASK', linewidth=lwd)
-    plt.loglog(dctx.rjb, np.exp(bea14), 'chartreuse', label = 'BSSA', linewidth=lwd)
-    plt.loglog(dctx.rjb, np.exp(cb14), 'b', label = 'CB', linewidth=lwd)
-    plt.loglog(dctx.rjb, np.exp(cy14), 'm', label = 'CY', linewidth=lwd)
-    plt.xlim([1, 300])
-    plt.ylim([1e-3, 3])
-    plt.grid(True, which="both", ls = '-')
-    plt.legend(loc = 3)
-    return fig
-
-@pytest.mark.mpl_image_compare
 def test_nga_w2_m6():
-    # Try to reproduce Gregor et al. (2014) Fig 2 (upper right)
+    # Test based on Gregor et al. (2014) Fig 2 (upper right)
     # This also tests
     #    - use of the multigmpe class with only a single GMPE 
     #    - Some of the sites class depth methods.
@@ -372,13 +509,6 @@ def test_nga_w2_m6():
     #                                                     Important ^^^^^^^
     cb14, sd_cb14 = gmpe.get_mean_and_stddevs(sctx, rctx, dctx, IMT,
         [const.StdDev.TOTAL])
-
-    #---------------------------------------------------------------------------
-    # For this test, we'll first test the numerical values in the arrays
-    # but also a figure. I anticipate that the figure may be helpful when
-    # trying to debug. Also, it can be compared to the published figure,
-    # whereas the assert statements are just a test of self consistency.
-    #---------------------------------------------------------------------------
 
     bea14t = np.array(
       [-0.99215164, -0.99358257, -0.99518353, -0.99697407, -0.99897586,
@@ -566,23 +696,6 @@ def test_nga_w2_m6():
     np.testing.assert_allclose(sd_ask14[0], sd_ask14t)
 
 
-    #---------------------------------------------------------------------------
-    # Make figure
-    #---------------------------------------------------------------------------
-    
-    fig = plt.figure(figsize = (5, 6) )
-    lwd = 1.5
-    plt.loglog(dctx.rjb, np.exp(ask14), 'r', label = 'ASK', linewidth=lwd)
-    plt.loglog(dctx.rjb, np.exp(bea14), 'chartreuse', label = 'BSSA',
-               linewidth=lwd)
-    plt.loglog(dctx.rjb, np.exp(cb14), 'b', label = 'CB', linewidth=lwd)
-    plt.loglog(dctx.rjb, np.exp(cy14), 'm', label = 'CY', linewidth=lwd)
-    plt.xlim([1, 300])
-    plt.ylim([1e-3, 3])
-    plt.grid(True, which="both", ls = '-')
-    plt.legend(loc = 3)
-    return fig
-
 def test_multigmpe_has_site():
     gmpes = [AtkinsonBoore2006(), Campbell2003()]
     wts = [0.6, 0.4]
@@ -703,7 +816,7 @@ def test_multigmpe_get_site_factors():
     # Check that get_site_factors gives the same result if one default is given
     # and all other GMPEs do not have a site term for default True and False.
     #---------------------------------------------------------------------------
-    gmpes = [Campbell2003(), AtkinsonBoore2006(), PezeshkEtAl2011()]
+    gmpes = [Campbell2003(), AtkinsonBoore2006(), PezeshkEtAl2011NEHRPBC()]
     gmpe_m1 = MultiGMPE.from_list(
         gmpes, [0.3, 0.4, 0.3], default_gmpes_for_site = [AtkinsonBoore2006()], 
         imc = 'Average Horizontal (RotD50)')
@@ -1120,6 +1233,8 @@ def test_multigmpe_exceptions():
     
     
 if __name__ == '__main__':
+    test_basic()
+    test_from_config()
     test_nga_w2_m8()
     test_nga_w2_m6()
     test_multigmpe_has_site()

@@ -338,7 +338,7 @@ class MultiGMPE(GMPE):
             selected_gmpes = conf['gmpe_sets'][s]['gmpes']
             selected_gmpe_weights = [float(w) for w in conf['gmpe_sets'][s]['weights']]
             if 'weights_large_dist' in conf['gmpe_sets'][s].keys():
-                if conf['gmpe_sets'][s]['weights_large_dist'] == 'None':
+                if not conf['gmpe_sets'][s]['weights_large_dist']:
                     selected_weights_large_dist = None
                 else:
                     selected_weights_large_dist = \
@@ -347,7 +347,7 @@ class MultiGMPE(GMPE):
                 selected_weights_large_dist = None
 
             if 'dist_cutoff' in conf['gmpe_sets'][s].keys():
-                if conf['gmpe_sets'][s]['dist_cutoff'] == 'None':
+                if np.isnan(conf['gmpe_sets'][s]['dist_cutoff']):
                     selected_dist_cutoff = None
                 else:
                     selected_dist_cutoff = float(conf['gmpe_sets'][s]['dist_cutoff'])
@@ -355,7 +355,7 @@ class MultiGMPE(GMPE):
                 selected_dist_cutoff = None
 
             if 'site_gmpes' in conf['gmpe_sets'][s].keys():
-                if conf['gmpe_sets'][s]['site_gmpes'] == 'None':
+                if not conf['gmpe_sets'][s]['site_gmpes']:
                     selected_site_gmpes = None
                 else:
                     selected_site_gmpes = conf['gmpe_sets'][s]['site_gmpes']
@@ -363,7 +363,7 @@ class MultiGMPE(GMPE):
                 selected_site_gmpes = None
 
             if 'weights_site_gmpes' in conf['gmpe_sets'][s].keys():
-                if conf['gmpe_sets'][s]['weights_site_gmpes'] == 'None':
+                if not conf['gmpe_sets'][s]['weights_site_gmpes']:
                     selected_weights_site_gmpes = None
                 else:
                     selected_weights_site_gmpes = [conf['gmpe_sets'][s]['weights_site_gmpes']]
@@ -383,6 +383,7 @@ class MultiGMPE(GMPE):
                     selected_site_gmpes = [selected_site_gmpes]
                 site_gmpes = []
                 for g in selected_site_gmpes:
+                    print('g: ', g)
                     mod = import_module(conf['gmpe_modules'][g][1])
                     tmpclass = getattr(mod, conf['gmpe_modules'][g][0])
                     site_gmpes.append(tmpclass())

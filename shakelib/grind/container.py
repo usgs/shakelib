@@ -18,7 +18,7 @@ from shakelib.grind.station import StationList
 from shakelib.grind.sites import Sites
 
 #list of allowed data types in dictionaries
-ALLOWED = [str,int,float,
+ALLOWED = [str,int,float,bool,
            type(None),
            list,tuple,np.ndarray,
            dict,datetime,
@@ -107,7 +107,7 @@ class InputContainer(object):
         :returns:
           Dictionary of configuration information.
         """
-        config = self._loadDict('config')
+        config = self._loadDict(self._hdfobj['config'])
         return config
     
     def getRupture(self):
@@ -131,14 +131,11 @@ class InputContainer(object):
         :returns:
           StationList object if data files were supplied, or None.
         """
-        if 'station_string' not in self._hdfobj:
+        if 'station_string' not in self._hdfobj['station'].attrs:
+            print('No station list in object')
             return None
         station_string = self._hdfobj['station'].attrs['station_string']
-        db = sqlite3.connect(':memory:')
-        cursor = db.cursor()
-        cursor.executescript(station_string)
-        station = StationList(db)
-        return station
+        return StationList.loadFromSQL(station_string)
 
     def getOrigin(self):
         """Return an Origin object for this earthquake.
@@ -166,9 +163,8 @@ class InputContainer(object):
         :param station:
           StationList object.
         """
-        station_string = '\n'.join(list(station.db.iterdump()))
         station_group = self._hdfobj.create_group('station')
-        station_group.attrs['station_string'] = station_string
+        station_group.attrs['station_string'] = station.dumpToSQL()
         
     def changeConfig(self):
         pass
@@ -185,7 +181,7 @@ class InputContainer(object):
         if self._hdfobj:
             self._hdfobj.close()
 
-    def _loadDict(cls,group):
+    def _loadDict(self, group):
         """Recursively load dictionaries from groups in an HDF file.
         
         :param group:
@@ -195,12 +191,13 @@ class InputContainer(object):
         """
         tdict = {}
         for (key,value) in group.attrs.items(): #attrs are NOT subgroups
+#            print('key ', key, ' value ', value)
             if key.find('time') > -1:
-                value = value = datetime.datetime.utcfromtimestamp(value)
+                value = datetime.datetime.utcfromtimestamp(value)
             tdict[key] = value
         for (key,value) in group.items(): #these are going to be the subgroups
-            tdict[key] = cls._loadDict(value)
-        return tdict
+            tdict[key] = self._loadDict(value)
+        return self.__convert(tdict)
 
     def _saveDict(self,group,mydict):
         """
@@ -215,13 +212,31 @@ class InputContainer(object):
             tvalue = type(value)
             if tvalue not in ALLOWED:
                 raise TypeError('Unsupported metadata value type "%s"' % tvalue)
-            if not isinstance(value,dict):
-                if isinstance(value,datetime):
-                    value = time.mktime(value.timetuple())
-                group.attrs[key] = value
-            else:
+
+#            print("key: ", key, " value ", value, " type ", tvalue)
+            if isinstance(value,dict):
                 subgroup = group.create_group(key)
                 self._saveDict(subgroup,value)
+                continue
+            elif isinstance(value,datetime):
+                value = time.mktime(value.timetuple())
+            elif isinstance(value, list):
+                for i, val in enumerate(value):
+#                    print("key: ", key, " value ", val, " type ", type(val))
+                    if isinstance(val, str):
+                        value[i] = val.encode('utf8')
+            else:
+                pass
+            group.attrs[key] = value
+        
+    def __convert(self, data):
+        if isinstance(data, bytes): return data.decode('ascii')
+        if isinstance(data, dict):  return dict(map(self.__convert, 
+                                                    data.items()))
+        if isinstance(data, tuple): return tuple(map(self.__convert, data))
+        if type(data) in (np.ndarray, list):  return list(map(self.__convert, 
+                                                              data))
+        return data
 
 class OutputContainer(object):
     def __init__(self,hdfobj):
@@ -232,6 +247,3 @@ class OutputContainer(object):
         hdfobj = h5py.File(hdffile, "r+")
         #probably should do some validating to make sure relevant data exists
         return cls(hdfobj)
-
-    
-        

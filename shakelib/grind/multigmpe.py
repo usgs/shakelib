@@ -2,6 +2,7 @@
 
 import copy
 from importlib import import_module
+import warnings
 
 import numpy as np
 
@@ -25,7 +26,14 @@ class DualDistanceWeights(GMPE):
     This class is a wrapper around the MultiGMPE class, which allows for the
     GMPE list and their weights to vary with distance. Only two sets of 
     GMPEs/weights are currently supported.
+
+
+    *NOTE* This class is deprecated and will be deleted soon.
+
     """
+
+    warnings.warn("The DualDistanceWeights class is deprecated.",
+                  DeprecationWarning)
 
     DEFINED_FOR_TECTONIC_REGION_TYPE = None
     DEFINED_FOR_INTENSITY_MEASURE_TYPES = None
@@ -315,26 +323,52 @@ class MultiGMPE(GMPE):
         selected_gmpe_sets = conf['gmpe_sets'][selected_gmpe]['gmpes']
         gmpe_set_weights = [float(w) for w in conf['gmpe_sets'][selected_gmpe]['weights']]
 
+        # Note: component is currently not fully suppored other than "Larger", which
+        # corresponds to const.IMC.GREATER_OF_TWO_HORIZONTAL. But for testing, we also
+        # need to be able to use "RotD50":
+        if conf['grind']['component'] == 'Larger':
+            IMC = const.IMC.GREATER_OF_TWO_HORIZONTAL
+        elif conf['grind']['component'] == 'RotD50':
+            IMC = const.IMC.RotD50
+        else:
+            raise Exception("Unsupported component in config file.")
+
         mgmpes = []
         for s in selected_gmpe_sets:
             selected_gmpes = conf['gmpe_sets'][s]['gmpes']
             selected_gmpe_weights = [float(w) for w in conf['gmpe_sets'][s]['weights']]
-            if not conf['gmpe_sets'][s]['weights_large_dist']:
+            if 'weights_large_dist' in conf['gmpe_sets'][s].keys():
+                if not conf['gmpe_sets'][s]['weights_large_dist']:
+                    selected_weights_large_dist = None
+                else:
+                    selected_weights_large_dist = \
+                        [float(w) for w in conf['gmpe_sets'][s]['weights_large_dist']]
+            else:
                 selected_weights_large_dist = None
+
+            if 'dist_cutoff' in conf['gmpe_sets'][s].keys():
+                if np.isnan(conf['gmpe_sets'][s]['dist_cutoff']):
+                    selected_dist_cutoff = None
+                else:
+                    selected_dist_cutoff = float(conf['gmpe_sets'][s]['dist_cutoff'])
             else:
-                selected_weights_large_dist = [float(w) for w in conf['gmpe_sets'][s]['weights_large_dist']]
-            if np.isnan(conf['gmpe_sets'][s]['dist_cutoff']):
                 selected_dist_cutoff = None
+
+            if 'site_gmpes' in conf['gmpe_sets'][s].keys():
+                if not conf['gmpe_sets'][s]['site_gmpes']:
+                    selected_site_gmpes = None
+                else:
+                    selected_site_gmpes = conf['gmpe_sets'][s]['site_gmpes']
             else:
-                selected_dist_cutoff = float(conf['gmpe_sets'][s]['dist_cutoff'])
-            if not conf['gmpe_sets'][s]['site_gmpes']:
                 selected_site_gmpes = None
+
+            if 'weights_site_gmpes' in conf['gmpe_sets'][s].keys():
+                if not conf['gmpe_sets'][s]['weights_site_gmpes']:
+                    selected_weights_site_gmpes = None
+                else:
+                    selected_weights_site_gmpes = [conf['gmpe_sets'][s]['weights_site_gmpes']]
             else:
-                selected_site_gmpes = conf['gmpe_sets'][s]['site_gmpes']
-            if not conf['gmpe_sets'][s]['weights_site_gmpes']:
                 selected_weights_site_gmpes = None
-            else:
-                selected_weights_site_gmpes = [conf['gmpe_sets'][s]['weights_site_gmpes']]
 
             # Import GMPE modules and initialize classes into list of objects
             gmpes = []
@@ -359,7 +393,8 @@ class MultiGMPE(GMPE):
             mgmpes.append(MultiGMPE.from_list(
                 gmpes, selected_gmpe_weights,
                 default_gmpes_for_site = site_gmpes,
-                default_gmpes_for_site_weights = selected_weights_site_gmpes))
+                default_gmpes_for_site_weights = selected_weights_site_gmpes,
+                imc = IMC))
 
             # Append large-distance info if specified
             if selected_dist_cutoff is not None:
@@ -367,7 +402,7 @@ class MultiGMPE(GMPE):
                 mgmpes[-1].WEIGHTS_LARGE_DISTANCE = selected_weights_large_dist
 
         # Make a MultiGMPE of MultiGMPEs
-        return MultiGMPE.from_list(mgmpes, gmpe_set_weights)
+        return MultiGMPE.from_list(mgmpes, gmpe_set_weights, imc = IMC)
 
 
     @classmethod
@@ -532,6 +567,14 @@ class MultiGMPE(GMPE):
                     raise Exception('default_gmpes_for_site_weights must sum'\
                                     ' to one.')
 
+        # Note: if ALL of the GMPEs do not have a site term (requiring Vs30),
+        #       then REQUIRES_SITES_PARAMETERS for the MultiGMPE will not
+        #       include Vs30 even though it will be needed to compute the
+        #       default site term. So if the site checks have passed to this
+        #       point, we should add Vs30 to the set of required site pars:
+        self.REQUIRES_SITES_PARAMETERS = set.union(
+            self.REQUIRES_SITES_PARAMETERS, set(['vs30']))
+
         self.DEFAULT_GMPES_FOR_SITE = default_gmpes_for_site
         self.DEFAULT_GMPES_FOR_SITE_WEIGHTS = default_gmpes_for_site_weights
         self.REFERENCE_VS30 = reference_vs30
@@ -555,23 +598,22 @@ class MultiGMPE(GMPE):
         Method for computing site amplification factors from the defalut GMPE
         to be applied to GMPEs which do not have a site term. 
 
-        **NOTE** Amps are calculated in natural log space and so the ln(amp)
+        **NOTE** Amps are calculated in natural log units and so the ln(amp)
         is returned. 
 
-        :param sites:
-            Instance of SitesContext. 
-        :param rup:
-            Instance of RuptureContext.
-        :param dists:
-            Instance of DistancesContext.
-        :param imt:
-            An instance openquake.hazardlib.imt.
-        :param default:
-            Boolean of whether or not to return the amplificaiton factors for 
-            the gmpes or default_gmpes_for_site. This argument is primarily only 
-            intended to be used internally for when we just need to access the 
-            default amplifications to apply to those GMPEs that do not have site
-            terms. 
+        Args:
+            sites (SitesContext): Instance of SitesContext. 
+            rup (RuptureContext): Instance of RuptureContext.
+            dists (DistancesContext): Instance of DistancesContext.
+            imt: An instance openquake.hazardlib.imt.
+            default (bool): Boolean of whether or not to return the amplificaiton
+                factors for the gmpes or default_gmpes_for_site. This argument is
+                primarily only intended to be used internally for when we just
+                need to access the default amplifications to apply to those GMPEs
+                that do not have site terms. 
+
+        Returns:
+            Site amplifications in natural log units. 
         """
 
         #-----------------------------------------------------------------------
@@ -615,13 +657,12 @@ class MultiGMPE(GMPE):
         methods that do not require the depth parameters in the
         SitesContext to make this easier.
 
-        :param sites:
-            A sites context.
-        :param gmpe:
-            A GMPE instance.
+        Args:
+            sites:1 An OQ sites context.
+            gmpe: An OQ GMPE instance.
 
-        :returns:
-            A sites context with the depth parameters set for the
+        Returns:
+            An OQ sites context with the depth parameters set for the
             requested GMPE. 
         """
 
@@ -721,7 +762,14 @@ def get_gmpe_coef_table(gmpe):
          for the table. So we have to look for it. We 
       *  We are also assuming that if there are more than one 
          coefficient table, the range of periods will be the 
-         same across all of the tables. 
+         same across all of the tables.
+
+    Args:
+        gmpe (GMPE): An OQ GMPE instance.
+
+    Returns:
+        The associated coefficient table.
+
     """
     stuff = gmpe.__dir__()
     coef_stuff = [s for s in stuff if 'COEFFS' in s]

@@ -35,7 +35,7 @@ Dependencies
 
 - Mac OSX or Linux operating systems
 - Python 3
-- Python libraries: numpy, scipy, rasterio, fiona, xlrd, pandas, shapely, h5py, gdal, descartes, oq-hazlib, neicio,
+- Python libraries: numpy, scipy, rasterio, fiona, xlrd, pandas, shapely, h5py, gdal, descartes, openquake.engine, neicio,
   MapIO, matplotlib, jupyter, pytables, lxml
 
 OQ Hazard Library

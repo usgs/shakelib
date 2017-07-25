@@ -751,20 +751,16 @@ def get_gmpe_sa_periods(gmpe):
 
 def get_gmpe_coef_table(gmpe):
     """
-    Method for finding the (or "a") GMPE table. If there are more than
-    one, then the first one found is returned. This is okay when using
-    check for the presence of PGA/PGV or the range of spectral periods
-    because presumably this is consistent across all tables for a given 
-    GMPE. 
+    Method for finding the (or "a") GMPE table. 
 
     Notes:
 
-      *  The reason for the complexity here is that some of the 
-         OQ GMPE classes do not use the COEFFS attribute name
-         for the table. So we have to look for it. We 
-      *  We are also assuming that if there are more than one 
-         coefficient table, the range of periods will be the 
-         same across all of the tables.
+      *  The reason for the complexity here is that there can be multiple
+         coefficient tables, and some of them may not have the sa_coeffs
+         attribute, which is the main reason for getting the table. 
+      *  We are also assuming that if there are more than one  coefficient
+         table, the range of periods will be the same across all of the 
+         tables.
 
     Args:
         gmpe (GMPE): An OQ GMPE instance.

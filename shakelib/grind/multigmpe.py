@@ -109,7 +109,7 @@ class DualDistanceWeights(GMPE):
         if imt is not None:
             sgmpe, swts = filter_gmpe_list(gmpes, wts, imt)
         else:
-            sgmpe, swts = gmpes, wts
+            sgmpe, swts = copy.copy(gmpes), copy.copy(wts)
 
         self.mgmpe_small = MultiGMPE.from_list(
             sgmpe, swts, default_gmpes_for_site = site_gmpes)
@@ -123,8 +123,8 @@ class DualDistanceWeights(GMPE):
                 sgmpe_large, swts_large = filter_gmpe_list(
                     gmpes, wts_large_dist, imt)
             else:
-                sgmpe_large = gmpes
-                swts_large = wts_large_dist
+                sgmpe_large = copy.copy(gmpes)
+                swts_large = copy.copy(wts_large_dist)
             self.mgmpe_large = MultiGMPE.from_list(
                 sgmpe_large, swts_large, default_gmpes_for_site = site_gmpes)
             self.dist_cutoff = dist_cutoff
@@ -132,6 +132,7 @@ class DualDistanceWeights(GMPE):
             self.mgmpe_large = None
             self.dist_cutoff = None
         return self
+
 
 class MultiGMPE(GMPE):
     """
@@ -690,7 +691,8 @@ def filter_gmpe_list(gmpes, wts, imt):
 
     Args:
         gmpes (list): List of GMPE instances. 
-        wts (list): List of floats indicating the weight of the GMPEs. 
+        wts (list): List of floats indicating the weight of the GMPEs.
+        imt (IMT): OQ IMT to filter GMPE list for.
 
     Returns:
         tuple: List of GMPE instances and list of weights. 
@@ -772,9 +774,17 @@ def get_gmpe_coef_table(gmpe):
 
     """
     stuff = gmpe.__dir__()
-    coef_stuff = [s for s in stuff if 'COEFFS' in s]
-    coef_stuff = coef_stuff[0]
+    coef_list = [s for s in stuff if 'COEFFS' in s]
+    success = False
+    ind = 0
+    while success is False:
+        coef_sel = coef_list[ind]
+        cobj = getattr(gmpe, coef_sel)
+        if "sa_coeffs" in cobj.__dir__():
+            success = True
+        else:
+            ind = ind + 1
 
-    cobj = getattr(gmpe, coef_stuff)
     return cobj
+
 

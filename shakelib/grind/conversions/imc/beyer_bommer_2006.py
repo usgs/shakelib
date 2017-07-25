@@ -49,6 +49,7 @@ class BeyerBommer2006(object):
         horizontal component of motion. Bulletin of the Seismological Society of
         America, 96(4A), 1512-1522. 
         `[link] <http://www.bssaonline.org/content/96/4A/1512.short>`__
+
     """
 
     # c12 = median ratio
@@ -88,21 +89,21 @@ class BeyerBommer2006(object):
             - Assumes the input amps are in natural log (not linear) space
             - IMC type 'VERTICAL' is not supported
 
-        :param amps:
-            Numpy array of ground motion amplitudes.
-        :param imc_in:
-            OpenQuake IMC type of the input amp array.
-            `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
-        :param imc_out:
-            Desired OpenQuake IMC type of the output amps.
-            `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
-        :param imt:
-            OpenQuake IMT of the input amps (must be one of PGA, PGV, or SA).
-            `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`
-        :returns:
-            Numpy array of amps converted from imc_in to imc_out.
+        Args:
+            amps (array): Numpy array of ground motion amplitudes.
+            imc_in (IMC): OpenQuake IMC type of the input amp array.
+                `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
+            imc_out (IMC): Desired OpenQuake IMC type of the output amps.
+                `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
+            imt (IMT): OpenQuake IMT of the input amps (must be one of PGA,
+                PGV, or SA).
+                `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`
+
+        Returns:
+            array: Numpy array of amps converted from imc_in to imc_out.
+
         """
-        
+
         denom = BeyerBommer2006.__GM2other(imt, imc_in)
         numer = BeyerBommer2006.__GM2other(imt, imc_out)
 
@@ -118,27 +119,26 @@ class BeyerBommer2006(object):
             - Assumes the input sigmas are in natural log space
             - IMC types 'VERTICAL' and 'HORIZONTAL' are not supported
 
-        :param sigmas:
-            Numpy array of standard deviations. 
-        :param imc_in:
-            OpenQuake IMC type of the input sigmas array. 
-            `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
-        :param imc_out:
-            Desired OpenQuake IMC type of the output sigmas. 
-            `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
-        :param imt:
-            OpenQuake IMT of the input sigmas (must be one of PGA, PGV, or SA)
-            `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`__
+        Args:
+            sigmas (array): Numpy array of standard deviations. 
+            imc_in (IMC): OpenQuake IMC type of the input sigmas array. 
+                `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
+            imc_out (IMC): Desired OpenQuake IMC type of the output sigmas. 
+                `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
+            imt (IMT): OpenQuake IMT of the input sigmas (must be one of PGA,
+                 PGV, or SA)
+                `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`__
 
-        :returns:
-            Numpy array of standard deviations converted from imc_in to imc_out
+        Returns:
+            array: Numpy array of standard deviations converted from imc_in to imc_out
+
         """
 
         #---------------------------------------------------
-        # Take input sigma to geometric mean sigma. 
+        # Take input sigma to geometric mean sigma.
         # Solve eqn 8 for sigma_GM2, which is sigma_logSa_GM
         # This is the sigma converted to geometric mean
-        # (i.e., reference component). 
+        # (i.e., reference component).
         #---------------------------------------------------
         R, sig_log_ratio = BeyerBommer2006.__GM2otherSigma(imt, imc_in)
         sigma_GM2 = (sigmas**2 - sig_log_ratio**2) / R**2
@@ -164,20 +164,21 @@ class BeyerBommer2006(object):
            imc != const.IMC.HORIZONTAL:
             raise ValueError('unknown IMC %r' % imc)
 
-
     @staticmethod
     def __GM2other(imt, imc):
         """
         Helper function to extract coefficients from the parameters for 
         converting the median ground motions.
 
-        :param imt:
-            Intensity measure type.
-        :param imc:
-            Intensity measure component.
-        :returns:
-            Median ratios. This is directly from Table 2 for PGA and PGV, and
-            computed from coefficients in Table 3 along with eqn 10 for Sa. 
+        Args:
+            imt (IMT): OQ intensity measure type.
+            imc (IMC): OQ Intensity measure component.
+
+        Returns:
+            float: Median ratios. This is directly from Table 2 for PGA and PGV,
+                and computed from coefficients in Table 3 along with eqn 10 for
+                Sa.
+
         """
 
         if imc == const.IMC.AVERAGE_HORIZONTAL:
@@ -186,7 +187,6 @@ class BeyerBommer2006(object):
             return 1.
 
         BeyerBommer2006.__checkIMC(imc)
-
 
         if 'PGA' in imt:
             return BeyerBommer2006.__pga_dict[imc]['c12']
@@ -215,12 +215,13 @@ class BeyerBommer2006(object):
         Helper function to extract coefficients from the parameters for
         converting standard deviations. 
 
-        :param imt:
-            Intensity measure type.
-        :param imc:
-            Intensity measure component.
-        :returns:
-            Coefficients: R (ratio of sigma values), standard deviation of sigma ratios.  
+        Args:
+            imt (IMT): OQ intensity measure type.
+            imc (IMC): OQ intensity measure component.
+
+        Returns:
+            tuple: Coefficients: R (ratio of sigma values), standard deviation
+            of sigma ratios.
         """
 
         if imc == const.IMC.AVERAGE_HORIZONTAL:
@@ -231,9 +232,11 @@ class BeyerBommer2006(object):
         BeyerBommer2006.__checkIMC(imc)
 
         if 'PGA' in imt:
-            return BeyerBommer2006.__pga_dict[imc]['R'], BeyerBommer2006.__pga_dict[imc]['c34']
+            return BeyerBommer2006.__pga_dict[imc]['R'],\
+                BeyerBommer2006.__pga_dict[imc]['c34']
         elif 'PGV' in imt:
-            return BeyerBommer2006.__pgv_dict[imc]['R'], BeyerBommer2006.__pgv_dict[imc]['c34']
+            return BeyerBommer2006.__pgv_dict[imc]['R'],\
+                BeyerBommer2006.__pgv_dict[imc]['c34']
         elif 'SA' in imt:
             R = BeyerBommer2006.__sa_dict[imc]['R']
             pp = imt.period
@@ -242,7 +245,8 @@ class BeyerBommer2006(object):
             elif pp < 0.8:
                 c3 = BeyerBommer2006.__sa_dict[imc]['c3']
                 c4 = BeyerBommer2006.__sa_dict[imc]['c4']
-                return R, c3 + (c4 - c3) * np.log(pp / 0.15) / np.log(0.8 / 0.15)
+                return R, c3 + (c4 - c3) * np.log(pp / 0.15) /\
+                    np.log(0.8 / 0.15)
             elif pp <= 5.0:
                 return R, BeyerBommer2006.__sa_dict[imc]['c4']
             else:

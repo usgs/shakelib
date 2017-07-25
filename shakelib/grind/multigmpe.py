@@ -775,16 +775,9 @@ def get_gmpe_coef_table(gmpe):
     """
     stuff = gmpe.__dir__()
     coef_list = [s for s in stuff if 'COEFFS' in s]
-    success = False
-    ind = 0
-    while success is False:
-        coef_sel = coef_list[ind]
+    for coef_sel in coef_list:
         cobj = getattr(gmpe, coef_sel)
         if "sa_coeffs" in cobj.__dir__():
-            success = True
-        else:
-            ind = ind + 1
-
-    return cobj
-
+            return cobj
+    raise Exception("GMPE %s does not contain sa_coeffs")
 

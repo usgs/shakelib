@@ -775,5 +775,5 @@ def get_gmpe_coef_table(gmpe):
         cobj = getattr(gmpe, coef_sel)
         if "sa_coeffs" in cobj.__dir__():
             return cobj
-    raise Exception("GMPE %s does not contain sa_coeffs")
+    raise Exception("GMPE %s does not contain sa_coeffs attrivute." %gmpe)
 

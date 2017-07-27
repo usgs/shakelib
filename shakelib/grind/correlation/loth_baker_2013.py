@@ -43,7 +43,7 @@ B3 = np.array([
     [0.08, 0.08, 0.03, 0.02, 0.04, 0.09, 0.13, 0.10, 0.22]
     ])
 
-class LothBaker2010(object):
+class LothBaker2013(object):
     """
     Created by Christophe Loth, 12/18/2012
     Pythonized and vectorized by C. Bruce Worden, 3/15/2017
@@ -54,7 +54,7 @@ class LothBaker2010(object):
     Documentation is provided in the following document:
     Loth, C., and Baker, J. W. (2013). “A spatial cross-correlation model of 
     ground motion spectral accelerations at multiple periods.” 
-    Earthquake Engineering & Structural Dynamics, (in press)
+    Earthquake Engineering & Structural Dynamics, 42, 397-417.
     """
     def __init__(self):
         self.rbs1 = RectBivariateSpline(Tlist, Tlist, B1, kx=1, ky=1)
@@ -92,12 +92,14 @@ class LothBaker2010(object):
 
         # Linearly interpolate the corresponding value of each coregionalization
         # matrix coefficient
+        # This is the slow part
 
         b1 = self.rbs1.ev(t1, t2)
         b2 = self.rbs2.ev(t1, t2)
         b3 = self.rbs3.ev(t1, t2)
 
         # Compute the correlation coefficient (Equation 42)
+        # This is very fast
 
         rho = ne.evaluate("b1 * exp(-3 * h / 20) + b2 * exp(-3 * h / 70) + (h == 0) * b3")
 

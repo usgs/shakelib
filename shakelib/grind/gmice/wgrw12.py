@@ -175,6 +175,8 @@ class WGRW12(object):
         lfact = np.log10(np.e)
         c, c2 = self.__getConsts(imt)
         mmi = mmi.copy()
+        ix_nan = np.isnan(mmi)
+        mmi[ix_nan] = 1.0
 
         if dists is not None and mag is not None:
             doresid = True
@@ -213,8 +215,11 @@ class WGRW12(object):
         else:
             units = 1.0
         pgm /= units
+        pgm = np.log(pgm)
+        pgm[ix_nan] = np.nan
+        dpgm_dmmi[ix_nan] = np.nan
 
-        return np.log(pgm), dpgm_dmmi
+        return pgm, dpgm_dmmi
 
     def getGM2MIsd(self):
         """

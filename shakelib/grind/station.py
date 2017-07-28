@@ -117,7 +117,7 @@ class StationList(object):
     def createDict(self):
         """Create a dictionary that maps to GeoJSON format for station data.
 
-        :returns:
+        Returns:
           Dictionary with fields:
             - type 'Feature'
             - id   'netid.code'

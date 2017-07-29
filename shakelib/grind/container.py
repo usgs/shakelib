@@ -18,9 +18,10 @@ from shakelib.grind.station import StationList
 from shakelib.grind.sites import Sites
 
 #list of allowed data types in dictionaries
-ALLOWED = [str,int,float,bool,
+ALLOWED = [str,int,float,bool, bytes,
            type(None),
            list,tuple,np.ndarray,
+           np.float64, np.bool_, np.int64,
            dict,datetime,
            collections.OrderedDict]
 
@@ -76,7 +77,7 @@ class InputContainer(object):
         #The config and event info are mandatory
         #write the config dictionary to a config group
         config_group = this._hdfobj.create_group('config')
-        this._saveDict(config_group,config)
+        _dict2h5group(config, config_group)
 
         #stash the event.xml in a group
         try:
@@ -107,7 +108,7 @@ class InputContainer(object):
         :returns:
           Dictionary of configuration information.
         """
-        config = self._loadDict(self._hdfobj['config'])
+        config = _h5group2dict(self._hdfobj['config'])
         return config
     
     def getRupture(self):
@@ -181,69 +182,195 @@ class InputContainer(object):
         if self._hdfobj:
             self._hdfobj.close()
 
-    def _loadDict(self, group):
-        """Recursively load dictionaries from groups in an HDF file.
-        
-        :param group:
-          HDF5 group object.
-        :returns:
-          Dictionary of metadata (possibly containing other dictionaries).
-        """
-        tdict = {}
-        for (key,value) in group.attrs.items(): #attrs are NOT subgroups
-#            print('key ', key, ' value ', value)
-            if key.find('time') > -1:
-                value = datetime.datetime.utcfromtimestamp(value)
-            tdict[key] = value
-        for (key,value) in group.items(): #these are going to be the subgroups
-            tdict[key] = self._loadDict(value)
-        return self.__convert(tdict)
-
-    def _saveDict(self,group,mydict):
-        """
-        Recursively save dictionaries into groups in an HDF file.
-        :param group:
-          HDF group object to contain a given dictionary of data in HDF file.
-        :param mydict:
-          Dictionary of values to save in group.  Dictionary can contain objects of the following types:
-            - str,unicode,int,float,long,list,tuple,np.ndarray,dict,datetime.datetime,collections.OrderedDict
-        """
-        for (key,value) in mydict.items():
-            tvalue = type(value)
-            if tvalue not in ALLOWED:
-                raise TypeError('Unsupported metadata value type "%s"' % tvalue)
-
-#            print("key: ", key, " value ", value, " type ", tvalue)
-            if isinstance(value,dict):
-                subgroup = group.create_group(key)
-                self._saveDict(subgroup,value)
-                continue
-            elif isinstance(value,datetime):
-                value = time.mktime(value.timetuple())
-            elif isinstance(value, list):
-                for i, val in enumerate(value):
-#                    print("key: ", key, " value ", val, " type ", type(val))
-                    if isinstance(val, str):
-                        value[i] = val.encode('utf8')
-            else:
-                pass
-            group.attrs[key] = value
-        
-    def __convert(self, data):
-        if isinstance(data, bytes): return data.decode('ascii')
-        if isinstance(data, dict):  return dict(map(self.__convert, 
-                                                    data.items()))
-        if isinstance(data, tuple): return tuple(map(self.__convert, data))
-        if type(data) in (np.ndarray, list):  return list(map(self.__convert, 
-                                                              data))
-        return data
-
 class OutputContainer(object):
+    """
+    Generic hdf5 output container to store metadata and data sets (with or 
+    without associated metadata).
+    """
     def __init__(self,hdfobj):
         self._hdfobj = hdfobj
     
     @classmethod
     def loadFromHDF(cls,hdffile):
+        """
+        Load an HDF file into the object.
+
+        Args:
+            hdffile (str):
+                Path to file to be loaded.
+
+        Returns:
+            A :class:`OutputContainer` object.
+        """
         hdfobj = h5py.File(hdffile, "r+")
-        #probably should do some validating to make sure relevant data exists
         return cls(hdfobj)
+
+    @classmethod
+    def createEmpty(cls, filename):
+        """
+        Create an empty HDF file/object.
+
+        Args:
+            filename (str):
+                Path to file to be created.
+
+        Returns:
+            An empty :class:`OutputContainer` object tied to file 
+            'filename'.
+        """
+
+        hdfobj = h5py.File(filename, "w")
+        return cls(hdfobj)
+
+    def addMetadata(self, data, name='metadata'):
+        """
+        Add a dictionary of metatata as a group.
+
+        Args:
+            data (dict):
+                Dictionary to be saved as a group.
+            name (str)(optional):
+                The name of the group holding the metadata. The default is
+                'metadata'.
+
+        Returns:
+            The h5py group holding the metadata.
+        """
+
+        mgroup = self._hdfobj.create_group(name)
+        _dict2h5group(data, mgroup)
+        return mgroup
+
+    def getMetadata(self, name='metadata'):
+        """
+        Retrieve a dictionary of metatata from a group.
+
+        Args:
+            name (str)(optional):
+                The name of the group holding the metadata. The default is
+                'metadata'.
+
+        Returns:
+            A dictionary holding the metadata.
+        """
+
+        return _h5group2dict(self._hdfobj[name])
+
+    def addData(self, data, name, metadata=None):
+        """
+        Add an array of data (and, optionally, it's metadata) as a dataset.
+
+        Args:
+            data (array):
+                Array to be saved as a dataset.
+            name (str):
+                The name of the dataset holding the data.
+            metadata (dict)(optional):
+                An (optional) dictionary of metadata to be associated with 
+                the dataset.
+
+        Returns:
+            The h5py dataset holding the data and metadata.
+        """
+
+        dset = self._hdfobj.create_dataset(name, data=data)
+        if metadata:
+            _dict2h5group(metadata, dset)
+        return dset
+
+    def getData(self, name):
+        """
+        Retrieve an array of data and any associated metadata from a dataset.
+
+        Args:
+            name (str):
+                The name of the dataset holding the data and metadata.
+
+        Returns:
+            An array of data and a dictionary of metadata.
+        """
+
+        dset = self._hdfobj['name']
+        data = dset[:]
+        metadata = _h5group2dict(dset)
+        return data, metadata
+
+    def close(self):
+        """
+        Close the HDF5 file.
+
+        """
+        if self._hdfobj:
+            self._hdfobj.close()
+
+def _dict2h5group(mydict, group):
+    """
+    Recursively save dictionaries into groups in an HDF group..
+
+    Args:
+        mydict (dict):
+            Dictionary of values to save in group or dataset.  Dictionary 
+            can contain objects of the following types: str, unicode, int, 
+            float, long, list, tuple, np. ndarray, dict, 
+            datetime.datetime, collections.OrderedDict
+        group:
+            HDF group or dataset in which to storedictionary of data.
+
+    Returns
+        nothing
+    """
+    for (key,value) in mydict.items():
+        tvalue = type(value)
+        if tvalue not in ALLOWED:
+            raise TypeError('Unsupported metadata value type "%s"' % tvalue)
+        if isinstance(value, dict):
+            subgroup = group.create_group(key)
+            _dict2h5group(value, subgroup)
+            continue
+        elif isinstance(value, datetime):
+            value = time.mktime(value.timetuple())
+        elif isinstance(value, list):
+            for i, val in enumerate(value):
+                if isinstance(val, str):
+                    value[i] = val.encode('utf8')
+        else:
+            pass
+        group.attrs[key] = value
+
+def _h5group2dict(group):
+    """
+    Recursively create dictionaries from groups in an HDF file.
+
+    Args: 
+        group:
+            HDF5 group object.
+
+    Returns:
+      Dictionary of metadata (possibly containing other dictionaries).
+    """
+    tdict = {}
+    for (key,value) in group.attrs.items(): #attrs are NOT subgroups
+        if key.find('time') > -1:
+            value = datetime.datetime.utcfromtimestamp(value)
+        tdict[key] = value
+    for (key,value) in group.items(): #these are going to be the subgroups
+        tdict[key] = _h5group2dict(value)
+    return _convert(tdict)
+        
+def _convert(data):
+    """
+    Recursively convert the bytes elements in a dictionary's values, lists,
+    and tuples into ascii.
+
+    Args:
+        data (dict):
+            A dictionary.
+
+    Returns;
+        A copy of the dictionary with the byte strings converted to ascii.
+    """
+    if isinstance(data, bytes): return data.decode('ascii')
+    if isinstance(data, dict):  return dict(map(_convert, data.items()))
+    if isinstance(data, tuple): return tuple(map(_convert, data))
+    if type(data) in (np.ndarray, list):  return list(map(_convert, data))
+    return data

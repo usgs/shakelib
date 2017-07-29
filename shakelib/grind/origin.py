@@ -152,6 +152,9 @@ class Origin(object):
             else:
                 self.rake = RAKEDICT['ALL']
 
+        if self.rake is None:
+            self.rake = 0.0
+
 
 
     @classmethod

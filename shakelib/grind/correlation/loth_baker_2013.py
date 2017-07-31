@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.interpolate import RectBivariateSpline
 import numexpr as ne
+import itertools as it
 
 Tlist = np.array([0.01, 0.1, 0.2, 0.5, 1, 2, 5, 7.5, 10.0001])
 
@@ -56,47 +57,59 @@ class LothBaker2013(object):
     ground motion spectral accelerations at multiple periods.” 
     Earthquake Engineering & Structural Dynamics, 42, 397-417.
     """
-    def __init__(self):
-        self.rbs1 = RectBivariateSpline(Tlist, Tlist, B1, kx=1, ky=1)
-        self.rbs2 = RectBivariateSpline(Tlist, Tlist, B2, kx=1, ky=1)
-        self.rbs3 = RectBivariateSpline(Tlist, Tlist, B3, kx=1, ky=1)
-        return;
+    def __init__(self, t1):
 
+        if np.any(t1 < 0.01):
+            raise ValueError('The periods must be greater or equal to 0.01s')
+        if np.any(t1 > 10):
+            raise ValueError('The periods must be less or equal to 10s')
 
-    def getCorrelation(self, t1, t2, h):
+        rbs1 = RectBivariateSpline(Tlist, Tlist, B1, kx=1, ky=1)
+        rbs2 = RectBivariateSpline(Tlist, Tlist, B2, kx=1, ky=1)
+        rbs3 = RectBivariateSpline(Tlist, Tlist, B3, kx=1, ky=1)
+
+        #
+        # Build new tables with entries at the periods we will use
+        #
+        st1 = np.array(sorted(t1))
+        tlist = list(zip(*it.product(st1, st1)))
+        nt1 = np.size(st1)
+        self.b1 = rbs1.ev(tlist[0], tlist[1]).reshape((nt1, nt1))
+        self.b2 = rbs2.ev(tlist[0], tlist[1]).reshape((nt1, nt1))
+        self.b3 = rbs3.ev(tlist[0], tlist[1]).reshape((nt1, nt1))
+
+    def getCorrelation(self, ix1, ix2, h):
         """
         Args:
-            t1, t2 (nd arrays):
-                The two periods of interest. The periods may be equal,
-                and there is no restriction on which one is larger.
+            ix1, ix2 (nd arrays):
+                The indices of the two periods of interest. The periods may 
+                be equal, and there is no restriction on which one is larger.
             h (nd array):
                 The separation distance between two sites (units of km)
 
-            t1, t2, and h should have the same dimensions. If they don't, 
+            ix1, ix2, and h should have the same dimensions. If they don't, 
             the results will be unpredictable.
 
         Returns:
             rho (nd array):
-                The predicted correlation coefficient
+                The predicted correlation coefficient. The output array 
+                will have the same shape as the inputs.
 
         """
         # Verify the validity of input arguments
-        if np.any(t1 < 0.01) or np.any(t2 < 0.01):
-            raise ValueError('The periods must be greater or equal to 0.01s')
-        if np.any(t1 > 10) or np.any(t2 > 10):
-            raise ValueError('The periods must be less or equal to 10s')
         if np.any(h < 0):
             raise ValueError('The separation distance must be positive')
-        if np.shape(t1) != np.shape(t2) or np.shape(t1) != np.shape(h):
-            raise ValueError('The input arguments must all have the same dimensions')
+        if np.shape(ix1) != np.shape(ix2) or np.shape(ix1) != np.shape(h):
+            raise ValueError(
+                    'The input arguments must all have the same dimensions')
 
-        # Linearly interpolate the corresponding value of each coregionalization
-        # matrix coefficient
-        # This is the slow part
-
-        b1 = self.rbs1.ev(t1, t2)
-        b2 = self.rbs2.ev(t1, t2)
-        b3 = self.rbs3.ev(t1, t2)
+        # 
+        # Index into the arrays to get the coefficients corresponding to the
+        # periods of interest.
+        #
+        b1 = self.b1[ix1, ix2]
+        b2 = self.b2[ix1, ix2]
+        b3 = self.b3[ix1, ix2]
 
         # Compute the correlation coefficient (Equation 42)
         # This is very fast

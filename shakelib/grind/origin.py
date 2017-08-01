@@ -209,7 +209,7 @@ class Origin(object):
             `TRT <http://docs.openquake.org/oq-hazardlib/master/const.html#openquake.hazardlib.const.TRT>`__
             object.
         """
-        return copy.deepcopy(self.TectonicRegion)
+        return copy.deepcopy(self._tectonic_region)
 
     def setMechanism(self, mech, rake=None, dip=None):
         """

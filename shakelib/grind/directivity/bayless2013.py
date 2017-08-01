@@ -263,8 +263,8 @@ class Bayless2013(object):
 
         # Geometric directivity predictor:
         RxoverW = (self.__Rx /
-            self._W[self.i]).clip(
-                min=-np.pi / 2.0, max=2.0 * np.pi / 3.0)
+                   self._W[self.i]).clip(
+            min=-np.pi / 2.0, max=2.0 * np.pi / 3.0)
         f_geom = np.log(self.d) * np.cos(RxoverW)
 
         # Distance taper

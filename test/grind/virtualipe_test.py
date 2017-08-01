@@ -3,12 +3,9 @@
 # stdlib modules
 import sys
 import os.path
-import time as time
-import shutil
 
 # third party modules
 import numpy as np
-from openquake.hazardlib.gsim import base
 from openquake.hazardlib.gsim.chiou_youngs_2014 import ChiouYoungs2014
 from openquake.hazardlib.gsim.boore_2014 import BooreEtAl2014
 import openquake.hazardlib.const as oqconst
@@ -30,8 +27,6 @@ from shakelib.grind.rupture import read_rupture_file
 from shakelib.utils.exception import ShakeLibException
 
 
-
-
 def test_virtualipe():
 
     #
@@ -47,7 +42,7 @@ def test_virtualipe():
     #
     homedir = os.path.dirname(os.path.abspath(__file__))
     datadir = os.path.abspath(os.path.join(homedir, '..', 'data',
-            'eventdata', 'Calexico', 'input'))
+                                           'eventdata', 'Calexico', 'input'))
 
     #
     # Read the event, origin, and rupture files and produce Rupture and Origin
@@ -70,10 +65,10 @@ def test_virtualipe():
     vs30filename = os.path.join(datadir, '..', 'vs30', 'vs30.grd')
 
     sites_obj_grid = Sites.fromCenter(
-            rx.hypo_lon, rx.hypo_lat, lonspan, latspan,
-            smdx, smdy, defaultVs30=760.0, vs30File=vs30filename,
-            vs30measured_grid=None, padding=False, resample=False
-        )
+        rx.hypo_lon, rx.hypo_lat, lonspan, latspan,
+        smdx, smdy, defaultVs30=760.0, vs30File=vs30filename,
+        vs30measured_grid=None, padding=False, resample=False
+    )
 
     npts = 200
     lats = np.empty(npts)
@@ -91,7 +86,7 @@ def test_virtualipe():
 
     sd_types = [oqconst.StdDev.TOTAL]
     mmi_const_vs30, mmi_sd_const_vs30 = \
-            ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
+        ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
 
 # These prints are just so a human can examine the outputs
 #    print(mmi_const_vs30)
@@ -99,15 +94,15 @@ def test_virtualipe():
 
     sx = sites_obj_grid.getSitesContext(lldict=lldict)
     mmi_variable_vs30, mmi_sd_variable_vs30 = \
-            ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
+        ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
 
 #    print(mmi_variable_vs30)
 #    print(mmi_sd_variable_vs30)
 
-    sd_types = [oqconst.StdDev.TOTAL, oqconst.StdDev.INTRA_EVENT, 
+    sd_types = [oqconst.StdDev.TOTAL, oqconst.StdDev.INTRA_EVENT,
                 oqconst.StdDev.INTER_EVENT]
     mmi_variable_vs30_intra, mmi_sd_variable_vs30_intra = \
-            ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
+        ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
 
 #    print(mmi_variable_vs30_intra)
 #    print(mmi_sd_variable_vs30_intra)
@@ -120,21 +115,21 @@ def test_virtualipe():
     gmpe.ALL_GMPES_HAVE_PGV = False
     ipe = VirtualIPE.fromFuncs(gmpe, gmice)
     mmi_pga, mmi_sd_pga = \
-            ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
+        ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
     #
     # Try with SA(1.0)
     #
     gmpe.DEFINED_FOR_INTENSITY_MEASURE_TYPES.remove(PGA)
     ipe = VirtualIPE.fromFuncs(gmpe, gmice)
     mmi_psa, mmi_sd_psa = \
-            ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
+        ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
 
     #
     # This should raise an exception because the IMT isn't MMI
     #
     with pytest.raises(ValueError) as e:
         mmi_psa, mmi_sd_psa = \
-                ipe.get_mean_and_stddevs(sx, rx, dx, PGA(), sd_types)
+            ipe.get_mean_and_stddevs(sx, rx, dx, PGA(), sd_types)
     #
     # This should raise an exception because no valid IMTs are available
     #
@@ -154,13 +149,13 @@ def test_virtualipe():
     dx = dobj.getDistanceContext()
 
     mmi_rjb, mmi_sd_rjb = \
-            ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
-    
+        ipe.get_mean_and_stddevs(sx, rx, dx, MMI(), sd_types)
+
     #
     # Test the results against a known standard
     #
     savefile = os.path.abspath(os.path.join(homedir, '..', 'data',
-            'eventdata', 'Calexico', 'virtualipe_test', 'savefile.npz'))
+                                            'eventdata', 'Calexico', 'virtualipe_test', 'savefile.npz'))
 
     #
     # If things change, set remake_save to True, and it will rebuild the
@@ -170,20 +165,20 @@ def test_virtualipe():
     remake_save = False
     if remake_save:
         np.savez_compressed(savefile,
-                mmi_const_vs30 = mmi_const_vs30,
-                mmi_sd_const_vs30 = mmi_sd_const_vs30[0],
-                mmi_variable_vs30 = mmi_variable_vs30,
-                mmi_sd_variable_vs30 = mmi_sd_variable_vs30[0],
-                mmi_variable_vs30_intra = mmi_variable_vs30_intra,
-                mmi_sd_variable_vs30_total = mmi_sd_variable_vs30_intra[0],
-                mmi_sd_variable_vs30_intra = mmi_sd_variable_vs30_intra[1],
-                mmi_sd_variable_vs30_inter = mmi_sd_variable_vs30_intra[2],
-                mmi_pga = mmi_pga,
-                mmi_sd_pga = mmi_sd_pga[0],
-                mmi_psa = mmi_psa,
-                mmi_sd_psa = mmi_sd_psa[0],
-                mmi_rjb = mmi_rjb,
-                mmi_sd_rjb = mmi_sd_rjb[0])
+                            mmi_const_vs30=mmi_const_vs30,
+                            mmi_sd_const_vs30=mmi_sd_const_vs30[0],
+                            mmi_variable_vs30=mmi_variable_vs30,
+                            mmi_sd_variable_vs30=mmi_sd_variable_vs30[0],
+                            mmi_variable_vs30_intra=mmi_variable_vs30_intra,
+                            mmi_sd_variable_vs30_total=mmi_sd_variable_vs30_intra[0],
+                            mmi_sd_variable_vs30_intra=mmi_sd_variable_vs30_intra[1],
+                            mmi_sd_variable_vs30_inter=mmi_sd_variable_vs30_intra[2],
+                            mmi_pga=mmi_pga,
+                            mmi_sd_pga=mmi_sd_pga[0],
+                            mmi_psa=mmi_psa,
+                            mmi_sd_psa=mmi_sd_psa[0],
+                            mmi_rjb=mmi_rjb,
+                            mmi_sd_rjb=mmi_sd_rjb[0])
 
     td = np.load(savefile)
 
@@ -192,12 +187,12 @@ def test_virtualipe():
     assert(np.allclose(td['mmi_variable_vs30'], mmi_variable_vs30))
     assert(np.allclose(td['mmi_sd_variable_vs30'], mmi_sd_variable_vs30[0]))
     assert(np.allclose(td['mmi_variable_vs30_intra'], mmi_variable_vs30_intra))
-    assert(np.allclose(td['mmi_sd_variable_vs30_total'], 
-        mmi_sd_variable_vs30_intra[0]))
-    assert(np.allclose(td['mmi_sd_variable_vs30_intra'], 
-        mmi_sd_variable_vs30_intra[1]))
-    assert(np.allclose(td['mmi_sd_variable_vs30_inter'], 
-        mmi_sd_variable_vs30_intra[2]))
+    assert(np.allclose(td['mmi_sd_variable_vs30_total'],
+                       mmi_sd_variable_vs30_intra[0]))
+    assert(np.allclose(td['mmi_sd_variable_vs30_intra'],
+                       mmi_sd_variable_vs30_intra[1]))
+    assert(np.allclose(td['mmi_sd_variable_vs30_inter'],
+                       mmi_sd_variable_vs30_intra[2]))
     assert(np.allclose(td['mmi_pga'], mmi_pga))
     assert(np.allclose(td['mmi_sd_pga'], mmi_sd_pga[0]))
     assert(np.allclose(td['mmi_psa'], mmi_psa))
@@ -210,9 +205,11 @@ def test_virtualipe():
 
     # The combined intra and inter-event uncertainty should be equal
     # to the total
-    tot = np.sqrt(mmi_sd_variable_vs30_intra[1]**2 + mmi_sd_variable_vs30_intra[2]**2)
+    tot = np.sqrt(
+        mmi_sd_variable_vs30_intra[1]**2 + mmi_sd_variable_vs30_intra[2]**2)
     assert(np.allclose(tot, mmi_sd_variable_vs30_intra[0], rtol=1e-2))
-    
+
+
 if __name__ == '__main__':
 
     test_virtualipe()

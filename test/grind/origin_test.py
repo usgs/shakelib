@@ -7,7 +7,6 @@ import io
 
 # third party
 import numpy as np
-import pytest
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
@@ -15,6 +14,7 @@ sys.path.insert(0, shakedir)
 
 # local imports
 from shakelib.grind.origin import Origin
+
 
 def test_origin():
     fault_text = """30.979788       103.454422      1

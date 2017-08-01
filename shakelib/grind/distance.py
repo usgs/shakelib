@@ -2,30 +2,16 @@
 
 # stdlib imports
 import copy
-import warnings
-import itertools as it
-import os
 
 # third party imports
 import numpy as np
-import pandas as pd
-import re
-import scipy.interpolate as spint
 
-from openquake.hazardlib.geo import geodetic
-from openquake.hazardlib.geo.utils import get_orthographic_projection
 from openquake.hazardlib.gsim.base import GMPE
 from openquake.hazardlib.gsim import base
 
 # local imports
 from shakelib.utils.exception import ShakeLibException
-from impactutils.vectorutils.ecef import latlon2ecef
-from impactutils.vectorutils.vector import Vector
-from shakelib.grind.rupture import QuadRupture
 from shakelib.grind.rupture import EdgeRupture
-from shakelib.grind.rupture import PointRupture
-from shakelib.grind.rupture import get_quad_length
-from shakelib.grind.rupture import reverse_quad
 
 
 class Distance(object):
@@ -42,7 +28,7 @@ class Distance(object):
         Report 2015-1028, 20 p., http://dx.doi.org/10.3133/ofr20151028.
     """
 
-    def __init__(self, gmpe, lon, lat, dep, rupture = None):
+    def __init__(self, gmpe, lon, lat, dep, rupture=None):
         """
         Constructor for Distance class. 
 
@@ -101,7 +87,6 @@ class Distance(object):
         """
         return copy.deepcopy(self._distance_context)
 
-
     def _calcDistanceContext(self, gmpe, lat, lon, dep):
         """
         Create a DistancesContext object.
@@ -113,11 +98,11 @@ class Distance(object):
             lat (array): Numpy array of latitudes.
             lon (array): Numpy array of longitudes.
             dep (array): Numpy array of depths (km).
-        
+
         Returns:
             DistancesContext object with distance grids required by input 
             gmpe(s).
-        
+
         Raises:
             TypeError: If gmpe is not a subclass of GMPE. 
         """
@@ -146,6 +131,7 @@ class Distance(object):
 
         return context
 
+
 def get_distance_measures():
     """
     Returns a list of strings specifying the distance measure types 
@@ -157,6 +143,7 @@ def get_distance_measures():
     """
 
     return ['repi', 'rhypo', 'rjb', 'rrup', 'rx', 'ry', 'ry0', 'U', 'T']
+
 
 def get_distance(methods, lat, lon, dep, rupture, dx=0.5):
     """
@@ -244,10 +231,7 @@ def get_distance(methods, lat, lon, dep, rupture, dx=0.5):
         distdict['rjb'] = rupture.computeRjb(lon, lat, dep)
 
     # If any of the GC2-related distances are requested, may as well do all
-    if len(set(methods).intersection(gc2_distances)) > 0: 
+    if len(set(methods).intersection(gc2_distances)) > 0:
         distdict.update(rupture.computeGC2(lon, lat, dep))
 
     return distdict
-
-
-

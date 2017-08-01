@@ -6,6 +6,7 @@ from openquake.hazardlib import const
 
 from shakelib.utils.exception import ShakeLibException
 
+
 class VirtualIPE(GMPE):
     """
     Implements a virtual IPE that is the combination of a MultiGMPE
@@ -54,7 +55,7 @@ class VirtualIPE(GMPE):
         self.gmice = gmice
 
         if (gmpe.ALL_GMPES_HAVE_PGV is True and
-            PGV in gmice.DEFINED_FOR_INTENSITY_MEASURE_TYPES):
+                PGV in gmice.DEFINED_FOR_INTENSITY_MEASURE_TYPES):
             self.imt = PGV()
         elif (PGA in gmpe.DEFINED_FOR_INTENSITY_MEASURE_TYPES and
               PGA in gmice.DEFINED_FOR_INTENSITY_MEASURE_TYPES):
@@ -64,11 +65,11 @@ class VirtualIPE(GMPE):
             self.imt = SA(1.0)
         else:
             raise ShakeLibException(
-                    'The supplied GMPE and GMICE do not use a common IMT'
-                )
-        
+                'The supplied GMPE and GMICE do not use a common IMT'
+            )
+
         self.DEFINED_FOR_STANDARD_DEVIATION_TYPES = \
-                gmpe.DEFINED_FOR_STANDARD_DEVIATION_TYPES.copy()
+            gmpe.DEFINED_FOR_STANDARD_DEVIATION_TYPES.copy()
 
         self.REQUIRES_DISTANCES = gmpe.REQUIRES_DISTANCES.copy()
 
@@ -100,8 +101,8 @@ class VirtualIPE(GMPE):
         #
         # Get the mean ground motions and stddev for the preferred IMT
         #
-        mgm, sdev = self.gmpe.get_mean_and_stddevs(sx, rx, dx, self.imt, 
-                stddev_types)
+        mgm, sdev = self.gmpe.get_mean_and_stddevs(sx, rx, dx, self.imt,
+                                                   stddev_types)
 
         if fd is not None:
             mgm = mgm + fd
@@ -131,5 +132,5 @@ class VirtualIPE(GMPE):
                 mmi_sd[i] = np.sqrt(gm_var_in_mmi)
             else:
                 mmi_sd[i] = np.sqrt(gm2mi_var + gm_var_in_mmi)
-        
+
         return mmi, mmi_sd

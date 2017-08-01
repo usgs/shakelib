@@ -1,6 +1,5 @@
 
 import numpy as np
-import pytest
 
 from shakelib.grind.correlation.baker_jayaram_2008 import baker_jayaram_correlation
 

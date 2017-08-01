@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def baker_jayaram_correlation(t1, t2):
     """
     Produce inter-period correlation for any two spectral periods.
@@ -18,12 +19,12 @@ def baker_jayaram_correlation(t1, t2):
     """
     t_min = min(t1, t2)
     t_max = max(t1, t2)
-        
-    c1 = 1.0 - np.cos(np.pi / 2.0 - np.log(t_max / max(t_min, 0.109)) 
-            * 0.366)
+
+    c1 = 1.0 - np.cos(np.pi / 2.0 - np.log(t_max / max(t_min, 0.109))
+                      * 0.366)
     if t_max < 0.2:
         c2 = 1.0 - 0.105 * (1.0 - 1.0 / (1.0 + np.exp(100.0 * t_max - 5.0))) \
-                * (t_max - t_min) / (t_max - 0.0099)
+            * (t_max - t_min) / (t_max - 0.0099)
     else:
         c2 = 0
 

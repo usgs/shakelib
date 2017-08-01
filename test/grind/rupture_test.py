@@ -9,12 +9,7 @@ import io
 # third party
 import numpy as np
 import pytest
-from impactutils.io.cmd import get_command_output
-import shapely
 from openquake.hazardlib.geo.geodetic import azimuth
-from openquake.hazardlib.geo.utils import get_orthographic_projection
-from shapely.geometry.polygon import Polygon
-from shapely.geometry.point import Point
 from mapio.geodict import GeoDict
 import matplotlib.pyplot as plt
 
@@ -26,23 +21,23 @@ from shakelib.grind.origin import Origin
 from shakelib.grind.rupture import QuadRupture
 from shakelib.grind.rupture import EdgeRupture
 from shakelib.grind.rupture import read_rupture_file
-from shakelib.utils.exception import ShakeLibException
 
 from shakelib.grind.rupture import get_local_unit_slip_vector
 from shakelib.grind.rupture import get_quad_slip
 from shakelib.grind.rupture import text_to_json
 
 
-
 def test_EdgeRupture():
     # Rupture requires an origin even when not used:
-    origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
+    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+                     'depth': 5.0, 'mag': 7.0})
 
-    file = os.path.join(shakedir,'test/data/cascadia.json')
+    file = os.path.join(shakedir, 'test/data/cascadia.json')
     rup = read_rupture_file(origin, file)
 
     # Force read Northridge as EdgeRupture
-    file = os.path.join(shakedir,'test/data/eventdata/northridge/northridge_fault.txt')
+    file = os.path.join(
+        shakedir, 'test/data/eventdata/northridge/northridge_fault.txt')
     d = text_to_json(file)
     rupt = EdgeRupture(d, origin)
     strike = rupt.getStrike()
@@ -57,7 +52,8 @@ def test_EdgeRupture():
     np.testing.assert_allclose(ztor, 5, atol=0.01)
 
     # And again for the same vertices but reversed order
-    file = os.path.join(shakedir,'test/data/eventdata/northridge/northridge_fixed_fault.txt')
+    file = os.path.join(
+        shakedir, 'test/data/eventdata/northridge/northridge_fixed_fault.txt')
     d = text_to_json(file)
     rupt = EdgeRupture(d, origin)
     strike = rupt.getStrike()
@@ -74,57 +70,62 @@ def test_EdgeRupture():
 
 def test_QuadRupture():
     # Rupture requires an origin even when not used:
-    origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
-    
+    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+                     'depth': 5.0, 'mag': 7.0})
+
     # First with json file
-    file = os.path.join(shakedir,'test/data/izmit.json')
+    file = os.path.join(shakedir, 'test/data/izmit.json')
     rupj = read_rupture_file(origin, file)
     # Then with text file:
-    file = os.path.join(shakedir,'test/data/Barkaetal02_fault.txt')
+    file = os.path.join(shakedir, 'test/data/Barkaetal02_fault.txt')
     rupt = read_rupture_file(origin, file)
 
     np.testing.assert_allclose(rupj.lats, rupt.lats, atol=1e-5)
     np.testing.assert_allclose(rupj.lons, rupt.lons, atol=1e-5)
     np.testing.assert_allclose(rupj._depth, rupt._depth, atol=1e-5)
 
+
 def test_rupture_depth(interactive=False):
     DIP = 17.0
     WIDTH = 20.0
     GRIDRES = 0.1
 
-    names = ['single','double','triple','concave','concave_simple','ANrvSA']
-    means = [3.0432719757967366,2.9973065932960385,2.965574077004633,2.79709300533401,2.9298856907070698]
-    stds = [1.638002652682061,1.7042373071141805,1.6818708593632576,1.7144371661600866,1.735985955287318]
+    names = ['single', 'double', 'triple',
+             'concave', 'concave_simple', 'ANrvSA']
+    means = [3.0432719757967366, 2.9973065932960385,
+             2.965574077004633, 2.79709300533401, 2.9298856907070698]
+    stds = [1.638002652682061, 1.7042373071141805,
+            1.6818708593632576, 1.7144371661600866, 1.735985955287318]
     xp0list = [np.array([118.3]),
-               np.array([10.1,10.1]),
-               np.array([10.1,10.1,10.3]),
-               np.array([10.9,10.5,10.9]),
-               np.array([10.9,10.6]),
-               np.array([-76.483, -76.626, -76.757, -76.99 , -77.024, -76.925, -76.65 ,
-       -76.321, -75.997, -75.958])]
+               np.array([10.1, 10.1]),
+               np.array([10.1, 10.1, 10.3]),
+               np.array([10.9, 10.5, 10.9]),
+               np.array([10.9, 10.6]),
+               np.array([-76.483, -76.626, -76.757, -76.99, -77.024, -76.925, -76.65,
+                         -76.321, -75.997, -75.958])]
     xp1list = [np.array([118.3]),
-               np.array([10.1,10.3]),
-               np.array([10.1,10.3,10.1]),
-               np.array([10.5,10.9,11.3]),
-               np.array([10.6,10.9]),
-               np.array([-76.626, -76.757, -76.99 , -77.024, -76.925, -76.65 , -76.321,
-       -75.997, -75.958, -76.006])]
+               np.array([10.1, 10.3]),
+               np.array([10.1, 10.3, 10.1]),
+               np.array([10.5, 10.9, 11.3]),
+               np.array([10.6, 10.9]),
+               np.array([-76.626, -76.757, -76.99, -77.024, -76.925, -76.65, -76.321,
+                         -75.997, -75.958, -76.006])]
     yp0list = [np.array([34.2]),
-               np.array([34.2,34.5]),
-               np.array([34.2,34.5,34.8]),
-               np.array([34.2,34.5,34.8]),
-               np.array([35.1,35.2]),
+               np.array([34.2, 34.5]),
+               np.array([34.2, 34.5, 34.8]),
+               np.array([34.2, 34.5, 34.8]),
+               np.array([35.1, 35.2]),
                np.array([-52.068, -51.377, -50.729, -49.845, -49.192, -48.507, -47.875,
-       -47.478, -47.08 , -46.422])]
+                         -47.478, -47.08, -46.422])]
     yp1list = [np.array([34.5]),
-               np.array([34.5,34.8]),
-               np.array([34.5,34.8,35.1]),
-               np.array([34.5,34.8,34.6]),
-               np.array([35.2,35.4]),
+               np.array([34.5, 34.8]),
+               np.array([34.5, 34.8, 35.1]),
+               np.array([34.5, 34.8, 34.6]),
+               np.array([35.2, 35.4]),
                np.array([-51.377, -50.729, -49.845, -49.192, -48.507, -47.875, -47.478,
-       -47.08 , -46.422, -45.659])]
+                         -47.08, -46.422, -45.659])]
 
-    for i in range(0,len(xp0list)):
+    for i in range(0, len(xp0list)):
         xp0 = xp0list[i]
         xp1 = xp1list[i]
         yp0 = yp0list[i]
@@ -132,59 +133,61 @@ def test_rupture_depth(interactive=False):
         name = names[i]
         # mean_value = means[i]
         # std_value = stds[i]
-        
+
         zp = np.zeros(xp0.shape)
-        strike = azimuth(xp0[0],yp0[0],xp1[-1],yp1[-1])
-        widths = np.ones(xp0.shape)*WIDTH
-        dips = np.ones(xp0.shape)*DIP
+        strike = azimuth(xp0[0], yp0[0], xp1[-1], yp1[-1])
+        widths = np.ones(xp0.shape) * WIDTH
+        dips = np.ones(xp0.shape) * DIP
         strike = [strike]
-        origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
-        rupture = QuadRupture.fromTrace(xp0,yp0,xp1,yp1,zp,widths,dips,origin,strike=strike)
+        origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+                         'depth': 5.0, 'mag': 7.0})
+        rupture = QuadRupture.fromTrace(
+            xp0, yp0, xp1, yp1, zp, widths, dips, origin, strike=strike)
 
-
-        #make a grid of points over both quads, ask for depths
+        # make a grid of points over both quads, ask for depths
         ymin = np.nanmin(rupture.lats)
         ymax = np.nanmax(rupture.lats)
         xmin = np.nanmin(rupture.lons)
         xmax = np.nanmax(rupture.lons)
 
-        xmin = np.floor(xmin*(1/GRIDRES))/(1/GRIDRES)
-        xmax = np.ceil(xmax*(1/GRIDRES))/(1/GRIDRES)
-        ymin = np.floor(ymin*(1/GRIDRES))/(1/GRIDRES)
-        ymax = np.ceil(ymax*(1/GRIDRES))/(1/GRIDRES)
-        geodict = GeoDict.createDictFromBox(xmin,xmax,ymin,ymax,GRIDRES,GRIDRES)
+        xmin = np.floor(xmin * (1 / GRIDRES)) / (1 / GRIDRES)
+        xmax = np.ceil(xmax * (1 / GRIDRES)) / (1 / GRIDRES)
+        ymin = np.floor(ymin * (1 / GRIDRES)) / (1 / GRIDRES)
+        ymax = np.ceil(ymax * (1 / GRIDRES)) / (1 / GRIDRES)
+        geodict = GeoDict.createDictFromBox(
+            xmin, xmax, ymin, ymax, GRIDRES, GRIDRES)
         nx = geodict.nx
         ny = geodict.ny
-        depths = np.zeros((ny,nx))
-        for row in range(0,ny):
-            for col in range(0,nx):
-                lat,lon = geodict.getLatLon(row,col)
-                depth = rupture.getDepthAtPoint(lat,lon)
-                depths[row,col] = depth
+        depths = np.zeros((ny, nx))
+        for row in range(0, ny):
+            for col in range(0, nx):
+                lat, lon = geodict.getLatLon(row, col)
+                depth = rupture.getDepthAtPoint(lat, lon)
+                depths[row, col] = depth
 
-        #np.testing.assert_almost_equal(np.nanmean(depths),mean_value)
-        #np.testing.assert_almost_equal(np.nanstd(depths),std_value)
+        # np.testing.assert_almost_equal(np.nanmean(depths),mean_value)
+        # np.testing.assert_almost_equal(np.nanstd(depths),std_value)
         if interactive:
-            fig,axes = plt.subplots(nrows=2,ncols=1)
-            ax1,ax2 = axes
-            xdata = np.append(xp0,xp1[-1])
-            ydata = np.append(yp0,yp1[-1])
+            fig, axes = plt.subplots(nrows=2, ncols=1)
+            ax1, ax2 = axes
+            xdata = np.append(xp0, xp1[-1])
+            ydata = np.append(yp0, yp1[-1])
             plt.sca(ax1)
-            plt.plot(xdata,ydata,'b')
+            plt.plot(xdata, ydata, 'b')
             plt.sca(ax2)
-            im = plt.imshow(depths,cmap='viridis_r')
+            im = plt.imshow(depths, cmap='viridis_r')
             ch = plt.colorbar()
-            fname = os.path.join(os.path.expanduser('~'),'quad_%s_test.png' % name)
-            print('Saving image for %s quad test... %s' % (name,fname))
+            fname = os.path.join(os.path.expanduser('~'),
+                                 'quad_%s_test.png' % name)
+            print('Saving image for %s quad test... %s' % (name, fname))
             plt.savefig(fname)
             plt.close()
-                    
-    
 
-    
+
 def test_slip():
     # Rupture requires an origin even when not used:
-    origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
+    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+                     'depth': 5.0, 'mag': 7.0})
     # Make a rupture
     lat0 = np.array([34.1])
     lon0 = np.array([-118.2])
@@ -215,7 +218,8 @@ def test_northridge():
     """
 
     # Rupture requires an origin even when not used:
-    origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
+    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+                     'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
     rupture = read_rupture_file(origin, cbuf)
     strike = rupture.getStrike()
@@ -242,7 +246,8 @@ def test_northridge():
     lats_d = np.array([34.401, 34.315, 34.175, 34.261, 34.401, np.nan])
     np.testing.assert_allclose(lats, lats_d, atol=0.01)
     lons = rupture.lons
-    lons_d = np.array([-118.587, -118.421, -118.527, -118.693, -118.587, np.nan])
+    lons_d = np.array(
+        [-118.587, -118.421, -118.527, -118.693, -118.587, np.nan])
     np.testing.assert_allclose(lons, lons_d, atol=0.01)
 
 
@@ -295,7 +300,8 @@ def test_parse_complicated_rupture():
     40.80199 30.94688 0"""
 
     # Rupture requires an origin even when not used:
-    origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
+    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+                     'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
     rupture = read_rupture_file(origin, cbuf)
     strike = rupture.getStrike()
@@ -325,32 +331,32 @@ def test_parse_complicated_rupture():
                      20.00083348])
     np.testing.assert_allclose(iw, iw_d, atol=0.01)
     lats = rupture.lats
-    lats_d = np.array([ 40.72733   ,  40.70985   ,  40.71185   ,  40.72932969,
-        40.72733   ,          np.nan,  40.74903   ,  40.70513   ,
-        40.70713   ,  40.75102924,  40.74903   ,          np.nan,
-        40.72336   ,  40.72582   ,  40.72336   ,  40.72536   ,
-        40.72782   ,  40.72536004,  40.72336   ,          np.nan,
-        40.71081   ,  40.7121    ,  40.71081   ,  40.71281   ,
-        40.7141    ,  40.71281002,  40.71081   ,          np.nan,
-        40.70068   ,  40.71621   ,  40.71821   ,  40.70268025,
-        40.70068   ,          np.nan,  40.79654   ,  40.69947   ,
-        40.70147   ,  40.79853872,  40.79654   ,          np.nan,
-        40.84501   ,  40.80199   ,  40.80399   ,  40.84700952,
-        40.84501   ,          np.nan])
+    lats_d = np.array([40.72733,  40.70985,  40.71185,  40.72932969,
+                       40.72733,          np.nan,  40.74903,  40.70513,
+                       40.70713,  40.75102924,  40.74903,          np.nan,
+                       40.72336,  40.72582,  40.72336,  40.72536,
+                       40.72782,  40.72536004,  40.72336,          np.nan,
+                       40.71081,  40.7121,  40.71081,  40.71281,
+                       40.7141,  40.71281002,  40.71081,          np.nan,
+                       40.70068,  40.71621,  40.71821,  40.70268025,
+                       40.70068,          np.nan,  40.79654,  40.69947,
+                       40.70147,  40.79853872,  40.79654,          np.nan,
+                       40.84501,  40.80199,  40.80399,  40.84700952,
+                       40.84501,          np.nan])
     np.testing.assert_allclose(lats, lats_d, atol=0.001)
     lons = rupture.lons
-    lons_d = np.array([ 29.51528   ,  29.3376    ,  29.3376    ,  29.51528005,
-        29.51528   ,          np.nan,  29.87519   ,  29.61152   ,
-        29.61152   ,  29.87519021,  29.87519   ,          np.nan,
-        30.11126   ,  29.88662   ,  30.11126   ,  30.11126   ,
-        29.88662   ,  30.11126   ,  30.11126   ,          np.nan,
-        30.4654    ,  30.30494   ,  30.4654    ,  30.4654    ,
-        30.30494   ,  30.4654    ,  30.4654    ,          np.nan,
-        30.63731   ,  30.57658   ,  30.57658   ,  30.63731011,
-        30.63731   ,          np.nan,  30.93655   ,  30.729     ,
-        30.729     ,  30.93655103,  30.93655   ,          np.nan,
-        31.01799   ,  30.94688   ,  30.94688   ,  31.0179905 ,
-        31.01799   ,          np.nan])
+    lons_d = np.array([29.51528,  29.3376,  29.3376,  29.51528005,
+                       29.51528,          np.nan,  29.87519,  29.61152,
+                       29.61152,  29.87519021,  29.87519,          np.nan,
+                       30.11126,  29.88662,  30.11126,  30.11126,
+                       29.88662,  30.11126,  30.11126,          np.nan,
+                       30.4654,  30.30494,  30.4654,  30.4654,
+                       30.30494,  30.4654,  30.4654,          np.nan,
+                       30.63731,  30.57658,  30.57658,  30.63731011,
+                       30.63731,          np.nan,  30.93655,  30.729,
+                       30.729,  30.93655103,  30.93655,          np.nan,
+                       31.01799,  30.94688,  30.94688,  31.0179905,
+                       31.01799,          np.nan])
 
     np.testing.assert_allclose(lons, lons_d, atol=0.001)
 
@@ -377,7 +383,8 @@ def test_incorrect():
     23.60400 120.97200	17"""
 
     # Rupture requires an origin even when not used:
-    origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
+    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+                     'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
     with pytest.raises(Exception):
         rupture = read_rupture_file(origin, cbuf)
@@ -393,7 +400,8 @@ def test_fromTrace():
     dips = [45.0]
 
     # Rupture requires an origin even when not used:
-    origin = Origin({'id':'test','lat':0,'lon':0,'depth':5.0,'mag':7.0})
+    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+                     'depth': 5.0, 'mag': 7.0})
     rupture = QuadRupture.fromTrace(
         xp0, yp0, xp1, yp1, zp, widths,
         dips, origin,
@@ -410,7 +418,7 @@ def test_fromTrace():
     dips = [30.0, 45.0]
     rupture = QuadRupture.fromTrace(
         xp0, yp0, xp1, yp1, zp, widths,
-        dips, origin, 
+        dips, origin,
         reference='From J Smith, (personal communication)')
 
 
@@ -423,4 +431,3 @@ if __name__ == "__main__":
     test_parse_complicated_rupture()
     test_incorrect()
     test_fromTrace()
-     

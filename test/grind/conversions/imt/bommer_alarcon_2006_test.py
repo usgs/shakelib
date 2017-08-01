@@ -4,7 +4,7 @@ import os.path
 import sys
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
-shakedir = os.path.abspath(os.path.join(homedir, '..', '..','..','..'))
+shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..', '..'))
 sys.path.insert(0, shakedir)
 
 import shakelib.grind.conversions.imt.bommer_alarcon_2006 as ba06
@@ -23,6 +23,7 @@ def test_bommeralarcon2006():
     assert abs(PSA05out - 0.2038735983690112) < 0.0001
     assert abs(PGVout - 4.905000) < 0.001
     assert abs(vfact - 49.050000) < 0.001
+
 
 if __name__ == '__main__':
     test_bommeralarcon2006()

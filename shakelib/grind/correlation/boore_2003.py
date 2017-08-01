@@ -1,5 +1,4 @@
 import numpy as np
-from openquake.hazardlib.imt import PGA
 
 
 class Boore2003(object):

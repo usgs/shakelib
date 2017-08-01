@@ -271,7 +271,8 @@ class Rowshandel2013(object):
         hyp_ecef = np.array([[x, y, z]])
         qdist = np.zeros(nquad)
         for i in range(0, nquad):
-            qdist[i] = _quad_distance(self._rup.getQuadrilaterals()[i], hyp_ecef)
+            qdist[i] = _quad_distance(
+                self._rup.getQuadrilaterals()[i], hyp_ecef)
         ind = int(np.where(qdist == np.min(qdist))[0][0])
         # *** check that this doesn't break with more than one quad
         q = self._rup.getQuadrilaterals()[ind]

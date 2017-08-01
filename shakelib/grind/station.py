@@ -12,38 +12,38 @@ import numpy as np
 
 
 TABLES = OrderedDict((
-        ('station',
-          OrderedDict((
-           ('id', 'str primary key'), # id is net.sta
-           ('network', 'str'),
-           ('code', 'str'),
-           ('name', 'str'),
-           ('lat', 'float'),
-           ('lon', 'float'),
-           ('elev', 'float'),
-           ('vs30', 'float'),
-           ('instrumented', 'int')
-           ))
-          ),
-         ('imt',
-          OrderedDict((
-           ('id', 'integer primary key'),
-           ('imt_type', 'str')
-           ))
-          ),
-         ('amp',
-          OrderedDict((
-           ('id', 'integer primary key'),
-           ('station_id', 'str'),
-           ('imt_id', 'int'),
-           ('original_channel', 'str'),
-           ('orientation', 'str'),
-           ('amp', 'float'),
-           ('uncertainty', 'float'),
-           ('flag', 'str')
-           ))
-          )
-         ))
+    ('station',
+     OrderedDict((
+         ('id', 'str primary key'),  # id is net.sta
+         ('network', 'str'),
+         ('code', 'str'),
+         ('name', 'str'),
+         ('lat', 'float'),
+         ('lon', 'float'),
+         ('elev', 'float'),
+         ('vs30', 'float'),
+         ('instrumented', 'int')
+     ))
+     ),
+    ('imt',
+     OrderedDict((
+         ('id', 'integer primary key'),
+         ('imt_type', 'str')
+     ))
+     ),
+    ('amp',
+     OrderedDict((
+         ('id', 'integer primary key'),
+         ('station_id', 'str'),
+         ('imt_id', 'int'),
+         ('original_channel', 'str'),
+         ('orientation', 'str'),
+         ('amp', 'float'),
+         ('uncertainty', 'float'),
+         ('flag', 'str')
+     ))
+     )
+))
 
 #
 # These are the netid's that indicate MMI data
@@ -148,73 +148,73 @@ class StationList(object):
         pass
 
     def _load_features(self, xmlfile):
-        #each station is a feature in a geojson file
-#        tree = ET.parse(xmlfile)
-#        root = tree.getroot()
-#        imt_translate = {}
-#        for sl in root.iter('stationlist'):
-#            for station in sl:
-#                feature = {'type':'Feature'}
-#                netid = station.attrib['netid']
-#                code = station.attrib['code']
-#                feature['id'] = '%s.%s' % (netid,code)
-#                lat = code = float(station.attrib['lat'])
-#                lon = code = float(station.attrib['lon'])
-#                feature['geometry'] = {'type':'Point','coordinates':[lon,lat]}
-#                properties = {}
-#                properties['name'] = station.attrib['name']
-#                properties['intensity_flag'] = station.attrib['']#??
-#                properties['distance'] = float(station.attrib['distance'])
-#                properties['location'] = station.attrib['loc']
-#                properties['code'] = station.attrib['code']
-#                properties['commType'] = station.attrib['commtype']
-#                properties['source'] = station.attrib['source']
-#                properties['network'] = station.attrib['netid']
-#                properties['instrumentType'] = station.attrib['insttype']
-#                properties['intensity'] = float(station.attrib['intensity'])
-#                channels = []
-#                for comp in station:
-#                    channel = {'name':comp.attrib['name']}
-#                    for component in comp:
-#                        pgmdict, imtset = self._getGroundMotions(component, 
-#                                                                 imt_translate)
+        # each station is a feature in a geojson file
+        #        tree = ET.parse(xmlfile)
+        #        root = tree.getroot()
+        #        imt_translate = {}
+        #        for sl in root.iter('stationlist'):
+        #            for station in sl:
+        #                feature = {'type':'Feature'}
+        #                netid = station.attrib['netid']
+        #                code = station.attrib['code']
+        #                feature['id'] = '%s.%s' % (netid,code)
+        #                lat = code = float(station.attrib['lat'])
+        #                lon = code = float(station.attrib['lon'])
+        #                feature['geometry'] = {'type':'Point','coordinates':[lon,lat]}
+        #                properties = {}
+        #                properties['name'] = station.attrib['name']
+        #                properties['intensity_flag'] = station.attrib['']#??
+        #                properties['distance'] = float(station.attrib['distance'])
+        #                properties['location'] = station.attrib['loc']
+        #                properties['code'] = station.attrib['code']
+        #                properties['commType'] = station.attrib['commtype']
+        #                properties['source'] = station.attrib['source']
+        #                properties['network'] = station.attrib['netid']
+        #                properties['instrumentType'] = station.attrib['insttype']
+        #                properties['intensity'] = float(station.attrib['intensity'])
+        #                channels = []
+        #                for comp in station:
+        #                    channel = {'name':comp.attrib['name']}
+        #                    for component in comp:
+        #                        pgmdict, imtset = self._getGroundMotions(component,
+        #                                                                 imt_translate)
         pass
-                    
+
     @classmethod
     def loadFromSQL(cls, sql, dbfile=':memory:'):
         """
         Create a new object from saved SQL code (see :meth:`dumpToSQL`).
-        
+
         Args:
             sql (str):
                 SQL code to create and populate the database           
             dbfile (str):
                 The path to a file in which the database will reside.
                 The default is ':memory:' for an in-memory database.
-                
+
         Returns:
             :class:`Stationlist` object.
         """
-        
+
         db = sqlite3.connect(dbfile)
         self = cls(db)
         self.cursor.executescript(sql)
         return self
-    
+
     def dumpToSQL(self):
         """
         Dump the database as a string of SQL code (see :meth:`loadFromSQL`).
-        
+
         Args:
             None
-            
+
         Returns:
             A string of SQL sufficient to restore and repopulate the 
             database.
         """
-        
+
         return "\n".join(list(self.db.iterdump()))
-       
+
     @classmethod
     def loadFromXML(cls, xmlfiles, dbfile=':memory:'):
         """
@@ -238,7 +238,7 @@ class StationList(object):
         self._createTables()
         return self.addData(xmlfiles)
 
-    def addData(self,xmlfiles):
+    def addData(self, xmlfiles):
         """
         Create a StationList object by reading one or more ShakeMap XML input
         files.
@@ -256,7 +256,7 @@ class StationList(object):
         for xmlfile in xmlfiles:
             stationdict, ims = self._filter_station(xmlfile, stationdict)
             imtset |= ims
-        # fill the database and create the object from it   
+        # fill the database and create the object from it
         self._loadFromDict(stationdict, imtset)
         return self
 
@@ -280,8 +280,8 @@ class StationList(object):
         imts_in_db = self.getIMTtypes()
         new_imts = imtset - imts_in_db
         if any(new_imts):
-            self.cursor.executemany('INSERT INTO imt (imt_type) VALUES (?)', 
-                                zip(new_imts))
+            self.cursor.executemany('INSERT INTO imt (imt_type) VALUES (?)',
+                                    zip(new_imts))
             self.db.commit()
 
         # Now get the updated list of IMTs and their IDs
@@ -290,7 +290,7 @@ class StationList(object):
         imt_hash = dict(self.cursor.fetchall())
 
         #
-        # Get the station codes for all the stations in the db            
+        # Get the station codes for all the stations in the db
         #
         query = 'SELECT id FROM station'
         self.cursor.execute(query)
@@ -327,26 +327,26 @@ class StationList(object):
 
             station_rows.append((sta_id, network, code, name, lat, lon,
                                  elev, vs30, instrumented))
-                
+
         self.cursor.executemany(
-                'INSERT INTO station (id, network, code, name, lat, lon, '
-                'elev, vs30, instrumented) VALUES '
-                '(?, ?, ?, ?, ?, ?, ?, ?, ?)', station_rows
-            )
+            'INSERT INTO station (id, network, code, name, lat, lon, '
+            'elev, vs30, instrumented) VALUES '
+            '(?, ?, ?, ?, ?, ?, ?, ?, ?)', station_rows
+        )
         self.db.commit()
 
         #
         # Now add the amps, first get the current set so we don't add
-        # any duplicates; a unique amp will be (station_id, imt_id, 
+        # any duplicates; a unique amp will be (station_id, imt_id,
         # original_channel)
         #
         query = 'SELECT station_id, imt_id, original_channel FROM amp'
         self.cursor.execute(query)
         amp_rows = self.cursor.fetchall()
         # Create a unique identifier for each amp so we don't repeat any
-        amp_set = set([str(v[0]) + '.' + str(v[1]) + '.' + str(v[2]) 
-                        for v in amp_rows])
-                
+        amp_set = set([str(v[0]) + '.' + str(v[1]) + '.' + str(v[2])
+                       for v in amp_rows])
+
         #
         # Insert the amps for each component
         #
@@ -362,7 +362,7 @@ class StationList(object):
                         continue
                     imtid = imt_hash[imt_type]
                     amp_id = str(sta_id) + '.' + str(imtid) + '.' + \
-                             str(original_channel)
+                        str(original_channel)
                     if amp_id in amp_set:
                         continue
                     else:
@@ -383,25 +383,25 @@ class StationList(object):
                                      orientation, amp, flag))
 
         self.cursor.executemany(
-                'INSERT INTO amp (station_id, imt_id, original_channel, '
-                'orientation, amp, flag) VALUES (?, ?, ?, ?, ?, ?)', amp_rows
-            )
+            'INSERT INTO amp (station_id, imt_id, original_channel, '
+            'orientation, amp, flag) VALUES (?, ?, ?, ?, ?, ?)', amp_rows
+        )
         self.db.commit()
         return
 
     def getIMTtypes(self):
         """
         Return a set of IMT types found in the database
-        
+
         Args:
             None
-            
+
         Returns:
             A set of IMT types
         """
         self.cursor.execute('SELECT imt_type FROM imt')
         return set([z[0] for z in self.cursor.fetchall()])
-            
+
     def getStationDataframe(self, instrumented):
         """
         Return a dictionary of the instrumented or non-instrumented
@@ -421,7 +421,7 @@ class StationList(object):
 
         The **id** column is **network** and **code** concatenated with a
         period (".") between them.
-        
+
         All ground motion units are natural log units. Distances are in km.
 
         Args:
@@ -437,9 +437,9 @@ class StationList(object):
         columns = list(TABLES['station'].keys())
         dstr = ', '.join(columns)
         self.cursor.execute(
-                'SELECT %s FROM station where instrumented = %d' %
-                (dstr, instrumented)
-            )
+            'SELECT %s FROM station where instrumented = %d' %
+            (dstr, instrumented)
+        )
 
         station_rows = self.cursor.fetchall()
         nstation_rows = len(station_rows)
@@ -460,13 +460,13 @@ class StationList(object):
         # Get all of the unflagged amps with the proper orientation
         #
         self.cursor.execute(
-                'SELECT a.amp, i.imt_type, a.station_id FROM '
-                'amp a, station s, imt i WHERE a.flag = "0" '
-                'AND s.id = a.station_id '
-                'AND a.imt_id = i.id '
-                'AND s.instrumented = %d AND a.orientation NOT IN ("Z", "U") '
-                'AND a.amp IS NOT NULL' % (instrumented)
-            )
+            'SELECT a.amp, i.imt_type, a.station_id FROM '
+            'amp a, station s, imt i WHERE a.flag = "0" '
+            'AND s.id = a.station_id '
+            'AND a.imt_id = i.id '
+            'AND s.instrumented = %d AND a.orientation NOT IN ("Z", "U") '
+            'AND a.amp IS NOT NULL' % (instrumented)
+        )
         amp_rows = self.cursor.fetchall()
 
         #
@@ -507,7 +507,6 @@ class StationList(object):
         else:
             orientation = 'U'  # this is unknown
         return orientation
-
 
     @staticmethod
     def _getGroundMotions(comp, imt_translate):
@@ -578,19 +577,19 @@ class StationList(object):
             for station in sl:
                 if station.tag != 'station':
                     continue
-                #look at the station attributes to figure out if this is a DYFI-type station
-                #or a station with instruments measuring PGA, PGV, etc.
+                # look at the station attributes to figure out if this is a DYFI-type station
+                # or a station with instruments measuring PGA, PGV, etc.
                 attributes = station.attrib.copy()
                 netid = attributes['netid']
                 instrumented = int(netid.lower() not in CIIM_TUPLE)
-                    
+
                 code = attributes['code']
                 if code.startswith(netid + '.'):
                     sta_id = code
                     code = code.replace(netid + '.', '')
                 else:
-                    sta_id = netid + '.' + code   
-    
+                    sta_id = netid + '.' + code
+
                 if sta_id in stationdict:
                     compdict = stationdict[sta_id]
                 else:
@@ -620,7 +619,6 @@ class StationList(object):
                 stationdict[sta_id] = (attributes, copy.copy(compdict))
         return stationdict, imtset
 
-
     def _createTables(self):
         """
         Build the database tables.
@@ -635,6 +633,7 @@ class StationList(object):
 
         self.db.commit()
         return
+
 
 def get_imt_period(imt):
 

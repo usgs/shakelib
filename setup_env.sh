@@ -5,7 +5,7 @@ VENV=shakelib2
 PYVER=3.5
 
 
-DEPARRAY=(numpy scipy matplotlib rasterio pandas shapely h5py gdal pytest pytest-cov pytest-mpl jupyter cartopy fiona pycrypto paramiko beautifulsoup4 numexpr)
+DEPARRAY=(numpy scipy matplotlib rasterio pandas shapely h5py gdal pytest pytest-cov pytest-mpl jupyter cartopy fiona pycrypto paramiko beautifulsoup4 numexpr configobj)
 
 # turn off whatever other virtual environment user might be in
 source deactivate

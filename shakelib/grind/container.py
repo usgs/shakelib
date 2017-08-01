@@ -1,136 +1,146 @@
 #!/usr/bin/env python
 
-#stdlib imports
+# stdlib imports
 from datetime import datetime
 import collections
 import time
-import sqlite3
 import io
 
-#third party imports
+# third party imports
 import h5py
 import numpy as np
 
-#local imports
-from shakelib.grind.rupture import read_rupture_file,PointRupture
+# local imports
+from shakelib.grind.rupture import read_rupture_file
 from shakelib.grind.origin import Origin
 from shakelib.grind.station import StationList
-from shakelib.grind.sites import Sites
 
-#list of allowed data types in dictionaries
-ALLOWED = [str,int,float,bool, bytes,
+# list of allowed data types in dictionaries
+ALLOWED = [str, int, float, bool, bytes,
            type(None),
-           list,tuple,np.ndarray,
+           list, tuple, np.ndarray,
            np.float64, np.bool_, np.int64,
-           dict,datetime,
+           dict, datetime,
            collections.OrderedDict]
 
-class InputContainer(object):
-    def __init__(self,hdfobj):
-        """Instantiate an InputContainer from an open h5py File Object.
 
-        :param hdfobj:
-          Open h5py File Object.
+class InputContainer(object):
+    def __init__(self, hdfobj):
+        """
+        Instantiate an InputContainer from an open h5py File Object.
+
+        Args:
+            hdfobj:  Open h5py File Object.
         """
         self._hdfobj = hdfobj
-    
-    @classmethod
-    def loadFromHDF(cls,hdf_file):
-        """Instantiate an InputContainer from an HDF5 file.
 
-        :param hdf_file:
-          Valid path to HDF5 file.
-        :returns:
-          Instance of InputContainer.
+    @classmethod
+    def loadFromHDF(cls, hdf_file):
+        """
+        Instantiate an InputContainer from an HDF5 file.
+
+        Args:
+            hdf_file: Valid path to HDF5 file.
+
+        Returns:
+            Instance of InputContainer.
         """
         hdfobj = h5py.File(hdf_file, "r+")
-        #probably should do some validating to make sure relevant data exists
+        # probably should do some validating to make sure relevant data exists
         return cls(hdfobj)
 
     def getFileName(self):
         return self._hdfobj.filename
-    
-    @classmethod
-    def loadFromInput(cls,filename,config,eventfile,rupturefile=None,datafiles=None):
-        """Instantiate an InputContainer from ShakeMap input data.
 
-        :param filename:
-          Path to HDF5 file that will be created to encapsulate all input data.
-        :param config:
-          Dictionary containing all configuration information necessary for ShakeMap 
-          ground motion and other calculations.
-        :param eventfile:
-          Path to ShakeMap event.xml file.
-        :param rupturefile:
-          Path to ShakeMap rupture text or JSON file.
-        :param datafiles:
-          List of ShakeMap data (DYFI, strong motion) files.
-        :returns:
-          Instance of InputContainer.
+    @classmethod
+    def loadFromInput(cls, filename, config, eventfile, rupturefile=None,
+                      datafiles=None):
         """
-        #open the file for writing, nuke if already exists
+        Instantiate an InputContainer from ShakeMap input data.
+
+        Args:
+            filename: Path to HDF5 file that will be created to encapsulate all
+                input data.
+            config: Dictionary containing all configuration information 
+                necessary for ShakeMap ground motion and other calculations.
+            eventfile: Path to ShakeMap event.xml file.
+            rupturefile: Path to ShakeMap rupture text or JSON file.
+            datafiles: List of ShakeMap data (DYFI, strong motion) files.
+
+        Returns:
+            Instance of InputContainer.
+        """
+        #-----------------------------------------------------------------------
+        # open the file for writing, nuke if already exists
+        #-----------------------------------------------------------------------
         hdfobj = h5py.File(filename, "w")
 
         this = cls(hdfobj)
 
-
-        #The config and event info are mandatory
-        #write the config dictionary to a config group
+        #-----------------------------------------------------------------------
+        # The config and event info are mandatory
+        # write the config dictionary to a config group
+        #-----------------------------------------------------------------------
         config_group = this._hdfobj.create_group('config')
         _dict2h5group(config, config_group)
 
-        #stash the event.xml in a group
+        # stash the event.xml in a group
         try:
-            event_string = open(eventfile,'rt').read()
+            event_string = open(eventfile, 'rt').read()
         except TypeError:
             event_string = eventfile.getvalue()
         event_group = this._hdfobj.create_group('event')
         event_group.attrs['event_string'] = event_string
 
-        #The rupture and data files are optional
-        #write the rupture file data to a rupture group
+        # The rupture and data files are optional
+        # write the rupture file data to a rupture group
         if rupturefile is not None:
-            rupturedata = open(rupturefile,'rt').read()
+            rupturedata = open(rupturefile, 'rt').read()
             rupture_group = this._hdfobj.create_group('rupture')
             rupture_group.attrs['rupture_string'] = rupturedata
 
-        #create the stationlist object, then dump its database as a big string
-        #into the hdf
+        #-----------------------------------------------------------------------
+        # create the stationlist object, then dump its database as a big string
+        # into the hdf
+        #-----------------------------------------------------------------------
         if datafiles is not None:
-            station = StationList.loadFromXML(datafiles,":memory:")
+            station = StationList.loadFromXML(datafiles, ":memory:")
             this.stashStationList(station)
 
         return this
 
     def getConfig(self):
-        """Return the config dictionary that was passed in via input files.
+        """
+        Return the config dictionary that was passed in via input files.
 
-        :returns:
-          Dictionary of configuration information.
+        Returns:
+            Dictionary of configuration information.
         """
         config = _h5group2dict(self._hdfobj['config'])
         return config
-    
-    def getRupture(self):
-        """Return a Rupture object (PointRupture if no rupture file was specified.)
 
-        :returns:
-          Rupture (Point, Edge or Quad Rupture).
+    def getRupture(self):
+        """
+        Return a Rupture object (PointRupture if no rupture file was specified.)
+
+        Returns:
+            Rupture (Point, Edge or Quad Rupture).
         """
         origin = self.getOrigin()
         if 'rupture' not in self._hdfobj:
             return PointRupture(origin)
-        
+
         ruptext = self._hdfobj['rupture'].attrs['rupture_string']
         rupio = io.StringIO(ruptext)
-        rupture = read_rupture_file(origin,rupio)
+        rupture = read_rupture_file(origin, rupio)
         return rupture
-        
-    def getStationList(self):
-        """Return a StationList object if data files were supplied, or None.
 
-        :returns:
-          StationList object if data files were supplied, or None.
+    def getStationList(self):
+        """
+        Return a StationList object if data files were supplied, or None.
+
+        Returns:
+            StationList object if data files were supplied, or None.
         """
         if 'station_string' not in self._hdfobj['station'].attrs:
             print('No station list in object')
@@ -139,38 +149,40 @@ class InputContainer(object):
         return StationList.loadFromSQL(station_string)
 
     def getOrigin(self):
-        """Return an Origin object for this earthquake.
+        """
+        Return an Origin object for this earthquake.
 
-        :returns:
-          Origin object.
+        Returns:
+            Origin object.
         """
         origin_file = io.StringIO(self._hdfobj['event'].attrs['event_string'])
         origin = Origin.fromFile(origin_file)
         return origin
-        
-    def addData(self,datafiles):
-        """Append new data to the internal StationList object.
-        
-        :param datafiles:
-          List of paths to XML datafiles.
+
+    def addData(self, datafiles):
+        """
+        Append new data to the internal StationList object.
+
+        Args:
+            datafiles: List of paths to XML datafiles.
         """
         stationlist = self.getStationList()
         stationlist.addData(datafiles)
         self.stashStationList(stationlist)
 
-    def stashStationList(self,station):
-        """Insert a new StationList object into the data file.
+    def stashStationList(self, station):
+        """
+        Insert a new StationList object into the data file.
 
-        :param station:
-          StationList object.
+        Args:
+            station: StationList object.
         """
         station_group = self._hdfobj.create_group('station')
         station_group.attrs['station_string'] = station.dumpToSQL()
-        
+
     def changeConfig(self):
         pass
-            
-        
+
     def __del__(self):
         if self._hdfobj:
             self._hdfobj.close()
@@ -182,16 +194,18 @@ class InputContainer(object):
         if self._hdfobj:
             self._hdfobj.close()
 
+
 class OutputContainer(object):
     """
     Generic hdf5 output container to store metadata and data sets (with or 
     without associated metadata).
     """
-    def __init__(self,hdfobj):
+
+    def __init__(self, hdfobj):
         self._hdfobj = hdfobj
-    
+
     @classmethod
-    def loadFromHDF(cls,hdffile):
+    def loadFromHDF(cls, hdffile):
         """
         Load an HDF file into the object.
 
@@ -303,6 +317,7 @@ class OutputContainer(object):
         if self._hdfobj:
             self._hdfobj.close()
 
+
 def _dict2h5group(mydict, group):
     """
     Recursively save dictionaries into groups in an HDF group..
@@ -319,7 +334,7 @@ def _dict2h5group(mydict, group):
     Returns
         nothing
     """
-    for (key,value) in mydict.items():
+    for (key, value) in mydict.items():
         tvalue = type(value)
         if tvalue not in ALLOWED:
             raise TypeError('Unsupported metadata value type "%s"' % tvalue)
@@ -337,6 +352,7 @@ def _dict2h5group(mydict, group):
             pass
         group.attrs[key] = value
 
+
 def _h5group2dict(group):
     """
     Recursively create dictionaries from groups in an HDF file.
@@ -349,14 +365,15 @@ def _h5group2dict(group):
       Dictionary of metadata (possibly containing other dictionaries).
     """
     tdict = {}
-    for (key,value) in group.attrs.items(): #attrs are NOT subgroups
+    for (key, value) in group.attrs.items():  # attrs are NOT subgroups
         if key.find('time') > -1:
             value = datetime.datetime.utcfromtimestamp(value)
         tdict[key] = value
-    for (key,value) in group.items(): #these are going to be the subgroups
+    for (key, value) in group.items():  # these are going to be the subgroups
         tdict[key] = _h5group2dict(value)
     return _convert(tdict)
-        
+
+
 def _convert(data):
     """
     Recursively convert the bytes elements in a dictionary's values, lists,
@@ -369,8 +386,12 @@ def _convert(data):
     Returns;
         A copy of the dictionary with the byte strings converted to ascii.
     """
-    if isinstance(data, bytes): return data.decode('ascii')
-    if isinstance(data, dict):  return dict(map(_convert, data.items()))
-    if isinstance(data, tuple): return tuple(map(_convert, data))
-    if type(data) in (np.ndarray, list):  return list(map(_convert, data))
+    if isinstance(data, bytes):
+        return data.decode('ascii')
+    if isinstance(data, dict):
+        return dict(map(_convert, data.items()))
+    if isinstance(data, tuple):
+        return tuple(map(_convert, data))
+    if type(data) in (np.ndarray, list):
+        return list(map(_convert, data))
     return data

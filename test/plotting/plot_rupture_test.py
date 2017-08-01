@@ -2,7 +2,6 @@
 
 import os.path
 import sys
-import tempfile
 
 from openquake.hazardlib.geo.geodetic import azimuth
 import numpy as np
@@ -15,10 +14,11 @@ sys.path.insert(0, shakedir)
 
 from shakelib.grind.rupture import QuadRupture
 from shakelib.grind.origin import Origin
-from shakelib.plotting.plotrupture import plot_rupture_wire3d,map_rupture
+from shakelib.plotting.plotrupture import plot_rupture_wire3d, map_rupture
 
 MAX_DEPTH = 70
 DIP = 17
+
 
 def test_plot_rupture(interactive=False):
     xp0 = np.array([-90.898000])
@@ -26,23 +26,25 @@ def test_plot_rupture(interactive=False):
     yp0 = np.array([12.584000])
     yp1 = np.array([12.832000])
     zp = [0.0]
-    strike = azimuth(yp0[0],xp0[0],yp1[0],xp1[0])
+    strike = azimuth(yp0[0], xp0[0], yp1[0], xp1[0])
     x = 1
-    origin = Origin({'lat':0.0,
-                     'lon':0.0,
-                     'depth':0.0,
-                     'mag':5.5,
-                     'id':'abcd'})
-    interface_width = MAX_DEPTH/np.sin(np.radians(DIP))
-    widths = np.ones(xp0.shape)*interface_width
-    dips = np.ones(xp0.shape)*DIP
+    origin = Origin({'lat': 0.0,
+                     'lon': 0.0,
+                     'depth': 0.0,
+                     'mag': 5.5,
+                     'id': 'abcd'})
+    interface_width = MAX_DEPTH / np.sin(np.radians(DIP))
+    widths = np.ones(xp0.shape) * interface_width
+    dips = np.ones(xp0.shape) * DIP
     strike = [strike]
-    rupture = QuadRupture.fromTrace(xp0,yp0,xp1,yp1,zp,widths,dips,origin,strike=strike)
+    rupture = QuadRupture.fromTrace(
+        xp0, yp0, xp1, yp1, zp, widths, dips, origin, strike=strike)
     ax = plot_rupture_wire3d(rupture)
     if interactive:
-        fname = os.path.join(os.path.expanduser('~'),'rupture_wire_plot.png')
+        fname = os.path.join(os.path.expanduser('~'), 'rupture_wire_plot.png')
         plt.savefig(fname)
         print('Wire 3D plot saved to %s.  Delete this file if you wish.' % fname)
+
 
 def test_map_rupture(interactive=False):
     xp0 = np.array([-90.898000])
@@ -50,30 +52,26 @@ def test_map_rupture(interactive=False):
     yp0 = np.array([12.584000])
     yp1 = np.array([12.832000])
     zp = [0.0]
-    strike = azimuth(yp0[0],xp0[0],yp1[0],xp1[0])
+    strike = azimuth(yp0[0], xp0[0], yp1[0], xp1[0])
     x = 1
-    origin = Origin({'lat':0.0,
-                     'lon':0.0,
-                     'depth':0.0,
-                     'mag':5.5,
-                     'id':'abcd'})
-    interface_width = MAX_DEPTH/np.sin(np.radians(DIP))
-    widths = np.ones(xp0.shape)*interface_width
-    dips = np.ones(xp0.shape)*DIP
+    origin = Origin({'lat': 0.0,
+                     'lon': 0.0,
+                     'depth': 0.0,
+                     'mag': 5.5,
+                     'id': 'abcd'})
+    interface_width = MAX_DEPTH / np.sin(np.radians(DIP))
+    widths = np.ones(xp0.shape) * interface_width
+    dips = np.ones(xp0.shape) * DIP
     strike = [strike]
-    rupture = QuadRupture.fromTrace(xp0,yp0,xp1,yp1,zp,widths,dips,origin,strike=strike)
+    rupture = QuadRupture.fromTrace(
+        xp0, yp0, xp1, yp1, zp, widths, dips, origin, strike=strike)
     ax = map_rupture(rupture)
     if interactive:
-        fname = os.path.join(os.path.expanduser('~'),'rupture_map.png')
+        fname = os.path.join(os.path.expanduser('~'), 'rupture_map.png')
         plt.savefig(fname)
         print('Rupture map plot saved to %s.  Delete this file if you wish.' % fname)
-    
+
+
 if __name__ == '__main__':
     test_plot_rupture(interactive=True)
     test_map_rupture(interactive=True)
-        
-        
-
-        
-    
-                       

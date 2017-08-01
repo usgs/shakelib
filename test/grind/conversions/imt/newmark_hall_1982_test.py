@@ -7,7 +7,7 @@ import os.path
 import sys
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
-shakedir = os.path.abspath(os.path.join(homedir, '..', '..','..','..'))
+shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..', '..'))
 sys.path.insert(0, shakedir)
 
 from shakelib.grind.conversions.imt.newmark_hall_1982 import NewmarkHall1982
@@ -28,6 +28,7 @@ def test_newmarkhall1982():
     assert abs(PGVsdout - 0.790489) < 0.001
     assert abs(mfact - 94.6658) < 0.001
     assert abs(lnsig - 0.5146578) < 0.001
+
 
 if __name__ == '__main__':
     test_newmarkhall1982()

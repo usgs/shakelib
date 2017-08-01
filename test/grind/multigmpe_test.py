@@ -28,7 +28,7 @@ from impactutils.time.ancient_time import HistoricTime
 
 from configobj import ConfigObj
 
-from shakemap.utils.config import get_custom_validator,\
+from shakelib.utils.config import get_custom_validator,\
     config_error
 
 from shakelib.grind.multigmpe import MultiGMPE

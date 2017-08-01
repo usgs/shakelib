@@ -3,9 +3,6 @@
 # stdlib modules
 import sys
 import os.path
-import time as time
-import shutil
-import glob
 import pickle
 
 # third party modules
@@ -23,6 +20,7 @@ from shakelib.grind.station import StationList
 # set it to False to actually run the tests.
 #
 SAVE = False
+
 
 def test_station():
 
@@ -45,7 +43,7 @@ def test_station():
     df1 = stations.getStationDataframe(1)
     df2 = stations.getStationDataframe(0)
 
-    ppath = os.path.abspath(os.path.join(datadir, '..', 'database', 
+    ppath = os.path.abspath(os.path.join(datadir, '..', 'database',
                                          'test1.pickle'))
     if SAVE:
         ldf = [df1, df2]
@@ -75,7 +73,6 @@ def test_station():
     datadir = os.path.abspath(os.path.join(homedir, '..', 'data', 'eventdata'))
     datadir = os.path.abspath(os.path.join(datadir, event, 'input'))
 
-
     inputfile = os.path.join(datadir, 'hist_dat.xml')
     dyfifile = os.path.join(datadir, 'dyfi_dat.xml')
     xmlfiles = [inputfile, dyfifile]
@@ -85,7 +82,7 @@ def test_station():
     df1 = stations.getStationDataframe(1)
     df2 = stations.getStationDataframe(0)
 
-    ppath = os.path.abspath(os.path.join(datadir, '..', 'database', 
+    ppath = os.path.abspath(os.path.join(datadir, '..', 'database',
                                          'test2.pickle'))
     if SAVE:
         ldf = [df1, df2]
@@ -101,6 +98,7 @@ def test_station():
         compare_dataframes(saved_df1, df1)
         compare_dataframes(saved_df2, df2)
 
+
 def test_station2():
 
     homedir = os.path.dirname(os.path.abspath(__file__))
@@ -111,14 +109,14 @@ def test_station2():
     datadir = os.path.abspath(os.path.join(datadir, event, 'input'))
 
     inputfile = os.path.join(datadir, 'stationlist.xml')
-    xmlfiles = [inputfile]    
+    xmlfiles = [inputfile]
 
     stations = StationList.loadFromXML(xmlfiles, ":memory:")
 
     df1 = stations.getStationDataframe(1)
     df2 = stations.getStationDataframe(0)
 
-    ppath = os.path.abspath(os.path.join(datadir, '..', 'database', 
+    ppath = os.path.abspath(os.path.join(datadir, '..', 'database',
                                          'test3.pickle'))
     if SAVE:
         ldf = [df1, df2]
@@ -133,7 +131,7 @@ def test_station2():
 
         compare_dataframes(saved_df1, df1)
         compare_dataframes(saved_df2, df2)
-        
+
         sql = stations.dumpToSQL()
 
         stations2 = StationList.loadFromSQL(sql)
@@ -158,8 +156,7 @@ def compare_dataframes(df1, df2):
         else:
             assert (df1[key][idx1] == df2[key][idx2]).all()
 
-        
+
 if __name__ == '__main__':
     test_station()
     test_station2()
-

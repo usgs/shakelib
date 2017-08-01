@@ -6,14 +6,10 @@ import copy
 import time as time
 
 # third party
-import numpy as np
-from openquake.hazardlib.geo import geodetic
 from openquake.hazardlib.geo import point
-from openquake.hazardlib.gsim import base
 from openquake.hazardlib.const import TRT
 
 from impactutils.time.ancient_time import HistoricTime
-from shakelib.grind.rupture import read_rupture_file
 from shakelib.utils.exception import ShakeLibException
 
 
@@ -56,7 +52,7 @@ class Origin(object):
         - mech: a string specifying the rupture mechanism; the accepted types
           are RS, SS, NM, and ALL, for reverse slip, strike slip, normal, and 
           unspecified ruptures, respectively.
-    
+
     For backward-compatibility, we also check for 'type'. If both 'mech' and 
     'type' are missing (or empty strings) then 'mech' is set to ALL.
 
@@ -128,7 +124,7 @@ class Origin(object):
             hour = int(event['hour'])
             minute = int(event['minute'])
             second = float(event['second'])
-            msec = int((second - int(second)) * 1e6) # microsec
+            msec = int((second - int(second)) * 1e6)  # microsec
             second = int(second)
             event['time'] = HistoricTime(
                 year, month, day, hour, minute, second, msec)
@@ -155,8 +151,6 @@ class Origin(object):
         if self.rake is None:
             self.rake = 0.0
 
-
-
     @classmethod
     def fromFile(cls, eventxmlfile, sourcefile=None):
         """
@@ -177,8 +171,6 @@ class Origin(object):
             params = read_source(sourcefile)
             event.update(params)
         return cls(event)
-
-
 
     def getHypo(self):
         """
@@ -301,7 +293,7 @@ def read_event_file(eventxml):
 
     Args:
         eventxml (str): Path to event XML file OR file-like object. 
-    
+
     Returns:
        Dictionary with keys as indicated above in earthquake element attributes.
 
@@ -326,7 +318,6 @@ def read_event_file(eventxml):
     root.unlink()
 
     return xmldict
-
 
 
 def read_source(sourcefile):
@@ -363,5 +354,3 @@ def read_source(sourcefile):
     if not isFile:
         f.close()
     return params
-
-

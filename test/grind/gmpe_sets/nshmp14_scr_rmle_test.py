@@ -3,22 +3,12 @@
 import os
 import sys
 
-from openquake.hazardlib.gsim.frankel_1996 import FrankelEtAl1996MwNSHMP2008
-# Note: the Toro implementation includes the 2002 update.
-from openquake.hazardlib.gsim.toro_1997 import ToroEtAl1997MwNSHMP2008
-from openquake.hazardlib.gsim.silva_2002 import SilvaEtAl2002MwNSHMP2008
-from openquake.hazardlib.gsim.campbell_2003 import Campbell2003MwNSHMP2008
-from openquake.hazardlib.gsim.tavakoli_pezeshk_2005 import TavakoliPezeshk2005MwNSHMP2008
-from openquake.hazardlib.gsim.atkinson_boore_2006 import AtkinsonBoore2006Modified2011
-from openquake.hazardlib.gsim.pezeshk_2011 import PezeshkEtAl2011NEHRPBC
-from openquake.hazardlib.gsim.boore_atkinson_2011 import Atkinson2008prime
-from openquake.hazardlib.gsim.somerville_2001 import SomervilleEtAl2001NSHMP2008
-
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
 sys.path.insert(0, shakedir)
 
 from shakelib.grind.gmpe_sets import nshmp14_scr_rlme
+
 
 def test_nshmp14_scr_rlme():
     gmpes, wts, wts_large_dist, dist_cutoff, site_gmpes = \
@@ -42,6 +32,7 @@ def test_nshmp14_scr_rlme():
     assert dist_cutoff == 500
 
     assert site_gmpes == ['AtkinsonBoore2006Modified2011()']
+
 
 if __name__ == '__main__':
     test_nshmp14_scr_rlme()

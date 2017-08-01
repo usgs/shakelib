@@ -2,6 +2,7 @@
 import copy
 import numpy as np
 
+
 class NewmarkHall1982(object):
 
     """
@@ -23,7 +24,7 @@ class NewmarkHall1982(object):
     The sigma factor was computed from an average sigma value determined
     by plotting PGV/PSA10 versus Distance for earthquakes with magnitudes
     greater than or equal to 5.0.
-    
+
     To do
         - Inherit from ConvertIMT class. 
 
@@ -61,7 +62,6 @@ class NewmarkHall1982(object):
 
         return pgv, sigmaTot
 
-    
     @staticmethod
     def getConversionFactor():
         """

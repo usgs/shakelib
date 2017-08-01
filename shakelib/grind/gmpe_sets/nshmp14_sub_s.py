@@ -28,6 +28,6 @@ def get_weights():
     # Note:
     #    - No distance-depenent weights
     # TODO:
-    #    - Figure out site GMPEs. 
+    #    - Figure out site GMPEs.
 
     return gmpes, wts, None, None, None

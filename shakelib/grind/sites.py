@@ -25,16 +25,14 @@ class Sites(object):
         """
         Construct a Sites object.
 
-        :param vs30grid:
-            MapIO Grid2D object containing Vs30 values.
-        :param vs30measured_grid:
-            Boolean array indicating whether Vs30 values were measured or derived
-            (i.e., from topographic slope). 
-        :param backarc:
-            Boolean array indicating whether site is in the subduction 
-            `backarc <http://earthquake.usgs.gov/learn/glossary/?term=backarc>`__.
-        :param defaultVs30:
-            Default Vs30 value to use in locations where Vs30Grid is not specified.
+        Args:
+            vs30grid: MapIO Grid2D object containing Vs30 values.
+            vs30measured_grid: Boolean array indicating whether Vs30 values were
+                measured or derived (i.e., from topographic slope). 
+            backarc: Boolean array indicating whether site is in the subduction 
+                `backarc <http://earthquake.usgs.gov/learn/glossary/?term=backarc>`__.
+            defaultVs30: Default Vs30 value to use in locations where Vs30Grid
+                is not specified.
         """
         self._Vs30 = vs30grid
         if backarc is None:
@@ -74,40 +72,31 @@ class Sites(object):
 
     @classmethod
     def fromBounds(cls, xmin, xmax, ymin, ymax, dx, dy, defaultVs30=686.0,
-                         vs30File=None, vs30measured_grid=None,
-                         backarc=None, padding=False, resample=False):
+                   vs30File=None, vs30measured_grid=None,
+                   backarc=None, padding=False, resample=False):
         """
         Create a Sites object by defining a center point, resolution, extent, 
         and Vs30 values.
 
-        :param xmin:
-            X coordinate of left edge of bounds.
-        :param xmax:
-            X coordinate of right edge of bounds.
-        :param ymin:
-            Y coordinate of bottom edge of bounds.
-        :param ymax:
-            Y coordinate of top edge of bounds.
-        :param dx:
-            Resolution of desired grid in X direction.
-        :param dy:
-            Resolution of desired grid in Y direction.
-        :param defaultVs30:
-            Default Vs30 value to use if vs30File not specified.
-        :param vs30File:
-            Name of GMT or GDAL format grid file containing Vs30 values.
-        :param vs30measured_grid:
-            Boolean grid indicating whether Vs30 values were measured or derived 
-            (i.e., from slope)
-        :param backarc:
-            Boolean array indicating whether site is in the subduction 
-            `backarc <http://earthquake.usgs.gov/learn/glossary/?term=backarc>`__.
-        :param padding:
-            Boolean indicating whether or not to pad resulting Vs30 grid out to
-            edges of input bounds. If False, grid will be clipped to the extent
-            of the input file.
-        :param resample:
-            Boolean indicating whether or not the grid should be resampled.
+        Args:
+            xmin: X coordinate of left edge of bounds.
+            xmax: X coordinate of right edge of bounds.
+            ymin: Y coordinate of bottom edge of bounds.
+            ymax: Y coordinate of top edge of bounds.
+            dx: Resolution of desired grid in X direction.
+            dy: Resolution of desired grid in Y direction.
+            defaultVs30: Default Vs30 value to use if vs30File not specified.
+            vs30File: Name of GMT or GDAL format grid file containing Vs30
+                values.
+            vs30measured_grid: Boolean grid indicating whether Vs30 values were
+                measured or derived (i.e., from slope).
+            backarc: Boolean array indicating whether site is in the subduction 
+                `backarc <http://earthquake.usgs.gov/learn/glossary/?term=backarc>`__.
+            padding: Boolean indicating whether or not to pad resulting Vs30
+                grid out to edges of input bounds. If False, grid will be
+                clipped to the extent of the input file.
+            resample: Boolean indicating whether or not the grid should be 
+                resampled.
         """
         geodict = GeoDict.createDictFromBox(xmin, xmax, ymin, ymax, dx, dy)
         if vs30File is not None:
@@ -122,40 +111,31 @@ class Sites(object):
 
     @classmethod
     def fromCenter(cls, cx, cy, xspan, yspan, dx, dy, defaultVs30=686.0,
-                         vs30File=None, vs30measured_grid=None,
-                         backarc=None, padding=False, resample=False):
+                   vs30File=None, vs30measured_grid=None,
+                   backarc=None, padding=False, resample=False):
         """
         Create a Sites object by defining a center point, resolution, extent, 
         and Vs30 values.
 
-        :param cx:
-            X coordinate of desired center point.
-        :param cy:
-            Y coordinate of desired center point.
-        :param xspan:
-            Width of desired grid.
-        :param yspan:
-            Height of desired grid.
-        :param dx:
-            Resolution of desired grid in X direction.
-        :param dy:
-            Resolution of desired grid in Y direction.
-        :param defaultVs30:
-            Default Vs30 value to use if vs30File not specified.
-        :param vs30File:
-            Name of GMT or GDAL format grid file containing Vs30 values.
-        :param vs30measured_grid:
-            Boolean grid indicating whether Vs30 values were measured or derived 
-            (i.e., from slope)
-        :param backarc:
-            Boolean array indicating whether site is in the subduction 
-            `backarc <http://earthquake.usgs.gov/learn/glossary/?term=backarc>`__.
-        :param padding:
-            Boolean indicating whether or not to pad resulting Vs30 grid out to
-            edges of input bounds. If False, grid will be clipped to the extent
-            of the input file.
-        :param resample:
-            Boolean indicating whether or not the grid should be resampled.
+        Args:
+            cx: X coordinate of desired center point.
+            cy: Y coordinate of desired center point.
+            xspan: Width of desired grid.
+            yspan: Height of desired grid.
+            dx: Resolution of desired grid in X direction.
+            dy: Resolution of desired grid in Y direction.
+            defaultVs30: Default Vs30 value to use if vs30File not specified.
+            vs30File: Name of GMT or GDAL format grid file containing Vs30
+                values.
+            vs30measured_grid: Boolean grid indicating whether Vs30 values were
+                measured or derived (i.e., from slope).
+            backarc: Boolean array indicating whether site is in the subduction
+                `backarc <http://earthquake.usgs.gov/learn/glossary/?term=backarc>`__.
+            padding: Boolean indicating whether or not to pad resulting Vs30
+                grid out to edges of input bounds. If False, grid will be
+                clipped to the extent of the input file.
+            resample: Boolean indicating whether or not the grid should be
+                resampled.
         """
         geodict = GeoDict.createDictFromCenter(cx, cy, dx, dy, xspan, yspan)
         if vs30File is not None:
@@ -172,8 +152,8 @@ class Sites(object):
         """
         Create a SitesContext object by sampling the current Sites object.
 
-        :param lldict:
-            Either
+        Args:
+            lldict: Either
 
                 - None, in which case the SitesContext for the complete Sites
                   grid is returned, or 
@@ -181,19 +161,19 @@ class Sites(object):
                   is a numpy array). Each element must have the same shape. In
                   this case the SitesContext for these locaitons is returned.
 
-        :param rock_vs30:
-            Either
+            rock_vs30: Either
 
                 - None, in which case the SitesContext will reflect the Vs30
-                  grid in the Sites instance, or 
-                - A float for the rock Vs30 value, in which case the 
+                  grid in the Sites instance, or
+                - A float for the rock Vs30 value, in which case the
                   SitesContext will be constructed for this constant Vs30 value.
 
-        :returns:
-            SitesContext object. 
+        Returns:
+            SitesContext object.
 
-        :raises ShakeLibException:
-             When lat/lon input sequences do not share dimensionality.
+        Raises:
+            ShakeLibException: When lat/lon input sequences do not share
+                dimensionality.
 
         """
 
@@ -241,15 +221,14 @@ class Sites(object):
 
     def getVs30Grid(self):
         """
-        :returns:
-            Grid2D object containing Vs30 values for this Sites object.
+
+        Returns: Grid2D object containing Vs30 values for this Sites object.
         """
         return self._Vs30
 
     def getNxNy(self):
         """
-        :returns:
-            The number of grid points in x and y.
+        Returns: The number of grid points in x and y.
         """
         return self._GeoDict.nx, self._GeoDict.ny
 
@@ -257,14 +236,20 @@ class Sites(object):
     def _load(vs30File, samplegeodict=None, resample=False, method='linear',
               doPadding=False, padValue=np.nan):
         try:
-            vs30grid = GMTGrid.load(vs30File, samplegeodict=samplegeodict,
-                                    resample=resample, method=method,
-                                    doPadding=doPadding, padValue=padValue)
+            vs30grid = GMTGrid.load(vs30File,
+                                    samplegeodict=samplegeodict,
+                                    resample=resample,
+                                    method=method,
+                                    doPadding=doPadding,
+                                    padValue=padValue)
         except Exception as msg1:
             try:
-                vs30grid = GDALGrid.load(vs30File, samplegeodict=samplegeodict,
-                                         resample=resample, method=method,
-                                         doPadding=doPadding, padValue=padValue)
+                vs30grid = GDALGrid.load(vs30File,
+                                         samplegeodict=samplegeodict,
+                                         resample=resample,
+                                         method=method,
+                                         doPadding=doPadding,
+                                         padValue=padValue)
             except Exception as msg2:
                 msg = 'Load failure of %s - error messages: "%s"\n "%s"' % (
                     vs30File, str(msg1), str(msg2))
@@ -279,13 +264,13 @@ class Sites(object):
     def _getFileGeoDict(fname):
         geodict = None
         try:
-            geodict,t = GMTGrid.getFileGeoDict(fname)
+            geodict, t = GMTGrid.getFileGeoDict(fname)
         except Exception as msg1:
             try:
-                geodict,t = GDALGrid.getFileGeoDict(fname)
+                geodict, t = GDALGrid.getFileGeoDict(fname)
             except Exception as msg2:
-                msg = 'File geodict failure with %s - error messages: "%s"\n "%s"' % (
-                    fname, str(msg1), str(msg2))
+                msg = 'File geodict failure with %s - error messages: '\
+                      '"%s"\n "%s"' % (fname, str(msg1), str(msg2))
                 raise ShakeLibException(msg)
         return geodict
 
@@ -295,14 +280,15 @@ class Sites(object):
         Add the different depth parameters to a sites context from 
         Vs30 values. 
 
-        :param sctx:
-            A sites context. 
-        :returns:
-            A sites context with the depth parameters set.
+        Args:
+            sctx: A sites context. 
+        
+        Returns: A sites context with the depth parameters set.
         """
         sctx.z1pt0_cy14_cal = Sites._z1pt0_from_vs30_cy14_cal(sctx.vs30)
         sctx.z1pt0_ask14_cal = Sites._z1pt0_from_vs30_ask14_cal(sctx.vs30)
-        sctx.z2pt5_cb14_cal = Sites._z2pt5_from_vs30_cb14_cal(sctx.vs30) / 1000.0
+        sctx.z2pt5_cb14_cal = Sites._z2pt5_from_vs30_cb14_cal(
+            sctx.vs30) / 1000.0
         sctx.z1pt0_cy08 = Sites._z1pt0_from_vs30_cy08(sctx.vs30)
         sctx.z2pt5_cb07 = Sites._z2pt5_from_z1pt0_cb07(sctx.z1pt0_cy08)
 
@@ -311,12 +297,12 @@ class Sites(object):
     @staticmethod
     def _z1pt0_from_vs30_cy14_cal(vs30):
         """
-        Compute z1.0 using CY14 relationship for California. 
+        Compute z1.0 using CY14 relationship for California.
 
-        :param vs30:
-            Numpy array of Vs30 values in m/s. 
-        :returns: 
-            Numpy array of z1.0 in m.  
+        Args:
+            vs30: Numpy array of Vs30 values in m/s.
+        
+        Returns: Numpy array of z1.0 in m.
         """
         z1 = np.exp(-(7.15 / 4.0) *
                     np.log((vs30**4.0 + 571.**4) / (1360**4.0 + 571.**4)))
@@ -325,12 +311,12 @@ class Sites(object):
     @staticmethod
     def _z1pt0_from_vs30_ask14_cal(vs30):
         """
-        Calculate z1.0 using ASK14 relationship for California. 
+        Calculate z1.0 using ASK14 relationship for California.
 
-        :param vs30:
-            Numpy array of Vs30 values in m/s. 
-        :returns: 
-            Numpy array of z1.0 in m.  
+        Args:
+            vs30: Numpy array of Vs30 values in m/s.
+
+        Returns: Numpy array of z1.0 in m.
 
         """
         # ASK14 define units as km, but implemented as m in OQ
@@ -341,13 +327,13 @@ class Sites(object):
     @staticmethod
     def _z2pt5_from_vs30_cb14_cal(vs30):
         """
-        Calculate z2.5 using CB14 relationship for California. 
+        Calculate z2.5 using CB14 relationship for California.
 
-        :param vs30:
-            Numpy array of Vs30 values in m/s.
-        :returns:
-            Numpy array of z2.5 in m. *NOTE*: OQ's CampbellBozorgnia2014 class
-            expects z2.5 to be in km!
+        Args:
+            vs30: Numpy array of Vs30 values in m/s.
+        
+        Returns: Numpy array of z2.5 in m. *NOTE*: OQ's CampbellBozorgnia2014
+            class expects z2.5 to be in km!
         """
         z2p5 = 1000 * np.exp(7.089 - 1.144 * np.log(vs30))
         return z2p5
@@ -357,10 +343,10 @@ class Sites(object):
         """
         Chiou and Youngs (2008) z1.0 equation.
 
-        :param vs30:
-            Numpy array of Vs30 values in m/s.
-        :returns:
-            Numpy array of z1.0 in m.
+        Args:
+            vs30: Numpy array of Vs30 values in m/s.
+        
+        Returns: Numpy array of z1.0 in m.
         """
         z1pt0 = np.exp(28.5 - (3.82 / 8.0) * np.log(vs30**8 + 378.7**8))
         return z1pt0
@@ -368,12 +354,12 @@ class Sites(object):
     @staticmethod
     def _z2pt5_from_z1pt0_cb07(z1pt0):
         """
-        Equations are from 2007 PEER report by Campbell and Bozorgnia. 
+        Equations are from 2007 PEER report by Campbell and Bozorgnia.
 
-        :param z1pt0:
-            Numpy array of z1.0 in m. 
-        :returns:
-            Numpy array of z2.5 in m. 
+        Args:
+            z1pt0: Numpy array of z1.0 in m.
+
+        Returns: Numpy array of z2.5 in m.
         """
         z2pt5 = 519.0 + z1pt0 * 3.595
         return z2pt5

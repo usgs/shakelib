@@ -32,7 +32,7 @@ before_script:
 script:
     - export PYTHONPATH="."
     - py.test --cov=shakelib
-    - echo `sphinx-build --version`
+#    - echo `sphinx-build --version`
 
 after_success:
     - pip install codecov codacy-coverage

@@ -1,10 +1,5 @@
 #!/usr/bin/env python
 
-from openquake.hazardlib.gsim.abrahamson_2014 import AbrahamsonEtAl2014
-from openquake.hazardlib.gsim.boore_2014 import BooreEtAl2014
-from openquake.hazardlib.gsim.campbell_bozorgnia_2014 import CampbellBozorgnia2014
-from openquake.hazardlib.gsim.chiou_youngs_2014 import ChiouYoungs2014
-
 import os.path
 import sys
 
@@ -32,6 +27,7 @@ def test_nshmp14_acr():
     assert dist_cutoff is None
 
     assert site_gmpes is None
+
 
 if __name__ == '__main__':
     test_nshmp14_acr()

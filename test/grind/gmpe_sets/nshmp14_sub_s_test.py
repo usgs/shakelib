@@ -3,10 +3,6 @@
 import os
 import sys
 
-from openquake.hazardlib.gsim.atkinson_boore_2003 import AtkinsonBoore2003SSlab
-from openquake.hazardlib.gsim.atkinson_boore_2003 import AtkinsonBoore2003SSlabCascadia
-from openquake.hazardlib.gsim.zhao_2006 import ZhaoEtAl2006SSlab
-from openquake.hazardlib.gsim.abrahamson_2015 import AbrahamsonEtAl2015SSlab
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
@@ -31,7 +27,8 @@ def test_nshmp14_sub_s():
 
     assert dist_cutoff is None
 
-#    assert site_gmpes == 
+#    assert site_gmpes ==
+
 
 if __name__ == '__main__':
     test_nshmp14_sub_s()

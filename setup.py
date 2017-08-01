@@ -3,7 +3,7 @@ import os.path
 
 VERSION = '0.1'
 
-#comment
+# comment
 setup(name='shakelib',
       version=VERSION,
       description='USGS Near-Real-Time Ground Motion Mapping Library',

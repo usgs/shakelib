@@ -2,6 +2,7 @@ import numpy as np
 
 from openquake.hazardlib.imt import PGA, PGV, SA
 
+
 class WGRW12(object):
     """
     Implements the ground motion intensity conversion equations (GMICE) of
@@ -295,7 +296,7 @@ class WGRW12(object):
         """
 
         if (imt != self.__pga and imt != self.__pgv and imt != self.__sa03 and
-            imt != self.__sa10 and imt != self.__sa30):
+                imt != self.__sa10 and imt != self.__sa30):
             raise ValueError("Invalid IMT " + str(imt))
         c = self.__constants[imt]
         c2 = self.__constants2[imt]

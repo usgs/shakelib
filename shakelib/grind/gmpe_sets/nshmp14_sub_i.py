@@ -8,6 +8,7 @@ from openquake.hazardlib.gsim.abrahamson_2015 import AbrahamsonEtAl2015SInter
 # Note: I'm not using the "NSHMP" versions of the OQ GMPEs because they
 #       fix hypocentral depth at 20 km.
 
+
 def get_weights():
     """
     Method for getting the 2014 NSHMP SUB/interface gmpe list and list of 
@@ -30,8 +31,7 @@ def get_weights():
     # Note:
     #    - No distance-depenent weights
     # TODO:
-    #    - Figure out site GMPEs. 
-
+    #    - Figure out site GMPEs.
 
     # Site decisions:
     #    - Abrahamson et al. (2015) includes site, indluding nonlinear

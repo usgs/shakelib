@@ -16,7 +16,7 @@ B1 = np.array([
     [0.03, 0, 0, 0.09, 0.13, 0.23, 0.34, 0.29, 0.24],
     [0, 0, 0, 0.06, 0.09, 0.19, 0.29, 0.30, 0.25],
     [0, 0, 0, 0.04, 0.07, 0.16, 0.24, 0.25, 0.24]
-    ])
+])
 
 # Table III. Long range coregionalization matrix, B2
 B2 = np.array([
@@ -29,7 +29,7 @@ B2 = np.array([
     [0.08, 0, 0.03, 0.17, 0.23, 0.33, 0.45, 0.42, 0.42],
     [0.06, 0, 0.02, 0.14, 0.19, 0.29, 0.42, 0.47, 0.47],
     [0.05, -0.03, 0, 0.14, 0.21, 0.32, 0.42, 0.47, 0.54]
-    ])
+])
 
 # Table IV. Nugget effect coregionalization matrix, B3
 B3 = np.array([
@@ -42,7 +42,8 @@ B3 = np.array([
     [0, 0, -0.04, 0.02, 0.09, 0.12, 0.21, 0.17, 0.13],
     [0.03, 0.02, -0.02, 0.04, 0.12, 0.13, 0.17, 0.23, 0.10],
     [0.08, 0.08, 0.03, 0.02, 0.04, 0.09, 0.13, 0.10, 0.22]
-    ])
+])
+
 
 class LothBaker2013(object):
     """
@@ -57,6 +58,7 @@ class LothBaker2013(object):
     ground motion spectral accelerations at multiple periods.” 
     Earthquake Engineering & Structural Dynamics, 42, 397-417.
     """
+
     def __init__(self, t1):
 
         if np.any(t1 < 0.01):
@@ -101,9 +103,9 @@ class LothBaker2013(object):
             raise ValueError('The separation distance must be positive')
         if np.shape(ix1) != np.shape(ix2) or np.shape(ix1) != np.shape(h):
             raise ValueError(
-                    'The input arguments must all have the same dimensions')
+                'The input arguments must all have the same dimensions')
 
-        # 
+        #
         # Index into the arrays to get the coefficients corresponding to the
         # periods of interest.
         #
@@ -114,6 +116,7 @@ class LothBaker2013(object):
         # Compute the correlation coefficient (Equation 42)
         # This is very fast
 
-        rho = ne.evaluate("b1 * exp(-3 * h / 20) + b2 * exp(-3 * h / 70) + (h == 0) * b3")
+        rho = ne.evaluate(
+            "b1 * exp(-3 * h / 20) + b2 * exp(-3 * h / 70) + (h == 0) * b3")
 
         return rho

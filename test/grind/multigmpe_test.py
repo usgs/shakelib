@@ -4,6 +4,7 @@ import os
 import sys
 import time as time
 import copy
+import pkg_resources
 
 import numpy as np
 import pytest
@@ -26,9 +27,11 @@ from openquake.hazardlib.gsim.base import DistancesContext
 from openquake.hazardlib.gsim.base import SitesContext
 from impactutils.time.ancient_time import HistoricTime
 
-homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
-shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
-sys.path.insert(0, shakedir)
+from configobj import ConfigObj, flatten_errors
+from validate import Validator
+
+from shakemap.utils.config import get_config_paths, get_custom_validator,\
+        config_error
 
 from shakelib.grind.multigmpe import MultiGMPE
 from shakelib.grind.multigmpe import DualDistanceWeights
@@ -37,6 +40,131 @@ from shakelib.grind.sites import Sites
 from shakelib.grind.origin import Origin
 from shakelib.grind.rupture import QuadRupture
 from shakelib.grind.distance import Distance
+
+from scenarios.utils import set_shakehome, set_vs30file, set_gmpe
+
+homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
+shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
+sys.path.insert(0, shakedir)
+
+
+def test_scr_rlme():
+    spec_file = pkg_resources.resource_filename(
+        'scenarios', os.path.join('..', 'data', 'configspec.conf'))
+    validator = get_custom_validator()
+    config = ConfigObj(os.path.join(os.path.expanduser('~'), 'scenarios.conf'),
+                       configspec=spec_file)
+    tmp = pkg_resources.resource_filename(
+        'scenarios', os.path.join('..', 'data', 'gmpe_sets.conf'))
+    config.merge(ConfigObj(tmp, configspec=spec_file))
+    tmp = pkg_resources.resource_filename(
+        'scenarios', os.path.join('..', 'data', 'modules.conf'))
+    config.merge(ConfigObj(tmp, configspec=spec_file))
+    results = config.validate(validator)
+    if results != True:
+        config_error(config, results)
+
+    # MultiGMPE from config
+    config = config.dict()
+    old_gmpe = set_gmpe('stable_continental_nshmp2014_rlme')
+    gmpe = MultiGMPE.from_config(config)
+
+    # MultiGMPE with set_name/DDW
+    set_name = 'nshmp14_scr_rlme'
+    ddw = DualDistanceWeights.from_set_name(set_name)
+
+    # Input stuff
+    IMT = imt.SA(1.0)
+    rctx = RuptureContext()
+    dctx = DistancesContext()
+    sctx = SitesContext()
+    sctx_rock = SitesContext()
+
+    rctx.rake = 0.0
+    rctx.dip = 90.0
+    rctx.ztor = 0.0
+    rctx.mag = 8.0
+    rctx.width = 10.0
+    rctx.hypo_depth = 8.0
+
+    dctx.rjb = np.logspace(1, np.log10(800), 100)
+    dctx.rrup = dctx.rjb
+    dctx.rhypo = dctx.rjb
+    dctx.rx = dctx.rjb
+    dctx.ry0 = dctx.rjb
+
+    sctx.vs30 = np.ones_like(dctx.rjb)*275.0
+    sctx.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+    sctx = MultiGMPE.set_sites_depth_parameters(sctx, gmpe)
+
+    # Evaluate
+    ddw_lmean, dummy = ddw.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    conf_lmean, dummy = gmpe.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+
+    target_lmean = np.array(
+      [ 0.10556736,  0.0839267 ,  0.06189444,  0.03945984,  0.01661264,
+       -0.006657  , -0.03035844, -0.05450058, -0.07909179, -0.10413995,
+       -0.1296524 , -0.15563655, -0.1821091 , -0.20909381, -0.23661405,
+       -0.26469259, -0.29335086, -0.32257956, -0.35232905, -0.38254639,
+       -0.41317807, -0.44417017, -0.47549552, -0.5071888 , -0.53929293,
+       -0.57185042, -0.60490345, -0.63848027, -0.67255251, -0.70707712,
+       -0.74201096, -0.77731091, -0.81293906, -0.84889737, -0.88520644,
+       -0.92188724, -0.95899471, -0.99699613, -1.03583184, -1.07530664,
+       -1.11531737, -1.15576129, -1.19653696, -1.23757689, -1.2772327 ,
+       -1.2915098 , -1.30576498, -1.32001713, -1.33429606, -1.3486727 ,
+       -1.36322545, -1.37803346, -1.39317668, -1.40677752, -1.42081409,
+       -1.43538898, -1.45056417, -1.46640223, -1.48327111, -1.50656497,
+       -1.53368548, -1.56645985, -1.59991327, -1.63399401, -1.66867278,
+       -1.7039438 , -1.73980246, -1.77624473, -1.81326727, -1.85087166,
+       -1.889066  , -1.92784814, -1.96721442, -2.0071855 , -2.04779304,
+       -2.08909259, -2.13114448, -2.17401045, -2.21775376, -2.26243406,
+       -2.30808979, -2.35475487, -2.40246494, -2.4512575 , -2.50117075,
+       -2.55223495, -2.60447754, -2.65792811, -2.71261851, -2.61732716,
+       -2.67007323, -2.72399057, -2.77918054, -2.83574666, -2.89379416,
+       -2.95340501, -3.01462691, -3.07750731, -3.14209631, -3.20844679])
+
+    np.testing.assert_allclose(conf_lmean, target_lmean, atol=1e-6)
+    np.testing.assert_allclose(ddw_lmean, target_lmean, atol=1e-6)
+
+    # Redo for 3 sec so some GMPEs are filtered out
+    IMT = imt.SA(3.0)
+    ddw = DualDistanceWeights.from_set_name(set_name, IMT)
+    gmpe = MultiGMPE.from_config(config, filter_imt = IMT)
+    ddw_lmean, dummy = ddw.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    conf_lmean, dummy = gmpe.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+
+    target_lmean = np.array(
+      [-1.26636973, -1.289514  , -1.31300386, -1.33683936, -1.36102084,
+       -1.38554902, -1.41042497, -1.43565015, -1.46122642, -1.48715602,
+       -1.51344154, -1.54008586, -1.56709215, -1.59446375, -1.62220409,
+       -1.65031664, -1.6788048 , -1.70767178, -1.7369205 , -1.76655351,
+       -1.79657287, -1.82698005, -1.85777587, -1.88896039, -1.92053288,
+       -1.95249175, -1.98483453, -2.01755788, -2.05065755, -2.08412844,
+       -2.11796463, -2.15215943, -2.18670547, -2.22159473, -2.25681869,
+       -2.29236835, -2.32823441, -2.36453464, -2.40140834, -2.43883442,
+       -2.47679132, -2.51525752, -2.55421156, -2.59363211, -2.63112832,
+       -2.63336521, -2.63582817, -2.6385319 , -2.64147962, -2.64466761,
+       -2.64809268, -2.65175214, -2.6556438 , -2.65976592, -2.66411721,
+       -2.66869673, -2.67350386, -2.67853821, -2.68413311, -2.69604497,
+       -2.7124745 , -2.73590549, -2.75964098, -2.78367044, -2.80798539,
+       -2.8325853 , -2.85746998, -2.88263948, -2.90809408, -2.93383429,
+       -2.95986073, -2.98617306, -3.01275705, -3.03961495, -3.06675608,
+       -3.09419043, -3.12192861, -3.14998191, -3.17836228, -3.20708239,
+       -3.23615561, -3.26559604, -3.29541858, -3.32563888, -3.35627343,
+       -3.38733956, -3.41885548, -3.4508403 , -3.48331409, -3.56476842,
+       -3.59987076, -3.63573296, -3.67238872, -3.70987332, -3.74822369,
+       -3.78747847, -3.82767809, -3.86886488, -3.91108308, -3.95437899])
+
+    np.testing.assert_allclose(conf_lmean, target_lmean, atol=1e-6)
+    np.testing.assert_allclose(ddw_lmean, target_lmean, atol=1e-6)
+
+    # Clean up
+    set_gmpe(old_gmpe)
+
 
 def test_basic():
     # Most basic possible test of MultiGMPE
@@ -77,7 +205,8 @@ def test_basic():
 
     # Two similar GMPEs, both with site terms
     CY14 = ChiouYoungs2014()
-    mgmpe = MultiGMPE.from_list([ASK14, CY14], [0.6, 0.4], imc = const.IMC.RotD50)
+    mgmpe = MultiGMPE.from_list(
+        [ASK14, CY14], [0.6, 0.4], imc = const.IMC.RotD50)
     sctx = MultiGMPE.set_sites_depth_parameters(sctx, CY14)
     lmean_cy14, sd_cy14 = CY14.get_mean_and_stddevs(
         sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
@@ -88,8 +217,9 @@ def test_basic():
 
     # Two GMPEs, one without a site term
     C03 = Campbell2003MwNSHMP2008()
-    mgmpe = MultiGMPE.from_list([ASK14, C03], [0.6, 0.4], imc = const.IMC.RotD50,
-                                default_gmpes_for_site = [ASK14])
+    mgmpe = MultiGMPE.from_list(
+        [ASK14, C03], [0.6, 0.4], imc = const.IMC.RotD50,
+        default_gmpes_for_site = [ASK14])
     lmean_c03, sd_c03 = C03.get_mean_and_stddevs(
         sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
     sctx_rock.vs30 = np.ones_like(dctx.rjb)*760.0
@@ -104,10 +234,13 @@ def test_basic():
     np.testing.assert_allclose(lmean_target, lmean_mgmpe)
 
     # Two multi-GMPEs
-    mgmpe1 = MultiGMPE.from_list([ASK14, CY14], [0.6, 0.4], imc = const.IMC.RotD50)
-    mgmpe2 = MultiGMPE.from_list([ASK14, C03], [0.6, 0.4], imc = const.IMC.RotD50,
-                                 default_gmpes_for_site = [ASK14])
-    mgmpe = MultiGMPE.from_list([mgmpe1, mgmpe2], [0.3, 0.7], imc = const.IMC.RotD50)
+    mgmpe1 = MultiGMPE.from_list(
+        [ASK14, CY14], [0.6, 0.4], imc = const.IMC.RotD50)
+    mgmpe2 = MultiGMPE.from_list(
+        [ASK14, C03], [0.6, 0.4], imc = const.IMC.RotD50,
+        default_gmpes_for_site = [ASK14])
+    mgmpe = MultiGMPE.from_list(
+        [mgmpe1, mgmpe2], [0.3, 0.7], imc = const.IMC.RotD50)
     lmean_mgmpe, sd_mgmpe = mgmpe.get_mean_and_stddevs(
         sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
     tmp1 = 0.6*lmean_ask14 + 0.4*lmean_cy14
@@ -115,13 +248,19 @@ def test_basic():
     lmean_target = 0.3*tmp1 + 0.7*tmp2
     np.testing.assert_allclose(lmean_target, lmean_mgmpe)
 
-def test_from_config():
+def test_from_config_set_of_sets():
     # Mock up a minimal config dictionary
     conf = {
         'gmpe_modules':{
-            'ASK14':['AbrahamsonEtAl2014', 'openquake.hazardlib.gsim.abrahamson_2014'],
-            'C03':['Campbell2003MwNSHMP2008', 'openquake.hazardlib.gsim.campbell_2003'],
-            'Pea11':['PezeshkEtAl2011NEHRPBC','openquake.hazardlib.gsim.pezeshk_2011']
+            'ASK14':['AbrahamsonEtAl2014',
+                     'openquake.hazardlib.gsim.abrahamson_2014'],
+            'C03':['Campbell2003MwNSHMP2008',
+                   'openquake.hazardlib.gsim.campbell_2003'],
+            'Pea11':['PezeshkEtAl2011NEHRPBC',
+                     'openquake.hazardlib.gsim.pezeshk_2011']
+        },
+        'imc_modules':{
+            'RotD50':'Average Horizontal (GMRotI50)',
         },
         'gmpe_sets':{
             'active_crustal':{
@@ -200,6 +339,159 @@ def test_from_config():
     lmean, sd = test.get_mean_and_stddevs(
         sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
     np.testing.assert_allclose(lmean_target, lmean)
+
+
+def test_from_config_set_of_gmpes():
+    # Mock up a minimal config dictionary
+    conf = {
+        'gmpe_modules':{
+            'ASK14':['AbrahamsonEtAl2014',
+                     'openquake.hazardlib.gsim.abrahamson_2014'],
+            'C03':['Campbell2003MwNSHMP2008',
+                   'openquake.hazardlib.gsim.campbell_2003'],
+            'Pea11':['PezeshkEtAl2011NEHRPBC',
+                     'openquake.hazardlib.gsim.pezeshk_2011']
+        },
+        'imc_modules':{
+            'RotD50':'Average Horizontal (GMRotI50)',
+        },
+        'gmpe_sets':{
+            'stable_continental':{
+                'gmpes':['C03', 'Pea11'],
+                'weights':[0.5, 0.5],
+                'weights_large_dist':[0, 1.0],
+                'dist_cutoff':500,
+                'site_gmpes':['ASK14'],
+                'weights_site_gmpes':[]
+            }
+        },
+        'grind':{
+            'gmpe':'stable_continental',
+            'component':'RotD50'
+        }
+    }
+
+    # Get multigmpe from config
+    test = MultiGMPE.from_config(conf)
+
+    # Compute "by hand"
+    ASK14 = AbrahamsonEtAl2014()
+    C03 = Campbell2003MwNSHMP2008()
+    Pea11 = PezeshkEtAl2011NEHRPBC()
+
+    IMT = imt.SA(1.0)
+    rctx = RuptureContext()
+    dctx = DistancesContext()
+    sctx = SitesContext()
+    sctx_rock = SitesContext()
+
+    rctx.rake = 0.0
+    rctx.dip = 90.0
+    rctx.ztor = 0.0
+    rctx.mag = 8.0
+    rctx.width = 10.0
+    rctx.hypo_depth = 8.0
+
+    dctx.rjb = np.logspace(1, np.log10(800), 100)
+    dctx.rrup = dctx.rjb
+    dctx.rhypo = dctx.rjb
+    dctx.rx = dctx.rjb
+    dctx.ry0 = dctx.rjb
+
+    sctx.vs30 = np.ones_like(dctx.rjb)*275.0
+    sctx.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+    sctx_rock.vs30 = np.ones_like(dctx.rjb)*760.0
+    sctx_rock.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+
+    sctx = MultiGMPE.set_sites_depth_parameters(sctx, ASK14)
+    sctx_rock = MultiGMPE.set_sites_depth_parameters(sctx_rock, ASK14)
+
+    lmean_ask14, dummy = ASK14.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_ask14_rock, dummy = ASK14.get_mean_and_stddevs(
+        sctx_rock, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_c03, dummy = C03.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_pea11, dummy = Pea11.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+
+    lamp = lmean_ask14 - lmean_ask14_rock
+    lmean_scr = 0.5*(lmean_c03 + lamp) + 0.5*(lmean_pea11 + lamp)
+    lmean_scr[dctx.rjb > 500] = (lmean_pea11 + lamp)[dctx.rjb > 500]
+    lmean_target = lmean_scr
+
+    lmean, sd = test.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    np.testing.assert_allclose(lmean_target, lmean)
+
+def test_from_config_single_gmpe():
+    # Mock up a minimal config dictionary
+    conf = {
+        'gmpe_modules':{
+            'ASK14':['AbrahamsonEtAl2014',
+                     'openquake.hazardlib.gsim.abrahamson_2014']
+        },
+        'imc_modules':{
+            'RotD50':'Average Horizontal (GMRotI50)',
+        },
+        'gmpe_sets':{
+            'stable_continental':{
+                'gmpes':['C03', 'Pea11'],
+                'weights':[0.5, 0.5],
+                'weights_large_dist':[0, 1.0],
+                'dist_cutoff':500,
+                'site_gmpes':['ASK14'],
+                'weights_site_gmpes':[]
+            }
+        },
+        'grind':{
+            'gmpe':'ASK14',
+            'component':'RotD50'
+        }
+    }
+
+    # Get multigmpe from config
+    test = MultiGMPE.from_config(conf)
+
+    # Compute "by hand"
+    ASK14 = AbrahamsonEtAl2014()
+
+    IMT = imt.SA(1.0)
+    rctx = RuptureContext()
+    dctx = DistancesContext()
+    sctx = SitesContext()
+    sctx_rock = SitesContext()
+
+    rctx.rake = 0.0
+    rctx.dip = 90.0
+    rctx.ztor = 0.0
+    rctx.mag = 8.0
+    rctx.width = 10.0
+    rctx.hypo_depth = 8.0
+
+    dctx.rjb = np.logspace(1, np.log10(800), 100)
+    dctx.rrup = dctx.rjb
+    dctx.rhypo = dctx.rjb
+    dctx.rx = dctx.rjb
+    dctx.ry0 = dctx.rjb
+
+    sctx.vs30 = np.ones_like(dctx.rjb)*275.0
+    sctx.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+    sctx_rock.vs30 = np.ones_like(dctx.rjb)*760.0
+    sctx_rock.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+
+    sctx = MultiGMPE.set_sites_depth_parameters(sctx, ASK14)
+
+    lmean_ask14, dummy = ASK14.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+
+    lmean_target = lmean_ask14
+
+    lmean, sd = test.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    np.testing.assert_allclose(lmean_target, lmean)
+
+
 
 def test_nga_w2_m8():
     # Test based on Gregor et al. (2014) Fig 2 (lower right)
@@ -506,7 +798,7 @@ def test_nga_w2_m6():
     gmpe = MultiGMPE.from_list(gmpes, [1.0],
         imc = 'Average Horizontal (RotD50)')
     sctx.z2pt5_cb14_cal = sites.Sites._z2pt5_from_vs30_cb14_cal(sctx.vs30)/1000.0
-    #                                                     Important ^^^^^^^
+    #                                                           Important ^^^^^^^
     cb14, sd_cb14 = gmpe.get_mean_and_stddevs(sctx, rctx, dctx, IMT,
         [const.StdDev.TOTAL])
 
@@ -852,7 +1144,8 @@ def test_multigmpe_get_sites_depth_parameters():
                             padding=True, resample=False)
     sctx = site.getSitesContext()
     sx1 = MultiGMPE.set_sites_depth_parameters(sctx, gmpes[0])
-    z2pt5d = np.array([[ 1177.61979893,  1300.11396989,  1168.13802718,  1168.56933015,
+    z2pt5d = np.array(
+      [[ 1177.61979893,  1300.11396989,  1168.13802718,  1168.56933015,
          1169.4040603 ,  1161.16046639,  1148.4288528 ],
        [ 1179.50520975,  1182.18094855,  1170.95306363,  1180.09841078,
          1198.16386197,  1190.96074128,  1179.30654372],
@@ -868,7 +1161,8 @@ def test_multigmpe_get_sites_depth_parameters():
          1165.80081172,  1174.83307617,  1180.5495586 ]])
     np.testing.assert_allclose(sx1.z2pt5, z2pt5d)
     sx2 = MultiGMPE.set_sites_depth_parameters(sctx, gmpes[1])
-    z1pt0d = np.array([[ 183.2043947 ,  217.27787758,  180.56690603,  180.68687904,
+    z1pt0d = np.array(
+      [[ 183.2043947 ,  217.27787758,  180.56690603,  180.68687904,
          180.91907101,  178.625999  ,  175.08452094],
        [ 183.72884833,  184.47314285,  181.34994816,  183.89385557,
          188.91901585,  186.91536614,  183.67358657],
@@ -945,7 +1239,8 @@ def test_multigmpe_get_mean_stddevs():
     lnmu, lnsd = mgmpe.get_mean_and_stddevs(
         sctx, rx, dctx, iimt, stddev_types)
 
-    lnmud = np.array([[ 3.53816879,  3.6486898 ,  3.67058155,  3.72223342,  3.75403094,
+    lnmud = np.array(
+      [[ 3.53816879,  3.6486898 ,  3.67058155,  3.72223342,  3.75403094,
          3.79317343,  3.79875342],
        [ 3.57531437,  3.64441687,  3.69915981,  3.74491289,  3.7893222 ,
          3.80960399,  3.80874163],
@@ -960,7 +1255,8 @@ def test_multigmpe_get_mean_stddevs():
        [ 3.61907294,  3.58790363,  3.58068716,  3.61177983,  3.64349327,
          3.66698467,  3.67129901]])
 
-    lnsdd = np.array([[ 0.63677975,  0.63715381,  0.64040366,  0.64404005,  0.64782624,
+    lnsdd = np.array(
+      [[ 0.63677975,  0.63715381,  0.64040366,  0.64404005,  0.64782624,
          0.64763289,  0.64509643],
        [ 0.63727968,  0.63899462,  0.64205578,  0.64604037,  0.64815297,
          0.64610035,  0.64402941],
@@ -991,7 +1287,8 @@ def test_multigmpe_get_mean_stddevs():
     lnmu, lnsd = mgmpe.get_mean_and_stddevs(
         sctx, rx, dctx, iimt, stddev_types)
 
-    lnmud = np.array([[ 3.58496124,  3.68331076,  3.67432197,  3.7042443 ,  3.72017426,
+    lnmud = np.array(
+      [[ 3.58496124,  3.68331076,  3.67432197,  3.7042443 ,  3.72017426,
          3.7169565 ,  3.69907643],
        [ 3.61232841,  3.66020066,  3.69193352,  3.71839033,  3.73324689,
          3.72272965,  3.70303263],
@@ -1006,7 +1303,8 @@ def test_multigmpe_get_mean_stddevs():
        [ 3.73031852,  3.64544351,  3.60279751,  3.60984631,  3.61790685,
          3.61978672,  3.61494122]])
 
-    lnsdd = np.array([[ 0.83458518,  0.83458518,  0.83458518,  0.83458518,  0.83458518,
+    lnsdd = np.array(
+      [[ 0.83458518,  0.83458518,  0.83458518,  0.83458518,  0.83458518,
          0.83458518,  0.83458518],
        [ 0.83458518,  0.83458518,  0.83458518,  0.83458518,  0.83458518,
          0.83458518,  0.83458518],
@@ -1034,7 +1332,8 @@ def test_multigmpe_get_mean_stddevs():
     lnmu, lnsd = mgmpe.get_mean_and_stddevs(
         sctx, rx, dctx, iimt, stddev_types)
 
-    lnmud = np.array([[ 3.28349394,  3.42997155,  3.59333458,  3.76646938,  3.90641707,
+    lnmud = np.array(
+      [[ 3.28349394,  3.42997155,  3.59333458,  3.76646938,  3.90641707,
          3.90610989,  3.78652442],
        [ 3.35455196,  3.50959439,  3.6799397 ,  3.84634989,  3.92970303,
          3.84785194,  3.72901443],
@@ -1049,7 +1348,8 @@ def test_multigmpe_get_mean_stddevs():
        [ 3.20566764,  3.28798422,  3.34669777,  3.37486192,  3.38647472,
          3.38162206,  3.36088883]])
 
-    lnsdd = np.array([[ 0.91979377,  0.91979377,  0.91979377,  0.91979377,  0.91979377,
+    lnsdd = np.array(
+      [[ 0.91979377,  0.91979377,  0.91979377,  0.91979377,  0.91979377,
          0.91979377,  0.91979377],
        [ 0.91979377,  0.91979377,  0.91979377,  0.91979377,  0.91979377,
          0.91979377,  0.91979377],
@@ -1129,7 +1429,8 @@ def test_dualdistsanceweights_get_mean_stddevs():
     lnmu, lnsd = ddw.get_mean_and_stddevs(
         sctx, rx, dctx, iimt, stddev_types)
 
-    lnmud = np.array([[ 3.53816879,  3.6486898 ,  3.67058155,  3.72223342,  3.75403094,
+    lnmud = np.array(
+      [[ 3.53816879,  3.6486898 ,  3.67058155,  3.72223342,  3.75403094,
          3.79317343,  3.79875342],
        [ 3.57531437,  3.64441687,  3.69915981,  3.74491289,  3.7893222 ,
          3.80960399,  3.80874163],
@@ -1144,7 +1445,8 @@ def test_dualdistsanceweights_get_mean_stddevs():
        [ 3.61907294,  3.58790363,  3.58068716,  3.61177983,  3.64349327,
          3.66698467,  3.67129901]])
 
-    lnsdd = np.array([[ 0.63677975,  0.63715381,  0.64040366,  0.64404005,  0.64782624,
+    lnsdd = np.array(
+      [[ 0.63677975,  0.63715381,  0.64040366,  0.64404005,  0.64782624,
          0.64763289,  0.64509643],
        [ 0.63727968,  0.63899462,  0.64205578,  0.64604037,  0.64815297,
          0.64610035,  0.64402941],
@@ -1233,8 +1535,11 @@ def test_multigmpe_exceptions():
     
     
 if __name__ == '__main__':
+    test_scr_rlme()
     test_basic()
-    test_from_config()
+    test_from_config_set_of_sets()
+    test_from_config_set_of_gmpes()
+    test_from_config_single_gmpe()
     test_nga_w2_m8()
     test_nga_w2_m6()
     test_multigmpe_has_site()

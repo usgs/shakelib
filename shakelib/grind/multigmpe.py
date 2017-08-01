@@ -7,8 +7,8 @@ import warnings
 import numpy as np
 
 from openquake.hazardlib.gsim.base import GMPE
-from openquake.hazardlib import const
 from openquake.hazardlib.imt import PGA, PGV, SA
+from openquake.hazardlib import const
 
 from shakelib.grind.conversions.imt.newmark_hall_1982 import NewmarkHall1982
 from shakelib.grind.conversions.imc.beyer_bommer_2006 import BeyerBommer2006
@@ -309,105 +309,217 @@ class MultiGMPE(GMPE):
 
 
     @classmethod
-    def from_config(cls, conf):
+    def from_config(cls, conf, filter_imt = None, verbose = False):
         """
         Construct a MultiGMPE from a config file.
 
         Args:
             conf (dict): Dictionary of config options.
+            filter_imt (IMT): An optional IMT to filter/reweight the GMPE list.
+            verbose (bool): Print verbose output for debugging.
 
         Returns: 
             MultiGMPE object.
 
         """
+        IMC = conf['imc_modules'][conf['grind']['component']]
         selected_gmpe = conf['grind']['gmpe']
-        selected_gmpe_sets = conf['gmpe_sets'][selected_gmpe]['gmpes']
-        gmpe_set_weights = [float(w) for w in conf['gmpe_sets'][selected_gmpe]['weights']]
 
-        # Note: component is currently not fully suppored other than "Larger", which
-        # corresponds to const.IMC.GREATER_OF_TWO_HORIZONTAL. But for testing, we also
-        # need to be able to use "RotD50":
-        if conf['grind']['component'] == 'Larger':
-            IMC = const.IMC.GREATER_OF_TWO_HORIZONTAL
-        elif conf['grind']['component'] == 'RotD50':
-            IMC = const.IMC.RotD50
+        if verbose is True:
+            print('selected_gmpe: %s' %selected_gmpe)
+            print('IMC: %s' %IMC)
+
+        #-----------------------------------------------------------------------
+        # Allow for selected_gmpe to be found in either conf['gmpe_sets'] or
+        # conf['gmpe_modules'], if it is a GMPE set, then all entries must be
+        # either a GMPE or a GMPE set (cannot have a GMPE set that is a mix of
+        # GMPEs and GMPE sets). 
+        #-----------------------------------------------------------------------
+
+        if selected_gmpe in conf['gmpe_sets'].keys():
+            selected_gmpe_sets = conf['gmpe_sets'][selected_gmpe]['gmpes']
+            gmpe_set_weights = \
+                [float(w) for w in conf['gmpe_sets'][selected_gmpe]['weights']]
+            if verbose is True:
+                print('selected_gmpe_sets: %s' %selected_gmpe_sets)
+                print('gmpe_set_weights: %s' %gmpe_set_weights)
+
+            #-------------------------------------------------------------------
+            # If it is a GMPE set, does it contain GMPEs or GMPE sets?
+            #-------------------------------------------------------------------
+
+            set_of_gmpes = all([s in conf['gmpe_modules'] for s in
+                                selected_gmpe_sets])
+            set_of_sets = all([s in conf['gmpe_sets'] for s in
+                               selected_gmpe_sets])
+                
+            if set_of_sets is True:
+                mgmpes = []
+                for s in selected_gmpe_sets:
+                    mgmpes.append(cls.__mutigmpe_from_gmpe_set(
+                        conf, s, verbose=verbose))
+                out = MultiGMPE.from_list(mgmpes, gmpe_set_weights, imc = IMC)
+            elif set_of_gmpes is True:
+                out = cls.__mutigmpe_from_gmpe_set(
+                    conf,
+                    selected_gmpe,
+                    filter_imt = filter_imt,
+                    verbose=verbose)
+            else:
+                raise Exception("%s must consist exclusively of keys in "\
+                                "conf['gmpe_modules'] or conf['gmpe_sets']"\
+                                %selected_gmpe)
+        elif selected_gmpe in conf['gmpe_modules'].keys():
+            modinfo = conf['gmpe_modules'][selected_gmpe]
+            mod = import_module(modinfo[1])
+            tmpclass = getattr(mod, modinfo[0])
+            out = MultiGMPE.from_list([tmpclass()], [1.0], imc = IMC)            
         else:
-            raise Exception("Unsupported component in config file.")
+            raise Exception("conf['grind']['gmpe'] must be a key in "\
+                            "conf['gmpe_modules'] or conf['gmpe_sets']")
 
-        mgmpes = []
-        for s in selected_gmpe_sets:
-            selected_gmpes = conf['gmpe_sets'][s]['gmpes']
-            selected_gmpe_weights = [float(w) for w in conf['gmpe_sets'][s]['weights']]
-            if 'weights_large_dist' in conf['gmpe_sets'][s].keys():
-                if not conf['gmpe_sets'][s]['weights_large_dist']:
-                    selected_weights_large_dist = None
-                else:
-                    selected_weights_large_dist = \
-                        [float(w) for w in conf['gmpe_sets'][s]['weights_large_dist']]
-            else:
+        out.DESCRIPTION = selected_gmpe
+        return out
+
+
+    def __mutigmpe_from_gmpe_set(conf, set_name, filter_imt = None,
+                                 verbose=False):
+        """
+        Private method for constructing a MultiGMPE from a set_name. 
+
+        Args:
+            conf (ConfigObj): A ShakeMap config object.
+            filter_imt (IMT): An optional IMT to filter/reweight the GMPE list.
+            set_name (str): Set name; must correspond to a key in 
+                conf['set_name'].
+
+        Returns:
+            MultiGMPE. 
+
+        """
+        IMC = conf['imc_modules'][conf['grind']['component']]
+
+        selected_gmpes = conf['gmpe_sets'][set_name]['gmpes']
+        selected_gmpe_weights = \
+            [float(w) for w in conf['gmpe_sets'][set_name]['weights']]
+
+        # Check for large distance GMPEs
+        if 'weights_large_dist' in conf['gmpe_sets'][set_name].keys():
+            if not conf['gmpe_sets'][set_name]['weights_large_dist']:
                 selected_weights_large_dist = None
-
-            if 'dist_cutoff' in conf['gmpe_sets'][s].keys():
-                if np.isnan(conf['gmpe_sets'][s]['dist_cutoff']):
-                    selected_dist_cutoff = None
-                else:
-                    selected_dist_cutoff = float(conf['gmpe_sets'][s]['dist_cutoff'])
             else:
+                selected_weights_large_dist = \
+                    [float(w) for w in \
+                     conf['gmpe_sets'][set_name]['weights_large_dist']]
+        else:
+            selected_weights_large_dist = None
+
+        if 'dist_cutoff' in conf['gmpe_sets'][set_name].keys():
+            if np.isnan(conf['gmpe_sets'][set_name]['dist_cutoff']):
                 selected_dist_cutoff = None
-
-            if 'site_gmpes' in conf['gmpe_sets'][s].keys():
-                if not conf['gmpe_sets'][s]['site_gmpes']:
-                    selected_site_gmpes = None
-                else:
-                    selected_site_gmpes = conf['gmpe_sets'][s]['site_gmpes']
             else:
+                selected_dist_cutoff = \
+                    float(conf['gmpe_sets'][set_name]['dist_cutoff'])
+        else:
+            selected_dist_cutoff = None
+
+        if 'site_gmpes' in conf['gmpe_sets'][set_name].keys():
+            if not conf['gmpe_sets'][set_name]['site_gmpes']:
                 selected_site_gmpes = None
-
-            if 'weights_site_gmpes' in conf['gmpe_sets'][s].keys():
-                if not conf['gmpe_sets'][s]['weights_site_gmpes']:
-                    selected_weights_site_gmpes = None
-                else:
-                    selected_weights_site_gmpes = [conf['gmpe_sets'][s]['weights_site_gmpes']]
             else:
-                selected_weights_site_gmpes = None
+                selected_site_gmpes = \
+                    conf['gmpe_sets'][set_name]['site_gmpes']
+        else:
+            selected_site_gmpes = None
 
-            # Import GMPE modules and initialize classes into list of objects
-            gmpes = []
-            for g in selected_gmpes:
+        if 'weights_site_gmpes' in conf['gmpe_sets'][set_name].keys():
+            if not conf['gmpe_sets'][set_name]['weights_site_gmpes']:
+                selected_weights_site_gmpes = None
+            else:
+                selected_weights_site_gmpes = \
+                    [conf['gmpe_sets'][set_name]['weights_site_gmpes']]
+        else:
+            selected_weights_site_gmpes = None
+
+        #-----------------------------------------------------------------------
+        # Import GMPE modules and initialize classes into list
+        #-----------------------------------------------------------------------
+        gmpes = []
+        for g in selected_gmpes:
+            mod = import_module(conf['gmpe_modules'][g][1])
+            tmpclass = getattr(mod, conf['gmpe_modules'][g][0])
+            gmpes.append(tmpclass())
+
+        #-----------------------------------------------------------------------
+        # Filter out GMPEs not applicable to this period
+        #-----------------------------------------------------------------------
+        if filter_imt is not None:
+            filtered_gmpes, filtered_wts = filter_gmpe_list(
+                gmpes, selected_gmpe_weights, filter_imt)
+        else:
+            filtered_gmpes, filtered_wts = gmpes, selected_gmpe_weights
+
+        #-----------------------------------------------------------------------
+        # Import site GMPEs
+        #-----------------------------------------------------------------------
+        if selected_site_gmpes is not None:
+            if isinstance(selected_site_gmpes, str):
+                selected_site_gmpes = [selected_site_gmpes]
+            site_gmpes = []
+            for g in selected_site_gmpes:
                 mod = import_module(conf['gmpe_modules'][g][1])
                 tmpclass = getattr(mod, conf['gmpe_modules'][g][0])
-                gmpes.append(tmpclass())
+                site_gmpes.append(tmpclass())
+        else:
+            site_gmpes = None
 
-            # Same for site GMPEs
-            if selected_site_gmpes is not None:
-                if isinstance(selected_site_gmpes, str):
-                    selected_site_gmpes = [selected_site_gmpes]
-                site_gmpes = []
-                for g in selected_site_gmpes:
-                    print('g: ', g)
-                    mod = import_module(conf['gmpe_modules'][g][1])
-                    tmpclass = getattr(mod, conf['gmpe_modules'][g][0])
-                    site_gmpes.append(tmpclass())
+        #-----------------------------------------------------------------------
+        # Filter out site GMPEs not applicable to this period
+        #-----------------------------------------------------------------------
+        if site_gmpes is not None:
+            if filter_imt is not None:
+                filtered_site_gmpes, filtered_site_wts = filter_gmpe_list(
+                    site_gmpes, selected_weights_site_gmpes, filter_imt)
             else:
-                site_gmpes = None
+                filtered_site_gmpes = copy.copy(site_gmpes)
+                filtered_site_wts = copy.copy(selected_weights_site_gmpes)
+        else:
+            filtered_site_gmpes = None
+            filtered_site_wts = None
 
-            mgmpes.append(MultiGMPE.from_list(
-                gmpes, selected_gmpe_weights,
-                default_gmpes_for_site = site_gmpes,
-                default_gmpes_for_site_weights = selected_weights_site_gmpes,
-                imc = IMC))
+        #-----------------------------------------------------------------------
+        # Construct MultiGMPE
+        #-----------------------------------------------------------------------
+        if verbose is True:
+            print('    filtered_gmpes: %s' %filtered_gmpes)
+            print('    filtered_wts: %s' %filtered_wts)
 
-            # Append large-distance info if specified
-            if selected_dist_cutoff is not None:
-                mgmpes[-1].CUTOFF_DISTANCE = selected_dist_cutoff
-                mgmpes[-1].WEIGHTS_LARGE_DISTANCE = selected_weights_large_dist
+        mgmpe = MultiGMPE.from_list(
+            filtered_gmpes, filtered_wts,
+            default_gmpes_for_site = filtered_site_gmpes,
+            default_gmpes_for_site_weights = filtered_site_wts,
+            imc = IMC)
 
-        # Make a MultiGMPE of MultiGMPEs
-        return MultiGMPE.from_list(mgmpes, gmpe_set_weights, imc = IMC)
+        #-----------------------------------------------------------------------
+        # Append large-distance info if specified
+        #-----------------------------------------------------------------------
+        if selected_dist_cutoff is not None:
+            if filter_imt is not None:
+                filtered_gmpes_ld, filtered_wts_ld = filter_gmpe_list(
+                    gmpes, selected_weights_large_dist, filter_imt)
+            else:
+                filtered_gmpes_ld = copy.copy(gmpes)
+                filtered_wts_ld = copy.copy(selected_weights_large_dist)
+
+            mgmpe.CUTOFF_DISTANCE = copy.copy(selected_dist_cutoff)
+            mgmpe.WEIGHTS_LARGE_DISTANCE = copy.copy(filtered_wts_ld)
+
+        return mgmpe
 
 
     @classmethod
-    def from_list(cls, gmpes, weights, imc = const.IMC.GREATER_OF_TWO_HORIZONTAL,
+    def from_list(cls, gmpes, weights,
+                  imc = const.IMC.GREATER_OF_TWO_HORIZONTAL,
                   default_gmpes_for_site = None,
                   default_gmpes_for_site_weights = None, 
                   reference_vs30 = 760):
@@ -776,4 +888,5 @@ def get_gmpe_coef_table(gmpe):
         if "sa_coeffs" in cobj.__dir__():
             return cobj
     raise Exception("GMPE %s does not contain sa_coeffs attribute." %gmpe)
+
 

@@ -2,6 +2,9 @@
     :target: https://travis-ci.org/usgs/shakelib
 .. image:: https://codecov.io/gh/usgs/shakelib/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/usgs/shakelib
+.. image:: https://badge.waffle.io/usgs/shakelib.png?label=ready&title=Ready 
+ :target: https://waffle.io/usgs/shakelib 
+ :alt: 'Stories in Ready'
 
 shakelib
 ========

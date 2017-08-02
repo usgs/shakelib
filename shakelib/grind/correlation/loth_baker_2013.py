@@ -49,13 +49,15 @@ class LothBaker2013(object):
     """
     Created by Christophe Loth, 12/18/2012
     Pythonized and vectorized by C. Bruce Worden, 3/15/2017
-    Compute the spatial correlation of epsilons for the NGA ground motion models
+    Compute the spatial correlation of epsilons for the NGA ground motion
+    models
 
-    The function is strictly empirical, fitted over the range the range 0.01s <= t1, t2 <= 10s
+    The function is strictly empirical, fitted over the range the range
+    0.01s <= t1, t2 <= 10s
 
     Documentation is provided in the following document:
-    Loth, C., and Baker, J. W. (2013). “A spatial cross-correlation model of 
-    ground motion spectral accelerations at multiple periods.” 
+    Loth, C., and Baker, J. W. (2013). “A spatial cross-correlation model of
+    ground motion spectral accelerations at multiple periods.”
     Earthquake Engineering & Structural Dynamics, 42, 397-417.
     """
 
@@ -84,17 +86,17 @@ class LothBaker2013(object):
         """
         Args:
             ix1, ix2 (nd arrays):
-                The indices of the two periods of interest. The periods may 
+                The indices of the two periods of interest. The periods may
                 be equal, and there is no restriction on which one is larger.
             h (nd array):
                 The separation distance between two sites (units of km)
 
-            ix1, ix2, and h should have the same dimensions. If they don't, 
+            ix1, ix2, and h should have the same dimensions. If they don't,
             the results will be unpredictable.
 
         Returns:
             rho (nd array):
-                The predicted correlation coefficient. The output array 
+                The predicted correlation coefficient. The output array
                 will have the same shape as the inputs.
 
         """

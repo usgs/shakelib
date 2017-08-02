@@ -11,7 +11,7 @@ import h5py
 import numpy as np
 
 # local imports
-from shakelib.grind.rupture import read_rupture_file
+from shakelib.grind.rupture import read_rupture_file, PointRupture
 from shakelib.grind.origin import Origin
 from shakelib.grind.station import StationList
 
@@ -61,7 +61,7 @@ class InputContainer(object):
         Args:
             filename: Path to HDF5 file that will be created to encapsulate all
                 input data.
-            config: Dictionary containing all configuration information 
+            config: Dictionary containing all configuration information
                 necessary for ShakeMap ground motion and other calculations.
             eventfile: Path to ShakeMap event.xml file.
             rupturefile: Path to ShakeMap rupture text or JSON file.
@@ -197,7 +197,7 @@ class InputContainer(object):
 
 class OutputContainer(object):
     """
-    Generic hdf5 output container to store metadata and data sets (with or 
+    Generic hdf5 output container to store metadata and data sets (with or
     without associated metadata).
     """
 
@@ -229,7 +229,7 @@ class OutputContainer(object):
                 Path to file to be created.
 
         Returns:
-            An empty :class:`OutputContainer` object tied to file 
+            An empty :class:`OutputContainer` object tied to file
             'filename'.
         """
 
@@ -280,7 +280,7 @@ class OutputContainer(object):
             name (str):
                 The name of the dataset holding the data.
             metadata (dict)(optional):
-                An (optional) dictionary of metadata to be associated with 
+                An (optional) dictionary of metadata to be associated with
                 the dataset.
 
         Returns:
@@ -324,9 +324,9 @@ def _dict2h5group(mydict, group):
 
     Args:
         mydict (dict):
-            Dictionary of values to save in group or dataset.  Dictionary 
-            can contain objects of the following types: str, unicode, int, 
-            float, long, list, tuple, np. ndarray, dict, 
+            Dictionary of values to save in group or dataset.  Dictionary
+            can contain objects of the following types: str, unicode, int,
+            float, long, list, tuple, np. ndarray, dict,
             datetime.datetime, collections.OrderedDict
         group:
             HDF group or dataset in which to storedictionary of data.
@@ -357,7 +357,7 @@ def _h5group2dict(group):
     """
     Recursively create dictionaries from groups in an HDF file.
 
-    Args: 
+    Args:
         group:
             HDF5 group object.
 

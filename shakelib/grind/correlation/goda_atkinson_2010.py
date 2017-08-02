@@ -4,29 +4,29 @@ import numexpr as ne
 
 class GodaAtkinson2010(object):
     """
-    Imlements the Goda and Atkinson (2010) spatial correlation model for IMTs. 
+    Imlements the Goda and Atkinson (2010) spatial correlation model for IMTs.
 
     To do
-        - Inherit from SpatialCorrelation class. 
+        - Inherit from SpatialCorrelation class.
 
-    References: 
+    References:
         Goda, K., & Atkinson, G. M. (2010). Intraevent spatial correlation of
-        ground-motion parameters using SK-net data. Bulletin of the Seismological
-        Society of America, 100(6), 3055-3067.
+        ground-motion parameters using SK-net data. Bulletin of the
+        Seismological Society of America, 100(6), 3055-3067.
         `[link] <http://www.bssaonline.org/content/100/6/3055.short>`__
     """
     @staticmethod
     def getSpatialCorrelation(dists, imt):
         """
-        Method for evalulating spatial correlation model. 
+        Method for evalulating spatial correlation model.
 
         :param dists:
-            Numpy array of distances (km). 
+            Numpy array of distances (km).
         :param imt:
-            Openquake intensity measure type instance. 
+            Openquake intensity measure type instance.
             `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`__
         :returns:
-            Numpy array of correlation values. 
+            Numpy array of correlation values.
         """
         if 'PGA' in imt:
             alpha = 0.060

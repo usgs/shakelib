@@ -1,3 +1,8 @@
+.. image:: https://travis-ci.org/usgs/shakelib.svg?branch=master
+    :target: https://travis-ci.org/usgs/shakelib
+.. image:: https://codecov.io/gh/usgs/shakelib/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/usgs/shakelib
+
 shakelib
 ========
 Note, this repository consists of experimental code that is still under 
@@ -5,11 +10,6 @@ development.
 
 Introduction
 ------------
-
-ShakeMap is a system for rapidly characterizing the extent and distribution of
-strong ground shaking following significant earthquakes. The current stable
-production version of ShakeMap (V3.5) is largely written in Perl, but also
-makes use of GMT (Generic Mapping Tools), MySQL, and many other programs.
 
 This repository is one of the places (https://github.com/usgs/shakemap
 being the other) where we are refactoring the code base into

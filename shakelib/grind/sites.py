@@ -16,7 +16,7 @@ from shakelib.utils.exception import ShakeLibException
 
 class Sites(object):
     """
-    An object to encapsulate information used to generate a GEM 
+    An object to encapsulate information used to generate a GEM
     `SitesContext <https://github.com/gem/oq-hazardlib/blob/master/openquake/hazardlib/gsim/base.py>`__.
     """
 
@@ -27,9 +27,9 @@ class Sites(object):
 
         Args:
             vs30grid: MapIO Grid2D object containing Vs30 values.
-            vs30measured_grid: Boolean array indicating whether Vs30 values were
-                measured or derived (i.e., from topographic slope). 
-            backarc: Boolean array indicating whether site is in the subduction 
+            vs30measured_grid: Boolean array indicating whether Vs30 values
+                were measured or derived (i.e., from topographic slope).
+            backarc: Boolean array indicating whether site is in the subduction
                 `backarc <http://earthquake.usgs.gov/learn/glossary/?term=backarc>`__.
             defaultVs30: Default Vs30 value to use in locations where Vs30Grid
                 is not specified.
@@ -75,7 +75,7 @@ class Sites(object):
                    vs30File=None, vs30measured_grid=None,
                    backarc=None, padding=False, resample=False):
         """
-        Create a Sites object by defining a center point, resolution, extent, 
+        Create a Sites object by defining a center point, resolution, extent,
         and Vs30 values.
 
         Args:
@@ -90,12 +90,12 @@ class Sites(object):
                 values.
             vs30measured_grid: Boolean grid indicating whether Vs30 values were
                 measured or derived (i.e., from slope).
-            backarc: Boolean array indicating whether site is in the subduction 
+            backarc: Boolean array indicating whether site is in the subduction
                 `backarc <http://earthquake.usgs.gov/learn/glossary/?term=backarc>`__.
             padding: Boolean indicating whether or not to pad resulting Vs30
                 grid out to edges of input bounds. If False, grid will be
                 clipped to the extent of the input file.
-            resample: Boolean indicating whether or not the grid should be 
+            resample: Boolean indicating whether or not the grid should be
                 resampled.
         """
         geodict = GeoDict.createDictFromBox(xmin, xmax, ymin, ymax, dx, dy)
@@ -114,7 +114,7 @@ class Sites(object):
                    vs30File=None, vs30measured_grid=None,
                    backarc=None, padding=False, resample=False):
         """
-        Create a Sites object by defining a center point, resolution, extent, 
+        Create a Sites object by defining a center point, resolution, extent,
         and Vs30 values.
 
         Args:
@@ -156,7 +156,7 @@ class Sites(object):
             lldict: Either
 
                 - None, in which case the SitesContext for the complete Sites
-                  grid is returned, or 
+                  grid is returned, or
                 - A location dictionary (elements are 'lats' and 'lons' and each
                   is a numpy array). Each element must have the same shape. In
                   this case the SitesContext for these locaitons is returned.
@@ -277,12 +277,12 @@ class Sites(object):
     @staticmethod
     def _addDepthParameters(sctx):
         """
-        Add the different depth parameters to a sites context from 
-        Vs30 values. 
+        Add the different depth parameters to a sites context from
+        Vs30 values.
 
         Args:
-            sctx: A sites context. 
-        
+            sctx: A sites context.
+
         Returns: A sites context with the depth parameters set.
         """
         sctx.z1pt0_cy14_cal = Sites._z1pt0_from_vs30_cy14_cal(sctx.vs30)
@@ -301,7 +301,7 @@ class Sites(object):
 
         Args:
             vs30: Numpy array of Vs30 values in m/s.
-        
+
         Returns: Numpy array of z1.0 in m.
         """
         z1 = np.exp(-(7.15 / 4.0) *
@@ -331,7 +331,7 @@ class Sites(object):
 
         Args:
             vs30: Numpy array of Vs30 values in m/s.
-        
+
         Returns: Numpy array of z2.5 in m. *NOTE*: OQ's CampbellBozorgnia2014
             class expects z2.5 to be in km!
         """
@@ -345,7 +345,7 @@ class Sites(object):
 
         Args:
             vs30: Numpy array of Vs30 values in m/s.
-        
+
         Returns: Numpy array of z1.0 in m.
         """
         z1pt0 = np.exp(28.5 - (3.82 / 8.0) * np.log(vs30**8 + 378.7**8))

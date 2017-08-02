@@ -16,12 +16,12 @@ from shakelib.grind.rupture import EdgeRupture
 
 class Distance(object):
     """
-    Class for distance calculations. Primary method is 'get_distance'. 
+    Class for distance calculations. Primary method is 'get_distance'.
     To gracefully handle multiple segment ruptures, many of the distances
-    are based on the Spudich and Chiou (2015) GC2 coordinate system. 
+    are based on the Spudich and Chiou (2015) GC2 coordinate system.
 
 
-    References: 
+    References:
         Spudich, Paul and Chiou, Brian, 2015, Strike-parallel and strike-normal
         coordinate system around geometrically complicated rupture traces—Use by
         NGA-West2 and further improvements: U.S. Geological Survey Open-File
@@ -30,7 +30,7 @@ class Distance(object):
 
     def __init__(self, gmpe, lon, lat, dep, rupture=None):
         """
-        Constructor for Distance class. 
+        Constructor for Distance class.
 
         Args:
             gmpe (GMPE): Concrete subclass of GMPE
@@ -38,7 +38,7 @@ class Distance(object):
                 can be individual instance or list of instances.
             lon (array): A numpy array of site longitudes.
             lat (array): A numpy array of site latitudes.
-            dep (array): A numpy array of site depths (km); down is positive. 
+            dep (array): A numpy array of site depths (km); down is positive.
             rupture (Rupture): A Shakemap Rupture instance.
 
         Returns:
@@ -100,11 +100,11 @@ class Distance(object):
             dep (array): Numpy array of depths (km).
 
         Returns:
-            DistancesContext object with distance grids required by input 
+            DistancesContext object with distance grids required by input
             gmpe(s).
 
         Raises:
-            TypeError: If gmpe is not a subclass of GMPE. 
+            TypeError: If gmpe is not a subclass of GMPE.
         """
         if not isinstance(gmpe, list):
             gmpe = [gmpe]
@@ -115,8 +115,8 @@ class Distance(object):
         for ig in gmpe:
             if not isinstance(ig, GMPE):
                 raise TypeError(
-                    'getDistanceContext() cannot work with objects of type "%s"' %
-                    type(ig))
+                    'getDistanceContext() cannot work with objects of '\
+                    'type "%s"' % type(ig))
             requires = requires | ig.REQUIRES_DISTANCES
 
         context = base.DistancesContext()
@@ -134,8 +134,8 @@ class Distance(object):
 
 def get_distance_measures():
     """
-    Returns a list of strings specifying the distance measure types 
-    (e.g. "repi", "rhypo") available for the "methods" argument to 
+    Returns a list of strings specifying the distance measure types
+    (e.g. "repi", "rhypo") available for the "methods" argument to
     get_diistance().
 
     Returns:
@@ -149,7 +149,7 @@ def get_distance(methods, lat, lon, dep, rupture, dx=0.5):
     """
     Calculate distance using any one of a number of distance measures.
     One of quadlist OR hypo must be specified. The following table gives
-    the allowed distance strings and a description of each. 
+    the allowed distance strings and a description of each.
 
     +--------+----------------------------------------------------------+
     | String | Description                                              |
@@ -185,7 +185,7 @@ def get_distance(methods, lat, lon, dep, rupture, dx=0.5):
         lon (array): A numpy array of longidues.
         dep (array): A numpy array of depths (km).
         rupture (Rupture): A ShakeMap Rupture instance.
-        dx (float): Mesh spacing for rupture; only used if rupture is an 
+        dx (float): Mesh spacing for rupture; only used if rupture is an
             EdgeRupture subclass.
 
     Returns:
@@ -211,18 +211,18 @@ def get_distance(methods, lat, lon, dep, rupture, dx=0.5):
     if (lat.shape != lon.shape) or (lat.shape != dep.shape):
         raise ShakeLibException('lat, lon, and dep must have the same shape.')
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     # Point distances
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     if 'rhypo' in methods:
         distdict['rhypo'] = rupture.computeRhyp(lon, lat, dep)
 
     if 'repi' in methods:
         distdict['repi'] = rupture.computeRepi(lon, lat, dep)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     # Rupture distances
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     gc2_distances = set(['rx', 'ry', 'ry0', 'U', 'T'])
     if 'rrup' in methods:
         distdict['rrup'] = rupture.computeRrup(lon, lat, dep)

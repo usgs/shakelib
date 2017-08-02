@@ -31,7 +31,7 @@ def test_station():
     #
     event = 'Calexico'
 
-    datadir = os.path.abspath(os.path.join(homedir, '..', 'data', 'eventdata'))
+    datadir = os.path.abspath(os.path.join(homedir, 'station_data'))
     datadir = os.path.abspath(os.path.join(datadir, event, 'input'))
 
     inputfile = os.path.join(datadir, 'stationlist_dat.xml')
@@ -70,7 +70,7 @@ def test_station():
     # Add the Northridge data to the Calexico data
     #
     event = 'northridge'
-    datadir = os.path.abspath(os.path.join(homedir, '..', 'data', 'eventdata'))
+    datadir = os.path.abspath(os.path.join(homedir, 'station_data'))
     datadir = os.path.abspath(os.path.join(datadir, event, 'input'))
 
     inputfile = os.path.join(datadir, 'hist_dat.xml')
@@ -105,7 +105,7 @@ def test_station2():
 
     event = 'wenchuan'
 
-    datadir = os.path.abspath(os.path.join(homedir, '..', 'data', 'eventdata'))
+    datadir = os.path.abspath(os.path.join(homedir, 'station_data'))
     datadir = os.path.abspath(os.path.join(datadir, event, 'input'))
 
     inputfile = os.path.join(datadir, 'stationlist.xml')

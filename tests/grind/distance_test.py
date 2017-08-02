@@ -151,7 +151,7 @@ def test_san_fernando():
 
 
 def test_exceptions():
-    vs30file = os.path.join(shakedir, 'tests/data/Vs30_test.grd')
+    vs30file = os.path.join(homedir, 'distance_data/Vs30_test.grd')
     cx = -118.2
     cy = 34.1
     dx = 0.0083
@@ -204,7 +204,7 @@ def test_distance_no_rupture():
     origin = Origin(event)
     origin.setMechanism('ALL')
     # Make sites instance
-    vs30file = os.path.join(shakedir, 'tests/data/Vs30_test.grd')
+    vs30file = os.path.join(homedir, 'distance_data/Vs30_test.grd')
     cx = -118.2
     cy = 34.1
     dx = 0.0083
@@ -645,7 +645,7 @@ def test_distance_no_rupture():
 
 def test_distance_from_sites_origin():
     # Make sites instance
-    vs30file = os.path.join(shakedir, 'tests/data/Vs30_test.grd')
+    vs30file = os.path.join(homedir, 'distance_data/Vs30_test.grd')
     cx = -118.2
     cy = 34.1
     dx = 0.0083
@@ -787,7 +787,7 @@ def test_distance_from_sites_origin():
 
 def test_chichi_with_get_distance():
     # read in rupture file
-    f = os.path.join(shakedir, 'tests/data/0137A.POL')
+    f = os.path.join(homedir, 'distance_data/0137A.POL')
     i0 = np.arange(0, 9 * 11 * 3, 11)
     i1 = i0 + 10
     cs = list(zip(i0, i1))
@@ -827,7 +827,7 @@ def test_chichi_with_get_distance():
         origin)
 
     # Get NGA distances
-    distfile = os.path.join(shakedir, 'tests/data/NGAW2_distances.csv')
+    distfile = os.path.join(homedir, 'distance_data/NGAW2_distances.csv')
     df = pd.read_csv(distfile)
     df2 = df.loc[df['EQID'] == 137]
     slat = df2['Station Latitude'].as_matrix()

@@ -32,12 +32,11 @@ def test_EdgeRupture():
     origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
 
-    file = os.path.join(shakedir, 'tests/data/cascadia.json')
+    file = os.path.join(homedir, 'rupture_data/cascadia.json')
     rup = read_rupture_file(origin, file)
 
     # Force read Northridge as EdgeRupture
-    file = os.path.join(
-        shakedir, 'tests/data/eventdata/northridge/northridge_fault.txt')
+    file = os.path.join(homedir, 'rupture_data/northridge_fault.txt')
     d = text_to_json(file)
     rupt = EdgeRupture(d, origin)
     strike = rupt.getStrike()
@@ -52,8 +51,7 @@ def test_EdgeRupture():
     np.testing.assert_allclose(ztor, 5, atol=0.01)
 
     # And again for the same vertices but reversed order
-    file = os.path.join(
-        shakedir, 'tests/data/eventdata/northridge/northridge_fixed_fault.txt')
+    file = os.path.join(homedir, 'rupture_data/northridge_fixed_fault.txt')
     d = text_to_json(file)
     rupt = EdgeRupture(d, origin)
     strike = rupt.getStrike()
@@ -74,10 +72,10 @@ def test_QuadRupture():
                      'depth': 5.0, 'mag': 7.0})
 
     # First with json file
-    file = os.path.join(shakedir, 'tests/data/izmit.json')
+    file = os.path.join(homedir, 'rupture_data/izmit.json')
     rupj = read_rupture_file(origin, file)
     # Then with text file:
-    file = os.path.join(shakedir, 'tests/data/Barkaetal02_fault.txt')
+    file = os.path.join(homedir, 'rupture_data/Barkaetal02_fault.txt')
     rupt = read_rupture_file(origin, file)
 
     np.testing.assert_allclose(rupj.lats, rupt.lats, atol=1e-5)
@@ -101,29 +99,29 @@ def test_rupture_depth(interactive=False):
                np.array([10.1, 10.1, 10.3]),
                np.array([10.9, 10.5, 10.9]),
                np.array([10.9, 10.6]),
-               np.array([-76.483, -76.626, -76.757, -76.99, -77.024, -76.925, -76.65,
-                         -76.321, -75.997, -75.958])]
+               np.array([-76.483, -76.626, -76.757, -76.99, -77.024, -76.925,
+                         -76.65, -76.321, -75.997, -75.958])]
     xp1list = [np.array([118.3]),
                np.array([10.1, 10.3]),
                np.array([10.1, 10.3, 10.1]),
                np.array([10.5, 10.9, 11.3]),
                np.array([10.6, 10.9]),
-               np.array([-76.626, -76.757, -76.99, -77.024, -76.925, -76.65, -76.321,
-                         -75.997, -75.958, -76.006])]
+               np.array([-76.626, -76.757, -76.99, -77.024, -76.925, -76.65,
+                         -76.321, -75.997, -75.958, -76.006])]
     yp0list = [np.array([34.2]),
                np.array([34.2, 34.5]),
                np.array([34.2, 34.5, 34.8]),
                np.array([34.2, 34.5, 34.8]),
                np.array([35.1, 35.2]),
-               np.array([-52.068, -51.377, -50.729, -49.845, -49.192, -48.507, -47.875,
-                         -47.478, -47.08, -46.422])]
+               np.array([-52.068, -51.377, -50.729, -49.845, -49.192, -48.507,
+                         -47.875, -47.478, -47.08, -46.422])]
     yp1list = [np.array([34.5]),
                np.array([34.5, 34.8]),
                np.array([34.5, 34.8, 35.1]),
                np.array([34.5, 34.8, 34.6]),
                np.array([35.2, 35.4]),
-               np.array([-51.377, -50.729, -49.845, -49.192, -48.507, -47.875, -47.478,
-                         -47.08, -46.422, -45.659])]
+               np.array([-51.377, -50.729, -49.845, -49.192, -48.507, -47.875,
+                         -47.478, -47.08, -46.422, -45.659])]
 
     for i in range(0, len(xp0list)):
         xp0 = xp0list[i]
@@ -363,21 +361,21 @@ def test_parse_complicated_rupture():
 
 def test_incorrect():
     rupture_text = """# Source: Ji, C., D. V. Helmberger, D. J. Wald, and K.-F. Ma (2003). Slip history and dynamic implications of the 1999 Chi-Chi, Taiwan, earthquake, J. Geophys. Res. 108, 2412, doi:10.1029/2002JB001764.
-    24.27980 120.72300	0 
+    24.27980 120.72300	0
     24.05000 121.00000	17
     24.07190 121.09300	17
     24.33120 121.04300	17
     24.33120 121.04300	17
-    24.27980 120.72300	0 
-    >   
+    24.27980 120.72300	0
+    >
     24.27980 120.72300	0
     23.70000 120.68000	0
     23.60400 120.97200	17
     24.05000 121.00000	17
     24.27980 120.72300	0
     >
-    23.60400 120.97200	17 
-    23.70000 120.68000	0 
+    23.60400 120.97200	17
+    23.70000 120.68000	0
     23.58850 120.58600	0
     23.40240 120.78900	17
     23.60400 120.97200	17"""

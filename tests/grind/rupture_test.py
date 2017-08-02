@@ -32,12 +32,12 @@ def test_EdgeRupture():
     origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
 
-    file = os.path.join(shakedir, 'test/data/cascadia.json')
+    file = os.path.join(shakedir, 'tests/data/cascadia.json')
     rup = read_rupture_file(origin, file)
 
     # Force read Northridge as EdgeRupture
     file = os.path.join(
-        shakedir, 'test/data/eventdata/northridge/northridge_fault.txt')
+        shakedir, 'tests/data/eventdata/northridge/northridge_fault.txt')
     d = text_to_json(file)
     rupt = EdgeRupture(d, origin)
     strike = rupt.getStrike()
@@ -53,7 +53,7 @@ def test_EdgeRupture():
 
     # And again for the same vertices but reversed order
     file = os.path.join(
-        shakedir, 'test/data/eventdata/northridge/northridge_fixed_fault.txt')
+        shakedir, 'tests/data/eventdata/northridge/northridge_fixed_fault.txt')
     d = text_to_json(file)
     rupt = EdgeRupture(d, origin)
     strike = rupt.getStrike()
@@ -74,10 +74,10 @@ def test_QuadRupture():
                      'depth': 5.0, 'mag': 7.0})
 
     # First with json file
-    file = os.path.join(shakedir, 'test/data/izmit.json')
+    file = os.path.join(shakedir, 'tests/data/izmit.json')
     rupj = read_rupture_file(origin, file)
     # Then with text file:
-    file = os.path.join(shakedir, 'test/data/Barkaetal02_fault.txt')
+    file = os.path.join(shakedir, 'tests/data/Barkaetal02_fault.txt')
     rupt = read_rupture_file(origin, file)
 
     np.testing.assert_allclose(rupj.lats, rupt.lats, atol=1e-5)

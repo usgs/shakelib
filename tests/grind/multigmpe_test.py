@@ -1009,7 +1009,7 @@ def test_multigmpe_get_sites_depth_parameters():
     #---------------------------------------------------------------------------
     # Make sites instance
     #---------------------------------------------------------------------------
-    vs30file = os.path.join(shakedir, 'test', 'data', 'Vs30_test.grd')
+    vs30file = os.path.join(shakedir, 'tests', 'data', 'Vs30_test.grd')
     cx = -118.2
     cy = 34.1
     dx = 0.0083
@@ -1067,7 +1067,7 @@ def test_multigmpe_get_mean_stddevs():
     #---------------------------------------------------------------------------
     # Make sites instance
     #---------------------------------------------------------------------------
-    vs30file = os.path.join(shakedir, 'test', 'data', 'Vs30_test.grd')
+    vs30file = os.path.join(shakedir, 'tests', 'data', 'Vs30_test.grd')
     cx = -118.2
     cy = 34.1
     dx = 0.0083
@@ -1258,7 +1258,7 @@ def test_dualdistsanceweights_get_mean_stddevs():
     #---------------------------------------------------------------------------
     # Make sites instance
     #---------------------------------------------------------------------------
-    vs30file = os.path.join(shakedir, 'test', 'data', 'Vs30_test.grd')
+    vs30file = os.path.join(shakedir, 'tests', 'data', 'Vs30_test.grd')
     cx = -118.2
     cy = 34.1
     dx = 0.0083
@@ -1410,7 +1410,6 @@ def test_multigmpe_exceptions():
 
 
 if __name__ == '__main__':
-    test_scr_rlme()
     test_basic()
     test_from_config_set_of_sets()
     test_from_config_set_of_gmpes()

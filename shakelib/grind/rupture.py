@@ -30,15 +30,16 @@ from shakelib.plotting.plotrupture import plot_rupture_wire3d
 from shakelib.plotting.plotrupture import map_rupture
 
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # CONSTANTS and DEFAULTS
 
-# Depth tolerance in km (for determining if top and bottom edges are horizontal)
+# Depth tolerance in km (for determining if top and bottom edges are
+# horizontal)
 DEPTH_TOL = 0.05
 
 # Maximum ratio of distance off of the plane (relative to edge length) for the
-# 4th point to be before being considered non-co-planar and adjusted to actually
-# be on the plane?
+# 4th point to be before being considered non-co-planar and adjusted to
+# actually be on the plane?
 OFFPLANE_TOLERANCE = 0.05
 
 RAKEDICT = {'SS': 0.0, 'NM': -90.0, 'RS': 90.0, 'ALL': None}
@@ -50,39 +51,39 @@ DEFAULT_RAKE = 0.0
 DEFAULT_WIDTH = 0.0
 DEFAULT_ZTOR = 0.0
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 
 def read_rupture_file(origin, file=None, mesh_dx=0.5):
     """
     This is a module-level function to read in a rupture file. This allows for
-    the ShakeMap 3 text file specification or the ShakeMap 4 JSON rupture format.
-    The ShakeMap 3 (".txt" extension) only supports QuadRupture style rupture
-    representation and so this method will always return a QuadRupture instance. 
-    The ShakeMap 4 JSON format supports QuadRupture and EdgeRupture
+    the ShakeMap 3 text file specification or the ShakeMap 4 JSON rupture
+    format. The ShakeMap 3 (".txt" extension) only supports QuadRupture style
+    rupture representation and so this method will always return a QuadRupture
+    instance. The ShakeMap 4 JSON format supports QuadRupture and EdgeRupture
     represenations and so this method detects the rupture class and returns the
     appropriate Rupture subclass instance.
 
     If file is None (default) then it returns a PointRupture.
 
     Args:
-        origin (Origin): A ShakeMap origin instance; required because 
+        origin (Origin): A ShakeMap origin instance; required because
             hypocentral/epicentral distances are computed from the Rupture
             class.
         file (srt): Path to rupture file (optional).
         mesh_dx (float): Target spacing (in km) for rupture discretization;
-            default is 0.5 km and it is only used if the rupture file is an 
+            default is 0.5 km and it is only used if the rupture file is an
             EdgeRupture.
 
     Returns:
-        Rupture subclass instance. 
+        Rupture subclass instance.
 
     """
     if file is not None:
         try:
-            #-----------------------------------------------------------------------
+            #------------------------------------------------------------------
             # First, try to read as a json file
-            #-----------------------------------------------------------------------
+            #------------------------------------------------------------------
             if isinstance(file, str):
                 with open(file) as f:
                     d = json.load(f)
@@ -92,9 +93,9 @@ def read_rupture_file(origin, file=None, mesh_dx=0.5):
             rupt = json_to_rupture(d, origin, mesh_dx=mesh_dx)
 
         except json.JSONDecodeError:
-            #-----------------------------------------------------------------------
+            #------------------------------------------------------------------
             # Reading as json failed, so hopefully it is a ShakeMap 3 text file
-            #-----------------------------------------------------------------------
+            #------------------------------------------------------------------
             try:
                 d = text_to_json(file)
                 rupt = json_to_rupture(d, origin, mesh_dx=mesh_dx)
@@ -109,10 +110,10 @@ def read_rupture_file(origin, file=None, mesh_dx=0.5):
 
 def json_to_rupture(d, origin, mesh_dx=0.5):
     """
-    Method returns either a QuadRupture or EdgeRupture object based on a 
-    GeoJSON dictionary. 
+    Method returns either a QuadRupture or EdgeRupture object based on a
+    GeoJSON dictionary.
 
-    Args: 
+    Args:
         d (dict): Rupture GeoJSON dictionary.
         origin (Origin): A ShakeMap origin object.
         mesh_dx (float): Target spacing (in km) for rupture discretization;
@@ -138,28 +139,28 @@ def json_to_rupture(d, origin, mesh_dx=0.5):
 
 def text_to_json(file):
     """
-    Read in old ShakeMap 3 textfile rupture format and convert to GeoJSON. 
+    Read in old ShakeMap 3 textfile rupture format and convert to GeoJSON.
 
     Args:
         rupturefile (srt): Path to rupture file OR file-like object in GMT
             psxy format, where:
 
-                * Rupture vertices are space separated lat, lon, depth triplets 
+                * Rupture vertices are space separated lat, lon, depth triplets
                   on a single line.
                 * Rupture groups are separated by lines containing ">"
                 * Rupture groups must be closed.
-                * Verticies within a rupture group must start along the top edge
-                  and move in the strike direction then move to the bottom edge
-                  and move back in the opposite direction.
+                * Verticies within a rupture group must start along the top
+                  edge and move in the strike direction then move to the bottom
+                  edge and move back in the opposite direction.
 
     Returns:
         dict: GeoJSON rupture dictionary.
 
     """
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     # First read in the data
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     x = []
     y = []
     z = []
@@ -231,8 +232,8 @@ def text_to_json(file):
 
 def validate_json(d):
     """
-    Check that the JSON format is acceptable. This is only for requirements that
-    are common to both QuadRupture and EdgeRupture.
+    Check that the JSON format is acceptable. This is only for requirements
+    that are common to both QuadRupture and EdgeRupture.
 
     Args:
         d (dict): Rupture JSON dictionary.
@@ -276,7 +277,7 @@ def validate_json(d):
 
         n_pairs = int((n_points - 1) / 2)
         for j in range(n_pairs):
-            #-------------------------------------------------------------------
+            #------------------------------------------------------------------
             # Points are paired and in each pair the top is first, as in:
             #
             #      _.-P1-._
@@ -285,7 +286,7 @@ def validate_json(d):
             #   P7---P6----P5-------P4
             #
             # Pairs: P0-P7, P1-P6, P2-P5, P3-P4
-            #-------------------------------------------------------------------
+            #------------------------------------------------------------------
             top_depth = p[j][2]
             bot_depth = p[-(j + 2)][2]
             if top_depth > bot_depth:
@@ -343,9 +344,9 @@ def is_quadrupture_class(d):
 
 def is_quad(q):
     """
-    Checks that an individual quad is coplanar. 
+    Checks that an individual quad is coplanar.
 
-    Args: 
+    Args:
         q (list): A quadrilateral; list of four OQ Points.
 
     Returns:
@@ -399,7 +400,7 @@ class Rupture(ABC):
         - There are three Ruptuer subclasses: PointRupture, QuadRupture, and
           EdgeRupture.
         - PointRupture represents the rupture as a point source.
-        - QuadRupture and EdgeRupture are two different finite source 
+        - QuadRupture and EdgeRupture are two different finite source
           representations.
         - A finite rupture is composed of segments. For QuadRupture, a segment
           is a quadrilaterial; for an EdgeRupture, a segment is a line
@@ -409,7 +410,7 @@ class Rupture(ABC):
         - The QuadRupture class requires that each segment is a quadrilateral
           with horizontal top and obttom edges.
         - The EdgeRupture class allows for arbitrarily complex top and bottom
-          edge specification. 
+          edge specification.
 
     """
 
@@ -418,7 +419,7 @@ class Rupture(ABC):
         Write the rupture to a GeoJson file.
 
         Args:
-            file (str): Name of file. 
+            file (str): Name of file.
         """
         with open(file, 'w') as f:
             json.dump(self._geojson, f)
@@ -450,8 +451,8 @@ class Rupture(ABC):
     @abstractmethod
     def getStrike(self):
         """
-        Return strike angle. If rupture consists of multiple quadrilaterals, the
-        average strike angle, weighted by quad length, is returned.
+        Return strike angle. If rupture consists of multiple quadrilaterals,
+        the average strike angle, weighted by quad length, is returned.
         Note: for ruptures with quads where the strike angle changes by 180 deg
         due to reverses in dip direction are problematic and not handeled well
         by this algorithm.
@@ -506,7 +507,7 @@ class Rupture(ABC):
     def getRuptureContext(self, gmpelist):
         """
         Returns:
-            An Openquake 
+            An Openquake
         `RuptureContext <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.RuptureContext>`__.
 
         Args:
@@ -546,7 +547,7 @@ class Rupture(ABC):
 
     def computeRhyp(self, lon, lat, depth):
         """
-        Method for computing hypocentral distance. 
+        Method for computing hypocentral distance.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -567,7 +568,7 @@ class Rupture(ABC):
 
     def computeRepi(self, lon, lat, depth):
         """
-        Method for computing epicentral distance. 
+        Method for computing epicentral distance.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -580,11 +581,6 @@ class Rupture(ABC):
         origin = self._origin
         oldshape = lon.shape
 
-        if len(oldshape) == 2:
-            newshape = (oldshape[0] * oldshape[1], 1)
-        else:
-            newshape = (oldshape[0], 1)
-
         repi = geodetic.distance(origin.lon, origin.lat, 0.0,
                                  lon, lat, depth)
         repi = repi.reshape(oldshape)
@@ -593,7 +589,7 @@ class Rupture(ABC):
     @abstractmethod
     def computeRjb(self, lon, lat, depth):
         """
-        Method for computing Joyner-Boore distance. 
+        Method for computing Joyner-Boore distance.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -609,7 +605,7 @@ class Rupture(ABC):
     @abstractmethod
     def computeRrup(self, lon, lat, depth):
         """
-        Method for computing rupture distance. 
+        Method for computing rupture distance.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -625,8 +621,8 @@ class Rupture(ABC):
     @abstractmethod
     def computeGC2(self, lon, lat, depth):
         """
-        Method for computing version 2 of the Generalized Coordinate system 
-        (GC2) by Spudich and Chiou OFR 2015-1028. 
+        Method for computing version 2 of the Generalized Coordinate system
+        (GC2) by Spudich and Chiou OFR 2015-1028.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -635,7 +631,7 @@ class Rupture(ABC):
 
         Returns:
             dict: Dictionary with keys for each of the GC2-related distances,
-                which include 'rx', 'ry', 'ry0', 'U', 'T'. 
+                which include 'rx', 'ry', 'ry0', 'U', 'T'.
         """
         pass
 
@@ -656,17 +652,17 @@ class PointRupture(Rupture):
     """
     Rupture class for point sources. The purpose is to gracefully handle:
 
-        - Requests for rupture distances when no rupture is available. 
-        - Provide reasonable default values for rupture parameters. 
+        - Requests for rupture distances when no rupture is available.
+        - Provide reasonable default values for rupture parameters.
     """
 
     def __init__(self, origin, reference=""):
         """
-        Constructs a PointRupture instance. 
+        Constructs a PointRupture instance.
 
         Args:
             origin (Origin): Reference to a ShakeMap Origin instance.
-            reference (str): Citable reference for rupture. 
+            reference (str): Citable reference for rupture.
 
         Returns:
             PointRupture instance.
@@ -726,7 +722,7 @@ class PointRupture(Rupture):
 
     def getStrike(self):
         """
-        Strike, which is None. 
+        Strike, which is None.
         Could potentially get from strec or something?
         """
         return DEFAULT_STRIKE
@@ -751,22 +747,22 @@ class PointRupture(Rupture):
     @property
     def lats(self):
         """
-        Returns rupture latitudes, which is just the hypocenter for a PointRupture.
-        """
+        Returns rupture latitudes, which is just the hypocenter for a
+        PointRupture."""
         return self._origin.lat
 
     @property
     def lons(self):
         """
-        Returns rupture longitudes, which is just the hypocenter for a PointRupture.
-        """
+        Returns rupture longitudes, which is just the hypocenter for a
+        PointRupture."""
         return self._origin.lon
 
     @property
     def depths(self):
         """
-        Returns rupture depths, which is just the hypocenter for a PointRupture.
-        """
+        Returns rupture depths, which is just the hypocenter for a
+        PointRupture."""
         return self._origin.depth
 
     def computeRjb(self, lon, lat, depth, var=False):
@@ -777,10 +773,10 @@ class PointRupture(Rupture):
             lon (array): Numpy array of longitudes.
             lat (array): Numpy array of latitudes.
             depth (array): Numpy array of depths (km; positive down).
-            var (bool): Also return variance of prediction. 
+            var (bool): Also return variance of prediction.
 
         Returns:
-            If var is True then this returns a tuple of two arrays: first, the 
+            If var is True then this returns a tuple of two arrays: first, the
                 predicted Rjb values, and second an array of the variance of
                 those predictions. If var is False then just the first element
                 of the tuple is returned.
@@ -1050,8 +1046,8 @@ class PointRupture(Rupture):
 
     def computeGC2(self, lon, lat, depth):
         """
-        Method for computing version 2 of the Generalized Coordinate system 
-        (GC2) by Spudich and Chiou OFR 2015-1028. 
+        Method for computing version 2 of the Generalized Coordinate system
+        (GC2) by Spudich and Chiou OFR 2015-1028.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -1060,10 +1056,10 @@ class PointRupture(Rupture):
 
         Returns:
             dict: Dictionary with keys for each of the GC2-related distances,
-                which include 'rx', 'ry', 'ry0', 'U', 'T'. 
+                which include 'rx', 'ry', 'ry0', 'U', 'T'.
         """
-        # This just returns defaults of zero, which will hopefully behave gracefully
-        # as used in GMPEs.
+        # This just returns defaults of zero, which will hopefully behave
+        # gracefully as used in GMPEs.
         dict = {"rx": np.zeros_like(lon),
                 "ry": np.zeros_like(lon),
                 "ry0": np.zeros_like(lon),
@@ -1078,23 +1074,24 @@ class EdgeRupture(Rupture):
     Rupture class that representst the rupture surface by specifying the top
     edge and the bottom edges. These edges do not need to be horizontal. The
     freedom to allow for non-horizontal edges (as compared to QuadRupture)
-    comes at the cost of slower distance calculations. This is because the 
+    comes at the cost of slower distance calculations. This is because the
     rupture must be discretized and then the distances are compued in a brute
-    force fashion based on this mesh, which can be quite large. 
+    force fashion based on this mesh, which can be quite large.
     """
 
     def __init__(self, d, origin, mesh_dx=0.5):
         """
-        Initialization of an EdgeRupture from a GeoJSON dictionary and an Origin.
+        Initialization of an EdgeRupture from a GeoJSON dictionary and an
+        Origin.
 
-        Args: 
+        Args:
             d (dict): Rupture GeoJSON dictionary.
             origin (Origin): Reference to a ShakeMap Origin object.
             mesh_dx (float): Target spacing (in km) for rupture discretization;
                 default is 0.5 km and it is only used if the rupture file is an
                 EdgeRupture.
 
-        Returns: 
+        Returns:
             EdgeRupture instance.
 
         """
@@ -1154,23 +1151,23 @@ class EdgeRupture(Rupture):
     def fromArrays(cls, toplons, toplats, topdeps, botlons, botlats, botdeps,
                    origin, group_index=None, mesh_dx=0.5, reference=''):
         """
-        Class method to initialize an EdgeRupture class from arrays of 
-        longitude, latitude, and depth along the top and bottom edges. 
+        Class method to initialize an EdgeRupture class from arrays of
+        longitude, latitude, and depth along the top and bottom edges.
 
         Args:
             toplons (ndarray): Array of top edge longitudes.
-            toplats (ndarray): Array of top edge latitudes. 
+            toplats (ndarray): Array of top edge latitudes.
             topdeps (ndarray): Array of top edge depths (km).
             botlons (ndarray): Array of bot edge longitudes.
-            botlats (ndarray): Array of bot edge latitudes. 
+            botlats (ndarray): Array of bot edge latitudes.
             botdeps (ndarray): Array of bot edge depths (km).
-            origin (Origin): Reference to a ShakeMap Origin object. 
-            group_index (ndarray): Optional array of group index. 
-                If None, then assume only single group. 
+            origin (Origin): Reference to a ShakeMap Origin object.
+            group_index (ndarray): Optional array of group index.
+                If None, then assume only single group.
             mesh_dx (float): Target spacing (in km) for rupture discretization.
             reference (str): Citable reference for rupture.
 
-        Returns: 
+        Returns:
             EdgeRupture instance.
 
         """
@@ -1252,8 +1249,8 @@ class EdgeRupture(Rupture):
 
     def getWidth(self):
         """
-        Compute average rupture width in km. For EdgeRupture, we compute this as
-        the rupture area divided by teh rupture length. 
+        Compute average rupture width in km. For EdgeRupture, we compute this
+        as the rupture area divided by teh rupture length.
 
         Returns:
             float: Rupture width in km.
@@ -1267,7 +1264,7 @@ class EdgeRupture(Rupture):
         Compute the rupture area. For EdgeRupture, we compute this by grouping
         the traces into "quadrilaterals" for which the verticies may not be
         co-planar. We then break up the quadrilaterals into triangles for which
-        we can compute area. 
+        we can compute area.
 
         Returns:
             float: Rupture area in square km.
@@ -1412,14 +1409,15 @@ class EdgeRupture(Rupture):
         Return a list of segment group indexes.
 
         Returns:
-            list: Segment group indexes; length equals the number of quadrilaterals.
+            list: Segment group indexes; length equals the number of
+                quadrilaterals.
         """
         return copy.deepcopy(self._group_index)
 
     def _computeStikeDip(self):
         """
-        Loop over all triangles and get the average normal, north, and up vectors
-        in ECEF. Use these to compute a representative strike and dip. 
+        Loop over all triangles and get the average normal, north, and up
+        vectors in ECEF. Use these to compute a representative strike and dip.
         """
         seg = self._group_index
         groups = np.unique(seg)
@@ -1533,7 +1531,7 @@ class EdgeRupture(Rupture):
     def getQuadrilaterals(self):
         """
         Return a list of quadrilaterals. Unlike QuadRupture, these
-        quadrilaterals are not restricted to be coplanar or have 
+        quadrilaterals are not restricted to be coplanar or have
         horizontal top/bottom edges.
 
         Return:
@@ -1565,7 +1563,7 @@ class EdgeRupture(Rupture):
 
     def computeRrup(self, lon, lat, depth):
         """
-        Method for computing rupture distance. 
+        Method for computing rupture distance.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -1579,9 +1577,9 @@ class EdgeRupture(Rupture):
 
         mesh_dx = self._mesh_dx
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Sort out sites
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         oldshape = lon.shape
 
         if len(oldshape) == 2:
@@ -1595,9 +1593,9 @@ class EdgeRupture(Rupture):
         z.shape = newshape
         sites_ecef = np.hstack((x, y, z))
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Get mesh
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         mx = []
         my = []
         mz = []
@@ -1626,9 +1624,9 @@ class EdgeRupture(Rupture):
                 mz.extend(list(np.reshape(mesh['z'], (-1,))))
         mesh_mat = np.array([np.array(mx), np.array(my), np.array(mz)])
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Compute distance
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         dist = np.zeros_like(x)
         for i in range(len(x)):
             sitecol = sites_ecef[i, :].reshape([3, 1])
@@ -1642,7 +1640,7 @@ class EdgeRupture(Rupture):
 
     def computeRjb(self, lon, lat, depth):
         """
-        Method for computing Joyner-Boore distance. 
+        Method for computing Joyner-Boore distance.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -1656,9 +1654,9 @@ class EdgeRupture(Rupture):
 
         mesh_dx = self._mesh_dx
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Sort out sites
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         oldshape = lon.shape
 
         if len(oldshape) == 2:
@@ -1672,9 +1670,9 @@ class EdgeRupture(Rupture):
         z.shape = newshape
         sites_ecef = np.hstack((x, y, z))
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Get mesh
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         mx = []
         my = []
         mz = []
@@ -1703,9 +1701,9 @@ class EdgeRupture(Rupture):
                 mz.extend(list(np.reshape(mesh['z'], (-1,))))
         mesh_mat = np.array([np.array(mx), np.array(my), np.array(mz)])
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Compute distance
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         dist = np.zeros_like(x)
         for i in range(len(x)):
             sitecol = sites_ecef[i, :].reshape([3, 1])
@@ -1719,8 +1717,8 @@ class EdgeRupture(Rupture):
 
     def computeGC2(self, lon, lat, depth):
         """
-        Method for computing version 2 of the Generalized Coordinate system 
-        (GC2) by Spudich and Chiou OFR 2015-1028. 
+        Method for computing version 2 of the Generalized Coordinate system
+        (GC2) by Spudich and Chiou OFR 2015-1028.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -1729,7 +1727,7 @@ class EdgeRupture(Rupture):
 
         Returns:
             dict: Dictionary with keys for each of the GC2-related distances,
-                which include 'rx', 'ry', 'ry0', 'U', 'T'. 
+                which include 'rx', 'ry', 'ry0', 'U', 'T'.
         """
         # This just hands off to the module-level method
         # NOTE: Not sure if the non-horizontal top edges of EdgeRupture will
@@ -1741,11 +1739,11 @@ class EdgeRupture(Rupture):
 
 class QuadRupture(Rupture):
     """
-    Rupture class that represents the rupture surface as a combination of 
+    Rupture class that represents the rupture surface as a combination of
     quadrilaterals. Each quadrilateral must have horizontal top and bottom
     edges and must be coplanar. These restrictions make the computation of
     rupture distances more efficient. The number of points in the top edges
-    must match the number of points in the bottom edge. 
+    must match the number of points in the bottom edge.
     """
 
     def __init__(self, d, origin):
@@ -1787,17 +1785,18 @@ class QuadRupture(Rupture):
     def fromArrays(cls, lon, lat, depth, origin, reference=''):
         """
         Class method for constructing a QuadRupture from arrays of longitude
-        latitude, and depth. The arrays should start on the top and move in the 
-        strike direction, then down to the bottom and move back (without 
-        closing) followed by a nan. 
+        latitude, and depth. The arrays should start on the top and move in the
+        strike direction, then down to the bottom and move back (without
+        closing) followed by a nan.
 
 
         Args:
-            lon (array): Sequence of rupture longitude vertices in clockwise 
+            lon (array): Sequence of rupture longitude vertices in clockwise
                 order.
-            lat (array): Sequence of rupture latitude vertices in clockwise 
+            lat (array): Sequence of rupture latitude vertices in clockwise
                 order.
-            depth (array): Sequence of rupture depth vertices in clockwise order.
+            depth (array): Sequence of rupture depth vertices in clockwise
+                order.
             origin (Origin): Reference to a ShakeMap Origin object.
             reference (str): String citeable reference for Rupture.
 
@@ -1811,7 +1810,8 @@ class QuadRupture(Rupture):
         SMALL_DISTANCE = 2e-03  # 2 meters
         depth = np.nan
 
-        if self.computeRjb(np.array([lon]), np.array([lat]), np.array([0])) > SMALL_DISTANCE:
+        tmp = self.computeRjb(np.array([lon]), np.array([lat]), np.array([0]))
+        if tmp > SMALL_DISTANCE:
             return depth
 
         i = 0
@@ -1845,7 +1845,6 @@ class QuadRupture(Rupture):
         # turn these to vectors
         s0 = Vector(s0x, s0y, 0)
         s1 = Vector(s1x, s1y, 0)
-        s2 = Vector(s2x, s2y, 0)
         s3 = Vector(s3x, s3y, 0)
         sx = Vector(sxx, sxy, 0)
 
@@ -1875,7 +1874,7 @@ class QuadRupture(Rupture):
         wtt = (ws - sxdd) / ws
         wtb = sxdd / ws
 
-        # #Compute the depth of of the plane at Px:
+        # Compute the depth of of the plane at Px:
         depth = wtt * P0.z + wtb * P3.z * 1000
 
         return depth
@@ -1909,10 +1908,10 @@ class QuadRupture(Rupture):
 
     def getArea(self):
         """
-        Compute area of rupture. 
+        Compute area of rupture.
 
-        Returns: 
-            float: Rupture area in square km. 
+        Returns:
+            float: Rupture area in square km.
 
         """
         asum = 0.0
@@ -1926,13 +1925,13 @@ class QuadRupture(Rupture):
     def fromTrace(cls, xp0, yp0, xp1, yp1, zp, widths, dips, origin,
                   strike=None, group_index=None, reference=""):
         """
-        Create a QuadRupture instance from a set of vertices that define the top
-        of the rupture, and an array of widths/dips.
+        Create a QuadRupture instance from a set of vertices that define the
+        top of the rupture, and an array of widths/dips.
 
         Each rupture quadrilaterial is defined by specifying the latitude,
         longitude, and depth of the two vertices on the top edges, which must
         have the dame depths. The other verticies are then constructed from
-        the top edges and the width and dip of the quadrilateral. 
+        the top edges and the width and dip of the quadrilateral.
 
         Args:
             xp0 (array): Array or list of longitudes (floats) of p0.
@@ -1953,8 +1952,8 @@ class QuadRupture(Rupture):
                 None then each quadrilateral is assumed to be in a different
                 group since there is no guarantee that any of them are
                 continuous.
-            reference (str): String explaining where the rupture definition came
-                from (publication style reference, etc.).
+            reference (str): String explaining where the rupture definition
+                came from (publication style reference, etc.).
 
         Returns:
             QuadRupture instance.
@@ -1965,7 +1964,8 @@ class QuadRupture(Rupture):
             pass
         else:
             raise ShakeLibException(
-                'Number of xp0,yp0,xp1,yp1,zp,widths,dips points must be equal.')
+                'Number of xp0,yp0,xp1,yp1,zp,widths,dips points must be '\
+                'equal.')
         if strike is None:
             pass
         else:
@@ -2059,27 +2059,34 @@ class QuadRupture(Rupture):
             yp3[i] = lat3
             zpdown[i] = zp[i] + dz
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Create GeoJSON object
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
 
         coords = []
         u_groups = np.unique(group_index)
         n_groups = len(u_groups)
         for i in range(n_groups):
             ind = np.where(u_groups[i] == group_index)[0]
-            lons = np.concatenate([xp0[ind[0]].reshape((1,)), xp1[ind],
-                                   xp2[ind][::-1], xp3[ind][::-
-                                                            1][-1].reshape((1,)),
-                                   xp0[ind[0]].reshape((1,))])
-            lats = np.concatenate([yp0[ind[0]].reshape((1,)), yp1[ind],
-                                   yp2[ind][::-1], yp3[ind][::-
-                                                            1][-1].reshape((1,)),
-                                   yp0[ind[0]].reshape((1,))])
-            deps = np.concatenate([zp[ind[0]].reshape((1,)), zp[ind],
-                                   zpdown[ind][::-1], zpdown[ind][::-
-                                                                  1][-1].reshape((1,)),
-                                   zp[ind[0]].reshape((1,))])
+            lons = np.concatenate(
+                    [xp0[ind[0]].reshape((1,)),
+                     xp1[ind], xp2[ind][::-1],
+                     xp3[ind][::-1][-1].reshape((1,)),
+                     xp0[ind[0]].reshape((1,))
+                     ])
+            lats = np.concatenate(
+                    [yp0[ind[0]].reshape((1,)),
+                     yp1[ind],
+                     yp2[ind][::-1],
+                     yp3[ind][::-1][-1].reshape((1,)),
+                     yp0[ind[0]].reshape((1,))
+                     ])
+            deps = np.concatenate(
+                    [zp[ind[0]].reshape((1,)),
+                     zp[ind],
+                     zpdown[ind][::-1],
+                     zpdown[ind][::-1][-1].reshape((1,)),
+                     zp[ind[0]].reshape((1,))])
 
             poly = []
             for lon, lat, dep in zip(lons, lats, deps):
@@ -2112,14 +2119,15 @@ class QuadRupture(Rupture):
 
     def writeTextFile(self, rupturefile):
         """
-        Write rupture data to rupture file format as defined in ShakeMap 
+        Write rupture data to rupture file format as defined in ShakeMap
         Software Guide.
 
         Note that this currently treats each quadrilateral as a separate
-        polygon. This needs to be udpated. 
+        polygon. This needs to be udpated.
 
         Args:
-            rupturefile (str): Filename of output data file OR file-like object.
+            rupturefile (str): Filename of output data file OR file-like
+                object.
 
         """
         if not hasattr(rupturefile, 'read'):
@@ -2159,7 +2167,7 @@ class QuadRupture(Rupture):
 
         All of the following vector arguments must have the same length.
 
-        Args: 
+        Args:
             xp0 (array): Array or list of longitudes (floats) of p0.
             yp0 (array): Array or list of latitudes (floats) of p0.
             zp0 (array): Array or list of depths (floats) of p0.
@@ -2175,18 +2183,19 @@ class QuadRupture(Rupture):
             origin (Origin): Reference to a ShakeMap Origin object.
             group_index (list): List of integers to indicate group index. If
                 None then each quadrilateral is assumed to be in a different
-                group since there is no guarantee that any of them are 
+                group since there is no guarantee that any of them are
                 continuous.
-            reference (str): String explaining where the rupture definition came
-                from (publication style reference, etc.)
+            reference (str): String explaining where the rupture definition
+                came from (publication style reference, etc.)
 
         Returns:
             QuadRupture object, where the rupture is modeled as a series of
                 trapezoids.
 
         """
-        if len(xp0) == len(yp0) == len(zp0) == len(xp1) == len(yp1) == len(zp1) == \
-           len(xp2) == len(yp2) == len(zp2) == len(xp3) == len(yp3) == len(zp3):
+        if len(xp0) == len(yp0) == len(zp0) == len(xp1) == len(yp1) == \
+           len(zp1) == len(xp2) == len(yp2) == len(zp2) == len(xp3) == \
+           len(yp3) == len(zp3):
             pass
         else:
             raise ShakeLibException('All vectors specifying quadrilateral '
@@ -2213,27 +2222,36 @@ class QuadRupture(Rupture):
         yp3 = np.array(yp3, dtype='d')
         zp3 = np.array(zp3, dtype='d')
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Create GeoJSON object
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
 
         coords = []
         u_groups = np.unique(group_index)
         n_groups = len(u_groups)
         for i in range(n_groups):
             ind = np.where(u_groups[i] == group_index)[0]
-            lons = np.concatenate([xp0[ind[0]].reshape((1,)), xp1[ind],
-                                   xp2[ind][::-1], xp3[ind][::-
-                                                            1][-1].reshape((1,)),
-                                   xp0[ind[0]].reshape((1,))])
-            lats = np.concatenate([yp0[ind[0]].reshape((1,)), yp1[ind],
-                                   yp2[ind][::-1], yp3[ind][::-
-                                                            1][-1].reshape((1,)),
-                                   yp0[ind[0]].reshape((1,))])
-            deps = np.concatenate([zp0[ind[0]].reshape((1,)), zp1[ind],
-                                   zp2[ind][::-1], zp3[ind][::-
-                                                            1][-1].reshape((1,)),
-                                   zp0[ind[0]].reshape((1,))])
+            lons = np.concatenate(
+                    [xp0[ind[0]].reshape((1,)),
+                     xp1[ind],
+                     xp2[ind][::-1],
+                     xp3[ind][::-1][-1].reshape((1,)),
+                     xp0[ind[0]].reshape((1,))
+                     ])
+            lats = np.concatenate(
+                    [yp0[ind[0]].reshape((1,)),
+                     yp1[ind],
+                     yp2[ind][::-1],
+                     yp3[ind][::-1][-1].reshape((1,)),
+                     yp0[ind[0]].reshape((1,))
+                     ])
+            deps = np.concatenate(
+                    [zp0[ind[0]].reshape((1,)),
+                     zp1[ind],
+                     zp2[ind][::-1],
+                     zp3[ind][::-1][-1].reshape((1,)),
+                     zp0[ind[0]].reshape((1,))
+                     ])
 
             poly = []
             for lon, lat, dep in zip(lons, lats, deps):
@@ -2279,8 +2297,8 @@ class QuadRupture(Rupture):
 
     def getStrike(self):
         """
-        Return strike angle. If rupture consists of multiple quadrilaterals, the
-        average strike angle, weighted by quad length, is returned.
+        Return strike angle. If rupture consists of multiple quadrilaterals,
+        the average strike angle, weighted by quad length, is returned.
         Note: for ruptures with quads where the strike angle changes by 180 deg
         due to reverses in dip direction are problematic and not handeled well
         by this algorithm.
@@ -2390,8 +2408,8 @@ class QuadRupture(Rupture):
 
     def _setQuadrilaterals(self):
         """
-        Create internal list of N quadrilaterals. Reverses quad if dip direction is
-        incorrect.
+        Create internal list of N quadrilaterals. Reverses quad if dip
+        direction is incorrect.
         """
 
         # Make sure arrays are numpy arrays.
@@ -2464,7 +2482,8 @@ class QuadRupture(Rupture):
         Return a list of segment group indexes.
 
         Returns:
-            list: Segment group indexes; length equals the number of quadrilaterals.
+            list: Segment group indexes; length equals the number of
+                quadrilaterals.
         """
         return copy.deepcopy(self._group_index)
 
@@ -2472,12 +2491,12 @@ class QuadRupture(Rupture):
     def lats(self):
         """
         Return an array of latitudes for the rupture verticies arranged for
-        plotting purposes; will give an outline of each group connected 
+        plotting purposes; will give an outline of each group connected
         segments.
 
         Returns:
             array: Numpy array of closed-loop latitude values; disconnected
-                segments are separated by nans. 
+                segments are separated by nans.
         """
         lats = []
         quads = self.getQuadrilaterals()
@@ -2505,12 +2524,12 @@ class QuadRupture(Rupture):
     def lons(self):
         """
         Return an array of longitudes for the rupture verticies arranged for
-        plotting purposes; will give an outline of each group connected 
+        plotting purposes; will give an outline of each group connected
         segments.
 
         Returns:
             array: Numpy array of closed-loop longitude values; disconnected
-                segments are separated by nans. 
+                segments are separated by nans.
         """
         lons = []
         quads = self.getQuadrilaterals()
@@ -2537,12 +2556,12 @@ class QuadRupture(Rupture):
     def depths(self):
         """
         Return an array of depths for the rupture verticies arranged for
-        plotting purposes; will give an outline of each group connected 
+        plotting purposes; will give an outline of each group connected
         segments.
 
         Returns:
             array: Numpy array of closed-loop depths; disconnected
-                segments are separated by nans. 
+                segments are separated by nans.
         """
         deps = []
         quads = self.getQuadrilaterals()
@@ -2580,7 +2599,7 @@ class QuadRupture(Rupture):
         Return a count of the number of rupture groups.
 
         Returns:
-            int:Rnumber of rupture groups. 
+            int:Rnumber of rupture groups.
 
         """
         return len(np.unique(self._group_index))
@@ -2600,10 +2619,12 @@ class QuadRupture(Rupture):
         coordinates. Rupture groups are separated by numpy.NaN values.
 
         Returns:
-            tuple: 3-tuple of numpy arrays indicating X,Y,Z (lon,lat,depth) 
+            tuple: 3-tuple of numpy arrays indicating X,Y,Z (lon,lat,depth)
                 coordinates.
         """
-        return (np.array(self._lon), np.array(self._lat), np.array(self._depth))
+        return (np.array(self._lon),
+                np.array(self._lat),
+                np.array(self._depth))
 
     def getRuptureAsMesh(self):
         """
@@ -2617,7 +2638,7 @@ class QuadRupture(Rupture):
 
     def computeRjb(self, lon, lat, depth):
         """
-        Method for computing Joyner-Boore distance. 
+        Method for computing Joyner-Boore distance.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -2629,9 +2650,9 @@ class QuadRupture(Rupture):
 
         """
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Sort out sites
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         oldshape = lon.shape
 
         if len(oldshape) == 2:
@@ -2667,7 +2688,7 @@ class QuadRupture(Rupture):
 
     def computeRrup(self, lon, lat, depth):
         """
-        Method for computing rupture distance. 
+        Method for computing rupture distance.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -2679,9 +2700,9 @@ class QuadRupture(Rupture):
 
         """
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Sort out sites
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         oldshape = lon.shape
 
         if len(oldshape) == 2:
@@ -2707,8 +2728,8 @@ class QuadRupture(Rupture):
 
     def computeGC2(self, lon, lat, depth):
         """
-        Method for computing version 2 of the Generalized Coordinate system 
-        (GC2) by Spudich and Chiou OFR 2015-1028. 
+        Method for computing version 2 of the Generalized Coordinate system
+        (GC2) by Spudich and Chiou OFR 2015-1028.
 
         Args:
             lon (array): Numpy array of longitudes.
@@ -2717,7 +2738,7 @@ class QuadRupture(Rupture):
 
         Returns:
             dict: Dictionary with keys for each of the GC2-related distances,
-                which include 'rx', 'ry', 'ry0', 'U', 'T'. 
+                which include 'rx', 'ry', 'ry0', 'U', 'T'.
         """
         # This just hands off to the module-level method
         dict = _computeGC2(self, lon, lat, depth)
@@ -2734,9 +2755,9 @@ def _computeGC2(rupture, lon, lat, depth):
         lat (array): Numpy array of site latitudes.
         depth (array): Numpy array of site depths.
 
-    Returns: 
-        dict: Dictionary of GC2 distances. Keys include "T", "U", "rx" 
-            "ry", "ry0". 
+    Returns:
+        dict: Dictionary of GC2 distances. Keys include "T", "U", "rx"
+            "ry", "ry0".
     """
 
     quadlist = rupture.getQuadrilaterals()
@@ -2749,9 +2770,9 @@ def _computeGC2(rupture, lon, lat, depth):
     else:
         newshape = (oldshape[0], 1)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     # Define a projection that spans sites and rupture
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
 
     all_lat = np.append(lat, rupture.lats)
     all_lon = np.append(lon, rupture.lons)
@@ -2766,10 +2787,10 @@ def _computeGC2(rupture, lon, lat, depth):
     GC2T = np.zeros(newshape, dtype=lon.dtype)
     GC2U = np.zeros(newshape, dtype=lon.dtype)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     # First sort out strike discordance and nominal strike prior to
     # starting the loop if there is more than one group/trace.
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     group_ind = rupture._getGroupIndex()
 
     # Need group_ind as numpy array for sensible indexing...
@@ -2778,11 +2799,11 @@ def _computeGC2(rupture, lon, lat, depth):
     n_groups = len(uind)
 
     if n_groups > 1:
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # The first thing we need to worry about is finding the coordinate
         # shift. U's origin is "selected from the two endpoints most
         # distant from each other."
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
 
         # Need to get index of first and last quad
         # for each segment
@@ -2793,10 +2814,10 @@ def _computeGC2(rupture, lon, lat, depth):
             iq0[k] = int(np.min(ii))
             iq1[k] = int(np.max(ii))
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # This is an iterator for each possible combination of traces
         # including trace orientations (i.e., flipped).
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
 
         it_seg = it.product(it.combinations(uind, 2),
                             it.product([0, 1], [0, 1]))
@@ -2826,10 +2847,10 @@ def _computeGC2(rupture, lon, lat, depth):
                 A0 = P0
                 A1 = P1
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # A0 and A1 are the furthest two segment endpoints, but we still
         # need to sort out which one is the "origin".
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
 
         # This goofy while-loop is to adjust the side of the rupture where the
         # origin is located
@@ -2871,10 +2892,10 @@ def _computeGC2(rupture, lon, lat, depth):
                 A0 = tmpA1
                 A1 = tmpA0
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # To fix discordancy, need to flip quads and rearrange
         # the order of quadgc2
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
 
         # 1) flip quads
         for i in range(len(quadgc2)):
@@ -2908,9 +2929,9 @@ def _computeGC2(rupture, lon, lat, depth):
         # Quad length (top edge)
         l_i[i] = get_quad_length(quadgc2[i])
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Weight of segment, three cases
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
 
         # Case 3: t_i == 0 and 0 <= u_i <= l_i
         w_i = np.zeros_like(t_i)
@@ -2918,7 +2939,7 @@ def _computeGC2(rupture, lon, lat, depth):
         # Case 1:
         ix = t_i != 0
         w_i[ix] = (1.0 / t_i[ix]) * (np.arctan((l_i[i] -
-                                                u_i[ix]) / t_i[ix]) - np.arctan(-u_i[ix] / t_i[ix]))
+           u_i[ix]) / t_i[ix]) - np.arctan(-u_i[ix] / t_i[ix]))
 
         # Case 2:
         ix = (t_i == 0) & ((u_i < 0) | (u_i > l_i[i]))
@@ -3008,13 +3029,13 @@ def get_quad_width(q):
 
 def get_quad_mesh(q, dx):
     """
-    Create a mesh from a quadrilateal. 
+    Create a mesh from a quadrilateal.
 
     Args:
-        q (list): A quadrilateral; list of four points. 
+        q (list): A quadrilateral; list of four points.
         dx (float):  Target dx in km; used to get nx and ny of mesh, but mesh
-            snaps to edges of rupture so actual dx/dy will not actually equal this
-            value in general.
+            snaps to edges of rupture so actual dx/dy will not actually equal
+            this value in general.
 
     Returns:
         dict: Mesh dictionary, which includes numpy arrays:
@@ -3177,12 +3198,12 @@ def get_local_unit_slip_vector_SS(strike, dip, rake):
 def reverse_quad(q):
     """
     Reverse the verticies of a quad in the sense that the strike direction
-    is flipped. 
+    is flipped.
 
     Args:
         q (list): A quadrilateral; list of four points.
 
-    Returns: 
+    Returns:
         list: Reversed quadrilateral.
 
     """
@@ -3340,13 +3361,14 @@ def _quad_distance(q, points, horizontal=False):
 
     Args:
         q (list): A quadrilateral; list of four points.
-        points (array): Numpy array Nx3 of points (ECEF) to calculate distance 
+        points (array): Numpy array Nx3 of points (ECEF) to calculate distance
             from.
-        horizontal:  Boolean indicating whether to treat points inside quad as 0 distance.
+        horizontal:  Boolean indicating whether to treat points inside quad as
+            0 distance.
 
     Returns:
-        float: Array of size N of distances (in km) from input points to rupture
-            surface.
+        float: Array of size N of distances (in km) from input points to
+            rupture surface.
     """
     P0, P1, P2, P3 = q
 
@@ -3417,7 +3439,8 @@ def get_distance_to_plane(planepoints, otherpoint):
     Args:
         planepoints (list): List of three points (from Vector class) defining a
             plane.
-        otherpoint (Vector): 4th Vector to compare to points defining the plane.
+        otherpoint (Vector): 4th Vector to compare to points defining the
+            plane.
 
     Returns:
         float: Distance (in meters) from otherpoint to plane.
@@ -3451,22 +3474,22 @@ def get_distance_to_plane(planepoints, otherpoint):
 
 def __calc_u_i(P0, P1, lat, lon, proj):
     """
-    Calculate u_i distance. See Spudich and Chiou OFR 2015-1028. This is the 
+    Calculate u_i distance. See Spudich and Chiou OFR 2015-1028. This is the
     distance along strike from the first vertex (P0) of the i-th segment.
 
     Args:
-        P0 (point): OQ Point object, representing the first top-edge vertex of 
+        P0 (point): OQ Point object, representing the first top-edge vertex of
             a rupture quadrilateral.
-        P1 (point): OQ Point object, representing the second top-edge vertex of 
+        P1 (point): OQ Point object, representing the second top-edge vertex of
             a rupture quadrilateral.
         lat (array): A numpy array of latitudes.
         lon (array): A numpy array of longitudes.
-        proj (object): An orthographic projection from 
+        proj (object): An orthographic projection from
             openquake.hazardlib.geo.utils.get_orthographic_projection.
 
     Returns:
-        array: Array of size N of distances (in km) from input points to rupture
-            surface.
+        array: Array of size N of distances (in km) from input points to
+            rupture surface.
 
     """
 
@@ -3504,18 +3527,18 @@ def __calc_t_i(P0, P1, lat, lon, proj):
     hanging-wall are positive and those on the foot-wall are negative.
 
     Args:
-        P0 (point): OQ Point object, representing the first top-edge vertex of 
+        P0 (point): OQ Point object, representing the first top-edge vertex of
             a rupture quadrilateral.
-        P1 (point): OQ Point object, representing the second top-edge vertex of 
+        P1 (point): OQ Point object, representing the second top-edge vertex of
             a rupture quadrilateral.
         lat (array): A numpy array of latitudes.
         lon (array): A numpy array of longitudes.
-        proj (object): An orthographic projection from 
+        proj (object): An orthographic projection from
             openquake.hazardlib.geo.utils.get_orthographic_projection.
 
     Returns:
-        array: Array of size N of distances (in km) from input points to rupture
-            surface.
+        array: Array of size N of distances (in km) from input points to
+            rupture surface.
     """
 
     # projected coordinates are in km
@@ -3546,7 +3569,8 @@ def __calc_t_i(P0, P1, lat, lon, proj):
 
 def _distance_sq_to_segment(p0, p1):
     """
-    Calculate the distance^2 from the origin to a segment defined by two vectors
+    Calculate the distance^2 from the origin to a segment defined by two
+    vectors
 
     Args:
         p0 (array): Numpy array Nx3 (ECEF).

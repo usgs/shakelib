@@ -15,14 +15,14 @@ class VirtualIPE(GMPE):
 
     Uncertainty is computed by combining the uncertainty of the GMPE
     with the uncertainty of the GMICE. Standard error propagation
-    techniques are used (see the ShakeMap manual for a detailed 
+    techniques are used (see the ShakeMap manual for a detailed
     explanation). For the intra- and inter-event components of total
     uncertainty, we assign all of GMICE uncertaninty to the intra-event
     term, and none to the inter-event term. This choice is conservative,
-    and seems appropriate until GMICE are produced with separate inter- 
+    and seems appropriate until GMICE are produced with separate inter-
     and intra-event terms.
 
-    Note that the combined inter- and intra-event uncertainties will 
+    Note that the combined inter- and intra-event uncertainties will
     only approximately equal the total uncertainty because the GMPEs
     will only produce combined uncertainties that are approximately
     equal to their total uncertainty.
@@ -78,19 +78,19 @@ class VirtualIPE(GMPE):
     def get_mean_and_stddevs(self, sx, rx, dx, imt, stddev_types, fd=None):
         """
         See superclass `method <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.GroundShakingIntensityModel.get_mean_and_stddevs>`__
-        for parameter definitions. The only acceptable IMT is MMI. 
+        for parameter definitions. The only acceptable IMT is MMI.
 
-        Additional subclass argument is "fd", which is the directivity amplification 
-        factor in natural log units. This is optional, and must be a numpy array with 
-        the same dimentions as the sites and is added
+        Additional subclass argument is "fd", which is the directivity
+        amplification factor in natural log units. This is optional, and must
+        be a numpy array with the same dimentions as the sites and is added
 
         Returns:
             mmi (ndarray): Ground motions predicted by the MultiGMPE using
                 the supplied parameters are converted to MMI using the
                 GMICE.
-            mmi_sd (list of ndarrays): The uncertainty of the combined 
+            mmi_sd (list of ndarrays): The uncertainty of the combined
                 prediction/conversion process. The prediction uncertainty
-                will typically be either OpenQuake's TOTAL or INTRA_EVENT. 
+                will typically be either OpenQuake's TOTAL or INTRA_EVENT.
                 But can be any set that the MultiGMPE supports. See the
                 ShakeMap manual for a detailed discussion of the way the
                 uncertainty is computed.

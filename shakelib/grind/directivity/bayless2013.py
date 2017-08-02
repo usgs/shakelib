@@ -12,8 +12,9 @@ from impactutils.vectorutils.vector import Vector
 
 class Bayless2013(object):
     """
-    Implements the Bayless and Somerville (2013) directivity model. This is an update
-    to Somerville et al. (1997), which defines some of the input parameters.
+    Implements the Bayless and Somerville (2013) directivity model. This is an
+    update to Somerville et al. (1997), which defines some of the input
+    parameters.
 
     Fd is the directivity effect parameter, and it is evaluated as
 
@@ -26,8 +27,8 @@ class Bayless2013(object):
     where
 
     - Fd is the directivity effect
-    - IM is the intensity measure predicted by the GMPE. 
-    - IM_dir is the directivity-adjusted IM. 
+    - IM is the intensity measure predicted by the GMPE.
+    - IM_dir is the directivity-adjusted IM.
 
     The model is seprated into strike-slip and dip-slip categories:
     SS: (abs(rake) >  0 & abs(rake) < 30) | (abs(rake) > 150 & abs(rake) < 180)
@@ -43,27 +44,28 @@ class Bayless2013(object):
     Bayless and Somerville state that each quadrilateral should have a pseudo-
     hypocenter:
 
-        "Define the pseudo-hypocenter for rupture of successive segments as the point
-        on the side edge of the fault segment that is closest to the side edge of
-        the previous segment, and that lies half way between the top and bottom of
-        the fault. We assume that the fault is segmented along strike, not updip.
-        All geometric parameters are computed relative to the pseudo-hypocenter."
+        "Define the pseudo-hypocenter for rupture of successive segments as the
+        point on the side edge of the fault segment that is closest to the side
+        edge of the previous segment, and that lies half way between the top
+        and bottom of the fault. We assume that the fault is segmented along
+        strike, not updip. All geometric parameters are computed relative to
+        the pseudo-hypocenter."
 
     Todo:
 
         - Interpolate for arbitrary periods
-        - Inherit from Directivity base class. 
+        - Inherit from Directivity base class.
 
-    References: 
-        Bayless, J., and Somerville, P. (2013). Bayless-Somerville Directivity Model, 
-        Chapter 3 of PEER Report No. 2013/09, P. Spudich (Editor), Pacific Earthquake 
-        Engineering Research Center, Berkeley, CA.
+    References:
+        Bayless, J., and Somerville, P. (2013). Bayless-Somerville Directivity
+        Model, Chapter 3 of PEER Report No. 2013/09, P. Spudich (Editor),
+        Pacific Earthquake Engineering Research Center, Berkeley, CA.
         `[link] <http://peer.berkeley.edu/publications/peer_reports/reports_2013/webPEER-2013-09-Spudich.pdf>`__
 
-        Somerville, P. G., Smith, N. F., Graves, R. W., and Abrahamson, N. A. (1997). 
-        Modification of empirical strong ground motion attenuation relations to include 
-        the amplitude and duration effects of rupture directivity, Seismol. Res. Lett. 
-        68, 199–222.
+        Somerville, P. G., Smith, N. F., Graves, R. W., and Abrahamson, N. A.
+        (1997). Modification of empirical strong ground motion attenuation
+        relations to include the amplitude and duration effects of rupture
+        directivity, Seismol. Res. Lett. 68, 199–222.
         `[link] <http://srl.geoscienceworld.org/content/68/1/199.abstract>`__
 
     """
@@ -85,19 +87,14 @@ class Bayless2013(object):
         """
         Constructor for bayless2013.
 
-        :param origin:
-            Shakemap Origin object.
-        :param rup:
-            Shakemap Rupture object.
-        :param lat:
-            Numpy array of latitudes. 
-        :param lon:
-            Numpy array of longitudes. 
-        :param depth:
-            Numpy array of depths (km); down is positive. 
-        :param T:
-            Period; Currently, only acceptable values are 
-            0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 7.5, 10. 
+        Args:
+            origin: Shakemap Origin object.
+            rup: Shakemap Rupture object.
+            lat: Numpy array of latitudes.
+            lon: Numpy array of longitudes.
+            depth: Numpy array of depths (km); down is positive.
+            T: Period; Currently, only acceptable values are
+                0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 7.5, 10.
         """
         self._origin = origin
         self._rup = rup
@@ -177,7 +174,8 @@ class Bayless2013(object):
                 # Compute weights:
                 DipWeight = refrake / (np.pi / 2.0)
                 StrikeWeight = 1.0 - DipWeight
-                fdcombined = StrikeWeight * self._fd_SS + DipWeight * self._fd_DS
+                fdcombined = StrikeWeight * self._fd_SS + DipWeight * \
+                    self._fd_DS
                 self._fd = self._fd + self.weights[i] * fdcombined
 
     def __setPseudoHypocenters(self):
@@ -213,11 +211,11 @@ class Bayless2013(object):
             n2 = Vector.cross(p3 - p2, hpnp)
             n3 = Vector.cross(p0 - p3, hpnp)
 
-            #-------------------------------------------------------------------
+            #------------------------------------------------------------------
             # Is the hypocenter inside the projected rectangle?
             # Dot products show which side the origin is on.
             # If origin is on same side of all the planes, then it is 'inside'
-            #-------------------------------------------------------------------
+            #------------------------------------------------------------------
 
             sgn0 = np.signbit(Vector.dot(n0, p0 - hyp_ecef))
             sgn1 = np.signbit(Vector.dot(n1, p1 - hyp_ecef))
@@ -326,8 +324,8 @@ class Bayless2013(object):
         Y = d/W, where d is the portion (in km) of the width of the fault which
         ruptures up-dip from the hypocenter to the top of the fault.
 
-        :param i:
-            index of segment for which d is to be computed.
+        Args:
+            i (int): index of segment for which d is to be computed.
         """
         hyp_ecef = self.phyp[i]  # already in ECEF
         hyp_col = np.array([[hyp_ecef.x], [hyp_ecef.y], [hyp_ecef.z]])
@@ -372,8 +370,8 @@ class Bayless2013(object):
 
     def __computeThetaAndS(self, i):
         """
-        :param i:
-            Compute d for the i-th quad/segment.
+        Args:
+            i (int): Compute d for the i-th quad/segment.
         """
         # self.phyp is in ECEF
         tmp = ecef.ecef2latlon(self.phyp[i].x, self.phyp[i].y, self.phyp[i].z)
@@ -439,8 +437,8 @@ class Bayless2013(object):
 
     def getFd(self):
         """
-        :returns:
-            Numpy array of Fd; Fd is the directivity amplification factor. 
+        Returns:
+            Numpy array of Fd; Fd is the directivity amplification factor.
         """
         return copy.deepcopy(self._fd)
 

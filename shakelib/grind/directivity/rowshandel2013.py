@@ -1,8 +1,8 @@
 """
 Implements the Rowshandel (2013) directivity model. Note that the report
-provides many options for computing the directivity factor and we have 
-also used some coefficients that are unpublished updates by Rowshandel. 
-Some of the implementation options are controlled by arguments (e.g., 
+provides many options for computing the directivity factor and we have
+also used some coefficients that are unpublished updates by Rowshandel.
+Some of the implementation options are controlled by arguments (e.g.,
 mtype).
 
 Fd is the directivity function. One of the options is whether or not to
@@ -37,11 +37,11 @@ where
 
 To do
     - Add checks on function arguments (e.g., mtype) for valid values.
-    - Interpolate periods. 
+    - Interpolate periods.
 
-References: 
-    Rowshandel, B. (2013). Rowshandel’s NGA-West2 directivity model, 
-    Chapter 3 of PEER Report No. 2013/09, P. Spudich (Editor), Pacific 
+References:
+    Rowshandel, B. (2013). Rowshandel’s NGA-West2 directivity model,
+    Chapter 3 of PEER Report No. 2013/09, P. Spudich (Editor), Pacific
     Earthquake Engineering Research Center, Berkeley, CA.
     `[link] <http://peer.berkeley.edu/publications/peer_reports/reports_2013/webPEER-2013-09-Spudich.pdf>`__
 """
@@ -71,34 +71,26 @@ class Rowshandel2013(object):
         """
         Constructor for rowshandel2013.
 
-        :param origin:
-            Origin instance.
-        :param rup:
-            Rupture instance.
-        :param lat:
-            Numpy array of site latitudes.
-        :param lon:
-            Numpy array of site longitudes.
-        :param dep:
-            Numpy array of site depths (km); positive down.
-        :param dx:
-            Float for target mesh spacing for subruptures in km. The mesh
-            snaps to the edges of the quadrilaterals so the actual mesh spacing
-            will not equal this exactly; spacing in x and y will not be equal.
-        :param T:
-            List floats (or a float) for periods to compute fd;
-            Currently, only acceptable values are 1, 2, 3, 4, 5, 7.5. 
-        :param a_weight:
-            Weighting factor for how p-dot-q and s-dot-q are averaged; 0 for
-            only p-dot-q (propagation factor) and 1 for only s-dot-q (slip
-            factor).
-        :param mtype:
-            Integer, either 1 or 2; 1 for adding only positive components of dot
-            products, 2 for adding all components of dot products.
-        :param simpleDT:
-            Boolean; should the simpler DT equation be used? Usually False.
-        :param centered:
-            Boolean; should the centered directivity parameter be used.
+        Args:
+            origin: Origin instance.
+            rup: Rupture instance.
+            lat (ndarray): Numpy array of site latitudes.
+            lon (ndarray): Numpy array of site longitudes.
+            dep (ndarray): Numpy array of site depths (km); positive down.
+            dx (float): Target mesh spacing for subruptures in km. The mesh
+                snaps to the edges of the quadrilaterals so the actual mesh
+                spacing will not equal this exactly; spacing in x and y will
+                not be equal.
+            T (list): List floats (or a float) for periods to compute fd;
+                Currently, only acceptable values are 1, 2, 3, 4, 5, 7.5.
+            a_weight (float): Weighting factor for how p-dot-q and s-dot-q are
+                averaged; 0 for only p-dot-q (propagation factor) and 1 for
+                only s-dot-q (slip factor).
+            mtype (int): Either 1 or 2; 1 for adding only positive components
+                of dot products, 2 for adding all components of dot products.
+            simpleDT (bool): Should the simpler DT equation be used? Usually
+                False.
+            centered (bool): Should the centered directivity parameter be used?
         """
         self._origin = origin
         self._rup = rup
@@ -145,13 +137,13 @@ class Rowshandel2013(object):
         :param rup:
             Rupture instance.
         :param sites:
-            Sites object. 
+            Sites object.
         :param dx:
             Float for target mesh spacing for subruptures in km. The mesh
             snaps to the edges of the quadrilaterals so the actual mesh spacing
             will not equal this exactly; spacing in x and y will not be equal.
         :param T:
-            Period; Currently, only acceptable values are 1, 2, 3, 4, 5, 7.5. 
+            Period; Currently, only acceptable values are 1, 2, 3, 4, 5, 7.5.
         :param a_weight:
             Weighting factor for how p-dot-q and s-dot-q are averaged; 0 for
             only p-dot-q (propagation factor) and 1 for only s-dot-q (slip
@@ -182,15 +174,15 @@ class Rowshandel2013(object):
         """
         :returns:
             Numpy array of Fd; this is the directivity amplification factor
-            (log units). 
+            (log units).
         """
         return copy.deepcopy(self._fd)
 
     def getXiPrime(self):
         """
-        :returns: 
+        :returns:
             Numpy array of Xi'; this is the variable that accounts for geometric
-            factors in Fd. 
+            factors in Fd.
         """
         return copy.deepcopy(self._xi_prime)
 
@@ -211,7 +203,7 @@ class Rowshandel2013(object):
     def getLD(self):
         """
         :returns:
-            Numpy array of the rupture length de-normalization factor. 
+            Numpy array of the rupture length de-normalization factor.
         """
         return copy.deepcopy(self._LD)
 
@@ -335,9 +327,6 @@ class Rowshandel2013(object):
             rpnvcol = np.array([[rpnv.x],
                                 [rpnv.y],
                                 [rpnv.z]])
-
-            # Make 3x(i*j) matrix of cp
-            nj = mesh['llx'].shape[1]
 
             cp_mat = np.array([np.reshape(mesh['cpx'], (-1,)),
                                np.reshape(mesh['cpy'], (-1,)),

@@ -26,17 +26,17 @@ DEFAULT_ZTOR = 0.0
 
 class Origin(object):
     """
-    The purpose of this class is to read/store event origin information, which 
+    The purpose of this class is to read/store event origin information, which
     is usually derived from an xml file called "event.xml". There is also a
     mechanism to overwrite information in event.xml with a file in the input
-    directory called "source.txt". 
+    directory called "source.txt".
 
     Note that this class is generally contained within a Rupture instance.
 
-    Event values are: 
+    Event values are:
 
-        - id: the event id. 
-        - created: file creation time (Unix epoch -- seconds since Jan 1, 1970). 
+        - id: the event id.
+        - created: file creation time (Unix epoch - seconds since Jan 1, 1970).
         - lat: hypocenter latitude (decimal degrees; -90 to 90).
         - lon: hypocenter longitude (decimal degrees; -180 to 180).
         - depth: hypocenter depth (km, positive down).
@@ -50,10 +50,10 @@ class Origin(object):
         - second: 0-59.
         - timezone: abbreviation (i.e., GMT, PST, PDT).
         - mech: a string specifying the rupture mechanism; the accepted types
-          are RS, SS, NM, and ALL, for reverse slip, strike slip, normal, and 
+          are RS, SS, NM, and ALL, for reverse slip, strike slip, normal, and
           unspecified ruptures, respectively.
 
-    For backward-compatibility, we also check for 'type'. If both 'mech' and 
+    For backward-compatibility, we also check for 'type'. If both 'mech' and
     'type' are missing (or empty strings) then 'mech' is set to ALL.
 
     """
@@ -63,16 +63,17 @@ class Origin(object):
         Construct an Origin object.
 
         Args:
-            event (dict): Dictionary of values. See list above for required keys.
+            event (dict): Dictionary of values. See list above for required
+            keys.
 
         Returns:
             Origin object.
 
         """
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Check for missing keys
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         missing = []
         for req in REQUIRED_KEYS:
             if req not in list(event.keys()):
@@ -82,9 +83,9 @@ class Origin(object):
             raise Exception('Input event dictionary is missing the following '
                             'required keys: "%s"' % (','.join(missing)))
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Check some types, ranges, and defaults
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         if not type(event['id']) is str:
             raise Exception('id must be a string.')
         event['lat'] = float(event['lat'])
@@ -109,9 +110,9 @@ class Origin(object):
         else:
             event['mech'] = DEFAULT_MECH
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Special handling of time
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         if ('year' in event.keys()) and \
            ('month' in event.keys()) and \
            ('day' in event.keys()) and \
@@ -131,9 +132,9 @@ class Origin(object):
         else:
             event['time'] = HistoricTime.utcfromtimestamp(int(time.time()))
 
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         # Add keys as class attributes
-        #-----------------------------------------------------------------------
+        #----------------------------------------------------------------------
         for k, v in event.items():
             if k == 'rake':
                 setattr(self, k, float(v))
@@ -162,7 +163,7 @@ class Origin(object):
             sourcefile (str): source.txt file (see read_source()).
 
         Returns:
-            Origin object. 
+            Origin object.
 
         """
         event = read_event_file(eventxmlfile)
@@ -185,8 +186,8 @@ class Origin(object):
 
         Args:
             region:
-                `TRT <http://docs.openquake.org/oq-hazardlib/master/const.html#openquake.hazardlib.const.TRT>`__ 
-                object. 
+                `TRT <http://docs.openquake.org/oq-hazardlib/master/const.html#openquake.hazardlib.const.TRT>`__
+                object.
         """
         if not isinstance(region, TRT):
             raise ValueError(
@@ -205,8 +206,8 @@ class Origin(object):
 
     def setMechanism(self, mech, rake=None, dip=None):
         """
-        Set the earthquake mechanism manually (overriding any values read 
-        in from event.xml or source.txt. If rake and dip are not specified, 
+        Set the earthquake mechanism manually (overriding any values read
+        in from event.xml or source.txt. If rake and dip are not specified,
         they will be assigned by mechanism as follows:
 
         +-------+--------+-----+
@@ -222,9 +223,9 @@ class Origin(object):
         +-------+--------+-----+
 
         Args:
-            mech (str): One of 'RS' (reverse), 'NM' (normal), 'SS' (strike slip), 
-                or 'ALL' (unknown).
-            rake (float): Value between -360 and 360 degrees. If set, will 
+            mech (str): One of 'RS' (reverse), 'NM' (normal), 'SS' (strike
+                slip), or 'ALL' (unknown).
+            rake (float): Value between -360 and 360 degrees. If set, will
                 override default value for mechanism (see table above).
             dip (float): Value betweeen 0 and 90 degrees. If set, will override
                 default value for mechanism (see table above). Value will be
@@ -256,7 +257,8 @@ class Origin(object):
                 rake -= 360
             if rake < -180 or rake > 180:
                 raise Exception(
-                    'Rake must be transformable to be in range -180 to 180 degrees.')
+                    'Rake must be transformable to be in range -180 to 180 '\
+                    'degrees.')
         else:
             rake = mechs[mech]['rake']
 
@@ -272,30 +274,31 @@ def read_event_file(eventxml):
 
     .. code-block:: xml
 
-         <earthquake 
+         <earthquake
              id="2008ryan "
-             lat="30.9858" 
-             lon="103.3639" 
-             mag="7.9" 
-             year="2008" 
-             month="05" 
-             day="12" 
-             hour="06" 
-             minute="28" 
-             second="01" 
-             timezone="GMT" 
-             depth="19.0" 
-             locstring="EASTERN SICHUAN, CHINA" 
-             created="1211173621" 
-             otime="1210573681" 
-             type="" 
+             lat="30.9858"
+             lon="103.3639"
+             mag="7.9"
+             year="2008"
+             month="05"
+             day="12"
+             hour="06"
+             minute="28"
+             second="01"
+             timezone="GMT"
+             depth="19.0"
+             locstring="EASTERN SICHUAN, CHINA"
+             created="1211173621"
+             otime="1210573681"
+             type=""
          />
 
     Args:
-        eventxml (str): Path to event XML file OR file-like object. 
+        eventxml (str): Path to event XML file OR file-like object.
 
     Returns:
-       Dictionary with keys as indicated above in earthquake element attributes.
+       dict: Dictionary with keys as indicated above in earthquake element
+           attributes.
 
     """
 
@@ -324,10 +327,11 @@ def read_source(sourcefile):
     """
     Read source.txt file, which has lines like key=value.
 
-    :param sourcefile:
-        Path to source.txt file OR file-like object
-    :returns:
-        Dictionary containing key/value pairs from file.
+    Args:
+        sourcefile: Path to source.txt file OR file-like object
+
+    Returns:
+        dict: Dictionary containing key/value pairs from file.
     """
     isFile = False
     if isinstance(sourcefile, str):

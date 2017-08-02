@@ -104,7 +104,7 @@ class StationList(object):
 
         Args:
             dbfile (string):
-                Path to a file which contains a SQLite database with station 
+                Path to a file which contains a SQLite database with station
                 data.
 
         Returns:
@@ -187,7 +187,7 @@ class StationList(object):
 
         Args:
             sql (str):
-                SQL code to create and populate the database           
+                SQL code to create and populate the database
             dbfile (str):
                 The path to a file in which the database will reside.
                 The default is ':memory:' for an in-memory database.
@@ -209,7 +209,7 @@ class StationList(object):
             None
 
         Returns:
-            A string of SQL sufficient to restore and repopulate the 
+            A string of SQL sufficient to restore and repopulate the
             database.
         """
 
@@ -411,12 +411,12 @@ class StationList(object):
         For the standard set of ShakeMap IMTs (mmi, pga, pgv, psa03, psa10,
         psa30), the keys in the dictionary would be:
 
-        'id', 'network', 'code', 'name', 'lat', 'lon', 'elev', 'vs30', 
+        'id', 'network', 'code', 'name', 'lat', 'lon', 'elev', 'vs30',
         'instrumented', 'PGA', 'PGV', 'SA(0.3)', 'SA(1.0)', 'SA(3.0)'
 
         For the non-instrumented dictionary, the keys would be:
 
-        'id', 'network', 'code', 'name', 'lat', 'lon', 'elev', 'vs30', 
+        'id', 'network', 'code', 'name', 'lat', 'lon', 'elev', 'vs30',
         'instrumented', 'MMI'
 
         The **id** column is **network** and **code** concatenated with a
@@ -577,8 +577,9 @@ class StationList(object):
             for station in sl:
                 if station.tag != 'station':
                     continue
-                # look at the station attributes to figure out if this is a DYFI-type station
-                # or a station with instruments measuring PGA, PGV, etc.
+                # look at the station attributes to figure out if this is a
+                # DYFI-type station or a station with instruments measuring
+                # PGA, PGV, etc.
                 attributes = station.attrib.copy()
                 netid = attributes['netid']
                 instrumented = int(netid.lower() not in CIIM_TUPLE)
@@ -605,8 +606,8 @@ class StationList(object):
                     else:
                         pgmdict = {}
                     pgmdict.update(tpgmdict)
-                    # copy the VALUES, not REFERENCES, of the component list into
-                    # our growing dictionary
+                    # copy the VALUES, not REFERENCES, of the component list
+                    # into our growing dictionary
                     compdict[compname] = copy.copy(pgmdict)
                     imtset |= ims
                 if ('intensity' in attributes) and (instrumented == 0):

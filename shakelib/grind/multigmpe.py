@@ -321,7 +321,7 @@ class MultiGMPE(GMPE):
             MultiGMPE object.
 
         """
-        IMC = conf['imc_modules'][conf['grind']['component']]
+        IMC = conf['component_modules'][conf['grind']['component']]
         selected_gmpe = conf['grind']['gmpe']
 
         if verbose is True:
@@ -395,7 +395,7 @@ class MultiGMPE(GMPE):
             MultiGMPE. 
 
         """
-        IMC = conf['imc_modules'][conf['grind']['component']]
+        IMC = conf['component_modules'][conf['grind']['component']]
 
         selected_gmpes = conf['gmpe_sets'][set_name]['gmpes']
         selected_gmpe_weights = \

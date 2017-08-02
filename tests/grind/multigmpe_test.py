@@ -136,7 +136,7 @@ def test_from_config_set_of_sets():
             'Pea11': ['PezeshkEtAl2011NEHRPBC',
                       'openquake.hazardlib.gsim.pezeshk_2011']
         },
-        'imc_modules': {
+        'component_modules': {
             'RotD50': 'Average Horizontal (GMRotI50)',
         },
         'gmpe_sets': {
@@ -229,7 +229,7 @@ def test_from_config_set_of_gmpes():
             'Pea11': ['PezeshkEtAl2011NEHRPBC',
                       'openquake.hazardlib.gsim.pezeshk_2011']
         },
-        'imc_modules': {
+        'component_modules': {
             'RotD50': 'Average Horizontal (GMRotI50)',
         },
         'gmpe_sets': {
@@ -309,7 +309,7 @@ def test_from_config_single_gmpe():
             'ASK14': ['AbrahamsonEtAl2014',
                       'openquake.hazardlib.gsim.abrahamson_2014']
         },
-        'imc_modules': {
+        'component_modules': {
             'RotD50': 'Average Horizontal (GMRotI50)',
         },
         'gmpe_sets': {

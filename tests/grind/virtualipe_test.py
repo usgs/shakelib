@@ -41,8 +41,8 @@ def test_virtualipe():
     # Use the Calexico event info
     #
     homedir = os.path.dirname(os.path.abspath(__file__))
-    datadir = os.path.abspath(os.path.join(homedir, '..', 'data',
-                                           'eventdata', 'Calexico', 'input'))
+    datadir = os.path.abspath(os.path.join(
+            homedir, 'virtualipe_data', 'Calexico', 'input'))
 
     #
     # Read the event, origin, and rupture files and produce Rupture and Origin
@@ -154,8 +154,9 @@ def test_virtualipe():
     #
     # Test the results against a known standard
     #
-    savefile = os.path.abspath(os.path.join(homedir, '..', 'data',
-                                            'eventdata', 'Calexico', 'virtualipe_test', 'savefile.npz'))
+    savefile = os.path.abspath(os.path.join(
+        homedir, 'virtualipe_data', 'Calexico', 'virtualipe_test',
+        'savefile.npz'))
 
     #
     # If things change, set remake_save to True, and it will rebuild the

@@ -19,14 +19,14 @@ def test_container():
               'class': 'Warrior',
               'intelligence': 10}
     datafile = os.path.join(os.path.expanduser('~'), 'test.hdf')
-    rupturefile = os.path.join(shakedir, 'tests/data/Barkaetal02_fault.txt')
+    rupturefile = os.path.join(homedir, 'container_data/Barkaetal02_fault.txt')
     event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
-<earthquake id="2008ryan" lat="30.9858" lon="103.3639" mag="7.9" year="2008" 
-month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0" 
+<earthquake id="2008ryan" lat="30.9858" lon="103.3639" mag="7.9" year="2008"
+month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0"
 locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type="" />"""
     eventfile = io.StringIO(event_text)
     datafiles = [os.path.join(
-        shakedir, 'tests/data/eventdata/northridge/northridge_stations_dat.xml')]
+        homedir, 'container_data/northridge_stations_dat.xml')]
     container = InputContainer.loadFromInput(datafile, config, eventfile,
                                              datafiles=datafiles,
                                              rupturefile=rupturefile)

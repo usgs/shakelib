@@ -98,7 +98,7 @@ def test_fromSites():
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='ss3')
 
-    vs30file = os.path.join(shakedir, 'tests/data/Vs30_test.grd')
+    vs30file = os.path.join(homedir, 'rowshandel2013_data/Vs30_test.grd')
     cx = -118.2
     cy = 34.1
     dx = 0.0083

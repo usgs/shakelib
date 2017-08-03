@@ -37,9 +37,10 @@ Dependencies
 ------------
 
 - Mac OSX or Linux operating systems
-- Python 3
-- Python libraries: numpy, scipy, rasterio, fiona, xlrd, pandas, shapely, h5py, gdal, descartes, openquake.engine, neicio,
-  MapIO, matplotlib, jupyter, pytables, lxml
+- Python 3.5
+- Python libraries: numpy scipy matplotlib rasterio pandas h5py gdal
+  pytest pytest-cov cartopy fiona numexpr configobj, openquake,
+  earthquake-impact-utils, MapIO
 
 OQ Hazard Library
 -----------------

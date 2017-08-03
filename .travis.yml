@@ -18,8 +18,8 @@ install:
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
     - conda info -a
-    - conda config --set always_yes yes --set changeps1 no
-    - conda update -q conda
+    - conda config --prepend channels conda-forge
+    - conda config --append channels digitalglobe # for rasterio v 1.0a9
     - bash setup_env.sh
     - source activate shakelib2
     #---------------------

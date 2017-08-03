@@ -17,11 +17,7 @@ cd $HOME;
 conda remove --name $VENV --all -y
 cd $CWD
 
-conda config --prepend channels conda-forge
-conda config --append channels digitalglobe # for rasterio v 1.0a9
-
 conda create --name $VENV --yes python=$PYVER ${DEPARRAY[*]} -y
-
 
 # Activate the new environment
 source activate $VENV
@@ -37,5 +33,5 @@ pip -v install https://github.com/usgs/MapIO/archive/master.zip
 pip -v install https://github.com/usgs/earthquake-impact-utils/archive/master.zip
 
 
-# tell the user they have to activate this environment
+# Tell the user they have to activate this environment
 echo "Type 'source activate $VENV' to use this new virtual environment."

@@ -7,9 +7,6 @@ source:
 
 build:
   number: {{ GIT_DESCRIBE_NUMBER }}
-
-  # Note that this will override the default build string with the Python
-  # and NumPy versions
   string: {{ GIT_BUILD_STR }}
 
 requirements:

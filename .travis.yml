@@ -1,9 +1,5 @@
 language: python
 sudo: false
-#cache:
-#  directories:
-#  - /home/travis/miniconda/envs/
-#  - /home/travis/virtualenv/python3.5.2/lib/python3.5/site-packages
 python:
     - "3.5"
 
@@ -26,7 +22,9 @@ install:
     #---------------------
     # Install shakelib
     #---------------------
-    - python setup.py install
+#    - python setup.py install
+    - conda build .
+    - conda install shakelib --use-local
 before_script:
     # This is to take care of Invalid DISPLAY variable
     - "export DISPLAY=:99.0"
@@ -35,7 +33,6 @@ before_script:
 script:
     - export PYTHONPATH="."
     - py.test --cov=shakelib
-#    - echo `sphinx-build --version`
 
 after_success:
     - pip install codecov codacy-coverage

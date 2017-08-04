@@ -23,7 +23,7 @@ install:
     # Install shakelib
     #---------------------
 #    - python setup.py install
-    - conda build shakelib2
+    - conda build shakelib
     - conda install shakelib --use-local
 before_script:
     # This is to take care of Invalid DISPLAY variable

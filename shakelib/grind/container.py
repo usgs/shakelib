@@ -281,7 +281,8 @@ class OutputContainer(object):
                 The name of the dataset holding the data.
             metadata (dict)(optional):
                 An (optional) dictionary of metadata to be associated with
-                the dataset.
+                the dataset. The dictionary must contain only scalars and
+                numpy arrays.
 
         Returns:
             The h5py dataset holding the data and metadata.
@@ -289,7 +290,8 @@ class OutputContainer(object):
 
         dset = self._hdfobj.create_dataset(name, data=data)
         if metadata:
-            _dict2h5group(metadata, dset)
+            for key, value in metadata.items():
+                dset.attrs[key] = value
         return dset
 
     def getData(self, name):
@@ -304,9 +306,14 @@ class OutputContainer(object):
             An array of data and a dictionary of metadata.
         """
 
-        dset = self._hdfobj['name']
-        data = dset[:]
-        metadata = _h5group2dict(dset)
+        dset = self._hdfobj[name]
+        if isinstance(dset, list) or isinstance(dset, np.ndarray):
+            data = dset[:]
+        else:
+            data = dset[()]
+        metadata = {}
+        for key, value in dset.attrs.items():
+            metadata[key] = value
         return data, metadata
 
     def close(self):

@@ -238,6 +238,74 @@ class StationList(object):
         self._createTables()
         return self.addData(xmlfiles)
 
+    def getGeoJson(self):
+        jdict = {'type': 'FeatureCollection',
+                 'features': []}
+
+        self.cursor.execute(
+            'SELECT id, network, code, name, lat, lon, elev, vs30, '
+            'instrumented from station'
+        )
+        sta_rows = self.cursor.fetchall()
+
+        for sta in sta_rows:
+#            print('doing station %s' % (str(sta[2])))
+            feature = {
+                'type': 'Feature',
+                'id': sta[1] + '.' + str(sta[2]),
+                'properties': {
+                    'code': str(sta[2]),
+                    'name': sta[3],
+                    'instrumentType': 'UNK' if sta[8] is True else 'OBSERVED',
+                    'source': sta[1],
+                    'network': sta[1],
+                    'commType': 'UNK',
+                    'location': '',
+                    'intensity': None,
+                    'intensity_flag': '',
+                    'pga': None,
+                    'pgv': None,
+                    'distance': None,
+                    'channels': []
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [sta[5], sta[4]]
+                }
+            }
+            self.cursor.execute(
+                'SELECT a.amp, i.imt_type, a.original_channel, a.flag '
+                'FROM amp a, imt i '
+                'WHERE a.station_id = "%s" '
+                'AND a.imt_id = i.id' % (str(sta[0]))
+            )
+            amp_rows = self.cursor.fetchall()
+            channels = {}
+            for amp in amp_rows:
+#                print('doing channel %s imt %s' % (amp[2], amp[1]))
+                if amp[2] not in channels:
+                    channels[amp[2]] = {'name': amp[2], 'amplitudes': []}
+                if amp[1] == 'PGV':
+                    value = np.exp(amp[0])
+                    units = 'cm/s' 
+                elif amp[1] == 'MMI':
+                    units = 'intensity'
+                    value = amp[0]
+                else:
+                    value = np.exp(amp[0]) * 100
+                    units = '%g'
+                this_amp = {'name': amp[1].lower(), 
+                            'value': '%.4f' % value,
+                            'units': units,
+                            'flag': str(amp[3])
+                }
+                channels[amp[2]]['amplitudes'].append(this_amp)
+            for channel in channels.values():
+                feature['properties']['channels'].append(channel)
+            jdict['features'].append(feature)
+
+        return jdict
+
     def addData(self, xmlfiles):
         """
         Create a StationList object by reading one or more ShakeMap XML input
@@ -443,6 +511,8 @@ class StationList(object):
 
         station_rows = self.cursor.fetchall()
         nstation_rows = len(station_rows)
+        if not nstation_rows:
+            return None
         station_columns = list(zip(*station_rows))
         df = OrderedDict()
         for ic, col in enumerate(columns):

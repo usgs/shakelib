@@ -307,10 +307,7 @@ class OutputContainer(object):
         """
 
         dset = self._hdfobj[name]
-        if isinstance(dset, list) or isinstance(dset, np.ndarray):
-            data = dset[:]
-        else:
-            data = dset[()]
+        data = dset[()]
         metadata = {}
         for key, value in dset.attrs.items():
             metadata[key] = value
@@ -374,7 +371,7 @@ def _h5group2dict(group):
     tdict = {}
     for (key, value) in group.attrs.items():  # attrs are NOT subgroups
         if key.find('time') > -1:
-            value = datetime.datetime.utcfromtimestamp(value)
+            value = datetime.fromtimestamp(value)
         tdict[key] = value
     for (key, value) in group.items():  # these are going to be the subgroups
         tdict[key] = _h5group2dict(value)

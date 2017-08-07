@@ -487,10 +487,18 @@ class Rupture(ABC):
     def getReference(self):
         """
         Returns:
-           float: Average dip in degrees.
+           string: Reference info from file.
 
         """
         return self._reference
+
+    def getOrigin(self):
+        """
+        Returns:
+           Origin object
+
+        """
+        return self._origin
 
     @abstractproperty
     def lats(self):

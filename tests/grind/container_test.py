@@ -6,6 +6,8 @@ import sys
 import io
 import json
 import numpy as np
+import datetime as dt
+import time
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
@@ -50,7 +52,8 @@ def test_output_container():
                   'string': 'This is a test',
                   'list': [1, 2, 3],
                   'dict': {'name': 'Joe', 'age': 20},
-                  'nparray': np.array([1., 2., 3.])}
+                  'nparray': np.array([1., 2., 3.]),
+                  'datetime': dt.datetime.utcnow()}
     test_string = 'This is a string.'
     test_json = json.dumps({'thing': 'some json', 'stuff': [1, 2, 3]})
     test_array = np.array([[1., 2., 3.], [4., 5., 6.]])
@@ -74,6 +77,7 @@ def test_output_container():
     os.remove(test_file)
 
     assert set(td.keys()) == set(test_dict.keys())
+    assert td['datetime'] == dt.datetime.fromtimestamp(time.mktime(test_dict['datetime'].timetuple()))
     assert ts == test_string
     assert tj == test_json
     assert np.all(ta == test_array)

@@ -1,11 +1,12 @@
 from distutils.core import setup
 import os.path
+import versioneer
 
-VERSION = '0.1'
 
 # comment
 setup(name='shakelib',
-      version=VERSION,
+      version=versioneer.get_version(),
+      cmdclass=versioneer.get_cmdclass(),
       description='USGS Near-Real-Time Ground Motion Mapping Library',
       author='Bruce Worden, Mike Hearne, Eric Thompson',
       author_email='cbworden@usgs.gov,mhearne@usgs.gov,emthompson@usgs.gov',

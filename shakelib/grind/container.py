@@ -171,11 +171,10 @@ class InputContainer(object):
         Returns:
             StationList object if data files were supplied, or None.
         """
-        if 'station_string' not in self._hdfobj['station'].attrs:
-            print('No station list in object')
+        if 'station' not in self._hdfobj:
             return None
-        station_string = self._hdfobj['station'].attrs['station_string']
-        return StationList.loadFromSQL(station_string)
+        station_sql = self._hdfobj['station'][()]
+        return StationList.loadFromSQL(station_sql)
 
     def addData(self, datafiles):
         """
@@ -199,8 +198,7 @@ class InputContainer(object):
         Args:
             station: StationList object.
         """
-        station_group = self._hdfobj.create_group('station')
-        station_group.attrs['station_string'] = station.dumpToSQL()
+        self._hdfobj.create_dataset('station', data=station.dumpToSQL())
 
     def getHistory(self):
         """
@@ -209,8 +207,10 @@ class InputContainer(object):
         Returns:
             Dictionary holding the history list
         """
-        version_history = _h5group2dict(self._hdfobj['version_history'])
-        return version_history
+        if 'version_history' in self._hdfobj:
+            return _h5group2dict(self._hdfobj['version_history'])
+        else:
+            return None
 
     def _storeHistory(self, version_history):
         history_group = self._hdfobj.create_group('version_history')

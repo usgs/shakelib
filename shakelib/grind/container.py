@@ -54,7 +54,7 @@ class InputContainer(object):
 
     @classmethod
     def loadFromInput(cls, filename, config, eventfile, rupturefile=None,
-                      datafiles=None):
+                      datafiles=None, version_history=None):
         """
         Instantiate an InputContainer from ShakeMap input data.
 
@@ -75,29 +75,19 @@ class InputContainer(object):
         #-----------------------------------------------------------------------
         hdfobj = h5py.File(filename, "w")
 
-        this = cls(hdfobj)
+        self = cls(hdfobj)
 
         #-----------------------------------------------------------------------
         # The config and event info are mandatory
         # write the config dictionary to a config group
         #-----------------------------------------------------------------------
-        config_group = this._hdfobj.create_group('config')
-        _dict2h5group(config, config_group)
+        self._storeConfig(config)
 
         # stash the event.xml in a group
-        try:
-            event_string = open(eventfile, 'rt').read()
-        except TypeError:
-            event_string = eventfile.getvalue()
-        event_group = this._hdfobj.create_group('event')
-        event_group.attrs['event_string'] = event_string
+        self._storeEvent(eventfile)
 
         # The rupture and data files are optional
-        # write the rupture file data to a rupture group
-        if rupturefile is not None:
-            rupturedata = open(rupturefile, 'rt').read()
-            rupture_group = this._hdfobj.create_group('rupture')
-            rupture_group.attrs['rupture_string'] = rupturedata
+        self._storeRupture(rupturefile)
 
         #-----------------------------------------------------------------------
         # create the stationlist object, then dump its database as a big string
@@ -105,9 +95,11 @@ class InputContainer(object):
         #-----------------------------------------------------------------------
         if datafiles is not None:
             station = StationList.loadFromXML(datafiles, ":memory:")
-            this.stashStationList(station)
+            self.stashStationList(station)
 
-        return this
+        self._storeHistory(version_history)    
+
+        return self
 
     def getConfig(self):
         """
@@ -118,6 +110,39 @@ class InputContainer(object):
         """
         config = _h5group2dict(self._hdfobj['config'])
         return config
+
+    def _storeConfig(self, config):
+        config_group = self._hdfobj.create_group('config')
+        _dict2h5group(config, config_group)
+
+    def updateConfig(self, config):
+        if 'config' in self._hdfobj:
+            del self._hdfobj['config']
+        self._storeConfig(config)
+
+    def _storeEvent(self, eventfile):
+        try:
+            event_string = open(eventfile, 'rt').read()
+        except TypeError:
+            event_string = eventfile.getvalue()
+        event_group = self._hdfobj.create_group('event')
+        event_group.attrs['event_string'] = event_string
+
+    def updateEvent(self, eventfile):
+        if 'event' in self._hdfobj:
+            del self._hdfobj['event']
+        self._storeEvent(eventfile)
+
+    def _storeRupture(self, rupturefile):
+        if rupturefile is not None:
+            rupturedata = open(rupturefile, 'rt').read()
+            rupture_group = self._hdfobj.create_group('rupture')
+            rupture_group.attrs['rupture_string'] = rupturedata
+
+    def updateRupture(self, rupturefile):
+        if 'rupture' in self._hdfobj:
+            del self._hdfobj['rupture']
+        self._storeRupture(rupturefile)
 
     def getRupture(self):
         """
@@ -148,17 +173,6 @@ class InputContainer(object):
         station_string = self._hdfobj['station'].attrs['station_string']
         return StationList.loadFromSQL(station_string)
 
-    def getOrigin(self):
-        """
-        Return an Origin object for this earthquake.
-
-        Returns:
-            Origin object.
-        """
-        origin_file = io.StringIO(self._hdfobj['event'].attrs['event_string'])
-        origin = Origin.fromFile(origin_file)
-        return origin
-
     def addData(self, datafiles):
         """
         Append new data to the internal StationList object.
@@ -166,8 +180,12 @@ class InputContainer(object):
         Args:
             datafiles: List of paths to XML datafiles.
         """
-        stationlist = self.getStationList()
-        stationlist.addData(datafiles)
+        if 'station' in self._hdfobj:
+            stationlist = self.getStationList()
+            stationlist.addData(datafiles)
+            del self._hdfobj['station']
+        else:
+            stationlist = StationList.loadFromXML(datafiles, ":memory:")
         self.stashStationList(stationlist)
 
     def stashStationList(self, station):
@@ -180,8 +198,35 @@ class InputContainer(object):
         station_group = self._hdfobj.create_group('station')
         station_group.attrs['station_string'] = station.dumpToSQL()
 
-    def changeConfig(self):
-        pass
+    def getHistory(self):
+        """
+        Return the history dictionary.
+
+        Returns:
+            Dictionary holding the history list
+        """
+        version_history = _h5group2dict(self._hdfobj['version_history'])
+        return version_history
+
+    def _storeHistory(self, version_history):
+        history_group = self._hdfobj.create_group('version_history')
+        _dict2h5group(version_history, history_group)
+
+    def updateHistory(self, version_history):
+        if 'version_history' in self._hdfobj:
+            del self._hdfobj['version_history']
+        self._storeHistory(version_history)
+
+    def getOrigin(self):
+        """
+        Return an Origin object for this earthquake.
+
+        Returns:
+            Origin object.
+        """
+        origin_file = io.StringIO(self._hdfobj['event'].attrs['event_string'])
+        origin = Origin.fromFile(origin_file)
+        return origin
 
     def __del__(self):
         if self._hdfobj:
@@ -349,13 +394,20 @@ def _dict2h5group(mydict, group):
         elif isinstance(value, datetime):
             value = time.mktime(value.timetuple())
         elif isinstance(value, list):
-            for i, val in enumerate(value):
-                if isinstance(val, str):
-                    value[i] = val.encode('utf8')
+            value = _encode_list(value)
         else:
             pass
         group.attrs[key] = value
 
+def _encode_list(value):
+    for i, val in enumerate(value):
+        if isinstance(val, list):
+            value[i] = _encode_list(val)
+        elif isinstance(val, str):
+            value[i] = val.encode('utf8')
+        else:
+            value[i] = val
+    return value
 
 def _h5group2dict(group):
     """

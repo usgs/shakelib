@@ -97,56 +97,6 @@ class StationList(object):
         self.cursor.close()
         self.db.close()
 
-    @classmethod
-    def loadFromDBFile(cls, dbfile):
-        """
-        Create a StationList object by reading a SQLite database file.
-
-        Args:
-            dbfile (string):
-                Path to a file which contains a SQLite database with station
-                data.
-
-        Returns:
-            :class:`StationList` object
-        """
-        db = sqlite3.connect(dbfile)
-        self = cls(db)
-        return self
-
-    def createDict(self):
-        """Create a dictionary that maps to GeoJSON format for station data.
-
-        Returns:
-          Dictionary with fields:
-            - type 'Feature'
-            - id   'netid.code'
-            - geometry Dictionary with fields:
-              - coordinates: (X,Y) tuple
-              - type: 'Point'
-            - properties Dictionary with fields:
-              - name Station name
-              - intensity_flag ??
-              - distance Station distance
-              - location Station loc
-              - code Station code
-              - commType Station commtype
-              - source Station source
-              - network Station netid
-              - instrumentType Station insttype
-              - intensity Station intensity
-              - pga (may not be present) comp->pga->value
-              - pgv (may not be present) comp->pgv->value
-              - channels, list of dictionaries with fields:
-                - name station->comp->name
-                - amplitudes, list of dictionaries with fields:
-                  - name station->comp->component name
-                  - flag station->comp->component name->flag
-                  - value station->comp->component name->value
-                  - units ('%g' for pga or any psa, 'cm/s' for pgv)
-        """
-        pass
-
     def _load_features(self, xmlfile):
         # each station is a feature in a geojson file
         #        tree = ET.parse(xmlfile)

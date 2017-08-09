@@ -78,12 +78,12 @@
 <shakemap-data code_version="3.5" map_version="1">
 <earthquake id="20080512062801" lat="30.98580" lon="103.36390" mag="7.9" year="2008" month="5" day="12" hour="6" minute="28" second="1" timezone="GMT" depth="19.0" network="us" locstring="Wenchuan, China" created="1485487610" />
 <stationlist created="1485487610">
-<station code="CEA01" name="01" insttype="UNK" lat="29.99702" lon="101.99595" dist="144.225824" source="China Earthquake Authority" netid="CEA" commtype="UNK" loc="" intensity="4.2">
+<station code="CEA.CEA01" elev="100.0" vs30="350.0" insttype="UNK" lat="29.99702" lon="101.99595" dist="144.225824" source="China Earthquake Authority" netid="CEA" commtype="UNK" loc="" intensity="4.2">
 <comp name="N">
-<pga value="3.4700" flag="0" />
+<pga value="2.7" flag="0" />
 </comp>
 <comp name="E">
-<pga value="2.2400" flag="0" />
+<pga value="3.5" flag="0" />
 </comp>
 </station>
 <station code="CEA02" name="02" insttype="UNK" lat="29.32063" lon="102.29231" dist="181.531003" source="China Earthquake Authority" netid="CEA" commtype="UNK" loc="" intensity="5.8">

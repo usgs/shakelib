@@ -143,6 +143,44 @@ def test_station2():
         compare_dataframes(saved_df2, df2)
 
 
+def test_station3():
+
+    homedir = os.path.dirname(os.path.abspath(__file__))
+
+    event = 'wenchuan'
+
+    datadir = os.path.abspath(os.path.join(homedir, 'station_data'))
+    datadir = os.path.abspath(os.path.join(datadir, event, 'input'))
+
+    inputfile = os.path.join(datadir, 'stationlist.xml')
+    xmlfiles = [inputfile]
+
+    stations = StationList.loadFromXML(xmlfiles, ":memory:")
+
+    #
+    # Just exercise some code
+    #
+    myjson = stations.getGeoJson()
+
+
+def test_station4():
+
+    homedir = os.path.dirname(os.path.abspath(__file__))
+
+    event = 'northridge'
+    datadir = os.path.abspath(os.path.join(homedir, 'station_data'))
+    datadir = os.path.abspath(os.path.join(datadir, event, 'input'))
+
+    dyfifile = os.path.join(datadir, 'dyfi_dat.xml')
+    xmlfiles = [dyfifile]
+
+    stations = StationList.loadFromXML(xmlfiles, ":memory:")
+
+    df1 = stations.getStationDataframe(1)
+    df2 = stations.getStationDataframe(0)
+    assert df1 is None
+
+
 def compare_dataframes(df1, df2):
 
     assert sorted(list(df1.keys())) == sorted(list(df2.keys()))
@@ -160,3 +198,5 @@ def compare_dataframes(df1, df2):
 if __name__ == '__main__':
     test_station()
     test_station2()
+    test_station3()
+    test_station4()

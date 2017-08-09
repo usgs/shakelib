@@ -9,12 +9,19 @@ import numpy as np
 import datetime as dt
 import time
 import datetime
+import pprint
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
 
 from shakelib.grind.container import InputContainer, OutputContainer
+from shakelib.grind.rupture import PointRupture
+
+def dict_equal(d1, d2):
+    s1 = sorted(set(d1.keys()))
+    s2 = sorted(set(d2.keys()))
+    return s1 == s2
 
 
 def test_container():
@@ -32,14 +39,18 @@ locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=
     eventfile = io.StringIO(event_text)
     datafiles = [os.path.join(
         homedir, 'container_data/northridge_stations_dat.xml')]
+
     timestamp = datetime.datetime.utcnow().strftime('%FT%TZ')
     originator = 'us'
     version = 1
-    history = {'history': [timestamp, originator, version]}
+    history = {'history': [[timestamp, originator, version]]}
+
     container = InputContainer.loadFromInput(datafile, config, eventfile,
                                              datafiles=datafiles,
                                              rupturefile=rupturefile,
                                              version_history=history)
+    cfile = container.getFileName()
+    assert datafile == cfile
     config = container.getConfig()
     station = container.getStationList()
     origin = container.getOrigin()
@@ -48,18 +59,41 @@ locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=
     del container
 
     container2 = InputContainer.loadFromHDF(datafile)
-    config = container2.getConfig()
-    station = container2.getStationList()
-    origin = container2.getOrigin()
-    rupture = container2.getRupture()
-    history = container2.getHistory()
+    config2 = container2.getConfig()
+    station2 = container2.getStationList()
+    origin2 = container2.getOrigin()
+    rupture2 = container2.getRupture()
+    history2 = container2.getHistory()
+
+    assert dict_equal(config, config2)
+    df1 = station.getStationDataframe(0)
+    df2 = station.getStationDataframe(0)
+    assert dict_equal(df1, df2)
+    df1 = station.getStationDataframe(1)
+    df2 = station.getStationDataframe(1)
+    assert dict_equal(df1, df2)
+    assert history['history'][-1][0] == history['history'][-1][0]
+    assert history['history'][-1][1] == history['history'][-1][1]
+    assert history['history'][-1][2] == history['history'][-1][2]
 
     container2.updateConfig(config)
     container2.updateRupture(rupturefile)
     container2.updateEvent(eventfile)
     container2.addData(datafiles)
     container2.updateHistory(history)
-    container2.getOrigin()
+    container2.close()
+
+    container3 = InputContainer.loadFromInput(datafile, config, eventfile)
+    station = container3.getStationList()
+    origin = container3.getOrigin()
+    rupture = container3.getRupture()
+    history = container3.getHistory()
+    assert station is None
+    assert history is None
+    assert isinstance(rupture, PointRupture)
+
+    container3.addData(datafiles)
+
 
 def test_output_container():
     test_file = os.path.join(homedir, 'container_data', 'test.hdf')

@@ -2,7 +2,6 @@
 
 import copy
 from importlib import import_module
-import warnings
 
 import numpy as np
 
@@ -14,124 +13,6 @@ from shakelib.grind.conversions.imt.newmark_hall_1982 import NewmarkHall1982
 from shakelib.grind.conversions.imc.beyer_bommer_2006 import BeyerBommer2006
 from shakelib.grind.sites import Sites
 
-from shakelib.grind.gmpe_sets import nshmp14_acr
-from shakelib.grind.gmpe_sets import nshmp14_scr_rlme
-from shakelib.grind.gmpe_sets import nshmp14_scr_grd
-from shakelib.grind.gmpe_sets import nshmp14_sub_i
-from shakelib.grind.gmpe_sets import nshmp14_sub_s
-
-
-class DualDistanceWeights(GMPE):
-    """
-    This class is a wrapper around the MultiGMPE class, which allows for the
-    GMPE list and their weights to vary with distance. Only two sets of
-    GMPEs/weights are currently supported.
-
-
-    *NOTE* This class is deprecated and will be deleted soon.
-
-    """
-
-    warnings.warn("The DualDistanceWeights class is deprecated.",
-                  DeprecationWarning)
-
-    DEFINED_FOR_TECTONIC_REGION_TYPE = None
-    DEFINED_FOR_INTENSITY_MEASURE_TYPES = None
-    DEFINED_FOR_INTENSITY_MEASURE_COMPONENT = None
-    DEFINED_FOR_STANDARD_DEVIATION_TYPES = None
-    REQUIRES_SITES_PARAMETERS = None
-    REQUIRES_RUPTURE_PARAMETERS = None
-    REQUIRES_DISTANCES = None
-
-    def get_mean_and_stddevs(self, sites, rup, dists, imt, stddev_types):
-        """
-        See superclass `method <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.GroundShakingIntensityModel.get_mean_and_stddevs>`__.
-        """
-
-        # Small-distance MultiGMPE:
-        lnmu, lnsd = self.mgmpe_small.get_mean_and_stddevs(
-            sites, rup, dists, imt, stddev_types)
-
-        # Large-distance MultiGMPE:
-        if self.mgmpe_large is not None:
-            lnmu_large, lnsd_large = self.mgmpe_large.get_mean_and_stddevs(
-                sites, rup, dists, imt, stddev_types)
-
-            # Stomp on lnmu and lnsd at large distances
-            dist_cutoff = self.dist_cutoff
-            lnmu[dists.rjb > dist_cutoff] = lnmu_large[dists.rjb > dist_cutoff]
-            for i in range(len(lnsd)):
-                lnsd[i][dists.rjb > dist_cutoff] = \
-                    lnsd_large[i][dists.rjb > dist_cutoff]
-
-        return lnmu, lnsd
-
-    @classmethod
-    def from_set_name(cls, set_name, imt=None):
-        """
-        Construct a DualDistanceWeights instance from set_name.
-
-        Args:
-            set_name (str): String indicating what GMPE set to use; valid
-                options are 'nshmp14_acr', 'nshmp14_scr_rlme',
-                'nshmp14_scr_grd', 'nshmp14_sub_i', 'nshmp14_sub_s'. The
-                meaning of these strings is found in shakelib.grind.gmpe_sets.
-            imt (IMT): Optional OQ IMT instance for filtering GMPE lists.
-
-        """
-
-        self = cls()
-        self.set_name = set_name
-
-        if set_name == 'nshmp14_acr':
-            gmpes, wts, wts_large_dist, dist_cutoff, site_gmpes = \
-                nshmp14_acr.get_weights()
-        elif set_name == 'nshmp14_scr_rlme':
-            gmpes, wts, wts_large_dist, dist_cutoff, site_gmpes = \
-                nshmp14_scr_rlme.get_weights()
-        elif set_name == 'nshmp14_scr_grd':
-            gmpes, wts, wts_large_dist, dist_cutoff, site_gmpes = \
-                nshmp14_scr_grd.get_weights()
-        elif set_name == 'nshmp14_sub_i':
-            gmpes, wts, wts_large_dist, dist_cutoff, site_gmpes = \
-                nshmp14_sub_i.get_weights()
-        elif set_name == 'nshmp14_sub_s':
-            gmpes, wts, wts_large_dist, dist_cutoff, site_gmpes = \
-                nshmp14_sub_s.get_weights()
-        else:
-            raise Exception("Unsupported value of set_name.")
-
-        #----------------------------------------------------------------------
-        # Small-distance GMPE and weights
-        #----------------------------------------------------------------------
-
-        # Remove GMPEs not applicable to this IMT and redistribute weights
-        if imt is not None:
-            sgmpe, swts = filter_gmpe_list(gmpes, wts, imt)
-        else:
-            sgmpe, swts = copy.copy(gmpes), copy.copy(wts)
-
-        self.mgmpe_small = MultiGMPE.from_list(
-            sgmpe, swts, default_gmpes_for_site=site_gmpes)
-
-        #----------------------------------------------------------------------
-        # Large-distance GMPE and weights
-        #----------------------------------------------------------------------
-        if wts_large_dist is not None:
-            # Remove GMPEs not applicable to this IMT and redistribute weights
-            if imt is not None:
-                sgmpe_large, swts_large = filter_gmpe_list(
-                    gmpes, wts_large_dist, imt)
-            else:
-                sgmpe_large = copy.copy(gmpes)
-                swts_large = copy.copy(wts_large_dist)
-            self.mgmpe_large = MultiGMPE.from_list(
-                sgmpe_large, swts_large, default_gmpes_for_site=site_gmpes)
-            self.dist_cutoff = dist_cutoff
-        else:
-            self.mgmpe_large = None
-            self.dist_cutoff = None
-        return self
 
 
 class MultiGMPE(GMPE):
@@ -818,7 +699,7 @@ def filter_gmpe_list(gmpes, wts, imt):
                  get_gmpe_coef_table(g).non_sa_coeffs]
         swts = [w for g, w in zip(gmpes, wts) if imt in
                 get_gmpe_coef_table(g).non_sa_coeffs]
-    elif(imt == PGV()):
+    elif imt == PGV():
         sgmpe = []
         swts = []
         for i in range(len(gmpes)):

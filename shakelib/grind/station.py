@@ -250,9 +250,13 @@ class StationList(object):
 
         for sta in sta_rows:
 #            print('doing station %s' % (str(sta[2])))
+            if str(sta[2]).startswith(sta[1] + '.'):
+                myid = str(sta[2])
+            else:
+                myid = sta[1] + '.' + str(sta[2])
             feature = {
                 'type': 'Feature',
-                'id': sta[1] + '.' + str(sta[2]),
+                'id': myid,
                 'properties': {
                     'code': str(sta[2]),
                     'name': sta[3],
@@ -285,14 +289,18 @@ class StationList(object):
 #                print('doing channel %s imt %s' % (amp[2], amp[1]))
                 if amp[2] not in channels:
                     channels[amp[2]] = {'name': amp[2], 'amplitudes': []}
+                if amp[0] == 'NULL':
+                    myamp = np.nan
+                else:
+                    myamp = amp[0]
                 if amp[1] == 'PGV':
-                    value = np.exp(amp[0])
+                    value = np.exp(myamp)
                     units = 'cm/s' 
                 elif amp[1] == 'MMI':
+                    value = myamp
                     units = 'intensity'
-                    value = amp[0]
                 else:
-                    value = np.exp(amp[0]) * 100
+                    value = np.exp(myamp) * 100
                     units = '%g'
                 this_amp = {'name': amp[1].lower(), 
                             'value': '%.4f' % value,

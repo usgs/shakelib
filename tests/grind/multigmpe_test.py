@@ -32,7 +32,7 @@ from shakelib.grind.sites import Sites
 from shakelib.grind.origin import Origin
 from shakelib.grind.rupture import QuadRupture
 from shakelib.grind.distance import Distance
-
+from shakelib.grind.multigmpe import filter_gmpe_list
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
@@ -123,6 +123,21 @@ def test_basic():
     lmean_target = 0.3 * tmp1 + 0.7 * tmp2
     np.testing.assert_allclose(lmean_target, lmean_mgmpe)
 
+def test_filter_gmpe_list():
+    gmpelist = [Campbell2003MwNSHMP2008(), AtkinsonBoore2006()]
+    wts = [0.5, 0.5]
+    fgmpes, fwts = filter_gmpe_list(gmpelist, wts, imt = imt.PGA())
+    assert fgmpes == gmpelist
+    assert np.all(wts == fwts)
+
+    fgmpes, fwts = filter_gmpe_list(gmpelist, wts, imt = imt.PGV())
+    assert fgmpes == gmpelist
+    assert np.all(wts == fwts)
+
+    fgmpes, fwts = filter_gmpe_list(gmpelist, wts, imt = imt.SA(3.5))
+    assert fgmpes == [gmpelist[1]]
+    assert fwts == [1.0]
+
 
 def test_from_config_set_of_sets():
     # Mock up a minimal config dictionary
@@ -163,7 +178,7 @@ def test_from_config_set_of_sets():
     }
 
     # Get multigmpe from config
-    test = MultiGMPE.from_config(conf)
+    test = MultiGMPE.from_config(conf, verbose=True)
 
     # Compute "by hand"
     ASK14 = AbrahamsonEtAl2014()

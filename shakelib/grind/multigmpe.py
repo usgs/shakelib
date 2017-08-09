@@ -699,7 +699,7 @@ def filter_gmpe_list(gmpes, wts, imt):
                  get_gmpe_coef_table(g).non_sa_coeffs]
         swts = [w for g, w in zip(gmpes, wts) if imt in
                 get_gmpe_coef_table(g).non_sa_coeffs]
-    elif(imt == PGV()):
+    elif imt == PGV():
         sgmpe = []
         swts = []
         for i in range(len(gmpes)):

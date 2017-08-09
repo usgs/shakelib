@@ -8,6 +8,7 @@ import json
 import numpy as np
 import datetime as dt
 import time
+import datetime
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
@@ -31,18 +32,34 @@ locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=
     eventfile = io.StringIO(event_text)
     datafiles = [os.path.join(
         homedir, 'container_data/northridge_stations_dat.xml')]
+    timestamp = datetime.datetime.utcnow().strftime('%FT%TZ')
+    originator = 'us'
+    version = 1
+    history = {'history': [timestamp, originator, version]}
     container = InputContainer.loadFromInput(datafile, config, eventfile,
                                              datafiles=datafiles,
-                                             rupturefile=rupturefile)
+                                             rupturefile=rupturefile,
+                                             version_history=history)
+    config = container.getConfig()
     station = container.getStationList()
     origin = container.getOrigin()
     rupture = container.getRupture()
+    history = container.getHistory()
     del container
 
     container2 = InputContainer.loadFromHDF(datafile)
+    config = container2.getConfig()
     station = container2.getStationList()
     origin = container2.getOrigin()
     rupture = container2.getRupture()
+    history = container2.getHistory()
+
+    container2.updateConfig(config)
+    container2.updateRupture(rupturefile)
+    container2.updateEvent(eventfile)
+    container2.addData(datafiles)
+    container2.updateHistory(history)
+    container2.getOrigin()
 
 def test_output_container():
     test_file = os.path.join(homedir, 'container_data', 'test.hdf')
@@ -82,8 +99,6 @@ def test_output_container():
     assert tj == test_json
     assert np.all(ta == test_array)
     assert set(tamd.keys()) == set(test_dset_metadata.keys())
-
-
 
 if __name__ == '__main__':
     test_container()

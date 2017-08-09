@@ -87,17 +87,22 @@ class InputContainer(object):
         self._storeEvent(eventfile)
 
         # The rupture and data files are optional
-        self._storeRupture(rupturefile)
+        if rupturefile:
+            self._storeRupture(rupturefile)
 
         #-----------------------------------------------------------------------
         # create the stationlist object, then dump its database as a big string
         # into the hdf
         #-----------------------------------------------------------------------
-        if datafiles is not None:
+        if datafiles:
             station = StationList.loadFromXML(datafiles, ":memory:")
             self.stashStationList(station)
 
-        self._storeHistory(version_history)    
+        #-----------------------------------------------------------------------
+        # Store the version history.
+        #-----------------------------------------------------------------------
+        if version_history:
+            self._storeHistory(version_history)    
 
         return self
 
@@ -134,10 +139,9 @@ class InputContainer(object):
         self._storeEvent(eventfile)
 
     def _storeRupture(self, rupturefile):
-        if rupturefile is not None:
-            rupturedata = open(rupturefile, 'rt').read()
-            rupture_group = self._hdfobj.create_group('rupture')
-            rupture_group.attrs['rupture_string'] = rupturedata
+        rupturedata = open(rupturefile, 'rt').read()
+        rupture_group = self._hdfobj.create_group('rupture')
+        rupture_group.attrs['rupture_string'] = rupturedata
 
     def updateRupture(self, rupturefile):
         if 'rupture' in self._hdfobj:

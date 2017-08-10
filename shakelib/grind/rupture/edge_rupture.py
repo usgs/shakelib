@@ -12,6 +12,7 @@ from impactutils.vectorutils.vector import Vector
 from impactutils.time.ancient_time import HistoricTime
 from shakelib.grind.rupture.base import Rupture
 import shakelib.grind.rupture.utils as utils
+import shakelib.grind.rupture.gc2 as gc2
 
 
 class EdgeRupture(Rupture):
@@ -678,6 +679,6 @@ class EdgeRupture(Rupture):
         # NOTE: Not sure if the non-horizontal top edges of EdgeRupture will
         #       case problems. Should do some checking. It might be okay to
         #       bring quad vertices up to the surface in this case.
-        dict = utils._computeGC2(self, lon, lat, depth)
+        dict = gc2._computeGC2(self, lon, lat, depth)
         return dict
 

@@ -5,6 +5,7 @@ import os
 import os.path
 import sys
 import io
+import copy
 
 # third party
 import numpy as np
@@ -65,6 +66,46 @@ def test_EdgeRupture():
     ztor = rupt.getDepthToTop()
     np.testing.assert_allclose(ztor, 5, atol=0.01)
 
+    # Test for fromArrays method
+    toplats = np.array([37.0, 38.0])
+    toplons = np.array([-120.0, -120.0])
+    topdeps = np.array([0.0, 0.0])
+    botlats = copy.copy(toplats)
+    botlons = copy.copy(toplons)
+    botdeps = np.array([10.0, 10.0])
+    erup = EdgeRupture.fromArrays(toplons, toplats, topdeps, botlons, botlats,
+                                  botdeps, origin)
+    qrup = QuadRupture.fromVertices(
+            [toplons[0]], [toplats[0]], [topdeps[0]],
+            [toplons[1]], [toplats[1]], [topdeps[1]],
+            [botlons[1]], [botlats[1]], [botdeps[1]],
+            [botlons[0]], [botlats[0]], [botdeps[0]],
+            origin)
+    np.testing.assert_allclose(erup.getArea(), 1108.9414759967776)
+    np.testing.assert_allclose(erup.getDepthToTop(), 0)
+    np.testing.assert_allclose(erup.getLength(), 111.19492664455889)
+    np.testing.assert_allclose(
+            erup.lats, np.array([37.,  38.,  38.,  37.,  37.,  np.nan]))
+    np.testing.assert_allclose(
+            erup.lons, np.array([-120., -120., -120., -120., -120.,  np.nan]))
+    np.testing.assert_allclose(
+            erup.depths, np.array([  0.,   0.,  10.,  10.,   0.,  np.nan]))
+    np.testing.assert_allclose(
+            erup._getGroupIndex(), np.array([  0.,   0.]))
+    quads = erup.getQuadrilaterals()
+    np.testing.assert_allclose(quads[0][0].x, -120.0)
+
+    # Need to also test the distances with EdgeRupture
+    lons = np.linspace(-120.1, -121.0, 10)
+    lats = np.linspace(37.0, 38, 10)
+    deps = np.zeros_like(lons)
+    rrup1 = qrup.computeRrup(lons, lats, deps)
+    rrup2 = erup.computeRrup(lons, lats, deps)
+    np.testing.assert_allclose(rrup1, rrup2, atol=2e-2)
+    rjb1 = qrup.computeRjb(lons, lats, deps)
+    rjb2 = erup.computeRjb(lons, lats, deps)
+    np.testing.assert_allclose(rjb1, rjb2, atol=2e-2)
+    gc2 = erup.computeGC2(lons, lats, deps)
 
 def test_QuadRupture():
     # Rupture requires an origin even when not used:

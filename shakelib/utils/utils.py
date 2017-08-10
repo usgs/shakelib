@@ -44,9 +44,6 @@ def get_extent(rupture):
 
     # Is this a stable or active tectonic event?
     # (this could be made an attribute of the ShakeMap Origin class)
-#
-# This currently only works for the continental US. Need to improve.
-#
     hypo = origin.getHypo()
     stable = is_stable(hypo.longitude, hypo.latitude)
 

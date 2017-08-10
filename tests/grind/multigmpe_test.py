@@ -29,8 +29,8 @@ from impactutils.time.ancient_time import HistoricTime
 from shakelib.grind.multigmpe import MultiGMPE
 import shakelib.grind.sites as sites
 from shakelib.grind.sites import Sites
-from shakelib.grind.origin import Origin
-from shakelib.grind.rupture import QuadRupture
+from shakelib.grind.rupture.origin import Origin
+from shakelib.grind.rupture.quad_rupture import QuadRupture
 from shakelib.grind.distance import Distance
 from shakelib.grind.multigmpe import filter_gmpe_list
 

@@ -15,12 +15,12 @@ homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
 sys.path.insert(0, shakedir)
 
-from shakelib.grind.origin import Origin
-import shakelib.grind.rupture as rupture
-from shakelib.grind.directivity.bayless2013 import Bayless2013
 from impactutils.time.ancient_time import HistoricTime
 from impactutils.vectorutils.vector import Vector
 from impactutils.vectorutils.ecef import ecef2latlon
+from shakelib.grind.rupture.origin import Origin
+from shakelib.grind.rupture.quad_rupture import QuadRupture
+from shakelib.grind.directivity.bayless2013 import Bayless2013
 
 
 def test_ss3():
@@ -47,7 +47,7 @@ def test_ss3():
                      'id': 'ss3',
                      'rake': rake})
 
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='ss3')
@@ -329,7 +329,7 @@ def test_ss3_m6():
                      'id': 'ss3',
                      'rake': rake})
 
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='ss3')
@@ -395,7 +395,7 @@ def test_ss3_move_hypo1():
                      'id': 'ss3',
                      'rake': rake})
 
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='ss3')
@@ -433,7 +433,7 @@ def test_ss3_move_hypo1():
     tlon, tlat = proj(rupx, rupy, reverse=True)
     epilon, epilat = proj(epix, epiy, reverse=True)
 
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array(tlon[0:3]), np.array(tlat[0:3]),
         np.array(tlon[1:4]), np.array(tlat[1:4]),
         zp, width, dip, origin, reference='')
@@ -506,7 +506,7 @@ def test_ss3_m4p5():
                      'id': 'ss3',
                      'rake': rake})
 
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='ss3')
@@ -559,7 +559,7 @@ def test_rv4():
                      'rake': rake})
 
     # Rupture
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='')
@@ -673,7 +673,7 @@ def test_so6():
                      'rake': rake})
 
     # Rupture
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='rv4')

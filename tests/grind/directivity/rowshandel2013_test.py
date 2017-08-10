@@ -13,9 +13,9 @@ homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
 sys.path.insert(0, shakedir)
 
-from shakelib.grind.origin import Origin
 from shakelib.grind.sites import Sites
-import shakelib.grind.rupture as rupture
+from shakelib.grind.rupture.quad_rupture import QuadRupture
+from shakelib.grind.rupture.origin import Origin
 from shakelib.grind.directivity.rowshandel2013 import Rowshandel2013
 from impactutils.vectorutils.vector import Vector
 from impactutils.vectorutils.ecef import ecef2latlon
@@ -46,7 +46,7 @@ def test_exceptions():
                      'rake': rake})
 
     # Rupture
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='ss3')
@@ -59,11 +59,13 @@ def test_exceptions():
     deps = np.zeros_like(slon)
 
     with pytest.raises(Exception) as e:
-        test1 = Rowshandel2013(origin, rup, slat, slon, deps, dx=1, T=[1.0, 3.0],
+        test1 = Rowshandel2013(origin, rup, slat, slon, deps, dx=1,
+                               T=[1.0, 3.0],
                                a_weight=1.5, mtype=1)
 
     with pytest.raises(Exception) as e:
-        test1 = Rowshandel2013(origin, rup, slat, slon, deps, dx=1, T=[1.0, 3.0],
+        test1 = Rowshandel2013(origin, rup, slat, slon, deps, dx=1,
+                               T=[1.0, 3.0],
                                a_weight=0.5, mtype=3)
 
 
@@ -93,7 +95,7 @@ def test_fromSites():
                      'rake': rake})
 
     # Rupture
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='ss3')
@@ -154,7 +156,7 @@ def test_ss3():
                      'rake': rake})
 
     # Rupture
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='ss3')
@@ -1877,7 +1879,7 @@ def test_rv4():
                      'rake': rake})
 
     # Rupture
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='')
@@ -1982,7 +1984,7 @@ def test_so6():
                      'rake': rake})
 
     # Rupture
-    rup = rupture.QuadRupture.fromTrace(
+    rup = QuadRupture.fromTrace(
         np.array([tlon[0]]), np.array([tlat[0]]),
         np.array([tlon[1]]), np.array([tlat[1]]),
         zp, width, dip, origin, reference='rv4')

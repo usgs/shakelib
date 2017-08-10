@@ -22,8 +22,8 @@ from shakelib.grind.gmice.wgrw12 import WGRW12
 from shakelib.grind.multigmpe import MultiGMPE
 from shakelib.grind.distance import Distance
 from shakelib.grind.sites import Sites
-from shakelib.grind.origin import Origin
-from shakelib.grind.rupture import read_rupture_file
+from shakelib.grind.rupture.origin import Origin
+from shakelib.grind.rupture.factory import get_rupture
 from shakelib.utils.exception import ShakeLibException
 
 
@@ -54,7 +54,7 @@ def test_virtualipe():
     rupturefile = os.path.join(datadir, 'wei_fault.txt')
 
     origin_obj = Origin.fromFile(eventfile)
-    rupture_obj = read_rupture_file(origin_obj, rupturefile)
+    rupture_obj = get_rupture(origin_obj, rupturefile)
     rx = rupture_obj.getRuptureContext([gmpe])
     rx.rake = 45.
 

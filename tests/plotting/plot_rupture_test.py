@@ -12,8 +12,8 @@ homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
 
-from shakelib.grind.rupture import QuadRupture
-from shakelib.grind.origin import Origin
+from shakelib.grind.rupture.quad_rupture import QuadRupture
+from shakelib.grind.rupture.origin import Origin
 from shakelib.plotting.plotrupture import plot_rupture_wire3d, map_rupture
 
 MAX_DEPTH = 70

@@ -17,14 +17,14 @@ homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
 
-from shakelib.grind.origin import Origin
-from shakelib.grind.rupture import QuadRupture
-from shakelib.grind.rupture import EdgeRupture
-from shakelib.grind.rupture import read_rupture_file
+from shakelib.grind.rupture.origin import Origin
+from shakelib.grind.rupture.quad_rupture import QuadRupture
+from shakelib.grind.rupture.edge_rupture import EdgeRupture
+from shakelib.grind.rupture.factory import get_rupture
 
-from shakelib.grind.rupture import get_local_unit_slip_vector
-from shakelib.grind.rupture import get_quad_slip
-from shakelib.grind.rupture import text_to_json
+from shakelib.grind.rupture.utils import get_local_unit_slip_vector
+from shakelib.grind.rupture.utils import get_quad_slip
+from shakelib.grind.rupture.factory import text_to_json
 
 
 def test_EdgeRupture():
@@ -33,7 +33,7 @@ def test_EdgeRupture():
                      'depth': 5.0, 'mag': 7.0})
 
     file = os.path.join(homedir, 'rupture_data/cascadia.json')
-    rup = read_rupture_file(origin, file)
+    rup = get_rupture(origin, file)
 
     # Force read Northridge as EdgeRupture
     file = os.path.join(homedir, 'rupture_data/northridge_fault.txt')
@@ -73,10 +73,10 @@ def test_QuadRupture():
 
     # First with json file
     file = os.path.join(homedir, 'rupture_data/izmit.json')
-    rupj = read_rupture_file(origin, file)
+    rupj = get_rupture(origin, file)
     # Then with text file:
     file = os.path.join(homedir, 'rupture_data/Barkaetal02_fault.txt')
-    rupt = read_rupture_file(origin, file)
+    rupt = get_rupture(origin, file)
 
     np.testing.assert_allclose(rupj.lats, rupt.lats, atol=1e-5)
     np.testing.assert_allclose(rupj.lons, rupt.lons, atol=1e-5)
@@ -219,7 +219,7 @@ def test_northridge():
     origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
-    rupture = read_rupture_file(origin, cbuf)
+    rupture = get_rupture(origin, cbuf)
     strike = rupture.getStrike()
     np.testing.assert_allclose(strike, 122.06, atol=0.01)
     dip = rupture.getDip()
@@ -301,7 +301,7 @@ def test_parse_complicated_rupture():
     origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
-    rupture = read_rupture_file(origin, cbuf)
+    rupture = get_rupture(origin, cbuf)
     strike = rupture.getStrike()
     np.testing.assert_allclose(strike, -100.46, atol=0.01)
     dip = rupture.getDip()
@@ -385,7 +385,7 @@ def test_incorrect():
                      'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
     with pytest.raises(Exception):
-        rupture = read_rupture_file(origin, cbuf)
+        rupture = get_rupture(origin, cbuf)
 
 
 def test_fromTrace():

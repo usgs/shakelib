@@ -6,7 +6,9 @@ from shapely.geometry import Polygon, Point
 
 from openquake.hazardlib.geo.utils import get_orthographic_projection
 
-from shakelib.grind.rupture import Rupture, EdgeRupture, QuadRupture
+from shakelib.grind.rupture.edge_rupture import EdgeRupture
+from shakelib.grind.rupture.quad_rupture import QuadRupture
+from shakelib.grind.rupture.base import Rupture
 
 
 def get_extent(rupture):
@@ -99,8 +101,8 @@ def get_extent(rupture):
     lonmax, latmax = proj(np.array([xmax]), np.array([ymax]), reverse=True)
 
     #
-    # Round coordinates to the nearest minute -- that should make the 
-    # output grid register with common grid resolutions (60c, 30c, 
+    # Round coordinates to the nearest minute -- that should make the
+    # output grid register with common grid resolutions (60c, 30c,
     # 15c, 7.5c)
     #
     return _round_coord(lonmin[0]), _round_coord(lonmax[0]), \

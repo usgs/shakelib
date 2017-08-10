@@ -11,20 +11,20 @@ from openquake.hazardlib.gsim import base
 
 # local imports
 from shakelib.utils.exception import ShakeLibException
-from shakelib.grind.rupture import EdgeRupture
+from shakelib.grind.rupture.edge_rupture import EdgeRupture
 
 
 class Distance(object):
     """
-    Class for distance calculations. Primary method is 'get_distance'.
-    To gracefully handle multiple segment ruptures, many of the distances
-    are based on the Spudich and Chiou (2015) GC2 coordinate system.
+    Class for distance calculations. Primary method is 'get_distance'. To
+    handle multiple segment ruptures, many of the distances are based on the
+    Spudich and Chiou (2015) GC2 coordinate system.
 
 
     References:
         Spudich, Paul and Chiou, Brian, 2015, Strike-parallel and strike-normal
-        coordinate system around geometrically complicated rupture traces—Use by
-        NGA-West2 and further improvements: U.S. Geological Survey Open-File
+        coordinate system around geometrically complicated rupture traces—Use
+        by NGA-West2 and further improvements: U.S. Geological Survey Open-File
         Report 2015-1028, 20 p., http://dx.doi.org/10.3133/ofr20151028.
     """
 

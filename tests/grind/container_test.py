@@ -16,7 +16,7 @@ shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
 
 from shakelib.grind.container import InputContainer, OutputContainer
-from shakelib.grind.rupture import PointRupture
+from shakelib.grind.rupture.point_rupture import PointRupture
 
 def dict_equal(d1, d2):
     s1 = sorted(set(d1.keys()))

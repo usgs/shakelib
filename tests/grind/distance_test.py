@@ -18,13 +18,13 @@ homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
 
-from shakelib.grind.rupture import QuadRupture
-from shakelib.grind.rupture import PointRupture
-from shakelib.grind.origin import Origin
+from shakelib.grind.rupture.quad_rupture import QuadRupture
+from shakelib.grind.rupture.point_rupture import PointRupture
+from shakelib.grind.rupture.origin import Origin
+from shakelib.grind.rupture.gc2 import _computeGC2
 from shakelib.grind.sites import Sites
 from shakelib.grind.distance import Distance
 from shakelib.grind.distance import get_distance
-from shakelib.grind.rupture import _computeGC2
 
 
 def test_san_fernando():

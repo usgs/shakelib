@@ -5,6 +5,7 @@ import os
 import os.path
 import sys
 import io
+import copy
 
 # third party
 import numpy as np
@@ -17,14 +18,14 @@ homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
 
-from shakelib.grind.origin import Origin
-from shakelib.grind.rupture import QuadRupture
-from shakelib.grind.rupture import EdgeRupture
-from shakelib.grind.rupture import read_rupture_file
+from shakelib.grind.rupture.origin import Origin
+from shakelib.grind.rupture.quad_rupture import QuadRupture
+from shakelib.grind.rupture.edge_rupture import EdgeRupture
+from shakelib.grind.rupture.factory import get_rupture
 
-from shakelib.grind.rupture import get_local_unit_slip_vector
-from shakelib.grind.rupture import get_quad_slip
-from shakelib.grind.rupture import text_to_json
+from shakelib.grind.rupture.utils import get_local_unit_slip_vector
+from shakelib.grind.rupture.utils import get_quad_slip
+from shakelib.grind.rupture.factory import text_to_json
 
 
 def test_EdgeRupture():
@@ -33,7 +34,7 @@ def test_EdgeRupture():
                      'depth': 5.0, 'mag': 7.0})
 
     file = os.path.join(homedir, 'rupture_data/cascadia.json')
-    rup = read_rupture_file(origin, file)
+    rup = get_rupture(origin, file)
 
     # Force read Northridge as EdgeRupture
     file = os.path.join(homedir, 'rupture_data/northridge_fault.txt')
@@ -65,6 +66,46 @@ def test_EdgeRupture():
     ztor = rupt.getDepthToTop()
     np.testing.assert_allclose(ztor, 5, atol=0.01)
 
+    # Test for fromArrays method
+    toplats = np.array([37.0, 38.0])
+    toplons = np.array([-120.0, -120.0])
+    topdeps = np.array([0.0, 0.0])
+    botlats = copy.copy(toplats)
+    botlons = copy.copy(toplons)
+    botdeps = np.array([10.0, 10.0])
+    erup = EdgeRupture.fromArrays(toplons, toplats, topdeps, botlons, botlats,
+                                  botdeps, origin)
+    qrup = QuadRupture.fromVertices(
+            [toplons[0]], [toplats[0]], [topdeps[0]],
+            [toplons[1]], [toplats[1]], [topdeps[1]],
+            [botlons[1]], [botlats[1]], [botdeps[1]],
+            [botlons[0]], [botlats[0]], [botdeps[0]],
+            origin)
+    np.testing.assert_allclose(erup.getArea(), 1108.9414759967776)
+    np.testing.assert_allclose(erup.getDepthToTop(), 0)
+    np.testing.assert_allclose(erup.getLength(), 111.19492664455889)
+    np.testing.assert_allclose(
+            erup.lats, np.array([37.,  38.,  38.,  37.,  37.,  np.nan]))
+    np.testing.assert_allclose(
+            erup.lons, np.array([-120., -120., -120., -120., -120.,  np.nan]))
+    np.testing.assert_allclose(
+            erup.depths, np.array([  0.,   0.,  10.,  10.,   0.,  np.nan]))
+    np.testing.assert_allclose(
+            erup._getGroupIndex(), np.array([  0.,   0.]))
+    quads = erup.getQuadrilaterals()
+    np.testing.assert_allclose(quads[0][0].x, -120.0)
+
+    # Need to also test the distances with EdgeRupture
+    lons = np.linspace(-120.1, -121.0, 10)
+    lats = np.linspace(37.0, 38, 10)
+    deps = np.zeros_like(lons)
+    rrup1 = qrup.computeRrup(lons, lats, deps)
+    rrup2 = erup.computeRrup(lons, lats, deps)
+    np.testing.assert_allclose(rrup1, rrup2, atol=2e-2)
+    rjb1 = qrup.computeRjb(lons, lats, deps)
+    rjb2 = erup.computeRjb(lons, lats, deps)
+    np.testing.assert_allclose(rjb1, rjb2, atol=2e-2)
+    gc2 = erup.computeGC2(lons, lats, deps)
 
 def test_QuadRupture():
     # Rupture requires an origin even when not used:
@@ -73,10 +114,10 @@ def test_QuadRupture():
 
     # First with json file
     file = os.path.join(homedir, 'rupture_data/izmit.json')
-    rupj = read_rupture_file(origin, file)
+    rupj = get_rupture(origin, file)
     # Then with text file:
     file = os.path.join(homedir, 'rupture_data/Barkaetal02_fault.txt')
-    rupt = read_rupture_file(origin, file)
+    rupt = get_rupture(origin, file)
 
     np.testing.assert_allclose(rupj.lats, rupt.lats, atol=1e-5)
     np.testing.assert_allclose(rupj.lons, rupt.lons, atol=1e-5)
@@ -219,7 +260,7 @@ def test_northridge():
     origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
-    rupture = read_rupture_file(origin, cbuf)
+    rupture = get_rupture(origin, cbuf)
     strike = rupture.getStrike()
     np.testing.assert_allclose(strike, 122.06, atol=0.01)
     dip = rupture.getDip()
@@ -301,7 +342,7 @@ def test_parse_complicated_rupture():
     origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
-    rupture = read_rupture_file(origin, cbuf)
+    rupture = get_rupture(origin, cbuf)
     strike = rupture.getStrike()
     np.testing.assert_allclose(strike, -100.46, atol=0.01)
     dip = rupture.getDip()
@@ -385,7 +426,7 @@ def test_incorrect():
                      'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
     with pytest.raises(Exception):
-        rupture = read_rupture_file(origin, cbuf)
+        rupture = get_rupture(origin, cbuf)
 
 
 def test_fromTrace():

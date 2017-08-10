@@ -3,9 +3,10 @@ import io
 import os.path
 import pytest
 
-from shakelib.grind.origin import Origin
-from shakelib.grind.rupture import read_rupture_file, Rupture
+from shakelib.grind.rupture.origin import Origin
+from shakelib.grind.rupture.factory import get_rupture
 from shakelib.utils.utils import get_extent, is_stable
+
 
 homedir = os.path.dirname(os.path.abspath(__file__))
 datadir = os.path.join(homedir, 'utils_data')
@@ -17,7 +18,7 @@ def test_get_extent_small_point():
     #
     eventfile = os.path.join(datadir, 'event_wenchuan_small.xml')
     origin = Origin.fromFile(eventfile)
-    rupture = read_rupture_file(origin)
+    rupture = get_rupture(origin)
     W, E, S, N = get_extent(rupture)
     assert W == 102.33333333333333
     assert E == 104.41666666666667
@@ -31,7 +32,7 @@ def test_get_extent_small_complex():
     eventfile = os.path.join(datadir, 'event_wenchuan.xml')
     origin = Origin.fromFile(eventfile)
     faultfile = os.path.join(datadir, 'Hartzell11_fault.txt')
-    rupture = read_rupture_file(origin, faultfile)
+    rupture = get_rupture(origin, faultfile)
     W, E, S, N = get_extent(rupture)
     assert W == 100.03333333333333
     assert E == 108.93333333333334
@@ -65,7 +66,7 @@ def test_get_extent_aspect():
             30.0 100.0 0.0
             """
            )
-    rupture = read_rupture_file(origin, rrep)
+    rupture = get_rupture(origin, rrep)
     W, E, S, N = get_extent(rupture)
     assert W == 97.18333333333334
     assert E == 113.51666666666667
@@ -83,7 +84,7 @@ def test_get_extent_aspect():
             24.0 100.0 0.0
             """
            )
-    rupture = read_rupture_file(origin, rrep)
+    rupture = get_rupture(origin, rrep)
     W, E, S, N = get_extent(rupture)
     assert W == 92.53333333333333
     assert E == 108.89999999999999
@@ -97,7 +98,7 @@ def test_get_extent_stable_small():
     #
     eventfile = os.path.join(datadir, 'event_oklahoma.xml')
     origin = Origin.fromFile(eventfile)
-    rupture = read_rupture_file(origin)
+    rupture = get_rupture(origin)
     W, E, S, N = get_extent(rupture)
     assert W == -98.5
     assert E == -96.28333333333333
@@ -111,7 +112,7 @@ def test_get_extent_stable_large():
     #
     eventfile = os.path.join(datadir, 'event_oklahoma_large.xml')
     origin = Origin.fromFile(eventfile)
-    rupture = read_rupture_file(origin)
+    rupture = get_rupture(origin)
     W, E, S, N = get_extent(rupture)
     assert W == -106.14999999999999
     assert E == -86.76666666666667

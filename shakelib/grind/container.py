@@ -11,8 +11,9 @@ import h5py
 import numpy as np
 
 # local imports
-from shakelib.grind.rupture import read_rupture_file, PointRupture
-from shakelib.grind.origin import Origin
+from shakelib.grind.rupture.factory import get_rupture
+from shakelib.grind.rupture.point_rupture import PointRupture
+from shakelib.grind.rupture.origin import Origin
 from shakelib.grind.station import StationList
 
 # list of allowed data types in dictionaries
@@ -102,7 +103,7 @@ class InputContainer(object):
         # Store the version history.
         #-----------------------------------------------------------------------
         if version_history:
-            self._storeHistory(version_history)    
+            self._storeHistory(version_history)
 
         return self
 
@@ -161,7 +162,7 @@ class InputContainer(object):
 
         ruptext = self._hdfobj['rupture'].attrs['rupture_string']
         rupio = io.StringIO(ruptext)
-        rupture = read_rupture_file(origin, rupio)
+        rupture = get_rupture(origin, rupio)
         return rupture
 
     def getStationList(self):

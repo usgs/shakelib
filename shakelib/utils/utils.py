@@ -44,9 +44,6 @@ def get_extent(rupture):
 
     # Is this a stable or active tectonic event?
     # (this could be made an attribute of the ShakeMap Origin class)
-#
-# This currently only works for the continental US. Need to improve.
-#
     hypo = origin.getHypo()
     stable = is_stable(hypo.longitude, hypo.latitude)
 
@@ -99,8 +96,8 @@ def get_extent(rupture):
     lonmax, latmax = proj(np.array([xmax]), np.array([ymax]), reverse=True)
 
     #
-    # Round coordinates to the nearest minute -- that should make the 
-    # output grid register with common grid resolutions (60c, 30c, 
+    # Round coordinates to the nearest minute -- that should make the
+    # output grid register with common grid resolutions (60c, 30c,
     # 15c, 7.5c)
     #
     return _round_coord(lonmin[0]), _round_coord(lonmax[0]), \
@@ -129,12 +126,15 @@ def is_stable(lon, lat):
         bool: Is the point classified as tectonically stable.
 
     """
-    here = os.path.dirname(os.path.abspath(__file__))
-    pfile = os.path.join(here, 'data', 'nshmp_stable.json')
-    with open(pfile) as f:
-        coords = json.load(f)
-    tmp = [(float(x), float(y)) for x, y in zip(coords['lon'], coords['lat'])]
-    poly = Polygon(tmp)
     p = Point((lon, lat))
-    return p.within(poly)
+    here = os.path.dirname(os.path.abspath(__file__))
+    pfile = os.path.join(here, 'data', 'cratons.geojson')
+    with open(pfile) as f:
+        cratons = json.load(f)
+    coord_list = cratons['features'][0]['geometry']['coordinates']
+    for clist in coord_list:
+        poly = Polygon(clist[0])
+        if p.within(poly):
+            return True
+    return False
 

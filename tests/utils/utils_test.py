@@ -5,7 +5,7 @@ import pytest
 
 from shakelib.grind.origin import Origin
 from shakelib.grind.rupture import read_rupture_file, Rupture
-from shakelib.utils.utils import get_extent
+from shakelib.utils.utils import get_extent, is_stable
 
 homedir = os.path.dirname(os.path.abspath(__file__))
 datadir = os.path.join(homedir, 'utils_data')
@@ -118,6 +118,15 @@ def test_get_extent_stable_large():
     assert S == 27.55
     assert N == 43.03333333333333
 
+def test_is_stable():
+
+    assert not is_stable(0, 0)
+    assert is_stable(-87.0, 36.0)
+    assert not is_stable(-112.0, 39.0)
+    assert is_stable(135.0, -30.0)
+    assert not is_stable(180.0, 0.0)
+    assert is_stable(-60.0, -15.0)
+
 
 if __name__ == '__main__':
     test_get_extent_small_point()
@@ -126,3 +135,4 @@ if __name__ == '__main__':
     test_get_extent_aspect()
     test_get_extent_stable_small()
     test_get_extent_stable_large()
+    test_is_stable()

@@ -11,17 +11,8 @@ from openquake.hazardlib.const import TRT
 
 from impactutils.time.ancient_time import HistoricTime
 from shakelib.utils.exception import ShakeLibException
+from shakelib.grind.rupture import constants
 
-
-REQUIRED_KEYS = ['lat', 'lon', 'depth', 'mag', 'id']
-
-RAKEDICT = {'SS': 0.0, 'NM': -90.0, 'RS': 90.0, 'ALL': None}
-DEFAULT_MECH = 'ALL'
-DEFAULT_STRIKE = 0.0
-DEFAULT_DIP = 90.0
-DEFAULT_RAKE = 0.0
-DEFAULT_WIDTH = 0.0
-DEFAULT_ZTOR = 0.0
 
 
 class Origin(object):
@@ -75,7 +66,7 @@ class Origin(object):
         # Check for missing keys
         #----------------------------------------------------------------------
         missing = []
-        for req in REQUIRED_KEYS:
+        for req in constants.ORIGIN_REQUIRED_KEYS:
             if req not in list(event.keys()):
                 missing.append(req)
 
@@ -98,17 +89,17 @@ class Origin(object):
         event['mag'] = float(event['mag'])
         if 'mech' in event.keys():
             if event['mech'] == '':
-                event['mech'] = DEFAULT_MECH
-            if not event['mech'] in RAKEDICT.keys():
+                event['mech'] = constants.DEFAULT_MECH
+            if not event['mech'] in constants.RAKEDICT.keys():
                 raise Exception('mech must be SS, NM, RS, or ALL.')
         elif 'type' in event.keys():
             event['mech'] = event['type']
             if event['mech'] == '':
-                event['mech'] = DEFAULT_MECH
-            if not event['mech'] in RAKEDICT.keys():
+                event['mech'] = constants.DEFAULT_MECH
+            if not event['mech'] in constants.RAKEDICT.keys():
                 raise Exception('mech must be SS, NM, RS, or ALL.')
         else:
-            event['mech'] = DEFAULT_MECH
+            event['mech'] = constants.DEFAULT_MECH
 
         #----------------------------------------------------------------------
         # Special handling of time
@@ -145,9 +136,9 @@ class Origin(object):
         if not hasattr(self, 'rake'):
             if hasattr(self, 'mech'):
                 mech = self.mech
-                self.rake = RAKEDICT[mech]
+                self.rake = constants.RAKEDICT[mech]
             else:
-                self.rake = RAKEDICT['ALL']
+                self.rake = constants.RAKEDICT['ALL']
 
         if self.rake is None:
             self.rake = 0.0

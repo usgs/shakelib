@@ -5,7 +5,7 @@ import openquake.hazardlib.geo as geo
 import copy
 
 from shakelib.grind.distance import get_distance
-from shakelib.grind.rupture import _distance_sq_to_segment
+from shakelib.grind.rupture.utils import _distance_sq_to_segment
 import impactutils.vectorutils.ecef as ecef
 from impactutils.vectorutils.vector import Vector
 

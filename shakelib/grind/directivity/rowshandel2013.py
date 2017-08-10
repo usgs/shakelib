@@ -53,7 +53,7 @@ import openquake.hazardlib.geo as geo
 from openquake.hazardlib.geo.utils import get_orthographic_projection
 
 import shakelib.grind.rupture as rupture
-from shakelib.grind.rupture import _quad_distance
+from shakelib.grind.rupture import utils
 from shakelib.grind.distance import get_distance
 from impactutils.vectorutils.ecef import latlon2ecef
 from impactutils.vectorutils.ecef import ecef2latlon
@@ -263,7 +263,7 @@ class Rowshandel2013(object):
         hyp_ecef = np.array([[x, y, z]])
         qdist = np.zeros(nquad)
         for i in range(0, nquad):
-            qdist[i] = _quad_distance(
+            qdist[i] = utils._quad_distance(
                 self._rup.getQuadrilaterals()[i], hyp_ecef)
         ind = int(np.where(qdist == np.min(qdist))[0][0])
         # *** check that this doesn't break with more than one quad
@@ -278,7 +278,7 @@ class Rowshandel2013(object):
         hyp_ecef = Vector.fromPoint(geo.point.Point(
             self._hyp.longitude, self._hyp.latitude, self._hyp.depth))
         hp0 = hyp_ecef - pp0
-        ddv = rupture.get_quad_down_dip_vector(q)
+        ddv = utils.get_quad_down_dip_vector(q)
         self._Wrup = Vector.dot(ddv, hp0) / 1000
 
     def __computeXiPrime(self):
@@ -320,10 +320,10 @@ class Rowshandel2013(object):
             q = self._rup.getQuadrilaterals()[k]
 
             # Quad mesh (ECEF coords)
-            mesh = rupture.get_quad_mesh(q, self._dx)
+            mesh = utils.get_quad_mesh(q, self._dx)
 
             # Rupture plane normal vector (ECEF coords)
-            rpnv = rupture.get_quad_normal(q)
+            rpnv = utils.get_quad_normal(q)
             rpnvcol = np.array([[rpnv.x],
                                 [rpnv.y],
                                 [rpnv.z]])
@@ -590,11 +590,11 @@ def _get_quad_slip_ds_ss(q, rake, cp, p):
     # Get quad vertices, strike, dip
     P0, P1 = q[0:2]
     strike = P0.azimuth(P1)
-    dip = rupture.get_quad_dip(q)
+    dip = utils.get_quad_dip(q)
 
     # Slip unit vectors in 'local' (i.e., z-up, x-east) coordinates
-    d1_local = rupture.get_local_unit_slip_vector_DS(strike, dip, rake)
-    s1_local = rupture.get_local_unit_slip_vector_SS(strike, dip, rake)
+    d1_local = utils.get_local_unit_slip_vector_DS(strike, dip, rake)
+    s1_local = utils.get_local_unit_slip_vector_SS(strike, dip, rake)
 
     # Convert to a column array
     d1_col = np.array([[d1_local.x],

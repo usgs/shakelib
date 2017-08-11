@@ -97,7 +97,7 @@ class StationList(object):
         self.cursor.close()
         self.db.close()
 
-    def _load_features(self, xmlfile):
+#    def _load_features(self, xmlfile):
         # each station is a feature in a geojson file
         #        tree = ET.parse(xmlfile)
         #        root = tree.getroot()
@@ -128,7 +128,7 @@ class StationList(object):
         #                    for component in comp:
         #                        pgmdict, imtset = self._getGroundMotions(component,
         #                                                                 imt_translate)
-        pass
+#        pass
 
     @classmethod
     def loadFromSQL(cls, sql, dbfile=':memory:'):
@@ -620,7 +620,7 @@ class StationList(object):
                     sta_id = netid + '.' + code
 
                 if sta_id in stationdict:
-                    compdict = stationdict[sta_id]
+                    compdict = stationdict[sta_id][1]
                 else:
                     compdict = {}
                 for comp in station:

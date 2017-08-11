@@ -61,11 +61,22 @@ class LothBaker2013(object):
     Earthquake Engineering & Structural Dynamics, 42, 397-417.
     """
 
-    def __init__(self, t1):
+    def __init__(self, periods):
+        """
+        Create an instance of LB13.
 
-        if np.any(t1 < 0.01):
+        Args:
+            periods (numpy.array): An array of periods that will be requested 
+                from the function. Values must be [0.01 -> 10.0], and must me 
+                sorted from smallest to largest.
+
+        Returns:
+            An instance of :class:`LothBaker2013`.
+        """
+
+        if np.any(periods < 0.01):
             raise ValueError('The periods must be greater or equal to 0.01s')
-        if np.any(t1 > 10):
+        if np.any(periods > 10):
             raise ValueError('The periods must be less or equal to 10s')
 
         rbs1 = RectBivariateSpline(Tlist, Tlist, B1, kx=1, ky=1)
@@ -75,24 +86,24 @@ class LothBaker2013(object):
         #
         # Build new tables with entries at the periods we will use
         #
-        st1 = np.array(sorted(t1))
-        tlist = list(zip(*it.product(st1, st1)))
-        nt1 = np.size(st1)
-        self.b1 = rbs1.ev(tlist[0], tlist[1]).reshape((nt1, nt1))
-        self.b2 = rbs2.ev(tlist[0], tlist[1]).reshape((nt1, nt1))
-        self.b3 = rbs3.ev(tlist[0], tlist[1]).reshape((nt1, nt1))
+        tlist = list(zip(*it.product(periods, periods)))
+        nper = np.size(periods)
+        self.b1 = rbs1.ev(tlist[0], tlist[1]).reshape((nper, nper))
+        self.b2 = rbs2.ev(tlist[0], tlist[1]).reshape((nper, nper))
+        self.b3 = rbs3.ev(tlist[0], tlist[1]).reshape((nper, nper))
 
     def getCorrelation(self, ix1, ix2, h):
         """
         Args:
-            ix1, ix2 (nd arrays):
-                The indices of the two periods of interest. The periods may
-                be equal, and there is no restriction on which one is larger.
+            ix1, ix2 (numpy arrays):
+                The indices of the two periods of interest. The indices refer
+                to periods in the 'period' argument to the class constructor.
+                The indices may be equal, and there is no restriction on which 
+                one is larger.
             h (nd array):
-                The separation distance between two sites (units of km)
+                The separation distance between two sites (units of km).
 
-            ix1, ix2, and h should have the same dimensions. If they don't,
-            the results will be unpredictable.
+            ix1, ix2, and h must have the same dimensions.
 
         Returns:
             rho (nd array):
@@ -114,10 +125,9 @@ class LothBaker2013(object):
         b1 = self.b1[ix1, ix2]
         b2 = self.b2[ix1, ix2]
         b3 = self.b3[ix1, ix2]
-
+        #
         # Compute the correlation coefficient (Equation 42)
-        # This is very fast
-
+        #
         rho = ne.evaluate(
             "b1 * exp(-3 * h / 20) + b2 * exp(-3 * h / 70) + (h == 0) * b3")
 

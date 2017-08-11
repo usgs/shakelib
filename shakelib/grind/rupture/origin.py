@@ -108,15 +108,14 @@ class Origin(object):
            ('month' in event.keys()) and \
            ('day' in event.keys()) and \
            ('hour' in event.keys()) and \
-           ('second' in event.keys()) and \
-           ('msec' in event.keys()):
+           ('second' in event.keys()):
             year = int(event['year'])
             month = int(event['month'])
             day = int(event['day'])
             hour = int(event['hour'])
             minute = int(event['minute'])
             second = float(event['second'])
-            msec = int((second - int(second)) * 1e6)  # microsec
+            msec = 0  # microsec
             second = int(second)
             event['time'] = HistoricTime(
                 year, month, day, hour, minute, second, msec)
@@ -171,31 +170,8 @@ class Origin(object):
         """
         return point.Point(self.lon, self.lat, self.depth)
 
-    def setTectonicRegion(self, region):
-        """
-        Set tectonic region.
 
-        Args:
-            region:
-                `TRT <http://docs.openquake.org/oq-hazardlib/master/const.html#openquake.hazardlib.const.TRT>`__
-                object.
-        """
-        if not isinstance(region, TRT):
-            raise ValueError(
-                'Input tectonic region must be of type openquake.hazardlib.const.TRT')
-        self._tectonic_region = copy.deepcopy(region)
-
-    def getTectonicRegion(self):
-        """
-        Get tectonic region.
-
-        Returns:
-            `TRT <http://docs.openquake.org/oq-hazardlib/master/const.html#openquake.hazardlib.const.TRT>`__
-            object.
-        """
-        return copy.deepcopy(self._tectonic_region)
-
-    def setMechanism(self, mech, rake=None, dip=None):
+    def setMechanism(self, mech=None, rake=None, dip=None):
         """
         Set the earthquake mechanism manually (overriding any values read
         in from event.xml or source.txt. If rake and dip are not specified,
@@ -234,8 +210,6 @@ class Origin(object):
                     list(mechs.keys())))
 
         if dip is not None:
-            if dip < 0 or dip > 90:
-                raise Exception('Dip must be in range 0-90 degrees.')
             if dip < 0 or dip > 90:
                 raise Exception('Dip must be in range 0-90 degrees.')
         else:

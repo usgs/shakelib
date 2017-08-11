@@ -67,7 +67,8 @@ def test_station():
     assert 'PGV' in imtlist
 
     #
-    # Add the Northridge data to the Calexico data
+    # Add the Northridge data to the Calexico data to test
+    # addData()
     #
     event = 'northridge'
     datadir = os.path.abspath(os.path.join(homedir, 'station_data'))
@@ -101,6 +102,9 @@ def test_station():
 
 def test_station2():
 
+    #
+    # Test the wenchuan data
+    #
     homedir = os.path.dirname(os.path.abspath(__file__))
 
     event = 'wenchuan'
@@ -132,6 +136,10 @@ def test_station2():
         compare_dataframes(saved_df1, df1)
         compare_dataframes(saved_df2, df2)
 
+        #
+        # Dump the database to SQL and then restore it to a new
+        # StationList object. Compare dataframes.
+        #
         sql = stations.dumpToSQL()
 
         stations2 = StationList.loadFromSQL(sql)
@@ -145,6 +153,12 @@ def test_station2():
 
 def test_station3():
 
+    #
+    # Exercise the geojson code. Can't really compare it to anything
+    # because the ordering is scrambled by the hashes in the XML
+    # parsing stage. Once (if) we institute a loadFromJSON() method, we
+    # can do a comparison.
+    #
     homedir = os.path.dirname(os.path.abspath(__file__))
 
     event = 'wenchuan'
@@ -157,9 +171,6 @@ def test_station3():
 
     stations = StationList.loadFromXML(xmlfiles, ":memory:")
 
-    #
-    # Just exercise some code
-    #
     myjson = stations.getGeoJson()
 
 
@@ -181,6 +192,33 @@ def test_station4():
     assert df1 is None
 
 
+def test_station5():
+
+    homedir = os.path.dirname(os.path.abspath(__file__))
+
+    event = 'Calexico'
+
+    datadir = os.path.abspath(os.path.join(homedir, 'station_data'))
+    datadir = os.path.abspath(os.path.join(datadir, event, 'input'))
+
+    inputfile = os.path.join(datadir, 'stationlist_dat.xml')
+    dyfifile = os.path.join(datadir, 'ciim3_dat.xml')
+
+    xmlfiles = [inputfile, dyfifile]
+    stations1 = StationList.loadFromXML(xmlfiles, ":memory:")
+    #
+    # Load the data more than once to exercise the code that handles
+    # repeated entries.
+    #
+    xmlfiles = [inputfile, inputfile, dyfifile, dyfifile]
+    stations2 = StationList.loadFromXML(xmlfiles, ":memory:")
+
+    df1 = stations1.getStationDataframe(1)
+    df2 = stations2.getStationDataframe(1)
+
+    compare_dataframes(df1, df2)
+
+
 def compare_dataframes(df1, df2):
 
     assert sorted(list(df1.keys())) == sorted(list(df2.keys()))
@@ -200,3 +238,4 @@ if __name__ == '__main__':
     test_station2()
     test_station3()
     test_station4()
+    test_station5()

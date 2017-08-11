@@ -62,30 +62,6 @@ class QuadRupture(Rupture):
         self._reference = d['features'][0]['properties']['reference']
         self._setQuadrilaterals()
 
-    @classmethod
-    def fromArrays(cls, lon, lat, depth, origin, reference=''):
-        """
-        Class method for constructing a QuadRupture from arrays of longitude
-        latitude, and depth. The arrays should start on the top and move in the
-        strike direction, then down to the bottom and move back (without
-        closing) followed by a nan.
-
-
-        Args:
-            lon (array): Sequence of rupture longitude vertices in clockwise
-                order.
-            lat (array): Sequence of rupture latitude vertices in clockwise
-                order.
-            depth (array): Sequence of rupture depth vertices in clockwise
-                order.
-            origin (Origin): Reference to a ShakeMap Origin object.
-            reference (str): String citeable reference for Rupture.
-
-        """
-        pass
-
-
-#        return cls(d, origin)
 
     def getDepthAtPoint(self, lat, lon):
         SMALL_DISTANCE = 2e-03  # 2 meters

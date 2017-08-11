@@ -20,7 +20,7 @@ cd $HOME;
 conda remove --name $VENV --all -y
 cd $CWD
 
-conda create --name $VENV --yes python=$PYVER ${DEPARRAY[*]} -y
+conda create --name $VENV --yes python=$PYVER ${DEPARRAY[*]}
 
 # Activate the new environment
 source activate $VENV

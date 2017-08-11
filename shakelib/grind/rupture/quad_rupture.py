@@ -833,12 +833,12 @@ class QuadRupture(Rupture):
             bot_deps = []
             for j in range(nq):
                 if j == 0:
-                    top0 = [quads[q_ind[j]][0].depitude]
-                    bot0 = [quads[q_ind[j]][3].depitude]
+                    top0 = [quads[q_ind[j]][0].depth]
+                    bot0 = [quads[q_ind[j]][3].depth]
                     top_deps = top_deps + top0
                     bot_deps = bot_deps + bot0
-                top_deps = top_deps + [quads[q_ind[j]][1].depitude]
-                bot_deps = bot_deps + [quads[q_ind[j]][2].depitude]
+                top_deps = top_deps + [quads[q_ind[j]][1].depth]
+                bot_deps = bot_deps + [quads[q_ind[j]][2].depth]
             deps = deps + top_deps + bot_deps[::-1] + top0 + [np.nan]
 
         return np.array(deps)

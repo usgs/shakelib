@@ -171,8 +171,10 @@ def test_from_config_set_of_sets():
                 'weights': [0.8, 0.2]
             }
         },
-        'grind': {
-            'gmpe': 'active_crustal_80_stable_continental_20',
+        'modeling': {
+            'gmpe': 'active_crustal_80_stable_continental_20'
+        },
+        'interp': {
             'component': 'RotD50'
         }
     }
@@ -256,8 +258,10 @@ def test_from_config_set_of_gmpes():
                 'weights_site_gmpes': []
             }
         },
-        'grind': {
+        'modeling': {
             'gmpe': 'stable_continental',
+        },
+        'interp': {
             'component': 'RotD50'
         }
     }
@@ -336,8 +340,10 @@ def test_from_config_single_gmpe():
                 'weights_site_gmpes': []
             }
         },
-        'grind': {
+        'modeling': {
             'gmpe': 'ASK14',
+        },
+        'interp': {
             'component': 'RotD50'
         }
     }

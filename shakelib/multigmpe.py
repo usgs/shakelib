@@ -203,8 +203,8 @@ class MultiGMPE(GMPE):
             MultiGMPE object.
 
         """
-        IMC = conf['component_modules'][conf['grind']['component']]
-        selected_gmpe = conf['grind']['gmpe']
+        IMC = conf['component_modules'][conf['interp']['component']]
+        selected_gmpe = conf['modeling']['gmpe']
 
         if verbose is True:
             print('selected_gmpe: %s' % selected_gmpe)
@@ -256,7 +256,7 @@ class MultiGMPE(GMPE):
             tmpclass = getattr(mod, modinfo[0])
             out = MultiGMPE.from_list([tmpclass()], [1.0], imc=IMC)
         else:
-            raise Exception("conf['grind']['gmpe'] must be a key in "
+            raise Exception("conf['modeling']['gmpe'] must be a key in "
                             "conf['gmpe_modules'] or conf['gmpe_sets']")
 
         out.DESCRIPTION = selected_gmpe
@@ -277,7 +277,7 @@ class MultiGMPE(GMPE):
             MultiGMPE.
 
         """
-        IMC = conf['component_modules'][conf['grind']['component']]
+        IMC = conf['component_modules'][conf['interp']['component']]
 
         selected_gmpes = conf['gmpe_sets'][set_name]['gmpes']
         selected_gmpe_weights = \

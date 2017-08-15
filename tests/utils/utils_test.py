@@ -3,8 +3,8 @@ import io
 import os.path
 import pytest
 
-from shakelib.grind.rupture.origin import Origin
-from shakelib.grind.rupture.factory import get_rupture
+from shakelib.rupture.origin import Origin
+from shakelib.rupture.factory import get_rupture
 from shakelib.utils.utils import get_extent, is_stable
 
 

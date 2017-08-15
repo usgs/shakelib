@@ -6,9 +6,9 @@ from shapely.geometry import Polygon, Point
 
 from openquake.hazardlib.geo.utils import get_orthographic_projection
 
-from shakelib.grind.rupture.edge_rupture import EdgeRupture
-from shakelib.grind.rupture.quad_rupture import QuadRupture
-from shakelib.grind.rupture.base import Rupture
+from shakelib.rupture.edge_rupture import EdgeRupture
+from shakelib.rupture.quad_rupture import QuadRupture
+from shakelib.rupture.base import Rupture
 
 
 def get_extent(rupture):

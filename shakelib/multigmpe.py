@@ -317,7 +317,7 @@ class MultiGMPE(GMPE):
                 selected_weights_site_gmpes = None
             else:
                 selected_weights_site_gmpes = \
-                    [conf['gmpe_sets'][set_name]['weights_site_gmpes']]
+                    conf['gmpe_sets'][set_name]['weights_site_gmpes']
         else:
             selected_weights_site_gmpes = None
 

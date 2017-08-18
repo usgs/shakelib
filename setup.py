@@ -23,6 +23,7 @@ setup(name='shakelib',
                 'shakelib.utils',
                 ],
       package_data={'shakelib': [os.path.join('test', 'data', '*'),
+                                 os.path.join('shakelib', 'utils', 'data', '*'),
                                  os.path.join('data', 'ps2ff', '*.csv')]},
       scripts=[],
       )

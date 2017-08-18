@@ -6,7 +6,7 @@ def baker_jayaram_correlation(t1, t2):
     Produce inter-period correlation for any two spectral periods.
 
     Based upon:
-    Baker, J.W. and Jayaram, N., "Correlation of spectral acceleration 
+    Baker, J.W. and Jayaram, N., "Correlation of spectral acceleration
     values from NGA ground motion models," Earthquake Spectra, (2007).
 
     Args:

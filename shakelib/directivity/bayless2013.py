@@ -68,11 +68,11 @@ class Bayless2013(object):
         directivity, Seismol. Res. Lett. 68, 199–222.
         `[link] <http://srl.geoscienceworld.org/content/68/1/199.abstract>`__
 
-    """
-    #-------------------------------------------------------------------------
+    """  # noqa
+    # ------------------------------------------------------------------------
     # C0 adn C1 are for RotD50. One set for each mechanism (SS vs DS).
     # FN and FP are also available
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     __periods = np.array([0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 7.5, 10])
     __c0ss = np.array([0.0, 0.0, -0.12, -0.175, -0.21, -0.235, -0.255,
                        -0.275, -0.29, -0.3])
@@ -211,11 +211,11 @@ class Bayless2013(object):
             n2 = Vector.cross(p3 - p2, hpnp)
             n3 = Vector.cross(p0 - p3, hpnp)
 
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
             # Is the hypocenter inside the projected rectangle?
             # Dot products show which side the origin is on.
             # If origin is on same side of all the planes, then it is 'inside'
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
 
             sgn0 = np.signbit(Vector.dot(n0, p0 - hyp_ecef))
             sgn1 = np.signbit(Vector.dot(n1, p1 - hyp_ecef))
@@ -283,7 +283,8 @@ class Bayless2013(object):
         self._fd_DS = (C0 + C1 * f_geom) * T_CD * self._T_Mw * T_Az
 
     def __computeSS(self):
-        # s is the length of striking fault rupturing toward site; max[(X*L),exp(1)]
+        # s is the length of striking fault rupturing toward site;
+        # max[(X*L),exp(1)]
         # theta (see Figure 5 in SSGA97)
         self.__computeThetaAndS(self.i)
 

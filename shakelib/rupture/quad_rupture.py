@@ -18,6 +18,7 @@ from shakelib.rupture.base import Rupture
 from shakelib.rupture import utils
 from shakelib.rupture import gc2
 
+
 class QuadRupture(Rupture):
     """
     Rupture class that represents the rupture surface as a combination of
@@ -61,7 +62,6 @@ class QuadRupture(Rupture):
         self._origin = origin
         self._reference = d['features'][0]['properties']['reference']
         self._setQuadrilaterals()
-
 
     def getDepthAtPoint(self, lat, lon):
         SMALL_DISTANCE = 2e-03  # 2 meters
@@ -174,9 +174,9 @@ class QuadRupture(Rupture):
         """
         asum = 0.0
         for quad in self._quadrilaterals:
-            w = utils.get_quad_width(quad)
-            l = utils.get_quad_length(quad)
-            asum = asum + w * l
+            width = utils.get_quad_width(quad)
+            length = utils.get_quad_length(quad)
+            asum = asum + width * length
         return asum
 
     @classmethod
@@ -222,7 +222,7 @@ class QuadRupture(Rupture):
             pass
         else:
             raise ShakeLibException(
-                'Number of xp0,yp0,xp1,yp1,zp,widths,dips points must be '\
+                'Number of xp0,yp0,xp1,yp1,zp,widths,dips points must be '
                 'equal.')
         if strike is None:
             pass
@@ -317,9 +317,9 @@ class QuadRupture(Rupture):
             yp3[i] = lat3
             zpdown[i] = zp[i] + dz
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Create GeoJSON object
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         coords = []
         u_groups = np.unique(group_index)
@@ -480,9 +480,9 @@ class QuadRupture(Rupture):
         yp3 = np.array(yp3, dtype='d')
         zp3 = np.array(zp3, dtype='d')
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Create GeoJSON object
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         coords = []
         u_groups = np.unique(group_index)
@@ -550,7 +550,7 @@ class QuadRupture(Rupture):
             list: List of quadrilaterals where each quad is a tuple of four
                 `Point <https://github.com/gem/oq-hazardlib/blob/master/openquake/hazardlib/geo/point.py>`__
                 objects.
-        """
+        """  # noqa
         return copy.deepcopy(self._quadrilaterals)
 
     def getStrike(self):
@@ -890,7 +890,7 @@ class QuadRupture(Rupture):
 
         Returns:
             Mesh (https://github.com/gem/oq-hazardlib/blob/master/openquake/hazardlib/geo/mesh.py)
-        """
+        """  # noqa
         rupture = Mesh(self._lon, self._lat, self._depth)
         return rupture
 
@@ -908,9 +908,9 @@ class QuadRupture(Rupture):
 
         """
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Sort out sites
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         oldshape = lon.shape
 
         if len(oldshape) == 2:
@@ -958,9 +958,9 @@ class QuadRupture(Rupture):
 
         """
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Sort out sites
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         oldshape = lon.shape
 
         if len(oldshape) == 2:
@@ -1001,4 +1001,3 @@ class QuadRupture(Rupture):
         # This just hands off to the module-level method
         dict = gc2._computeGC2(self, lon, lat, depth)
         return dict
-

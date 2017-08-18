@@ -20,6 +20,3 @@ DEFAULT_WIDTH = 0.0
 DEFAULT_ZTOR = 0.0
 
 ORIGIN_REQUIRED_KEYS = ['lat', 'lon', 'depth', 'mag', 'id']
-
-
-

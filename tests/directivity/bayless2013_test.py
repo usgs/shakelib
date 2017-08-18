@@ -11,16 +11,16 @@ import numpy as np
 import openquake.hazardlib.geo as geo
 from openquake.hazardlib.geo import point
 
-homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
-shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
-sys.path.insert(0, shakedir)
-
 from impactutils.time.ancient_time import HistoricTime
 from impactutils.vectorutils.vector import Vector
 from impactutils.vectorutils.ecef import ecef2latlon
 from shakelib.rupture.origin import Origin
 from shakelib.rupture.quad_rupture import QuadRupture
 from shakelib.directivity.bayless2013 import Bayless2013
+
+homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
+shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
+sys.path.insert(0, shakedir)
 
 
 def test_ss3():
@@ -416,9 +416,9 @@ def test_ss3_move_hypo1():
     np.testing.assert_allclose(plon, -120.98636122402166, rtol=1e-4)
     np.testing.assert_allclose(pdep, 7.4999999989205968, rtol=1e-4)
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Also for multiple segments
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     dip = np.array([90., 90., 90.])
     rake = 180.0
     width = np.array([15., 15., 10.])
@@ -650,7 +650,6 @@ def test_rv4():
 
 
 def test_so6():
-    event_name = 'so6'
     magnitude = 7.2
     dip = np.array([70])
     rake = 135

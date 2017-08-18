@@ -12,10 +12,6 @@ import openquake.hazardlib.const as oqconst
 from openquake.hazardlib.imt import MMI, PGA, PGV, SA
 import pytest
 
-homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
-shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
-sys.path.insert(0, shakedir)
-
 # local imports
 from shakelib.virtualipe import VirtualIPE
 from shakelib.gmice.wgrw12 import WGRW12
@@ -25,6 +21,10 @@ from shakelib.sites import Sites
 from shakelib.rupture.origin import Origin
 from shakelib.rupture.factory import get_rupture
 from shakelib.utils.exception import ShakeLibException
+
+homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
+shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
+sys.path.insert(0, shakedir)
 
 
 def test_virtualipe():
@@ -48,8 +48,8 @@ def test_virtualipe():
     # Read the event, origin, and rupture files and produce Rupture and Origin
     # objects
     #
-    inputfile = os.path.join(datadir, 'stationlist_dat.xml')
-    dyfifile = os.path.join(datadir, 'ciim3_dat.xml')
+    # inputfile = os.path.join(datadir, 'stationlist_dat.xml')
+    # dyfifile = os.path.join(datadir, 'ciim3_dat.xml')
     eventfile = os.path.join(datadir, 'event.xml')
     rupturefile = os.path.join(datadir, 'wei_fault.txt')
 
@@ -134,7 +134,7 @@ def test_virtualipe():
     # This should raise an exception because no valid IMTs are available
     #
     gmpe.DEFINED_FOR_INTENSITY_MEASURE_TYPES.remove(SA)
-    with pytest.raises(ShakeLibException) as e:
+    with pytest.raises(ShakeLibException) as e:  # noqa
         ipe = VirtualIPE.fromFuncs(gmpe, gmice)
 
     #
@@ -165,21 +165,22 @@ def test_virtualipe():
     #
     remake_save = False
     if remake_save:
-        np.savez_compressed(savefile,
-                            mmi_const_vs30=mmi_const_vs30,
-                            mmi_sd_const_vs30=mmi_sd_const_vs30[0],
-                            mmi_variable_vs30=mmi_variable_vs30,
-                            mmi_sd_variable_vs30=mmi_sd_variable_vs30[0],
-                            mmi_variable_vs30_intra=mmi_variable_vs30_intra,
-                            mmi_sd_variable_vs30_total=mmi_sd_variable_vs30_intra[0],
-                            mmi_sd_variable_vs30_intra=mmi_sd_variable_vs30_intra[1],
-                            mmi_sd_variable_vs30_inter=mmi_sd_variable_vs30_intra[2],
-                            mmi_pga=mmi_pga,
-                            mmi_sd_pga=mmi_sd_pga[0],
-                            mmi_psa=mmi_psa,
-                            mmi_sd_psa=mmi_sd_psa[0],
-                            mmi_rjb=mmi_rjb,
-                            mmi_sd_rjb=mmi_sd_rjb[0])
+        np.savez_compressed(
+                savefile,
+                mmi_const_vs30=mmi_const_vs30,
+                mmi_sd_const_vs30=mmi_sd_const_vs30[0],
+                mmi_variable_vs30=mmi_variable_vs30,
+                mmi_sd_variable_vs30=mmi_sd_variable_vs30[0],
+                mmi_variable_vs30_intra=mmi_variable_vs30_intra,
+                mmi_sd_variable_vs30_total=mmi_sd_variable_vs30_intra[0],
+                mmi_sd_variable_vs30_intra=mmi_sd_variable_vs30_intra[1],
+                mmi_sd_variable_vs30_inter=mmi_sd_variable_vs30_intra[2],
+                mmi_pga=mmi_pga,
+                mmi_sd_pga=mmi_sd_pga[0],
+                mmi_psa=mmi_psa,
+                mmi_sd_psa=mmi_sd_psa[0],
+                mmi_rjb=mmi_rjb,
+                mmi_sd_rjb=mmi_sd_rjb[0])
 
     td = np.load(savefile)
 

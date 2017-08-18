@@ -71,17 +71,17 @@ class InputContainer(object):
         Returns:
             Instance of InputContainer.
         """
-        #-----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         # open the file for writing, nuke if already exists
-        #-----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         hdfobj = h5py.File(filename, "w")
 
         self = cls(hdfobj)
 
-        #-----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         # The config and event info are mandatory
         # write the config dictionary to a config group
-        #-----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         self._storeConfig(config)
 
         # stash the event.xml in a group
@@ -91,17 +91,17 @@ class InputContainer(object):
         if rupturefile:
             self._storeRupture(rupturefile)
 
-        #-----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         # create the stationlist object, then dump its database as a big string
         # into the hdf
-        #-----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         if datafiles:
             station = StationList.loadFromXML(datafiles, ":memory:")
             self.stashStationList(station)
 
-        #-----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         # Store the version history.
-        #-----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         if version_history:
             self._storeHistory(version_history)
 
@@ -151,7 +151,8 @@ class InputContainer(object):
 
     def getRupture(self):
         """
-        Return a Rupture object (PointRupture if no rupture file was specified.)
+        Return a Rupture object (PointRupture if no rupture file was
+        specified.)
 
         Returns:
             Rupture (Point, Edge or Quad Rupture).
@@ -404,6 +405,7 @@ def _dict2h5group(mydict, group):
             pass
         group.attrs[key] = value
 
+
 def _encode_list(value):
     for i, val in enumerate(value):
         if isinstance(val, list):
@@ -413,6 +415,7 @@ def _encode_list(value):
         else:
             value[i] = val
     return value
+
 
 def _h5group2dict(group):
     """

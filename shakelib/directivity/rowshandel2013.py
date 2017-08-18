@@ -44,7 +44,7 @@ References:
     Chapter 3 of PEER Report No. 2013/09, P. Spudich (Editor), Pacific
     Earthquake Engineering Research Center, Berkeley, CA.
     `[link] <http://peer.berkeley.edu/publications/peer_reports/reports_2013/webPEER-2013-09-Spudich.pdf>`__
-"""
+"""  # noqa
 
 import numpy as np
 import copy
@@ -52,7 +52,6 @@ import copy
 import openquake.hazardlib.geo as geo
 from openquake.hazardlib.geo.utils import get_orthographic_projection
 
-import shakelib.rupture as rupture
 from shakelib.rupture import utils
 from shakelib.distance import get_distance
 from impactutils.vectorutils.ecef import latlon2ecef
@@ -101,8 +100,6 @@ class Rowshandel2013(object):
         self._rake = origin.rake
         self._dx = dx
         self._M = origin.mag
-#        if np.all(T != np.array([1, 2, 3, 4, 5, 7.5])):
-#            raise IndexError('Invalid T value. Interpolation not yet supported.')
         if isinstance(T, float):
             self._T = [T]
         else:
@@ -132,29 +129,29 @@ class Rowshandel2013(object):
         Class method for constructing a rowshandel2013 instance from
         a sites instance.
 
-        :param origin:
-            Origin instance.
-        :param rup:
-            Rupture instance.
-        :param sites:
-            Sites object.
-        :param dx:
-            Float for target mesh spacing for subruptures in km. The mesh
-            snaps to the edges of the quadrilaterals so the actual mesh spacing
-            will not equal this exactly; spacing in x and y will not be equal.
-        :param T:
-            Period; Currently, only acceptable values are 1, 2, 3, 4, 5, 7.5.
-        :param a_weight:
-            Weighting factor for how p-dot-q and s-dot-q are averaged; 0 for
-            only p-dot-q (propagation factor) and 1 for only s-dot-q (slip
-            factor).
-        :param mtype:
-            Integer, either 1 or 2; 1 for adding only positive components of dot
-            products, 2 for adding all components of dot products.
-        :param simpleDT:
-            Boolean; should the simpler DT equation be used? Usually False.
-        :param centered:
-            Boolean; should the centered directivity parameter be used.
+        Args:
+            origin: Origin instance.
+            rup: Rupture instance.
+            sites: Sites object.
+            dx: Float for target mesh spacing for subruptures in km. The mesh
+                snaps to the edges of the quadrilaterals so the actual mesh
+                spacing will not equal this exactly; spacing in x and y will
+                not be equal.
+            T: Period; Currently, only acceptable values are 1, 2, 3, 4, 5,
+                7.5.
+            a_weight: Weighting factor for how p-dot-q and s-dot-q are
+                averaged; 0 for only p-dot-q (propagation factor) and 1 for
+                only s-dot-q (slip factor).
+            mtype: Integer, either 1 or 2; 1 for adding only positive
+                components of dot products, 2 for adding all components of dot
+                products.
+            simpleDT: Boolean; should the simpler DT equation be used? Usually
+                False.
+            centered: Boolean; should the centered directivity parameter be
+                used
+
+        Returns:
+            Rowshandel2013 directivity class.
         """
         sm_dict = sites.getVs30Grid().getGeoDict()
         west = sm_dict.xmin
@@ -180,29 +177,31 @@ class Rowshandel2013(object):
 
     def getXiPrime(self):
         """
-        :returns:
-            Numpy array of Xi'; this is the variable that accounts for geometric
-            factors in Fd.
+        Returns:
+            Numpy array of Xi'; this is the variable that accounts for
+            geometric factors in Fd.
         """
         return copy.deepcopy(self._xi_prime)
 
     def getDT(self):
         """
-        :returns:
-           List of numpy arrays of the distance taper factor. Length is the number of periods.
+        Returns:
+           List of numpy arrays of the distance taper factor. Length is the
+           number of periods.
         """
         return copy.deepcopy(self._DTlist)
 
     def getWP(self):
         """
-        :returns:
-            List of numpy array of the narrow-band multiplier. Length is the number of periods.
+        Returns:
+            List of numpy array of the narrow-band multiplier. Length is the
+            number of periods.
         """
         return copy.deepcopy(self._WPlist)
 
     def getLD(self):
         """
-        :returns:
+        Returns:
             Numpy array of the rupture length de-normalization factor.
         """
         return copy.deepcopy(self._LD)
@@ -254,9 +253,9 @@ class Rowshandel2013(object):
         """
         nquad = len(self._rup.getQuadrilaterals())
 
-        #-------------------------------------------
+        # ---------------------------------------------------------------------
         # First find which quad the hypocenter is on
-        #-------------------------------------------
+        # ---------------------------------------------------------------------
 
         x, y, z = latlon2ecef(
             self._hyp.latitude, self._hyp.longitude, self._hyp.depth)
@@ -269,9 +268,9 @@ class Rowshandel2013(object):
         # *** check that this doesn't break with more than one quad
         q = self._rup.getQuadrilaterals()[ind]
 
-        #--------------------------
+        # ---------------------------------------------------------------------
         # Compute Wrup on that quad
-        #--------------------------
+        # ---------------------------------------------------------------------
 
         pp0 = Vector.fromPoint(geo.point.Point(
             q[0].longitude, q[0].latitude, q[0].depth))
@@ -469,9 +468,9 @@ class Rowshandel2013(object):
         ni, nj = LD.shape
         for i in range(ni):
             for j in range(nj):
-                #-----------------------
+                # -------------------------------------------------------------
                 # Compute Ls
-                #-----------------------
+                # -------------------------------------------------------------
                 # Convert to local orthographic
                 site_x, site_y = proj(slon[i, j], slat[i, j])
 
@@ -493,9 +492,9 @@ class Rowshandel2013(object):
                     site3 = np.dot(rmat, [site_x2, site_y2, 0])
                 Li = np.min([np.max([a[0] for a in llr]), site3[0]])
 
-                #-----------------------------------
+                # -------------------------------------------------------------
                 # Compute LD and save results into matrices
-                #-----------------------------------
+                # -------------------------------------------------------------
 
                 Lrup = np.sqrt(Li * Li + self._Wrup * self._Wrup)
                 LD[i, j] = np.log(Lrup) / np.log(Lrup_max)
@@ -530,12 +529,13 @@ class Rowshandel2013(object):
                 R2 = 40
             DT = np.ones(nsite)
             # As written in report:
-            # DT[(Rrup > R1) & (Rrup < R2)] = 2 - Rrup[(Rrup > R1) & (Rrup < R2)]/(20 + 10 * np.log(period))
+            # DT[(Rrup > R1) & (Rrup < R2)] = \
+            #    2 - Rrup[(Rrup > R1) & (Rrup < R2)]/(20 + 10 * np.log(period))
             # Modification:
             DT[(Rrup > R1) & (Rrup < R2)] = 2 - \
                 Rrup[(Rrup > R1) & (Rrup < R2)] / R1
-            # Note: it is not clear if the above modification is 'correct' but it gives
-            #       results that make more sense
+            # Note: it is not clear if the above modification is 'correct'
+            #       but it gives results that make more sense
             DT[Rrup >= R2] = 0
         DT = np.reshape(DT, slat.shape)
         self._DT = DT

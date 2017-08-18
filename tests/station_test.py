@@ -8,12 +8,12 @@ import pickle
 # third party modules
 import numpy as np
 
+# local imports
+from shakelib.station import StationList
+
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
-
-# local imports
-from shakelib.station import StationList
 
 #
 # Set SAVE to True to write new versions of the output to disk,
@@ -171,7 +171,7 @@ def test_station3():
 
     stations = StationList.loadFromXML(xmlfiles, ":memory:")
 
-    myjson = stations.getGeoJson()
+    myjson = stations.getGeoJson()  # noqa
 
 
 def test_station4():
@@ -187,8 +187,8 @@ def test_station4():
 
     stations = StationList.loadFromXML(xmlfiles, ":memory:")
 
-    df1 = stations.getStationDataframe(1)
-    df2 = stations.getStationDataframe(0)
+    df1 = stations.getStationDataframe(1)  # noqa
+    df2 = stations.getStationDataframe(0)  # noqa
     assert df1 is None
 
 

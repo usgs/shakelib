@@ -5,15 +5,15 @@ import numpy as np
 
 import openquake.hazardlib.geo as geo
 
-homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
-shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
-sys.path.insert(0, shakedir)
-
 from shakelib.rupture.edge_rupture import EdgeRupture
 from shakelib.rupture.quad_rupture import QuadRupture
 from shakelib.rupture.origin import Origin
 from shakelib.sites import Sites
 from shakelib.distance import get_distance
+
+homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
+shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
+sys.path.insert(0, shakedir)
 
 
 def test_multisegment_discordant():
@@ -41,7 +41,8 @@ def test_multisegment_discordant():
     lon2, lat2 = proj(x2, y2, reverse=True)
     lon3, lat3 = proj(x3, y3, reverse=True)
 
-    # Make an Origin object; most of the 'event' values don't matter for this example
+    # Make an Origin object; most of the 'event' values don't matter for
+    # this example
     origin = Origin({'lat': 0,  'lon': 0, 'depth': 0, 'mag': 7.2, 'id': ''})
     rup = QuadRupture.fromVertices(
         lon0, lat0, z0, lon1, lat1, z1, lon2, lat2, z2, lon3, lat3, z3,
@@ -357,13 +358,13 @@ def test_EdgeRupture_vs_QuadRupture():
     np.testing.assert_allclose(rjb_e, rjb_q, atol=0.35)
 
     # For ploting
-    #plt.imshow(rjb_q, interpolation="none")
-    #plt.imshow(rjb_e, interpolation="none")
+    # plt.imshow(rjb_q, interpolation="none")
+    # plt.imshow(rjb_e, interpolation="none")
 
     # fig = plt.contourf(lon, lat, rrup_e,
     #                   levels = range(0, 100, 1),
     #                   cmap=plt.cm.spectral)
-    #cbar = plt.colorbar(fig)
+    # cbar = plt.colorbar(fig)
     # for q in qrup.getQuadrilaterals():
     #    x = [a.longitude for a in q]+[q[0].longitude]
     #    y = [a.latitude for a in q]+[q[0].latitude]

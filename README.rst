@@ -1,9 +1,11 @@
+.. image:: https://badge.waffle.io/usgs/shakelib.png?label=ready&title=Ready
+  :target: https://waffle.io/usgs/shakelib
 .. image:: https://travis-ci.org/usgs/shakelib.svg?branch=master
   :target: https://travis-ci.org/usgs/shakelib
 .. image:: https://codecov.io/gh/usgs/shakelib/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/usgs/shakelib
-.. image:: https://badge.waffle.io/usgs/shakelib.png?label=ready&title=Ready
-  :target: https://waffle.io/usgs/shakelib
+.. image:: https://api.codacy.com/project/badge/Grade/a4686f81f98244f2877d1291f920d3e2
+  :target: https://www.codacy.com/app/emthompson_2/shakelib?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=usgs/shakelib&amp;utm_campaign=Badge_Grade
 
 shakelib
 ========

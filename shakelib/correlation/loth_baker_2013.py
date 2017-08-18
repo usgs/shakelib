@@ -66,8 +66,8 @@ class LothBaker2013(object):
         Create an instance of LB13.
 
         Args:
-            periods (numpy.array): An array of periods that will be requested 
-                from the function. Values must be [0.01 -> 10.0], and must me 
+            periods (numpy.array): An array of periods that will be requested
+                from the function. Values must be [0.01 -> 10.0], and must me
                 sorted from smallest to largest.
 
         Returns:
@@ -98,7 +98,7 @@ class LothBaker2013(object):
             ix1, ix2 (numpy arrays):
                 The indices of the two periods of interest. The indices refer
                 to periods in the 'period' argument to the class constructor.
-                The indices may be equal, and there is no restriction on which 
+                The indices may be equal, and there is no restriction on which
                 one is larger.
             h (nd array):
                 The separation distance between two sites (units of km).
@@ -122,9 +122,10 @@ class LothBaker2013(object):
         # Index into the arrays to get the coefficients corresponding to the
         # periods of interest.
         #
-        b1 = self.b1[ix1, ix2]
-        b2 = self.b2[ix1, ix2]
-        b3 = self.b3[ix1, ix2]
+        # These variables are used in ne.evaluate but unseen by linter
+        b1 = self.b1[ix1, ix2]  # noqa
+        b2 = self.b2[ix1, ix2]  # noqa
+        b3 = self.b3[ix1, ix2]  # noqa
         #
         # Compute the correlation coefficient (Equation 42)
         #

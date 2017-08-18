@@ -31,23 +31,23 @@ class BeyerBommer2006(object):
     | VERTICAL                  | ---                    |
     +---------------------------+------------------------+
 
-    Notes 
+    Notes
 
-        - AVERAGE_HORIZONTAL is the "reference" type. 
+        - AVERAGE_HORIZONTAL is the "reference" type.
         - The OQ IMC "HORIZONAL" indicates that the horizontal IMC category
-          may be ambiguous. In these cases, we are assuming that it is a 
+          may be ambiguous. In these cases, we are assuming that it is a
           random horizontal component as a default.
 
     To do
 
-        - Inherit from ConvertIMC class. 
+        - Inherit from ConvertIMC class.
 
     References
 
         Beyer, K., & Bommer, J. J. (2006). Relationships between median values
-        and between aleatory variabilities for different definitions of the 
-        horizontal component of motion. Bulletin of the Seismological Society of
-        America, 96(4A), 1512-1522. 
+        and between aleatory variabilities for different definitions of the
+        horizontal component of motion. Bulletin of the Seismological Society
+        of America, 96(4A), 1512-1522.
         `[link] <http://www.bssaonline.org/content/96/4A/1512.short>`__
 
     """
@@ -99,7 +99,7 @@ class BeyerBommer2006(object):
 
     @staticmethod
     def ampIMCtoIMC(amps, imc_in, imc_out, imt):
-        """ 
+        """
         Returns amps converted from one IMC to another.
 
         **Important**:
@@ -120,7 +120,7 @@ class BeyerBommer2006(object):
         Returns:
             array: Numpy array of amps converted from imc_in to imc_out.
 
-        """
+        """  # noqa
 
         denom = BeyerBommer2006.__GM2other(imt, imc_in)
         numer = BeyerBommer2006.__GM2other(imt, imc_out)
@@ -129,41 +129,42 @@ class BeyerBommer2006(object):
 
     @staticmethod
     def sigmaIMCtoIMC(sigmas, imc_in, imc_out, imt):
-        """ 
+        """
         Returns standard deviations converted from one IMC to another.
 
-        **Important**: 
+        **Important**:
 
             - Assumes the input sigmas are in natural log space
             - IMC types 'VERTICAL' and 'HORIZONTAL' are not supported
 
         Args:
-            sigmas (array): Numpy array of standard deviations. 
-            imc_in (IMC): OpenQuake IMC type of the input sigmas array. 
+            sigmas (array): Numpy array of standard deviations.
+            imc_in (IMC): OpenQuake IMC type of the input sigmas array.
                 `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
-            imc_out (IMC): Desired OpenQuake IMC type of the output sigmas. 
+            imc_out (IMC): Desired OpenQuake IMC type of the output sigmas.
                 `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
             imt (IMT): OpenQuake IMT of the input sigmas (must be one of PGA,
                  PGV, or SA)
                 `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`__
 
         Returns:
-            array: Numpy array of standard deviations converted from imc_in to imc_out
+            array: Numpy array of standard deviations converted from imc_in to
+                imc_out.
 
-        """
+        """  # noqa
 
-        #---------------------------------------------------
+        # ---------------------------------------------------------------------
         # Take input sigma to geometric mean sigma.
         # Solve eqn 8 for sigma_GM2, which is sigma_logSa_GM
         # This is the sigma converted to geometric mean
         # (i.e., reference component).
-        #---------------------------------------------------
+        # ---------------------------------------------------------------------
         R, sig_log_ratio = BeyerBommer2006.__GM2otherSigma(imt, imc_in)
         sigma_GM2 = (sigmas**2 - sig_log_ratio**2) / R**2
 
-        #---------------------------------------------------
+        # ---------------------------------------------------------------------
         # Evaluate equation 8 to go from GM to requested IMC
-        #---------------------------------------------------
+        # ---------------------------------------------------------------------
         R, sig_log_ratio = BeyerBommer2006.__GM2otherSigma(imt, imc_out)
         sigma_out = np.sqrt(sigma_GM2 * R**2 + sig_log_ratio**2)
 
@@ -185,7 +186,7 @@ class BeyerBommer2006(object):
     @staticmethod
     def __GM2other(imt, imc):
         """
-        Helper function to extract coefficients from the parameters for 
+        Helper function to extract coefficients from the parameters for
         converting the median ground motions.
 
         Args:
@@ -193,9 +194,9 @@ class BeyerBommer2006(object):
             imc (IMC): OQ Intensity measure component.
 
         Returns:
-            float: Median ratios. This is directly from Table 2 for PGA and PGV,
-                and computed from coefficients in Table 3 along with eqn 10 for
-                Sa.
+            float: Median ratios. This is directly from Table 2 for PGA and
+                PGV, and computed from coefficients in Table 3 along with
+                eqn 10 for Sa.
 
         """
 
@@ -231,7 +232,7 @@ class BeyerBommer2006(object):
     def __GM2otherSigma(imt, imc):
         """
         Helper function to extract coefficients from the parameters for
-        converting standard deviations. 
+        converting standard deviations.
 
         Args:
             imt (IMT): OQ intensity measure type.

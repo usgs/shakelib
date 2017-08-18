@@ -18,7 +18,7 @@ class Sites(object):
     """
     An object to encapsulate information used to generate a GEM
     `SitesContext <https://github.com/gem/oq-hazardlib/blob/master/openquake/hazardlib/gsim/base.py>`__.
-    """
+    """  # noqa
 
     def __init__(self, vs30grid, vs30measured_grid=None, backarc=None,
                  defaultVs30=686.0):
@@ -33,7 +33,7 @@ class Sites(object):
                 `backarc <http://earthquake.usgs.gov/learn/glossary/?term=backarc>`__.
             defaultVs30: Default Vs30 value to use in locations where Vs30Grid
                 is not specified.
-        """
+        """  # noqa
         self._Vs30 = vs30grid
         if backarc is None:
             self._backarc = np.zeros_like(vs30grid.getData(), dtype=bool)
@@ -97,7 +97,7 @@ class Sites(object):
                 clipped to the extent of the input file.
             resample: Boolean indicating whether or not the grid should be
                 resampled.
-        """
+        """  # noqa
         geodict = GeoDict.createDictFromBox(xmin, xmax, ymin, ymax, dx, dy)
         if vs30File is not None:
             vs30grid = cls._create(geodict, defaultVs30,
@@ -136,7 +136,7 @@ class Sites(object):
                 clipped to the extent of the input file.
             resample: Boolean indicating whether or not the grid should be
                 resampled.
-        """
+        """  # noqa
         geodict = GeoDict.createDictFromCenter(cx, cy, dx, dy, xspan, yspan)
         if vs30File is not None:
             vs30grid = cls._create(geodict, defaultVs30,
@@ -157,16 +157,18 @@ class Sites(object):
 
                 - None, in which case the SitesContext for the complete Sites
                   grid is returned, or
-                - A location dictionary (elements are 'lats' and 'lons' and each
-                  is a numpy array). Each element must have the same shape. In
-                  this case the SitesContext for these locaitons is returned.
+                - A location dictionary (elements are 'lats' and 'lons' and
+                  each is a numpy array). Each element must have the same
+                  shape. In this case the SitesContext for these locaitons is
+                  returned.
 
             rock_vs30: Either
 
                 - None, in which case the SitesContext will reflect the Vs30
                   grid in the Sites instance, or
                 - A float for the rock Vs30 value, in which case the
-                  SitesContext will be constructed for this constant Vs30 value.
+                  SitesContext will be constructed for this constant Vs30
+                  value.
 
         Returns:
             SitesContext object.
@@ -175,7 +177,7 @@ class Sites(object):
             ShakeLibException: When lat/lon input sequences do not share
                 dimensionality.
 
-        """
+        """  # noqa
 
         sctx = SitesContext()
 

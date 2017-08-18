@@ -10,14 +10,16 @@ import pytest
 
 from openquake.hazardlib.gsim.abrahamson_2014 import AbrahamsonEtAl2014
 from openquake.hazardlib.gsim.boore_2014 import BooreEtAl2014
-from openquake.hazardlib.gsim.campbell_bozorgnia_2014 import CampbellBozorgnia2014
+from openquake.hazardlib.gsim.campbell_bozorgnia_2014 import \
+    CampbellBozorgnia2014
 from openquake.hazardlib.gsim.chiou_youngs_2014 import ChiouYoungs2014
 from openquake.hazardlib.gsim.campbell_2003 import Campbell2003
 from openquake.hazardlib.gsim.campbell_2003 import Campbell2003MwNSHMP2008
 from openquake.hazardlib.gsim.atkinson_boore_2006 import AtkinsonBoore2006
 from openquake.hazardlib.gsim.pezeshk_2011 import PezeshkEtAl2011NEHRPBC
 from openquake.hazardlib.gsim.zhao_2006 import ZhaoEtAl2006Asc
-from openquake.hazardlib.gsim.campbell_bozorgnia_2008 import CampbellBozorgnia2008
+from openquake.hazardlib.gsim.campbell_bozorgnia_2008 import \
+    CampbellBozorgnia2008
 from openquake.hazardlib.gsim.chiou_youngs_2008 import ChiouYoungs2008
 from openquake.hazardlib import imt, const
 from openquake.hazardlib.gsim.base import RuptureContext
@@ -37,8 +39,6 @@ from shakelib.multigmpe import filter_gmpe_list
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
-
-
 
 
 def test_basic():
@@ -123,18 +123,19 @@ def test_basic():
     lmean_target = 0.3 * tmp1 + 0.7 * tmp2
     np.testing.assert_allclose(lmean_target, lmean_mgmpe)
 
+
 def test_filter_gmpe_list():
     gmpelist = [Campbell2003MwNSHMP2008(), AtkinsonBoore2006()]
     wts = [0.5, 0.5]
-    fgmpes, fwts = filter_gmpe_list(gmpelist, wts, imt = imt.PGA())
+    fgmpes, fwts = filter_gmpe_list(gmpelist, wts, imt=imt.PGA())
     assert fgmpes == gmpelist
     assert np.all(wts == fwts)
 
-    fgmpes, fwts = filter_gmpe_list(gmpelist, wts, imt = imt.PGV())
+    fgmpes, fwts = filter_gmpe_list(gmpelist, wts, imt=imt.PGV())
     assert fgmpes == gmpelist
     assert np.all(wts == fwts)
 
-    fgmpes, fwts = filter_gmpe_list(gmpelist, wts, imt = imt.SA(3.5))
+    fgmpes, fwts = filter_gmpe_list(gmpelist, wts, imt=imt.SA(3.5))
     assert fgmpes == [gmpelist[1]]
     assert fwts == [1.0]
 
@@ -441,7 +442,7 @@ def test_nga_w2_m8():
                                imc='Average Horizontal (RotD50)')
     sctx.z2pt5_cb14_cal = sites.Sites._z2pt5_from_vs30_cb14_cal(
         sctx.vs30) / 1000.0
-    #                                                           Important ^^^^^^^
+    #     Important ^^^^^^^
     cb14, sd_cb14 = gmpe.get_mean_and_stddevs(sctx, rctx, dctx, IMT,
                                               [const.StdDev.TOTAL])
 
@@ -695,7 +696,7 @@ def test_nga_w2_m6():
                                imc='Average Horizontal (RotD50)')
     sctx.z2pt5_cb14_cal = sites.Sites._z2pt5_from_vs30_cb14_cal(
         sctx.vs30) / 1000.0
-    #                                                           Important ^^^^^^^
+    #     Important ^^^^^^^
     cb14, sd_cb14 = gmpe.get_mean_and_stddevs(sctx, rctx, dctx, IMT,
                                               [const.StdDev.TOTAL])
 
@@ -894,9 +895,9 @@ def test_multigmpe_has_site():
 
 
 def test_multigmpe_get_site_factors():
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Setup rupture and distance contexts to get linear amps
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     rctx = RuptureContext()
     dctx = DistancesContext()
@@ -916,9 +917,9 @@ def test_multigmpe_get_site_factors():
 
     sctx.vs30 = np.ones_like(dctx.rjb) * 292.0
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Single GMPE
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     gmpes = [BooreEtAl2014()]
 
     gmpe = MultiGMPE.from_list(gmpes, [1.0],
@@ -936,9 +937,9 @@ def test_multigmpe_get_site_factors():
          0.93331921,  0.88494693,  0.81332188,  0.72361212,  0.62726726])
     np.testing.assert_allclose(fs, target_fs)
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Multiple GMPEs
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     gmpes = [BooreEtAl2014(), CampbellBozorgnia2014()]
     gmpe = MultiGMPE.from_list(gmpes, [0.5, 0.5],
                                imc='Average Horizontal (RotD50)')
@@ -953,11 +954,11 @@ def test_multigmpe_get_site_factors():
          0.92226581,  0.8694731,  0.81333471,  0.74510641,  0.65804797])
     np.testing.assert_allclose(fs, target_fs)
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Check that a multigmpe with one GMPE that has no site term and one GMPE
     # that does have a site term gives the same amps as a multigmpe with
     # just the one GMPE that has a site term.
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     per = np.logspace(np.log10(0.1), np.log10(4))
     gmpes = [AtkinsonBoore2006()]
     gmpe_m1 = MultiGMPE.from_list(
@@ -975,10 +976,10 @@ def test_multigmpe_get_site_factors():
     fs2 = np.array(fs2).reshape((-1))
     np.testing.assert_allclose(fs1, fs2)
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Check that get_site_factors gives the same thing as calling
     # mgmpe.get_mean_and_stddevs twice
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     gmpes = [Campbell2003(), AtkinsonBoore2006()]
     gmpe_m2 = MultiGMPE.from_list(
         gmpes, [0.5, 0.5], default_gmpes_for_site=[AtkinsonBoore2006()],
@@ -1001,10 +1002,10 @@ def test_multigmpe_get_site_factors():
     fs3 = lmean - lmean_ref
     np.testing.assert_allclose(fs2, fs3)
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Check that get_site_factors gives the same result if one default is given
     # and all other GMPEs do not have a site term for default True and False.
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     gmpes = [Campbell2003(), AtkinsonBoore2006(), PezeshkEtAl2011NEHRPBC()]
     gmpe_m1 = MultiGMPE.from_list(
         gmpes, [0.3, 0.4, 0.3], default_gmpes_for_site=[AtkinsonBoore2006()],
@@ -1020,14 +1021,14 @@ def test_multigmpe_get_site_factors():
 
 
 def test_multigmpe_get_sites_depth_parameters():
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # This is to check the older (2008) parameters that aren't getting tested
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     gmpes = [CampbellBozorgnia2008(), ChiouYoungs2008()]
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Make sites instance
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     vs30file = os.path.join(homedir, 'multigmpe_data', 'Vs30_test.grd')
     cx = -118.2
     cy = 34.1
@@ -1058,8 +1059,8 @@ def test_multigmpe_get_sites_depth_parameters():
     np.testing.assert_allclose(sx1.z2pt5, z2pt5d)
     sx2 = MultiGMPE.set_sites_depth_parameters(sctx, gmpes[1])
     z1pt0d = np.array(
-           [[183.2043947,   217.27787758,  180.56690603,  180.68687904,
-             180.91907101,  178.625999,    175.08452094],
+        [[183.2043947,   217.27787758,  180.56690603,  180.68687904,
+          180.91907101,  178.625999,    175.08452094],
             [183.72884833,  184.47314285,  181.34994816,  183.89385557,
              188.91901585,  186.91536614,  183.67358657],
             [181.43651087,  179.19139187,  180.03044953,  183.81199342,
@@ -1076,16 +1077,16 @@ def test_multigmpe_get_sites_depth_parameters():
 
 
 def test_multigmpe_get_mean_stddevs():
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Define gmpes and their weights
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     gmpes = [AbrahamsonEtAl2014(), BooreEtAl2014(),
              CampbellBozorgnia2014(), ChiouYoungs2014()]
     wts = [0.25, 0.25, 0.25, 0.25]
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Make sites instance
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     vs30file = os.path.join(homedir, 'multigmpe_data', 'Vs30_test.grd')
     cx = -118.2
     cy = 34.1
@@ -1098,9 +1099,9 @@ def test_multigmpe_get_mean_stddevs():
                             padding=True, resample=False)
     sctx = site.getSitesContext()
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Make rupture instance
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     lat0 = np.array([34.1])
     lon0 = np.array([-118.2])
     lat1 = np.array([34.2])
@@ -1116,19 +1117,19 @@ def test_multigmpe_get_mean_stddevs():
     origin = Origin(event)
     rup = QuadRupture.fromTrace(lon0, lat0, lon1, lat1, z, W, dip, origin)
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Make a rupture context
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     rx = rup.getRuptureContext(gmpes)
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Make a distance context
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     dctx = Distance.fromSites(gmpes, site, rup).getDistanceContext()
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Compute weighted GMPE
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     iimt = imt.PGV()
     stddev_types = [const.StdDev.TOTAL]
     mgmpe = MultiGMPE.from_list(gmpes, wts)
@@ -1136,20 +1137,20 @@ def test_multigmpe_get_mean_stddevs():
         sctx, rx, dctx, iimt, stddev_types)
 
     lnmud = np.array(
-          [[3.53816879,  3.6486898,  3.67058155,  3.72223342,  3.75403094,
+        [[3.53816879,  3.6486898,  3.67058155,  3.72223342,  3.75403094,
             3.79317343,  3.79875342],
-           [3.57531437,  3.64441687,  3.69915981,  3.74491289,  3.7893222,
+         [3.57531437,  3.64441687,  3.69915981,  3.74491289,  3.7893222,
             3.80960399,  3.80874163],
-            [3.60764647,  3.66894024,  3.72148551,  3.75742965,  3.82165729,
-             3.86343278,  3.87173434],
-            [3.61835381,  3.68166249,  3.7338161,  3.82454214,  3.8154445,
-             3.81508757,  3.8000821],
-            [3.71324776,  3.70389969,  3.77034752,  3.78259432,  3.78677497,
-             3.79838465,  3.7905037],
-            [3.67813977,  3.71754876,  3.65520574,  3.69463436,  3.72516445,
-             3.7457098,  3.74672185],
-            [3.61907294,  3.58790363,  3.58068716,  3.61177983,  3.64349327,
-             3.66698467,  3.67129901]])
+         [3.60764647,  3.66894024,  3.72148551,  3.75742965,  3.82165729,
+            3.86343278,  3.87173434],
+         [3.61835381,  3.68166249,  3.7338161,  3.82454214,  3.8154445,
+            3.81508757,  3.8000821],
+         [3.71324776,  3.70389969,  3.77034752,  3.78259432,  3.78677497,
+            3.79838465,  3.7905037],
+         [3.67813977,  3.71754876,  3.65520574,  3.69463436,  3.72516445,
+            3.7457098,  3.74672185],
+         [3.61907294,  3.58790363,  3.58068716,  3.61177983,  3.64349327,
+            3.66698467,  3.67129901]])
 
     lnsdd = np.array(
         [[0.63677975,  0.63715381,  0.64040366,  0.64404005,  0.64782624,
@@ -1171,9 +1172,9 @@ def test_multigmpe_get_mean_stddevs():
     np.testing.assert_allclose(lnmu, lnmud, rtol=RTOL)
     np.testing.assert_allclose(lnsd[0], lnsdd, rtol=RTOL)
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Check PGV from a GMPE without PGV
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     gmpes = [Campbell2003()]
     stddev_types = [const.StdDev.TOTAL]
     wts = [1.0]
@@ -1217,9 +1218,9 @@ def test_multigmpe_get_mean_stddevs():
     np.testing.assert_allclose(lnmu, lnmud)
     np.testing.assert_allclose(lnsd[0], lnsdd)
 
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Check a GMPE that doens't have PGV but does have site
-    #---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     gmpes = [ZhaoEtAl2006Asc()]
     stddev_types = [const.StdDev.TOTAL]
     wts = [1.0]
@@ -1263,12 +1264,34 @@ def test_multigmpe_get_mean_stddevs():
     np.testing.assert_allclose(lnsd[0], lnsdd)
 
 
-
-
 def test_multigmpe_exceptions():
     gmpes = [AbrahamsonEtAl2014(), BooreEtAl2014(),
              CampbellBozorgnia2014(), ChiouYoungs2014()]
     wts = [0.25, 0.25, 0.25, 0.25]
+
+    ASK14 = AbrahamsonEtAl2014()
+
+    iimt = imt.SA(1.0)
+    rctx = RuptureContext()
+    dctx = DistancesContext()
+    sctx = SitesContext()
+
+    rctx.rake = 0.0
+    rctx.dip = 90.0
+    rctx.ztor = 0.0
+    rctx.mag = 8.0
+    rctx.width = 10.0
+    rctx.hypo_depth = 8.0
+
+    dctx.rjb = np.logspace(1, np.log10(800), 100)
+    dctx.rrup = dctx.rjb
+    dctx.rhypo = dctx.rjb
+    dctx.rx = dctx.rjb
+    dctx.ry0 = dctx.rjb
+
+    sctx.vs30 = np.ones_like(dctx.rjb) * 275.0
+    sctx.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+    sctx = MultiGMPE.set_sites_depth_parameters(sctx, ASK14)
 
     # Check for exception due to weights:
     with pytest.raises(Exception) as a:
@@ -1299,7 +1322,7 @@ def test_multigmpe_exceptions():
         mgmpe = MultiGMPE.from_list(gmpes, wts)
         stddev_types = [const.StdDev.INTER_EVENT]
         lnmu, lnsd = mgmpe.get_mean_and_stddevs(
-            sctx, rx, dctx, iimt, stddev_types)
+            sctx, rctx, dctx, iimt, stddev_types)
 
     # Check exception for GMPE instance of default_gmpes_for_site
     with pytest.raises(Exception) as a:
@@ -1322,7 +1345,7 @@ def test_multigmpe_exceptions():
 
     # Check exception for case where GMPEs do not have site term,
     # and their weights do not sum to one.
-    with pytest.raises(Exception) as a:
+    with pytest.raises(Exception) as a:  # noqa
         gmpes = [Campbell2003()]
         site_gmpes = [PezeshkEtAl2011NEHRPBC(), AtkinsonBoore2006()]
         site_gmpes_wts = [0.6, 0.5]

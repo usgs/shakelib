@@ -9,14 +9,14 @@ import numpy as np
 import datetime as dt
 import time
 import datetime
-import pprint
+
+from shakelib.utils.container import InputContainer, OutputContainer
+from shakelib.rupture.point_rupture import PointRupture
 
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
 
-from shakelib.utils.container import InputContainer, OutputContainer
-from shakelib.rupture.point_rupture import PointRupture
 
 def dict_equal(d1, d2):
     s1 = sorted(set(d1.keys()))
@@ -34,8 +34,9 @@ def test_container():
     rupturefile = os.path.join(homedir, 'container_data/Barkaetal02_fault.txt')
     event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
 <earthquake id="2008ryan" lat="30.9858" lon="103.3639" mag="7.9" year="2008"
-month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0"
-locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type="" />"""
+month="05" day="12" hour="06" minute="28" second="01" timezone="GMT"
+depth="19.0" locstring="EASTERN SICHUAN, CHINA" created="1211173621"
+otime="1210573681" type="" />"""
     eventfile = io.StringIO(event_text)
     datafiles = [os.path.join(
         homedir, 'container_data/northridge_stations_dat.xml')]
@@ -60,10 +61,10 @@ locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=
 
     container2 = InputContainer.loadFromHDF(datafile)
     config2 = container2.getConfig()
-    station2 = container2.getStationList()
-    origin2 = container2.getOrigin()
-    rupture2 = container2.getRupture()
-    history2 = container2.getHistory()
+    station2 = container2.getStationList()  # noqa
+    origin2 = container2.getOrigin()  # noqa
+    rupture2 = container2.getRupture()  # noqa
+    history2 = container2.getHistory()  # noqa
 
     assert dict_equal(config, config2)
     df1 = station.getStationDataframe(0)
@@ -85,7 +86,7 @@ locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=
 
     container3 = InputContainer.loadFromInput(datafile, config, eventfile)
     station = container3.getStationList()
-    origin = container3.getOrigin()
+    origin = container3.getOrigin()  # noqa
     rupture = container3.getRupture()
     history = container3.getHistory()
     assert station is None
@@ -98,17 +99,19 @@ locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=
 def test_output_container():
     test_file = os.path.join(homedir, 'container_data', 'test.hdf')
     oc = OutputContainer.createEmpty(test_file)
-    test_dict = { 'float': 2.5,
-                  'int': 3,
-                  'string': 'This is a test',
-                  'list': [1, 2, 3],
-                  'dict': {'name': 'Joe', 'age': 20},
-                  'nparray': np.array([1., 2., 3.]),
-                  'datetime': dt.datetime.utcnow()}
+    test_dict = {'float': 2.5,
+                 'int': 3,
+                 'string': 'This is a test',
+                 'list': [1, 2, 3],
+                 'dict': {'name': 'Joe', 'age': 20},
+                 'nparray': np.array([1., 2., 3.]),
+                 'datetime': dt.datetime.utcnow()}
     test_string = 'This is a string.'
     test_json = json.dumps({'thing': 'some json', 'stuff': [1, 2, 3]})
     test_array = np.array([[1., 2., 3.], [4., 5., 6.]])
-    test_dset_metadata = {'nx': 100, 'ny': 200, 'an_array': np.array([1, 2, 3])}
+    test_dset_metadata = {'nx': 100,
+                          'ny': 200,
+                          'an_array': np.array([1, 2, 3])}
 
     oc.addMetadata(test_dict)
     oc.addData(test_string, 'test_string')
@@ -128,11 +131,14 @@ def test_output_container():
     os.remove(test_file)
 
     assert set(td.keys()) == set(test_dict.keys())
-    assert td['datetime'] == dt.datetime.fromtimestamp(time.mktime(test_dict['datetime'].timetuple()))
+    assert td['datetime'] == \
+        dt.datetime.fromtimestamp(time.mktime(
+            test_dict['datetime'].timetuple()))
     assert ts == test_string
     assert tj == test_json
     assert np.all(ta == test_array)
     assert set(tamd.keys()) == set(test_dset_metadata.keys())
+
 
 if __name__ == '__main__':
     test_container()

@@ -1,8 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import cartopy.crs as ccrs
-import numpy as np
+from mpl_toolkits.mplot3d import Axes3D  # noqa
 
 from shakelib.utils.exception import ShakeLibException
 
@@ -14,15 +13,15 @@ MAP_WIDTH = 10.0  # map width in degrees
 
 def plot_rupture_wire3d(rupture, ax=None):
     """
-    Method for making a simple representation of a Rupture instance. 
-    This method draws the outline of each quadrilateral in 3D. 
+    Method for making a simple representation of a Rupture instance.
+    This method draws the outline of each quadrilateral in 3D.
 
     Args:
-        rupture: A Rupture instance. 
-        ax: A matplotlib axis (optional). 
+        rupture: A Rupture instance.
+        ax: A matplotlib axis (optional).
 
     Returns:
-        Matplotlib axis. 
+        Matplotlib axis.
     """
 
     if ax is None:

@@ -15,7 +15,7 @@ class WGRW12(object):
         Seismological Society of America, 102(1), 204-221.
     """
 
-    #------------------------------------------------------------------------
+    # -----------------------------------------------------------------------
     #
     # MMI = c2->C1 + c2->C2 * log(Y)  for log(Y) <= c2->T1
     # MMI = C1 + C2 * log(Y)          for c2->T1 < log(Y) <= T1
@@ -32,7 +32,7 @@ class WGRW12(object):
     # Limit the distance residuals to between 10 and 300 km.
     # Limit the magnitude residuals to between M3.0 and M7.3.
     #
-    #------------------------------------------------------------------------
+    # -----------------------------------------------------------------------
 
     __pga = PGA()
     __pgv = PGV()
@@ -93,10 +93,10 @@ class WGRW12(object):
                 Earthquake magnitude.
 
         Returns:
-            ndarray of Modified Mercalli Intensity and ndarray of 
+            ndarray of Modified Mercalli Intensity and ndarray of
             dMMI / dln(amp) (i.e., the slope of the relationship at the
             point in question).
-        """
+        """  # noqa
         lfact = np.log10(np.e)
         c, c2 = self.__getConsts(imt)
 
@@ -170,9 +170,9 @@ class WGRW12(object):
 
         Returns:
             Ndarray of ground motion intensity in natural log of g for PGA
-            and PSA, and natural log cm/s for PGV; ndarray of dln(amp) / dMMI 
+            and PSA, and natural log cm/s for PGV; ndarray of dln(amp) / dMMI
             (i.e., the slope of the relationship at the point in question).
-        """
+        """  # noqa
         lfact = np.log10(np.e)
         c, c2 = self.__getConsts(imt)
         mmi = mmi.copy()

@@ -7,9 +7,9 @@ from shakelib.rupture.origin import Origin
 from shakelib.rupture.factory import get_rupture
 from shakelib.utils.utils import get_extent, is_stable
 
-
 homedir = os.path.dirname(os.path.abspath(__file__))
 datadir = os.path.join(homedir, 'utils_data')
+
 
 def test_get_extent_small_point():
     #
@@ -25,6 +25,7 @@ def test_get_extent_small_point():
     assert S == 30.083333333333332
     assert N == 31.883333333333333
 
+
 def test_get_extent_small_complex():
     #
     # Do a complex rupture
@@ -39,6 +40,7 @@ def test_get_extent_small_complex():
     assert S == 27.9
     assert N == 35.55
 
+
 def test_get_extent_bad_usage():
     #
     # Test bad usage
@@ -47,6 +49,7 @@ def test_get_extent_bad_usage():
         W, E, S, N = get_extent()
     with pytest.raises(TypeError):
         W, E, S, N = get_extent(34)
+
 
 def test_get_extent_aspect():
     #
@@ -91,6 +94,7 @@ def test_get_extent_aspect():
     assert S == 21.03333333333333
     assert N == 38.46666666666667
 
+
 def test_get_extent_stable_small():
     #
     # Do an event in a stable region
@@ -105,6 +109,7 @@ def test_get_extent_stable_small():
     assert S == 34.766666666666666
     assert N == 36.583333333333336
 
+
 def test_get_extent_stable_large():
     #
     # Do an event in a stable region
@@ -118,6 +123,7 @@ def test_get_extent_stable_large():
     assert E == -86.76666666666667
     assert S == 27.55
     assert N == 43.03333333333333
+
 
 def test_is_stable():
 

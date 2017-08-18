@@ -14,7 +14,6 @@ from shakelib.utils.exception import ShakeLibException
 from shakelib.rupture import constants
 
 
-
 def is_quad(q):
     """
     Checks that an individual quad is coplanar.
@@ -404,7 +403,8 @@ def get_vertical_vector(q):
         q (list): A quadrilateral; list of four points.
 
     Returns:
-        Vector: Normalized vertical vector for the quadrilateral in ECEF coords.
+        Vector: Normalized vertical vector for the quadrilateral in ECEF
+                coords.
     """
     P0, P1, P2, P3 = q
     P0_up = copy.deepcopy(P0)
@@ -530,8 +530,6 @@ def get_distance_to_plane(planepoints, otherpoint):
     else:
         dist = 0
     return dist
-
-
 
 
 def _distance_sq_to_segment(p0, p1):

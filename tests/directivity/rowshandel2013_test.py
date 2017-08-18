@@ -9,16 +9,16 @@ import pytest
 import openquake.hazardlib.geo as geo
 from openquake.hazardlib.geo import point
 
-homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
-shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
-sys.path.insert(0, shakedir)
-
 from shakelib.sites import Sites
 from shakelib.rupture.quad_rupture import QuadRupture
 from shakelib.rupture.origin import Origin
 from shakelib.directivity.rowshandel2013 import Rowshandel2013
 from impactutils.vectorutils.vector import Vector
 from impactutils.vectorutils.ecef import ecef2latlon
+
+homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
+shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
+sys.path.insert(0, shakedir)
 
 
 def test_exceptions():
@@ -58,15 +58,15 @@ def test_exceptions():
     slon, slat = proj(site_x, site_y, reverse=True)
     deps = np.zeros_like(slon)
 
-    with pytest.raises(Exception) as e:
-        test1 = Rowshandel2013(origin, rup, slat, slon, deps, dx=1,
-                               T=[1.0, 3.0],
-                               a_weight=1.5, mtype=1)
+    with pytest.raises(Exception) as e:  # noqa
+        Rowshandel2013(origin, rup, slat, slon, deps, dx=1,
+                       T=[1.0, 3.0],
+                       a_weight=1.5, mtype=1)
 
-    with pytest.raises(Exception) as e:
-        test1 = Rowshandel2013(origin, rup, slat, slon, deps, dx=1,
-                               T=[1.0, 3.0],
-                               a_weight=0.5, mtype=3)
+    with pytest.raises(Exception) as e:  # noqa
+        Rowshandel2013(origin, rup, slat, slon, deps, dx=1,
+                       T=[1.0, 3.0],
+                       a_weight=0.5, mtype=3)
 
 
 def test_fromSites():
@@ -114,20 +114,21 @@ def test_fromSites():
     test1 = Rowshandel2013.fromSites(origin, rup, mysite, dx=1, T=[5.0],
                                      a_weight=0.5, mtype=1)
 
-    targetFd = np.array([[0.10991596,  0.11007528,  0.11018762,  0.11023397,  0.11018809,
-                          0.11007606,  0.10991697],
-                         [0.10989916,  0.11005883,  0.11017133,  0.11021747,  0.1101718,
-                          0.11005961,  0.10990017],
-                         [0.10988182,  0.11004174,  0.11015419,  0.11019949,  0.11015466,
-                          0.11004252,  0.10988284],
-                         [0.11043384,  0.1105936,  0.11070573,  0.11074989,  0.11070619,
-                          0.11059438,  0.11043486],
-                         [0.11090065,  0.11104924,  0.1111476,  0.11118285,  0.11114798,
-                          0.11104995,  0.11090161],
-                         [0.111294,  0.11142864,  0.11151456,  0.11154438,  0.11151489,
-                          0.11142926,  0.11129488],
-                         [0.11162799,  0.11174971,  0.11182586,  0.11185193,  0.11182615,
-                          0.11175027,  0.11162879]])
+    targetFd = np.array(
+            [[0.10991596,  0.11007528,  0.11018762,  0.11023397,  0.11018809,
+              0.11007606,  0.10991697],
+             [0.10989916,  0.11005883,  0.11017133,  0.11021747,  0.1101718,
+              0.11005961,  0.10990017],
+             [0.10988182,  0.11004174,  0.11015419,  0.11019949,  0.11015466,
+              0.11004252,  0.10988284],
+             [0.11043384,  0.1105936,  0.11070573,  0.11074989,  0.11070619,
+              0.11059438,  0.11043486],
+             [0.11090065,  0.11104924,  0.1111476,  0.11118285,  0.11114798,
+              0.11104995,  0.11090161],
+             [0.111294,    0.11142864,  0.11151456,  0.11154438,  0.11151489,
+              0.11142926,  0.11129488],
+             [0.11162799,  0.11174971,  0.11182586,  0.11185193,  0.11182615,
+              0.11175027,  0.11162879]])
     np.testing.assert_allclose(test1.getFd()[0], targetFd)
 
 
@@ -1961,7 +1962,6 @@ def test_rv4():
 
 
 def test_so6():
-    event_name = 'so6'
     magnitude = 7.2
     dip = np.array([70])
     rake = 135

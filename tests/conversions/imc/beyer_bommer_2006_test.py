@@ -7,11 +7,11 @@ import numpy as np
 import os.path
 import sys
 
+from shakelib.conversions.imc.beyer_bommer_2006 import BeyerBommer2006
+
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..', '..'))
 sys.path.insert(0, shakedir)
-
-from shakelib.conversions.imc.beyer_bommer_2006 import BeyerBommer2006
 
 amps_in = np.log(np.array([0.05, 0.1, 0.2, 0.4, 0.8, 1.6]))
 sigmas_in = np.array([0.5, 0.55, 0.6, 0.65, 0.61, 0.7])
@@ -173,7 +173,7 @@ def test_bb06():
         tmp = bb06.ampIMCtoIMC(amps_in, imc_in[0], 'a', imt_in[0])
     with pytest.raises(Exception) as a:
         tmp = bb06.ampIMCtoIMC(amps_in, 'a', imc_out[0], imt_in[0])
-    with pytest.raises(Exception) as a:
+    with pytest.raises(Exception) as a:  # noqa
         tmp = bb06.ampIMCtoIMC(amps_in, imc_in[0], imc_out[0], 'a')
 
 

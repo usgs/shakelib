@@ -30,10 +30,12 @@ def test_origin():
 30.979788       103.454422      1"""
     event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
 <earthquake id="2008ryan" lat="30.9858" lon="103.3639" mag="7.9" year="2008"
-month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0"
-locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type="" />"""
+month="05" day="12" hour="06" minute="28" second="01" timezone="GMT"
+depth="19.0"
+locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681"
+type="" />"""
     source_text = "mech=RS"
-    ffile = io.StringIO(fault_text)
+    ffile = io.StringIO(fault_text)  # noqa
     efile = io.StringIO(event_text)
     sfile = io.StringIO(source_text)
     origin = Origin.fromFile(efile, sourcefile=sfile)
@@ -72,53 +74,56 @@ locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=
         origin.setMechanism("SS", rake=1111)
     # Lat is greater than 90
     with pytest.raises(Exception) as a:
-        event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
-<earthquake id="2008" lat="91.9858" lon="103.3639" mag="7.9" year="2008"
-month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0"
-locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type="" />"""
+        event_text = """<?xml version="1.0" encoding="US-ASCII"
+standalone="yes"?> <earthquake id="2008" lat="91.9858" lon="103.3639"
+mag="7.9" year="2008" month="05" day="12" hour="06" minute="28" second="01"
+timezone="GMT" depth="19.0" locstring="EASTERN SICHUAN, CHINA"
+created="1211173621" otime="1210573681" type="" />"""
         efile = io.StringIO(event_text)
         origin = Origin.fromFile(efile)
     # Lon is greater than 180
     with pytest.raises(Exception) as a:
-        event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
-<earthquake id="2008" lat="31.9858" lon="183.3639" mag="7.9" year="2008"
-month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0"
-locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type="" />"""
+        event_text = """<?xml version="1.0" encoding="US-ASCII"
+standalone="yes"?> <earthquake id="2008" lat="31.9858" lon="183.3639"
+mag="7.9" year="2008" month="05" day="12" hour="06" minute="28" second="01"
+timezone="GMT" depth="19.0" locstring="EASTERN SICHUAN, CHINA"
+created="1211173621" otime="1210573681" type="" />"""
         efile = io.StringIO(event_text)
         origin = Origin.fromFile(efile)
     # No event id
     with pytest.raises(Exception) as a:
-        event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
-<earthquake lat="30.9858" lon="103.3639" mag="7.9" year="2008"
-month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0"
-locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type="" />"""
+        event_text = """<?xml version="1.0" encoding="US-ASCII"
+standalone="yes"?> <earthquake lat="30.9858" lon="103.3639" mag="7.9"
+year="2008" month="05" day="12" hour="06" minute="28" second="01"
+timezone="GMT" depth="19.0" locstring="EASTERN SICHUAN, CHINA"
+created="1211173621" otime="1210573681" type="" />"""
         efile = io.StringIO(event_text)
         origin = Origin.fromFile(efile)
     # Put mech in event keys
     event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
 <earthquake id="2008" lat="30.9858" lon="103.3639" mag="7.9" year="2008"
-month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0"
-locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=""
-mech="SS"/>"""
+month="05" day="12" hour="06" minute="28" second="01" timezone="GMT"
+depth="19.0" locstring="EASTERN SICHUAN, CHINA" created="1211173621"
+otime="1210573681" type="" mech="SS"/>"""
     efile = io.StringIO(event_text)
     origin = Origin.fromFile(efile)
     assert origin.mech == 'SS'
     # Empty mech
     event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
 <earthquake id="2008" lat="30.9858" lon="103.3639" mag="7.9" year="2008"
-month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0"
-locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=""
-mech=""/>"""
+month="05" day="12" hour="06" minute="28" second="01" timezone="GMT"
+depth="19.0" locstring="EASTERN SICHUAN, CHINA" created="1211173621"
+otime="1210573681" type="" mech=""/>"""
     efile = io.StringIO(event_text)
     origin = Origin.fromFile(efile)
     assert origin.mech == 'ALL'
     # Mech not acceptable value
-    with pytest.raises(Exception) as a:
-        event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
-<earthquake id="2008" lat="31.9858" lon="103.3639" mag="7.9" year="2008"
-month="05" day="12" hour="06" minute="28" second="01" timezone="GMT" depth="19.0"
-locstring="EASTERN SICHUAN, CHINA" created="1211173621" otime="1210573681" type=""
-mech="Strike slip"/>"""
+    with pytest.raises(Exception) as a:  # noqa
+        event_text = """<?xml version="1.0" encoding="US-ASCII"
+standalone="yes"?> <earthquake id="2008" lat="31.9858" lon="103.3639"
+mag="7.9" year="2008" month="05" day="12" hour="06" minute="28" second="01"
+timezone="GMT" depth="19.0" locstring="EASTERN SICHUAN, CHINA"
+created="1211173621" otime="1210573681" type="" mech="Strike slip"/>"""
         efile = io.StringIO(event_text)
         origin = Origin.fromFile(efile)
 

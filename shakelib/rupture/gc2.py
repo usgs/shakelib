@@ -38,9 +38,9 @@ def _computeGC2(rupture, lon, lat, depth):
     else:
         newshape = (oldshape[0], 1)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Define a projection that spans sites and rupture
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     all_lat = np.append(lat, rupture.lats)
     all_lon = np.append(lon, rupture.lons)
@@ -55,10 +55,10 @@ def _computeGC2(rupture, lon, lat, depth):
     GC2T = np.zeros(newshape, dtype=lon.dtype)
     GC2U = np.zeros(newshape, dtype=lon.dtype)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # First sort out strike discordance and nominal strike prior to
     # starting the loop if there is more than one group/trace.
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     group_ind = rupture._getGroupIndex()
 
     # Need group_ind as numpy array for sensible indexing...
@@ -67,11 +67,11 @@ def _computeGC2(rupture, lon, lat, depth):
     n_groups = len(uind)
 
     if n_groups > 1:
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # The first thing we need to worry about is finding the coordinate
         # shift. U's origin is "selected from the two endpoints most
         # distant from each other."
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # Need to get index of first and last quad
         # for each segment
@@ -82,10 +82,10 @@ def _computeGC2(rupture, lon, lat, depth):
             iq0[k] = int(np.min(ii))
             iq1[k] = int(np.max(ii))
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # This is an iterator for each possible combination of traces
         # including trace orientations (i.e., flipped).
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         it_seg = it.product(it.combinations(uind, 2),
                             it.product([0, 1], [0, 1]))
@@ -115,10 +115,10 @@ def _computeGC2(rupture, lon, lat, depth):
                 A0 = P0
                 A1 = P1
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # A0 and A1 are the furthest two segment endpoints, but we still
         # need to sort out which one is the "origin".
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # This goofy while-loop is to adjust the side of the rupture where the
         # origin is located
@@ -160,10 +160,10 @@ def _computeGC2(rupture, lon, lat, depth):
                 A0 = tmpA1
                 A1 = tmpA0
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # To fix discordancy, need to flip quads and rearrange
         # the order of quadgc2
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # 1) flip quads
         for i in range(len(quadgc2)):
@@ -197,9 +197,9 @@ def _computeGC2(rupture, lon, lat, depth):
         # Quad length (top edge)
         l_i[i] = get_quad_length(quadgc2[i])
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Weight of segment, three cases
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # Case 3: t_i == 0 and 0 <= u_i <= l_i
         w_i = np.zeros_like(t_i)
@@ -207,7 +207,7 @@ def _computeGC2(rupture, lon, lat, depth):
         # Case 1:
         ix = t_i != 0
         w_i[ix] = (1.0 / t_i[ix]) * (np.arctan((l_i[i] -
-           u_i[ix]) / t_i[ix]) - np.arctan(-u_i[ix] / t_i[ix]))
+                  u_i[ix]) / t_i[ix]) - np.arctan(-u_i[ix] / t_i[ix]))
 
         # Case 2:
         ix = (t_i == 0) & ((u_i < 0) | (u_i > l_i[i]))
@@ -232,7 +232,7 @@ def _computeGC2(rupture, lon, lat, depth):
             s_ij_2 = (p1 - p_origin).dot(np.sign(E) * ahat) / 1000.0
 
             # Above is GC2N, for GC2T use:
-            #s_ij_2 = (p1 - p_origin).dot(bhat) / 1000.0
+            # s_ij_2 = (p1 - p_origin).dot(bhat) / 1000.0
 
             s_ij = s_ij_1 + s_ij_2
             GC2U = GC2U + w_i * (u_i + s_ij)
@@ -365,4 +365,3 @@ def __calc_t_i(P0, P1, lat, lon, proj):
         t_i.shape = (shp[0], 1)
     t_i = np.fliplr(t_i)
     return t_i
-

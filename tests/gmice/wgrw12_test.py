@@ -8,11 +8,11 @@ import sys
 
 from openquake.hazardlib.imt import PGA, PGV, SA, MMI
 
+from shakelib.gmice.wgrw12 import WGRW12
+
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
 sys.path.insert(0, shakedir)
-
-from shakelib.gmice.wgrw12 import WGRW12
 
 
 # Inputs
@@ -147,7 +147,7 @@ def test_wgrw12():
     #
     # This should fail
     #
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(ValueError) as e:  # noqa
         mi, dmda = gmice.getMIfromGM(amps_in, MMI(), dists=None, mag=None)
 
 

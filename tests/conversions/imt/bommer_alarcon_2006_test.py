@@ -3,11 +3,11 @@
 import os.path
 import sys
 
+import shakelib.conversions.imt.bommer_alarcon_2006 as ba06
+
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..', '..'))
 sys.path.insert(0, shakedir)
-
-import shakelib.conversions.imt.bommer_alarcon_2006 as ba06
 
 
 def test_bommeralarcon2006():

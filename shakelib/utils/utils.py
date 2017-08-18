@@ -105,6 +105,7 @@ def get_extent(rupture):
     return _round_coord(lonmin[0]), _round_coord(lonmax[0]), \
            _round_coord(latmin[0]), _round_coord(latmax[0])
 
+
 def _round_coord(coord):
     """
     Round a number to the nearest arc-minute
@@ -113,6 +114,7 @@ def _round_coord(coord):
     mm = coord / dm
     imm = int(mm + 0.5)
     return imm * dm
+
 
 def is_stable(lon, lat):
     """
@@ -139,4 +141,3 @@ def is_stable(lon, lat):
         if p.within(poly):
             return True
     return False
-

@@ -7,11 +7,11 @@ from openquake.hazardlib.imt import PGA, PGV, SA
 import os.path
 import sys
 
+import shakelib.correlation.goda_atkinson_2010 as ga10
+
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
 sys.path.insert(0, shakedir)
-
-import shakelib.correlation.goda_atkinson_2010 as ga10
 
 
 def test_goda_atkinson_2010():

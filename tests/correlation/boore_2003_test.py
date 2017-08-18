@@ -6,11 +6,11 @@ import pytest
 import os.path
 import sys
 
+import shakelib.correlation.boore_2003 as b03
+
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
 sys.path.insert(0, shakedir)
-
-import shakelib.correlation.boore_2003 as b03
 
 
 def test_boore2003():
@@ -42,7 +42,7 @@ def test_boore2003():
     )
     np.testing.assert_allclose(cor, cor_target)
 
-    with pytest.raises(Exception) as a:
+    with pytest.raises(Exception) as a:  # noqa
         cormod.getSpatialCorrelation(d, imt="PGV")
 
 

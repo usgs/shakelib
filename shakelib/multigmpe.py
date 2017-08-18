@@ -14,7 +14,6 @@ from shakelib.conversions.imc.beyer_bommer_2006 import BeyerBommer2006
 from shakelib.sites import Sites
 
 
-
 class MultiGMPE(GMPE):
     """
     Implements a GMPE that is the combination of multiple GMPEs.
@@ -37,7 +36,7 @@ class MultiGMPE(GMPE):
     def get_mean_and_stddevs(self, sites, rup, dists, imt, stddev_types):
         """
         See superclass `method <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.GroundShakingIntensityModel.get_mean_and_stddevs>`__.
-        """
+        """  # noqa
 
         # Evaluate MultiGMPE:
         lnmu, lnsd = self.__get_mean_and_stddevs(
@@ -59,17 +58,17 @@ class MultiGMPE(GMPE):
     def __get_mean_and_stddevs(self, sites, rup, dists, imt, stddev_types,
                                large_dist=False):
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Sort out which set of weights to use
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if large_dist is False:
             wts = self.WEIGHTS
         else:
             wts = self.WEIGHTS_LARGE_DISTANCE
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Sort out shapes of sites and dists elements
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         shapes = []
         for k, v in sites.__dict__.items():
@@ -95,9 +94,9 @@ class MultiGMPE(GMPE):
             if (k is not 'lons') and (k is not 'lats'):
                 sites.__dict__[k] = np.reshape(sites.__dict__[k], (-1,))
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # These are arrays to hold the weighted combination of the GMPEs
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         lnmu = np.zeros_like(sites.vs30)
         sd_avail = self.DEFINED_FOR_STANDARD_DEVIATION_TYPES
         if not sd_avail.issuperset(set(stddev_types)):
@@ -106,25 +105,25 @@ class MultiGMPE(GMPE):
         lnsd2 = [np.zeros_like(sites.vs30) for a in stddev_types]
 
         for i in range(len(self.GMPES)):
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
             # Loop over GMPE list
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
 
             gmpe = self.GMPES[i]
 
             sites = MultiGMPE.set_sites_depth_parameters(sites, gmpe)
 
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
             # Evaluate GMPEs
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
 
             gmpe_imts = [imt.__name__ for imt in
                          gmpe.DEFINED_FOR_INTENSITY_MEASURE_TYPES]
             if (isinstance(imt, PGV)) and ("PGV" not in gmpe_imts):
-                #--------------------------------------------------------------
+                # -------------------------------------------------------------
                 # If IMT is PGV and PGV is not given by the GMPE, then
                 # convert from PSA10.
-                #--------------------------------------------------------------
+                # -------------------------------------------------------------
                 if self.HAS_SITE[i] is True:
                     psa10, psa10sd = gmpe.get_mean_and_stddevs(
                         sites, rup, dists, SA(1.0), stddev_types)
@@ -147,9 +146,9 @@ class MultiGMPE(GMPE):
                         sites, rup, dists, imt, stddev_types)
                     lmean = lmean + lamps
 
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
             # Convertions due to component definition
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
 
             imc_in = gmpe.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT
             imc_out = self.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT
@@ -158,9 +157,9 @@ class MultiGMPE(GMPE):
                 lsd[j] = BeyerBommer2006.sigmaIMCtoIMC(
                     lsd[j], imc_in, imc_out, imt)
 
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
             # Compute weighted mean and sd
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
 
             lnmu = lnmu + wts[i] * lmean
 
@@ -210,12 +209,12 @@ class MultiGMPE(GMPE):
             print('selected_gmpe: %s' % selected_gmpe)
             print('IMC: %s' % IMC)
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Allow for selected_gmpe to be found in either conf['gmpe_sets'] or
         # conf['gmpe_modules'], if it is a GMPE set, then all entries must be
         # either a GMPE or a GMPE set (cannot have a GMPE set that is a mix of
         # GMPEs and GMPE sets).
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         if selected_gmpe in conf['gmpe_sets'].keys():
             selected_gmpe_sets = conf['gmpe_sets'][selected_gmpe]['gmpes']
@@ -225,9 +224,9 @@ class MultiGMPE(GMPE):
                 print('selected_gmpe_sets: %s' % selected_gmpe_sets)
                 print('gmpe_set_weights: %s' % gmpe_set_weights)
 
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
             # If it is a GMPE set, does it contain GMPEs or GMPE sets?
-            #------------------------------------------------------------------
+            # -----------------------------------------------------------------
 
             set_of_gmpes = all([s in conf['gmpe_modules'] for s in
                                 selected_gmpe_sets])
@@ -321,27 +320,27 @@ class MultiGMPE(GMPE):
         else:
             selected_weights_site_gmpes = None
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Import GMPE modules and initialize classes into list
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         gmpes = []
         for g in selected_gmpes:
             mod = import_module(conf['gmpe_modules'][g][1])
             tmpclass = getattr(mod, conf['gmpe_modules'][g][0])
             gmpes.append(tmpclass())
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Filter out GMPEs not applicable to this period
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if filter_imt is not None:
             filtered_gmpes, filtered_wts = filter_gmpe_list(
                 gmpes, selected_gmpe_weights, filter_imt)
         else:
             filtered_gmpes, filtered_wts = gmpes, selected_gmpe_weights
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Import site GMPEs
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if selected_site_gmpes is not None:
             if isinstance(selected_site_gmpes, str):
                 selected_site_gmpes = [selected_site_gmpes]
@@ -353,9 +352,9 @@ class MultiGMPE(GMPE):
         else:
             site_gmpes = None
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Filter out site GMPEs not applicable to this period
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if site_gmpes is not None:
             if filter_imt is not None:
                 filtered_site_gmpes, filtered_site_wts = filter_gmpe_list(
@@ -367,9 +366,9 @@ class MultiGMPE(GMPE):
             filtered_site_gmpes = None
             filtered_site_wts = None
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Construct MultiGMPE
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if verbose is True:
             print('    filtered_gmpes: %s' % filtered_gmpes)
             print('    filtered_wts: %s' % filtered_wts)
@@ -380,9 +379,9 @@ class MultiGMPE(GMPE):
             default_gmpes_for_site_weights=filtered_site_wts,
             imc=IMC)
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Append large-distance info if specified
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if selected_dist_cutoff is not None:
             if filter_imt is not None:
                 filtered_gmpes_ld, filtered_wts_ld = filter_gmpe_list(
@@ -413,9 +412,10 @@ class MultiGMPE(GMPE):
 
             imc: Requested intensity measure component. Must be one listed
                 `here <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__.
-                The amplitudes returned by the GMPEs will be converted to this IMT.
-                Default is 'GREATER_OF_TWO_HORIZONTAL', which is used by ShakeMap.
-                See discussion in `this section <http://usgs.github.io/shakemap/tg_choice_of_parameters.html#use-of-peak-values-rather-than-mean>`__
+                The amplitudes returned by the GMPEs will be converted to this
+                IMT. Default is 'GREATER_OF_TWO_HORIZONTAL', which is used by
+                ShakeMap. See discussion in
+                `this section <http://usgs.github.io/shakemap/tg_choice_of_parameters.html#use-of-peak-values-rather-than-mean>`__
                 of the ShakeMap manual.
 
             default_gmpes_for_site (list):
@@ -439,26 +439,26 @@ class MultiGMPE(GMPE):
                 the reference rock in the GMPEs so this is the responsibility
                 of the user.
 
-        """
+        """  # noqa
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Check that GMPE weights sum to 1.0:
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         if np.abs(np.sum(weights) - 1.0) > 1e-7:
             raise Exception('Weights must sum to one.')
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Check that length of GMPE weights equals length of gmpe list
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         if len(weights) != len(gmpes):
             raise Exception(
                 'Length of weights must match length of GMPE list.')
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Check that gmpes is a list of OQ GMPE instances
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         for g in gmpes:
             if not isinstance(g, GMPE):
@@ -468,7 +468,7 @@ class MultiGMPE(GMPE):
         self.GMPES = gmpes
         self.WEIGHTS = weights
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Combine the intensity measure types. This is problematic:
         #   - Logically, we should only include the intersection of the sets
         #     of imts for the different GMPEs.
@@ -476,51 +476,51 @@ class MultiGMPE(GMPE):
         #     subduction zones do not have PGV.
         #   - So instead we will use the union of the imts and then convert
         #     to get the missing imts later in get_mean_and_stddevs.
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         imts = [g.DEFINED_FOR_INTENSITY_MEASURE_TYPES for g in gmpes]
         self.DEFINED_FOR_INTENSITY_MEASURE_TYPES = set.union(*imts)
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # For VirtualIPE class, we also want to know if ALL of the GMPEs are
         # defined for PGV, in which case we will convert from PGV to MI,
         # otherwise use PGA or Sa.
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         haspgv = [PGV in g.DEFINED_FOR_INTENSITY_MEASURE_TYPES for g in gmpes]
         self.ALL_GMPES_HAVE_PGV = all(haspgv)
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Store intensity measure types for conversion in get_mean_and_stddevs.
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         self.IMCs = [g.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT for g in gmpes]
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Store the component
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         self.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT = imc
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Intersection of GMPE standard deviation types
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         stdlist = [set(g.DEFINED_FOR_STANDARD_DEVIATION_TYPES) for g in gmpes]
         self.DEFINED_FOR_STANDARD_DEVIATION_TYPES = \
             set.intersection(*stdlist)
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Need union of site parameters, but it is complicated by the
         # different depth parameter flavors.
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         sitepars = [g.REQUIRES_SITES_PARAMETERS for g in gmpes]
         self.REQUIRES_SITES_PARAMETERS = set.union(*sitepars)
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Construct a list of whether or not each GMPE has a site term
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         self.HAS_SITE = ['vs30' in g.REQUIRES_SITES_PARAMETERS for g in gmpes]
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Checks and sort out defaults
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # things to check if default_gmpes_for_site is provided
         if default_gmpes_for_site is not None:
@@ -551,8 +551,9 @@ class MultiGMPE(GMPE):
             # default_gmpe_for_site_weights
             if len(default_gmpes_for_site_weights) != \
                len(default_gmpes_for_site):
-                raise Exception('Length of default_gmpes_for_site_weights must'
-                                ' match length of default_gmpes_for_site list.')
+                raise Exception('Length of default_gmpes_for_site_weights '
+                                'must match length of default_gmpes_for_site '
+                                'list.')
 
             # check weights sum to one if needed
             if not all(self.HAS_SITE):
@@ -572,15 +573,15 @@ class MultiGMPE(GMPE):
         self.DEFAULT_GMPES_FOR_SITE_WEIGHTS = default_gmpes_for_site_weights
         self.REFERENCE_VS30 = reference_vs30
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Union of rupture parameters
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         ruppars = [g.REQUIRES_RUPTURE_PARAMETERS for g in gmpes]
         self.REQUIRES_RUPTURE_PARAMETERS = set.union(*ruppars)
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Union of distance parameters
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         distpars = [g.REQUIRES_DISTANCES for g in gmpes]
         self.REQUIRES_DISTANCES = set.union(*distpars)
 
@@ -609,25 +610,25 @@ class MultiGMPE(GMPE):
             Site amplifications in natural log units.
         """
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Make reference sites context
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         ref_sites = copy.deepcopy(sites)
         ref_sites.vs30 = np.ones_like(sites.vs30) * self.REFERENCE_VS30
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # If default True, construct new MultiGMPE with default GMPE/weights
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if default is True:
             tmp = MultiGMPE.from_list(
                 self.DEFAULT_GMPES_FOR_SITE,
                 self.DEFAULT_GMPES_FOR_SITE_WEIGHTS,
                 self.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT)
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # If default False, just use self
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         else:
             tmp = self
 

@@ -110,24 +110,28 @@ class StationList(object):
         #                feature['id'] = '%s.%s' % (netid,code)
         #                lat = code = float(station.attrib['lat'])
         #                lon = code = float(station.attrib['lon'])
-        #                feature['geometry'] = {'type':'Point','coordinates':[lon,lat]}
+        #                feature['geometry'] = \
+        #                    {'type':'Point','coordinates':[lon,lat]}
         #                properties = {}
         #                properties['name'] = station.attrib['name']
         #                properties['intensity_flag'] = station.attrib['']#??
-        #                properties['distance'] = float(station.attrib['distance'])
+        #                properties['distance'] = \
+        #                    float(station.attrib['distance'])
         #                properties['location'] = station.attrib['loc']
         #                properties['code'] = station.attrib['code']
         #                properties['commType'] = station.attrib['commtype']
         #                properties['source'] = station.attrib['source']
         #                properties['network'] = station.attrib['netid']
-        #                properties['instrumentType'] = station.attrib['insttype']
-        #                properties['intensity'] = float(station.attrib['intensity'])
+        #                properties['instrumentType'] = \
+        #                    station.attrib['insttype']
+        #                properties['intensity'] = \
+        #                    float(station.attrib['intensity'])
         #                channels = []
         #                for comp in station:
         #                    channel = {'name':comp.attrib['name']}
         #                    for component in comp:
-        #                        pgmdict, imtset = self._getGroundMotions(component,
-        #                                                                 imt_translate)
+        #                        pgmdict, imtset = self._getGroundMotions(
+        #                            component, imt_translate)
 #        pass
 
     @classmethod
@@ -199,7 +203,7 @@ class StationList(object):
         sta_rows = self.cursor.fetchall()
 
         for sta in sta_rows:
-#            print('doing station %s' % (str(sta[2])))
+            # print('doing station %s' % (str(sta[2])))
             if str(sta[2]).startswith(sta[1] + '.'):
                 myid = str(sta[2])
             else:
@@ -236,7 +240,7 @@ class StationList(object):
             amp_rows = self.cursor.fetchall()
             channels = {}
             for amp in amp_rows:
-#                print('doing channel %s imt %s' % (amp[2], amp[1]))
+                # print('doing channel %s imt %s' % (amp[2], amp[1]))
                 if amp[2] not in channels:
                     channels[amp[2]] = {'name': amp[2], 'amplitudes': []}
                 if amp[0] == 'NULL':
@@ -245,18 +249,18 @@ class StationList(object):
                     myamp = amp[0]
                 if amp[1] == 'PGV':
                     value = np.exp(myamp)
-                    units = 'cm/s' 
+                    units = 'cm/s'
                 elif amp[1] == 'MMI':
                     value = myamp
                     units = 'intensity'
                 else:
                     value = np.exp(myamp) * 100
                     units = '%g'
-                this_amp = {'name': amp[1].lower(), 
+                this_amp = {'name': amp[1].lower(),
                             'value': '%.4f' % value,
                             'units': units,
                             'flag': str(amp[3])
-                }
+                           }
                 channels[amp[2]]['amplitudes'].append(this_amp)
             for channel in channels.values():
                 feature['properties']['channels'].append(channel)

@@ -20,14 +20,14 @@ class GodaAtkinson2010(object):
         """
         Method for evalulating spatial correlation model.
 
-        :param dists:
-            Numpy array of distances (km).
-        :param imt:
-            Openquake intensity measure type instance.
-            `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`__
-        :returns:
-            Numpy array of correlation values.
-        """
+        Args:
+            dists (ndarray): Numpy array of distances (km).
+            imt (IMT): Openquake intensity measure type instance.
+                `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`__
+
+        Returns:
+            ndarray: Numpy array of correlation values.
+        """  # noqa
         if 'PGA' in imt:
             alpha = 0.060
             beta = 0.283
@@ -80,11 +80,12 @@ class GodaAtkinson2010(object):
         else:
             # Again we use the average values because we don't know the IMT
             alpha = 0.054
-            beta = 0.319
+            # Variable used within ne.evaluate, not seen by linter
+            beta = 0.319  # noqa
             gamma = 5.0
             pass
-        nal = -1.0 * alpha
-        gm1 = gamma - 1.0
+        nal = -1.0 * alpha  # noqa
+        gm1 = gamma - 1.0  # noqa
 #        cor = 1.0 - np.sqrt(1.0 - np.maximum(
 #                gamma * np.exp(nal * np.power(dists, beta)) - gm1,
 #                0))

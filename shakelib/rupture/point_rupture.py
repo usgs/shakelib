@@ -16,7 +16,6 @@ from shakelib.rupture import utils
 from shakelib.rupture import constants
 
 
-
 class PointRupture(Rupture):
     """
     Rupture class for point sources. The purpose is to gracefully handle:

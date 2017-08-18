@@ -6,11 +6,11 @@ import pytest
 import os.path
 import sys
 
+from shakelib.correlation.loth_baker_2013 import LothBaker2013
+
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..'))
 sys.path.insert(0, shakedir)
-
-from shakelib.correlation.loth_baker_2013 import LothBaker2013
 
 
 def test_loth_baker_2012():
@@ -117,8 +117,9 @@ def test_loth_baker_2012():
         lb13 = LothBaker2013(t1)
 
     t1 = np.array([0.01, 0.3, 1.0, 2.0, 3.0, 20.0])
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(ValueError) as e:  # noqa
         lb13 = LothBaker2013(t1)
+
 
 if __name__ == '__main__':
     test_loth_baker_2012()

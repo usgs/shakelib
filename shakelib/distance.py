@@ -43,7 +43,7 @@ class Distance(object):
 
         Returns:
             Distance object.
-        """
+        """  # noqa
 
         self._rupture = rupture
 
@@ -65,7 +65,7 @@ class Distance(object):
 
         Returns:
             Distance object.
-        """
+        """  # noqa
         sm_dict = sites._GeoDict
         west = sm_dict.xmin
         east = sm_dict.xmax
@@ -84,7 +84,7 @@ class Distance(object):
         Returns:
             Openquake distance context
             `[link] <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html?highlight=distancescontext#openquake.hazardlib.gsim.base.DistancesContext>`__.
-        """
+        """  # noqa
         return copy.deepcopy(self._distance_context)
 
     def _calcDistanceContext(self, gmpe, lat, lon, dep):
@@ -115,7 +115,7 @@ class Distance(object):
         for ig in gmpe:
             if not isinstance(ig, GMPE):
                 raise TypeError(
-                    'getDistanceContext() cannot work with objects of '\
+                    'getDistanceContext() cannot work with objects of '
                     'type "%s"' % type(ig))
             requires = requires | ig.REQUIRES_DISTANCES
 
@@ -211,18 +211,18 @@ def get_distance(methods, lat, lon, dep, rupture, dx=0.5):
     if (lat.shape != lon.shape) or (lat.shape != dep.shape):
         raise ShakeLibException('lat, lon, and dep must have the same shape.')
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Point distances
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     if 'rhypo' in methods:
         distdict['rhypo'] = rupture.computeRhyp(lon, lat, dep)
 
     if 'repi' in methods:
         distdict['repi'] = rupture.computeRepi(lon, lat, dep)
 
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Rupture distances
-    #--------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     gc2_distances = set(['rx', 'ry', 'ry0', 'U', 'T'])
     if 'rrup' in methods:
         distdict['rrup'] = rupture.computeRrup(lon, lat, dep)

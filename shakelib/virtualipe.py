@@ -94,7 +94,7 @@ class VirtualIPE(GMPE):
                 But can be any set that the MultiGMPE supports. See the
                 ShakeMap manual for a detailed discussion of the way the
                 uncertainty is computed.
-        """
+        """  # noqa
 
         if imt != MMI():
             raise ValueError("imt must be MMI")

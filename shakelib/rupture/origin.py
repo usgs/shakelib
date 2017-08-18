@@ -2,17 +2,14 @@
 
 # stdlib imports
 from xml.dom import minidom
-import copy
 import time as time
 
 # third party
 from openquake.hazardlib.geo import point
-from openquake.hazardlib.const import TRT
 
 from impactutils.time.ancient_time import HistoricTime
 from shakelib.utils.exception import ShakeLibException
 from shakelib.rupture import constants
-
 
 
 class Origin(object):
@@ -62,9 +59,9 @@ class Origin(object):
 
         """
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Check for missing keys
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         missing = []
         for req in constants.ORIGIN_REQUIRED_KEYS:
             if req not in list(event.keys()):
@@ -74,9 +71,9 @@ class Origin(object):
             raise Exception('Input event dictionary is missing the following '
                             'required keys: "%s"' % (','.join(missing)))
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Check some types, ranges, and defaults
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if not type(event['id']) is str:
             raise Exception('id must be a string.')
         event['lat'] = float(event['lat'])
@@ -101,9 +98,9 @@ class Origin(object):
         else:
             event['mech'] = constants.DEFAULT_MECH
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Special handling of time
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if ('year' in event.keys()) and \
            ('month' in event.keys()) and \
            ('day' in event.keys()) and \
@@ -122,9 +119,9 @@ class Origin(object):
         else:
             event['time'] = HistoricTime.utcfromtimestamp(int(time.time()))
 
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # Add keys as class attributes
-        #----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         for k, v in event.items():
             if k == 'rake':
                 setattr(self, k, float(v))
@@ -169,7 +166,6 @@ class Origin(object):
            Hypocenter as OpenQuake Point instance.
         """
         return point.Point(self.lon, self.lat, self.depth)
-
 
     def setMechanism(self, mech=None, rake=None, dip=None):
         """
@@ -222,7 +218,7 @@ class Origin(object):
                 rake -= 360
             if rake < -180 or rake > 180:
                 raise Exception(
-                    'Rake must be transformable to be in range -180 to 180 '\
+                    'Rake must be transformable to be in range -180 to 180 '
                     'degrees.')
         else:
             rake = mechs[mech]['rake']

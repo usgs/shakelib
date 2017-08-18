@@ -16,7 +16,6 @@ from shakelib.plotting.plotrupture import map_rupture
 from shakelib.rupture import constants
 
 
-
 class Rupture(ABC):
     """
     Abstract base class for ruptures.
@@ -150,7 +149,7 @@ class Rupture(ABC):
         Returns:
             RuptureContext object with all known parameters filled in.
 
-        """
+        """  # noqa
 
         origin = self._origin
 
@@ -193,7 +192,6 @@ class Rupture(ABC):
         """
         origin = self._origin
         oldshape = lon.shape
-
 
         rhyp = geodetic.distance(origin.lon, origin.lat, origin.depth,
                                  lon, lat, depth)

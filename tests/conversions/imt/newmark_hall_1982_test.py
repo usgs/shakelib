@@ -6,16 +6,16 @@ import numpy as np
 import os.path
 import sys
 
+from shakelib.conversions.imt.newmark_hall_1982 import NewmarkHall1982
+
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..', '..', '..'))
 sys.path.insert(0, shakedir)
 
-from shakelib.conversions.imt.newmark_hall_1982 import NewmarkHall1982
-
 
 def test_newmarkhall1982():
     # Inputs
-    PGVin = np.log(10)
+    # PGVin = np.log(10)
     PSA10in = np.log(0.1)
     sd = 0.6
 

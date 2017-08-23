@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>shakelib.rupture.factory &mdash; shakelib 4.0a documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
+        <link rel="up" title="shakelib.rupture" href="shakelib.rupture.html"/>
+        <link rel="next" title="shakelib.rupture.gc2" href="shakelib.rupture.gc2.html"/>
+        <link rel="prev" title="shakelib.rupture.edge_rupture" href="shakelib.rupture.edge_rupture.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> shakelib
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imc.beyer_bommer_2006.html">shakelib.conversions.imc.beyer_bommer_2006</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imt.html">shakelib.conversions.imt</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imt.bommer_alarcon_2006.html">shakelib.conversions.imt.bommer_alarcon_2006</a></li>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imt.newmark_hall_1982.html">shakelib.conversions.imt.newmark_hall_1982</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.correlation.html">shakelib.correlation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.baker_jayaram_2008.html">shakelib.correlation.baker_jayaram_2008</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.boore_2003.html">shakelib.correlation.boore_2003</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.goda_atkinson_2010.html">shakelib.correlation.goda_atkinson_2010</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.loth_baker_2013.html">shakelib.correlation.loth_baker_2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.directivity.html">shakelib.directivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.bayless2013.html">shakelib.directivity.bayless2013</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.rowshandel2013.html">shakelib.directivity.rowshandel2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.gmice.html">shakelib.gmice</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.gmice.wgrw12.html">shakelib.gmice.wgrw12</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.plotting.html">shakelib.plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.plotting.plotrupture.html">shakelib.plotting.plotrupture</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="shakelib.rupture.html">shakelib.rupture</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.base.html">shakelib.rupture.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.constants.html">shakelib.rupture.constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.edge_rupture.html">shakelib.rupture.edge_rupture</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">shakelib.rupture.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.gc2.html">shakelib.rupture.gc2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.origin.html">shakelib.rupture.origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.point_rupture.html">shakelib.rupture.point_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.quad_rupture.html">shakelib.rupture.quad_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.utils.html">shakelib.rupture.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.multigmpe.html">shakelib.multigmpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.sites.html">shakelib.sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.station.html">shakelib.station</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.virtualipe.html">shakelib.virtualipe</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">shakelib</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="shakelib.html">shakelib</a> &raquo;</li>
+      
+          <li><a href="shakelib.rupture.html">shakelib.rupture</a> &raquo;</li>
+      
+    <li>shakelib.rupture.factory</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/shakelib.rupture.factory.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-shakelib.rupture.factory">
+<span id="shakelib-rupture-factory"></span><h1>shakelib.rupture.factory<a class="headerlink" href="#module-shakelib.rupture.factory" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="shakelib.rupture.factory.get_rupture">
+<code class="descclassname">shakelib.rupture.factory.</code><code class="descname">get_rupture</code><span class="sig-paren">(</span><em>origin</em>, <em>file=None</em>, <em>mesh_dx=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/factory.html#get_rupture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.factory.get_rupture" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a module-level function to read in a rupture file. This allows for
+the ShakeMap 3 text file specification or the ShakeMap 4 JSON rupture
+format. The ShakeMap 3 (&#8221;.txt&#8221; extension) only supports QuadRupture style
+rupture representation and so this method will always return a QuadRupture
+instance. The ShakeMap 4 JSON format supports QuadRupture and EdgeRupture
+represenations and so this method detects the rupture class and returns the
+appropriate Rupture subclass instance.</p>
+<p>If file is None (default) then it returns a PointRupture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; A ShakeMap origin instance; required because
+hypocentral/epicentral distances are computed from the Rupture
+class.</li>
+<li><strong>file</strong> (<em>srt</em>) &#8211; Path to rupture file (optional).</li>
+<li><strong>mesh_dx</strong> (<em>float</em>) &#8211; Target spacing (in km) for rupture discretization;
+default is 0.5 km and it is only used if the rupture file is an
+EdgeRupture.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rupture subclass instance.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.rupture.factory.json_to_rupture">
+<code class="descclassname">shakelib.rupture.factory.</code><code class="descname">json_to_rupture</code><span class="sig-paren">(</span><em>d</em>, <em>origin</em>, <em>mesh_dx=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/factory.html#json_to_rupture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.factory.json_to_rupture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method returns either a QuadRupture or EdgeRupture object based on a
+GeoJSON dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>d</strong> (<em>dict</em>) &#8211; Rupture GeoJSON dictionary.</li>
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; A ShakeMap origin object.</li>
+<li><strong>mesh_dx</strong> (<em>float</em>) &#8211; Target spacing (in km) for rupture discretization;
+default is 0.5 km and it is only used if the rupture file is an
+EdgeRupture.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a Rupture subclass.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.rupture.factory.text_to_json">
+<code class="descclassname">shakelib.rupture.factory.</code><code class="descname">text_to_json</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/factory.html#text_to_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.factory.text_to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in old ShakeMap 3 textfile rupture format and convert to GeoJSON.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rupturefile</strong> (<em>srt</em>) &#8211; <p>Path to rupture file OR file-like object in GMT
+psxy format, where:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Rupture vertices are space separated lat, lon, depth triplets
+on a single line.</li>
+<li>Rupture groups are separated by lines containing &#8220;&gt;&#8221;</li>
+<li>Rupture groups must be closed.</li>
+<li>Verticies within a rupture group must start along the top
+edge and move in the strike direction then move to the bottom
+edge and move back in the opposite direction.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">GeoJSON rupture dictionary.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.rupture.factory.validate_json">
+<code class="descclassname">shakelib.rupture.factory.</code><code class="descname">validate_json</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/factory.html#validate_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.factory.validate_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that the JSON format is acceptable. This is only for requirements
+that are common to both QuadRupture and EdgeRupture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>dict</em>) &#8211; Rupture JSON dictionary.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.rupture.factory.is_quadrupture_class">
+<code class="descclassname">shakelib.rupture.factory.</code><code class="descname">is_quadrupture_class</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/factory.html#is_quadrupture_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.factory.is_quadrupture_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if JSON file fulfills QuadRupture class criteria:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Are top and bottom edges horizontal?</li>
+<li>Are the four points in each quad coplanar?</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>dict</em>) &#8211; Rupture JSON dictionary.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Can the rupture be represented in the QuadRupture class?</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="shakelib.rupture.gc2.html" class="btn btn-neutral float-right" title="shakelib.rupture.gc2" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="shakelib.rupture.edge_rupture.html" class="btn btn-neutral" title="shakelib.rupture.edge_rupture" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'4.0a',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -144,8 +144,7 @@ class BeyerBommer2006(object):
             imc_out (IMC): Desired OpenQuake IMC type of the output sigmas.
                 `[link] <http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC>`__
             imt (IMT): OpenQuake IMT of the input sigmas (must be one of PGA,
-                 PGV, or SA)
-                `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`__
+                 PGV, or SA) `[link] <http://docs.openquake.org/oq-hazardlib/master/imt.html>`__
 
         Returns:
             array: Numpy array of standard deviations converted from imc_in to

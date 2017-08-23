@@ -77,23 +77,26 @@ class VirtualIPE(GMPE):
 
     def get_mean_and_stddevs(self, sx, rx, dx, imt, stddev_types, fd=None):
         """
-        See superclass `method <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.GroundShakingIntensityModel.get_mean_and_stddevs>`__
+        See superclass
+        `method <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.GroundShakingIntensityModel.get_mean_and_stddevs>`__
         for parameter definitions. The only acceptable IMT is MMI.
 
         Additional subclass argument is "fd", which is the directivity
-        amplification factor in natural log units. This is optional, and must
-        be a numpy array with the same dimentions as the sites and is added
+        amplification factor in natural log units. This is optional,
+        and must be a numpy array with the same dimentions as the
+        sites and is added
 
         Returns:
+
             mmi (ndarray): Ground motions predicted by the MultiGMPE using
-                the supplied parameters are converted to MMI using the
-                GMICE.
+            the supplied parameters are converted to MMI using the GMICE.
+
             mmi_sd (list of ndarrays): The uncertainty of the combined
-                prediction/conversion process. The prediction uncertainty
-                will typically be either OpenQuake's TOTAL or INTRA_EVENT.
-                But can be any set that the MultiGMPE supports. See the
-                ShakeMap manual for a detailed discussion of the way the
-                uncertainty is computed.
+            prediction/conversion process. The prediction uncertainty will
+            typically be either OpenQuake's TOTAL or INTRA_EVENT.  But can
+            be any set that the MultiGMPE supports. See the ShakeMap manual
+            for a detailed discussion of the way the uncertainty is computed.
+
         """  # noqa
 
         if imt != MMI():

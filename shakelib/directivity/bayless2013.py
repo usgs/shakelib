@@ -51,7 +51,7 @@ class Bayless2013(object):
         strike, not updip. All geometric parameters are computed relative to
         the pseudo-hypocenter."
 
-    Todo:
+    To do:
 
         - Interpolate for arbitrary periods
         - Inherit from Directivity base class.

@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>shakelib.rupture.base &mdash; shakelib 4.0a documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="shakelib 4.0a documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> shakelib
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../shakelib.html">shakelib</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.conversions.html">shakelib.conversions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../shakelib.conversions.imc.beyer_bommer_2006.html">shakelib.conversions.imc.beyer_bommer_2006</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.conversions.imt.html">shakelib.conversions.imt</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../shakelib.conversions.imt.bommer_alarcon_2006.html">shakelib.conversions.imt.bommer_alarcon_2006</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../shakelib.conversions.imt.newmark_hall_1982.html">shakelib.conversions.imt.newmark_hall_1982</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.correlation.html">shakelib.correlation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.correlation.baker_jayaram_2008.html">shakelib.correlation.baker_jayaram_2008</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.correlation.boore_2003.html">shakelib.correlation.boore_2003</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.correlation.goda_atkinson_2010.html">shakelib.correlation.goda_atkinson_2010</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.correlation.loth_baker_2013.html">shakelib.correlation.loth_baker_2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.directivity.html">shakelib.directivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.directivity.bayless2013.html">shakelib.directivity.bayless2013</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.directivity.rowshandel2013.html">shakelib.directivity.rowshandel2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.gmice.html">shakelib.gmice</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.gmice.wgrw12.html">shakelib.gmice.wgrw12</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.plotting.html">shakelib.plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.plotting.plotrupture.html">shakelib.plotting.plotrupture</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.rupture.html">shakelib.rupture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.rupture.base.html">shakelib.rupture.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.rupture.constants.html">shakelib.rupture.constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.rupture.edge_rupture.html">shakelib.rupture.edge_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.rupture.factory.html">shakelib.rupture.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.rupture.gc2.html">shakelib.rupture.gc2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.rupture.origin.html">shakelib.rupture.origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.rupture.point_rupture.html">shakelib.rupture.point_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.rupture.quad_rupture.html">shakelib.rupture.quad_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../shakelib.rupture.utils.html">shakelib.rupture.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.distance.html">shakelib.distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.multigmpe.html">shakelib.multigmpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.sites.html">shakelib.sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.station.html">shakelib.station</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../shakelib.virtualipe.html">shakelib.virtualipe</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">shakelib</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>shakelib.rupture.base</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for shakelib.rupture.base</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># stdlib modules</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractproperty</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># third party imports</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo</span> <span class="kn">import</span> <span class="n">geodetic</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.gsim</span> <span class="kn">import</span> <span class="n">base</span>
+
+
+<span class="kn">from</span> <span class="nn">shakelib.plotting.plotrupture</span> <span class="kn">import</span> <span class="n">plot_rupture_wire3d</span>
+<span class="kn">from</span> <span class="nn">shakelib.plotting.plotrupture</span> <span class="kn">import</span> <span class="n">map_rupture</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture</span> <span class="kn">import</span> <span class="n">constants</span>
+
+
+<div class="viewcode-block" id="Rupture"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture">[docs]</a><span class="k">class</span> <span class="nc">Rupture</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract base class for ruptures.</span>
+
+<span class="sd">    Note on terminology:</span>
+
+<span class="sd">        - There are three Ruptuer subclasses: PointRupture, QuadRupture, and</span>
+<span class="sd">          EdgeRupture.</span>
+<span class="sd">        - PointRupture represents the rupture as a point source.</span>
+<span class="sd">        - QuadRupture and EdgeRupture are two different finite source</span>
+<span class="sd">          representations.</span>
+<span class="sd">        - A finite rupture is composed of segments. For QuadRupture, a segment</span>
+<span class="sd">          is a quadrilaterial; for an EdgeRupture, a segment is a line</span>
+<span class="sd">          connecting two points.</span>
+<span class="sd">        - Segments are grouped with a common &quot;group index&quot;.</span>
+<span class="sd">        - Segments within a group must be continuous.</span>
+<span class="sd">        - The QuadRupture class requires that each segment is a quadrilateral</span>
+<span class="sd">          with horizontal top and obttom edges.</span>
+<span class="sd">        - The EdgeRupture class allows for arbitrarily complex top and bottom</span>
+<span class="sd">          edge specification.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Rupture.writeGeoJson"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.writeGeoJson">[docs]</a>    <span class="k">def</span> <span class="nf">writeGeoJson</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the rupture to a GeoJson file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file (str): Name of file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_geojson</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.getLength"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getLength">[docs]</a>    <span class="k">def</span> <span class="nf">getLength</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Rupture length in km.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.getWidth"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getWidth">[docs]</a>    <span class="k">def</span> <span class="nf">getWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Rupture width in km.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.getArea"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getArea">[docs]</a>    <span class="k">def</span> <span class="nf">getArea</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Rupture area in square km.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.getStrike"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getStrike">[docs]</a>    <span class="k">def</span> <span class="nf">getStrike</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return strike angle. If rupture consists of multiple quadrilaterals,</span>
+<span class="sd">        the average strike angle, weighted by quad length, is returned.</span>
+<span class="sd">        Note: for ruptures with quads where the strike angle changes by 180 deg</span>
+<span class="sd">        due to reverses in dip direction are problematic and not handeled well</span>
+<span class="sd">        by this algorithm.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Strike angle in degrees.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.getDip"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getDip">[docs]</a>    <span class="k">def</span> <span class="nf">getDip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.getDepthToTop"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getDepthToTop">[docs]</a>    <span class="k">def</span> <span class="nf">getDepthToTop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">           float: Average dip in degrees.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.getQuadrilaterals"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getQuadrilaterals">[docs]</a>    <span class="k">def</span> <span class="nf">getQuadrilaterals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to return rupture quadrilaterals. Returns None for</span>
+<span class="sd">        PointRupture.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Rupture.getReference"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getReference">[docs]</a>    <span class="k">def</span> <span class="nf">getReference</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">           string: Reference info from file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span></div>
+
+<div class="viewcode-block" id="Rupture.getOrigin"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getOrigin">[docs]</a>    <span class="k">def</span> <span class="nf">getOrigin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">           Origin object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span></div>
+
+    <span class="nd">@abstractproperty</span>
+    <span class="k">def</span> <span class="nf">lats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractproperty</span>
+    <span class="k">def</span> <span class="nf">lons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractproperty</span>
+    <span class="k">def</span> <span class="nf">depths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Rupture.getRuptureContext"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.getRuptureContext">[docs]</a>    <span class="k">def</span> <span class="nf">getRuptureContext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gmpelist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an Openquake `RuptureContext &lt;http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.RuptureContext&gt;`__.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            gmpelist (list): List of hazardlib GMPE objects.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            RuptureContext object with all known parameters filled in.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa</span>
+
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span>
+
+        <span class="c1"># rupturecontext constructor inputs:</span>
+        <span class="c1"># &#39;mag&#39;, &#39;strike&#39;, &#39;dip&#39;, &#39;rake&#39;, &#39;ztor&#39;, &#39;hypo_lon&#39;, &#39;hypo_lat&#39;,</span>
+        <span class="c1"># &#39;hypo_depth&#39;, &#39;width&#39;, &#39;hypo_loc&#39;</span>
+
+        <span class="n">rx</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">RuptureContext</span><span class="p">()</span>
+        <span class="n">rx</span><span class="o">.</span><span class="n">mag</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">mag</span>
+        <span class="n">rx</span><span class="o">.</span><span class="n">strike</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStrike</span><span class="p">()</span>
+        <span class="n">rx</span><span class="o">.</span><span class="n">dip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDip</span><span class="p">()</span>
+        <span class="n">rx</span><span class="o">.</span><span class="n">ztor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDepthToTop</span><span class="p">()</span>
+        <span class="n">rx</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getWidth</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="s1">&#39;rake&#39;</span><span class="p">):</span>
+            <span class="n">rx</span><span class="o">.</span><span class="n">rake</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">rake</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="s1">&#39;mech&#39;</span><span class="p">):</span>
+            <span class="n">mech</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">mech</span>
+            <span class="n">rx</span><span class="o">.</span><span class="n">rake</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">RAKEDICT</span><span class="p">[</span><span class="n">mech</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rx</span><span class="o">.</span><span class="n">rake</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">RAKEDICT</span><span class="p">[</span><span class="s1">&#39;ALL&#39;</span><span class="p">]</span>
+
+        <span class="n">rx</span><span class="o">.</span><span class="n">hypo_lat</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">lat</span>
+        <span class="n">rx</span><span class="o">.</span><span class="n">hypo_lon</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">lon</span>
+        <span class="n">rx</span><span class="o">.</span><span class="n">hypo_depth</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">depth</span>
+
+        <span class="k">return</span> <span class="n">rx</span></div>
+
+<div class="viewcode-block" id="Rupture.computeRhyp"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.computeRhyp">[docs]</a>    <span class="k">def</span> <span class="nf">computeRhyp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method for computing hypocentral distance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lon (array): Numpy array of longitudes.</span>
+<span class="sd">            lat (array): Numpy array of latitudes.</span>
+<span class="sd">            depth (array): Numpy array of depths (km; positive down).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           array: Hypocentral distance (km).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span>
+        <span class="n">oldshape</span> <span class="o">=</span> <span class="n">lon</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="n">rhyp</span> <span class="o">=</span> <span class="n">geodetic</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">origin</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">origin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">origin</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span>
+                                 <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+        <span class="n">rhyp</span> <span class="o">=</span> <span class="n">rhyp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">oldshape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rhyp</span></div>
+
+<div class="viewcode-block" id="Rupture.computeRepi"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.computeRepi">[docs]</a>    <span class="k">def</span> <span class="nf">computeRepi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method for computing epicentral distance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lon (array): Numpy array of longitudes.</span>
+<span class="sd">            lat (array): Numpy array of latitudes.</span>
+<span class="sd">            depth (array): Numpy array of depths (km; positive down).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           array: Epicentral distance (km).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span>
+        <span class="n">oldshape</span> <span class="o">=</span> <span class="n">lon</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="n">repi</span> <span class="o">=</span> <span class="n">geodetic</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">origin</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">origin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
+                                 <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+        <span class="n">repi</span> <span class="o">=</span> <span class="n">repi</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">oldshape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">repi</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.computeRjb"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.computeRjb">[docs]</a>    <span class="k">def</span> <span class="nf">computeRjb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method for computing Joyner-Boore distance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lon (array): Numpy array of longitudes.</span>
+<span class="sd">            lat (array): Numpy array of latitudes.</span>
+<span class="sd">            depth (array): Numpy array of depths (km; positive down).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           array: Joyner-Boore distance (km).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.computeRrup"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.computeRrup">[docs]</a>    <span class="k">def</span> <span class="nf">computeRrup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method for computing rupture distance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lon (array): Numpy array of longitudes.</span>
+<span class="sd">            lat (array): Numpy array of latitudes.</span>
+<span class="sd">            depth (array): Numpy array of depths (km; positive down).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           array: Rupture distance (km).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Rupture.computeGC2"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.computeGC2">[docs]</a>    <span class="k">def</span> <span class="nf">computeGC2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method for computing version 2 of the Generalized Coordinate system</span>
+<span class="sd">        (GC2) by Spudich and Chiou OFR 2015-1028.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lon (array): Numpy array of longitudes.</span>
+<span class="sd">            lat (array): Numpy array of latitudes.</span>
+<span class="sd">            depth (array): Numpy array of depths (km; positive down).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Dictionary with keys for each of the GC2-related distances,</span>
+<span class="sd">                which include &#39;rx&#39;, &#39;ry&#39;, &#39;ry0&#39;, &#39;U&#39;, &#39;T&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Rupture.plot3d"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.plot3d">[docs]</a>    <span class="k">def</span> <span class="nf">plot3d</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method for making a quick 3D wireframe plot of rupture.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plot_rupture_wire3d</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Rupture.map"><a class="viewcode-back" href="../../../shakelib.rupture.base.html#shakelib.rupture.base.Rupture.map">[docs]</a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method for making a quick map of the fault.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">map_rupture</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'4.0a',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

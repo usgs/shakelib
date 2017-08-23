@@ -1,0 +1,418 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>shakelib.gmice.wgrw12 &mdash; shakelib 4.0a documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
+        <link rel="up" title="shakelib.gmice" href="shakelib.gmice.html"/>
+        <link rel="next" title="shakelib.plotting" href="shakelib.plotting.html"/>
+        <link rel="prev" title="shakelib.gmice" href="shakelib.gmice.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> shakelib
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imc.beyer_bommer_2006.html">shakelib.conversions.imc.beyer_bommer_2006</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imt.html">shakelib.conversions.imt</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imt.bommer_alarcon_2006.html">shakelib.conversions.imt.bommer_alarcon_2006</a></li>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imt.newmark_hall_1982.html">shakelib.conversions.imt.newmark_hall_1982</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.correlation.html">shakelib.correlation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.baker_jayaram_2008.html">shakelib.correlation.baker_jayaram_2008</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.boore_2003.html">shakelib.correlation.boore_2003</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.goda_atkinson_2010.html">shakelib.correlation.goda_atkinson_2010</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.loth_baker_2013.html">shakelib.correlation.loth_baker_2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.directivity.html">shakelib.directivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.bayless2013.html">shakelib.directivity.bayless2013</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.rowshandel2013.html">shakelib.directivity.rowshandel2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="shakelib.gmice.html">shakelib.gmice</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="">shakelib.gmice.wgrw12</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.plotting.html">shakelib.plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.plotting.plotrupture.html">shakelib.plotting.plotrupture</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.rupture.html">shakelib.rupture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.base.html">shakelib.rupture.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.constants.html">shakelib.rupture.constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.edge_rupture.html">shakelib.rupture.edge_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.factory.html">shakelib.rupture.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.gc2.html">shakelib.rupture.gc2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.origin.html">shakelib.rupture.origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.point_rupture.html">shakelib.rupture.point_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.quad_rupture.html">shakelib.rupture.quad_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.utils.html">shakelib.rupture.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.multigmpe.html">shakelib.multigmpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.sites.html">shakelib.sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.station.html">shakelib.station</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.virtualipe.html">shakelib.virtualipe</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">shakelib</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="shakelib.html">shakelib</a> &raquo;</li>
+      
+          <li><a href="shakelib.gmice.html">shakelib.gmice</a> &raquo;</li>
+      
+    <li>shakelib.gmice.wgrw12</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/shakelib.gmice.wgrw12.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-shakelib.gmice.wgrw12">
+<span id="shakelib-gmice-wgrw12"></span><h1>shakelib.gmice.wgrw12<a class="headerlink" href="#module-shakelib.gmice.wgrw12" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shakelib.gmice.wgrw12.WGRW12">
+<em class="property">class </em><code class="descclassname">shakelib.gmice.wgrw12.</code><code class="descname">WGRW12</code><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Implements the ground motion intensity conversion equations (GMICE) of
+Worden et al. (2012).</p>
+<p class="rubric">References</p>
+<p>Worden, C. B., Gerstenberger, M. C., Rhoades, D. A., &amp; Wald, D. J.
+(2012). Probabilistic relationships between ground‐motion parameters
+and modified Mercalli intensity in California. Bulletin of the
+Seismological Society of America, 102(1), 204-221.</p>
+<dl class="attribute">
+<dt id="shakelib.gmice.wgrw12.WGRW12.DEFINED_FOR_INTENSITY_MEASURE_TYPES">
+<code class="descname">DEFINED_FOR_INTENSITY_MEASURE_TYPES</code><em class="property"> = {&lt;class 'openquake.hazardlib.imt.SA'&gt;, &lt;class 'openquake.hazardlib.imt.PGV'&gt;, &lt;class 'openquake.hazardlib.imt.PGA'&gt;}</em><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.DEFINED_FOR_INTENSITY_MEASURE_TYPES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="shakelib.gmice.wgrw12.WGRW12.DEFINED_FOR_SA_PERIODS">
+<code class="descname">DEFINED_FOR_SA_PERIODS</code><em class="property"> = {0.3, 1.0, 3.0}</em><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.DEFINED_FOR_SA_PERIODS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getMIfromGM">
+<code class="descname">getMIfromGM</code><span class="sig-paren">(</span><em>amps</em>, <em>imt</em>, <em>dists=None</em>, <em>mag=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getMIfromGM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getMIfromGM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to compute macroseismic intensity from ground-motion
+intensity. Supported ground-motion IMTs are PGA, PGV and PSA
+at 0.3, 1.0, and 3.0 sec periods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>amps</strong> (<em>ndarray</em>) &#8211; Ground motion amplitude; natural log units; g for PGA and
+PSA, cm/s for PGV.</li>
+<li><strong>imt</strong> (<em>OpenQuake IMT</em>) &#8211; Type the input amps (must be one of PGA, PGV, or SA).
+Supported SA periods are 0.3, 1.0, and 3.0 sec.
+<cite>[link] &lt;http://docs.openquake.org/oq-hazardlib/master/imt.html&gt;</cite></li>
+<li><strong>dists</strong> (<em>ndarray</em>) &#8211; Numpy array of distances from rupture (km).</li>
+<li><strong>mag</strong> (<em>float</em>) &#8211; Earthquake magnitude.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">ndarray of Modified Mercalli Intensity and ndarray of
+dMMI / dln(amp) (i.e., the slope of the relationship at the
+point in question).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getGMfromMI">
+<code class="descname">getGMfromMI</code><span class="sig-paren">(</span><em>mmi</em>, <em>imt</em>, <em>dists=None</em>, <em>mag=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getGMfromMI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getGMfromMI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to tcompute ground-motion intensity from macroseismic
+intensity. Supported IMTs are PGA, PGV and PSA for 0.3, 1.0, and
+3.0 sec periods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mmi</strong> (<em>ndarray</em>) &#8211; Macroseismic intensity.</li>
+<li><strong>imt</strong> (<em>OpenQuake IMT</em>) &#8211; IMT of the requested ground-motions intensities (must be
+one of PGA, PGV, or SA).
+<cite>[link] &lt;http://docs.openquake.org/oq-hazardlib/master/imt.html&gt;</cite></li>
+<li><strong>dists</strong> (<em>ndarray</em>) &#8211; Rupture distances (km) to the corresponding MMIs.</li>
+<li><strong>mag</strong> (<em>float</em>) &#8211; Earthquake magnitude.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Ndarray of ground motion intensity in natural log of g for PGA
+and PSA, and natural log cm/s for PGV; ndarray of dln(amp) / dMMI
+(i.e., the slope of the relationship at the point in question).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getGM2MIsd">
+<code class="descname">getGM2MIsd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getGM2MIsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getGM2MIsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary of standard deviations for the ground-motion
+to MMI conversion. The keys are the ground motion types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dictionary of GM to MI sigmas (in MMI units).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getMI2GMsd">
+<code class="descname">getMI2GMsd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getMI2GMsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getMI2GMsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary of standard deviations for the MMI
+to ground-motion conversion. The keys are the ground motion
+types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dictionary of MI to GM sigmas (ln(PGM) units).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getName">
+<em class="property">static </em><code class="descname">getName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of this GMICE.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">String containing name of this GMICE.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getScale">
+<em class="property">static </em><code class="descname">getScale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getScale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getScale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the PostScript file containing this GMICE&#8217;s
+scale.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Name of GMICE scale file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getMinMax">
+<em class="property">static </em><code class="descname">getMinMax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getMinMax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getMinMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the minimum and maximum MMI values produced by this GMICE.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple of min and max values of GMICE.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getDistanceType">
+<em class="property">static </em><code class="descname">getDistanceType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getDistanceType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getDistanceType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="shakelib.plotting.html" class="btn btn-neutral float-right" title="shakelib.plotting" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="shakelib.gmice.html" class="btn btn-neutral" title="shakelib.gmice" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'4.0a',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

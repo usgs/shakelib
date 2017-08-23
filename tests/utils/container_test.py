@@ -31,7 +31,8 @@ def test_container():
               'class': 'Warrior',
               'intelligence': 10}
     datafile = os.path.join(os.path.expanduser('~'), 'test.hdf')
-    rupturefile = os.path.join(homedir, 'container_data/Barkaetal02_fault.txt')
+    rupturefile = os.path.join(homedir, 'container_data', 
+                               'Barkaetal02_fault.txt')
     event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
 <earthquake id="2008ryan" lat="30.9858" lon="103.3639" mag="7.9" year="2008"
 month="05" day="12" hour="06" minute="28" second="01" timezone="GMT"
@@ -139,6 +140,16 @@ def test_output_container():
     assert np.all(ta == test_array)
     assert set(tamd.keys()) == set(test_dset_metadata.keys())
 
+    #
+    # Get a real data file
+    #
+    hdf_file = os.path.join(homedir, 'container_data', 
+                            'shake_result.hdf')
+    oc = OutputContainer.loadFromHDF(hdf_file)
+    imtlist = oc.getIMTlist()
+    assert 'MMI' in imtlist
+    assert 'PGA' in imtlist
+    assert 'PGV' in imtlist
 
 if __name__ == '__main__':
     test_container()

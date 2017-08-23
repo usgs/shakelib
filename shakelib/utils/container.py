@@ -372,6 +372,16 @@ class OutputContainer(object):
         if self._hdfobj:
             self._hdfobj.close()
 
+    def getIMTlist(self):
+        """
+        Returns a list of IMT grids in the file.
+        """
+        imtlist = []
+        for key in self._hdfobj.keys():
+            if key in ('PGA', 'PGV', 'MMI') or \
+               (key.startswith('SA(') and key.endswith(')')):
+                imtlist.append(key)
+        return imtlist
 
 def _dict2h5group(mydict, group):
     """

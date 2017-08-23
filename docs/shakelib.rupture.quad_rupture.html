@@ -1,0 +1,762 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>shakelib.rupture.quad_rupture &mdash; shakelib 4.0a documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
+        <link rel="up" title="shakelib.rupture" href="shakelib.rupture.html"/>
+        <link rel="next" title="shakelib.rupture.utils" href="shakelib.rupture.utils.html"/>
+        <link rel="prev" title="shakelib.rupture.point_rupture" href="shakelib.rupture.point_rupture.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> shakelib
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imc.beyer_bommer_2006.html">shakelib.conversions.imc.beyer_bommer_2006</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imt.html">shakelib.conversions.imt</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imt.bommer_alarcon_2006.html">shakelib.conversions.imt.bommer_alarcon_2006</a></li>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imt.newmark_hall_1982.html">shakelib.conversions.imt.newmark_hall_1982</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.correlation.html">shakelib.correlation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.baker_jayaram_2008.html">shakelib.correlation.baker_jayaram_2008</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.boore_2003.html">shakelib.correlation.boore_2003</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.goda_atkinson_2010.html">shakelib.correlation.goda_atkinson_2010</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.loth_baker_2013.html">shakelib.correlation.loth_baker_2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.directivity.html">shakelib.directivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.bayless2013.html">shakelib.directivity.bayless2013</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.rowshandel2013.html">shakelib.directivity.rowshandel2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.gmice.html">shakelib.gmice</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.gmice.wgrw12.html">shakelib.gmice.wgrw12</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.plotting.html">shakelib.plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.plotting.plotrupture.html">shakelib.plotting.plotrupture</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="shakelib.rupture.html">shakelib.rupture</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.base.html">shakelib.rupture.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.constants.html">shakelib.rupture.constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.edge_rupture.html">shakelib.rupture.edge_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.factory.html">shakelib.rupture.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.gc2.html">shakelib.rupture.gc2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.origin.html">shakelib.rupture.origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.point_rupture.html">shakelib.rupture.point_rupture</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">shakelib.rupture.quad_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.utils.html">shakelib.rupture.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.multigmpe.html">shakelib.multigmpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.sites.html">shakelib.sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.station.html">shakelib.station</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.virtualipe.html">shakelib.virtualipe</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">shakelib</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="shakelib.html">shakelib</a> &raquo;</li>
+      
+          <li><a href="shakelib.rupture.html">shakelib.rupture</a> &raquo;</li>
+      
+    <li>shakelib.rupture.quad_rupture</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/shakelib.rupture.quad_rupture.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-shakelib.rupture.quad_rupture">
+<span id="shakelib-rupture-quad-rupture"></span><h1>shakelib.rupture.quad_rupture<a class="headerlink" href="#module-shakelib.rupture.quad_rupture" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture">
+<em class="property">class </em><code class="descclassname">shakelib.rupture.quad_rupture.</code><code class="descname">QuadRupture</code><span class="sig-paren">(</span><em>d</em>, <em>origin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="shakelib.rupture.base.html#shakelib.rupture.base.Rupture" title="shakelib.rupture.base.Rupture"><code class="xref py py-class docutils literal"><span class="pre">shakelib.rupture.base.Rupture</span></code></a></p>
+<p>Rupture class that represents the rupture surface as a combination of
+quadrilaterals. Each quadrilateral must have horizontal top and bottom
+edges and must be coplanar. These restrictions make the computation of
+rupture distances more efficient. The number of points in the top edges
+must match the number of points in the bottom edge.</p>
+<p>Create a QuadRupture instance from a GeoJSON dictionary and an Origin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>d</strong> (<em>dict</em>) &#8211; Rupture GeoJSON dictionary.</li>
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; Reference to a ShakeMap Origin object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">QuadRupture instance.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getDepthAtPoint">
+<code class="descname">getDepthAtPoint</code><span class="sig-paren">(</span><em>lat</em>, <em>lon</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getDepthAtPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getDepthAtPoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getLength">
+<code class="descname">getLength</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getLength"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute length of rupture based on top edge in km.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Length of rupture (km).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getWidth">
+<code class="descname">getWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getWidth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getWidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute average rupture width (km) for all quadrilaterals defined for
+the rupture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average width in km of all rupture quadrilaterals.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getArea">
+<code class="descname">getArea</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getArea"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getArea" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute area of rupture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Rupture area in square km.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.fromTrace">
+<em class="property">classmethod </em><code class="descname">fromTrace</code><span class="sig-paren">(</span><em>xp0</em>, <em>yp0</em>, <em>xp1</em>, <em>yp1</em>, <em>zp</em>, <em>widths</em>, <em>dips</em>, <em>origin</em>, <em>strike=None</em>, <em>group_index=None</em>, <em>reference=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.fromTrace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.fromTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a QuadRupture instance from a set of vertices that define the
+top of the rupture, and an array of widths/dips.</p>
+<p>Each rupture quadrilaterial is defined by specifying the latitude,
+longitude, and depth of the two vertices on the top edges, which must
+have the dame depths. The other verticies are then constructed from
+the top edges and the width and dip of the quadrilateral.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xp0</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p0.</li>
+<li><strong>yp0</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p0.</li>
+<li><strong>xp1</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p1.</li>
+<li><strong>yp1</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p1.</li>
+<li><strong>zp</strong> (<em>array</em>) &#8211; Array or list of depths for each of the top of rupture
+rectangles (km).</li>
+<li><strong>widths</strong> (<em>array</em>) &#8211; Array of widths for each of rectangle (km).</li>
+<li><strong>dips</strong> (<em>array</em>) &#8211; Array of dips for each of rectangle (degrees).</li>
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; Reference to a ShakeMap origin object.</li>
+<li><strong>strike</strong> (<em>array</em>) &#8211; If None then strike is computed from verticies of
+top edge of each quadrilateral. If a scalar, then all
+quadrilaterals are constructed assuming this strike direction.
+If an array with the same length as the trace coordinates then
+it specifies the strike for each quadrilateral.</li>
+<li><strong>group_index</strong> (<em>list</em>) &#8211; List of integers to indicate group index. If
+None then each quadrilateral is assumed to be in a different
+group since there is no guarantee that any of them are
+continuous.</li>
+<li><strong>reference</strong> (<em>str</em>) &#8211; String explaining where the rupture definition
+came from (publication style reference, etc.).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">QuadRupture instance.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.writeTextFile">
+<code class="descname">writeTextFile</code><span class="sig-paren">(</span><em>rupturefile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.writeTextFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.writeTextFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write rupture data to rupture file format as defined in ShakeMap
+Software Guide.</p>
+<p>Note that this currently treats each quadrilateral as a separate
+polygon. This needs to be udpated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rupturefile</strong> (<em>str</em>) &#8211; Filename of output data file OR file-like
+object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.fromVertices">
+<em class="property">classmethod </em><code class="descname">fromVertices</code><span class="sig-paren">(</span><em>xp0</em>, <em>yp0</em>, <em>zp0</em>, <em>xp1</em>, <em>yp1</em>, <em>zp1</em>, <em>xp2</em>, <em>yp2</em>, <em>zp2</em>, <em>xp3</em>, <em>yp3</em>, <em>zp3</em>, <em>origin</em>, <em>group_index=None</em>, <em>reference=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.fromVertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.fromVertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a QuadDrupture instance from the vector of vertices that fully
+define the quadrilaterals. The points p0, ..., p3 are labeled below for
+a trapezoid:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>   p0--------p1
+  /          |
+ /           |
+p3-----------p2
+</pre></div>
+</div>
+<p>All of the following vector arguments must have the same length.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xp0</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p0.</li>
+<li><strong>yp0</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p0.</li>
+<li><strong>zp0</strong> (<em>array</em>) &#8211; Array or list of depths (floats) of p0.</li>
+<li><strong>xp1</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p1.</li>
+<li><strong>yp1</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p1.</li>
+<li><strong>zp1</strong> (<em>array</em>) &#8211; Array or list of depths (floats) of p1.</li>
+<li><strong>xp2</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p2.</li>
+<li><strong>yp2</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p2.</li>
+<li><strong>zp2</strong> (<em>array</em>) &#8211; Array or list of depths (floats) of p2.</li>
+<li><strong>xp3</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p3.</li>
+<li><strong>yp3</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p3.</li>
+<li><strong>zp3</strong> (<em>array</em>) &#8211; Array or list of depths (floats) of p3.</li>
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; Reference to a ShakeMap Origin object.</li>
+<li><strong>group_index</strong> (<em>list</em>) &#8211; List of integers to indicate group index. If
+None then each quadrilateral is assumed to be in a different
+group since there is no guarantee that any of them are
+continuous.</li>
+<li><strong>reference</strong> (<em>str</em>) &#8211; String explaining where the rupture definition
+came from (publication style reference, etc.)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">QuadRupture object, where the rupture is modeled as a series of
+trapezoids.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getQuadrilaterals">
+<code class="descname">getQuadrilaterals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getQuadrilaterals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getQuadrilaterals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of quadrilaterals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of quadrilaterals where each quad is a tuple of four
+<a class="reference external" href="https://github.com/gem/oq-hazardlib/blob/master/openquake/hazardlib/geo/point.py">Point</a>
+objects.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getStrike">
+<code class="descname">getStrike</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getStrike"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getStrike" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return strike angle. If rupture consists of multiple quadrilaterals,
+the average strike angle, weighted by quad length, is returned.
+Note: for ruptures with quads where the strike angle changes by 180 deg
+due to reverses in dip direction are problematic and not handeled well
+by this algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Strike angle in degrees.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getDepthToTop">
+<code class="descname">getDepthToTop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getDepthToTop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getDepthToTop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine shallowest vertex of entire rupture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Shallowest depth of all vertices (float).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getDip">
+<code class="descname">getDip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getDip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getDip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return average dip of all quadrilaterals in the rupture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average dip in degrees.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getIndividualWidths">
+<code class="descname">getIndividualWidths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getIndividualWidths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getIndividualWidths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array of rupture widths (km), one for each quadrilateral
+defined for the rupture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Array of quad widths in km of all rupture quadrilaterals.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getIndividualTopLengths">
+<code class="descname">getIndividualTopLengths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getIndividualTopLengths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getIndividualTopLengths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array of rupture lengths along top edge (km),
+one for each quadrilateral defined for the rupture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Array of lengths in km of top edge of quadrilaterals.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.lats">
+<code class="descname">lats</code><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.lats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array of latitudes for the rupture verticies arranged for
+plotting purposes; will give an outline of each group connected
+segments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of closed-loop latitude values; disconnected
+segments are separated by nans.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.lons">
+<code class="descname">lons</code><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.lons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array of longitudes for the rupture verticies arranged for
+plotting purposes; will give an outline of each group connected
+segments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of closed-loop longitude values; disconnected
+segments are separated by nans.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.depths">
+<code class="descname">depths</code><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.depths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array of depths for the rupture verticies arranged for
+plotting purposes; will give an outline of each group connected
+segments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of closed-loop depths; disconnected
+segments are separated by nans.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getDeps">
+<code class="descname">getDeps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getDeps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getDeps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of the array of depths for the rupture verticies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of latitude values.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getNumGroups">
+<code class="descname">getNumGroups</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getNumGroups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getNumGroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a count of the number of rupture groups.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Rnumber of rupture groups.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getNumQuads">
+<code class="descname">getNumQuads</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getNumQuads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getNumQuads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a count of the number of rupture quadrilaterals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of rupture quadrilaterals.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getRuptureAsArrays">
+<code class="descname">getRuptureAsArrays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getRuptureAsArrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getRuptureAsArrays" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a 3-tuple of numpy arrays indicating X, Y, Z (lon,lat,depth)
+coordinates. Rupture groups are separated by numpy.NaN values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">3-tuple of numpy arrays indicating X,Y,Z (lon,lat,depth)
+coordinates.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.getRuptureAsMesh">
+<code class="descname">getRuptureAsMesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.getRuptureAsMesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.getRuptureAsMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return rupture segments as a OQ-Hazardlib Mesh object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">//github.com/gem/oq-hazardlib/blob/master/openquake/hazardlib/geo/mesh.py)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Mesh (https</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.computeRjb">
+<code class="descname">computeRjb</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.computeRjb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.computeRjb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for computing Joyner-Boore distance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Joyner-Boore distance (km).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.computeRrup">
+<code class="descname">computeRrup</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.computeRrup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.computeRrup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for computing rupture distance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Rupture distance (km).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.quad_rupture.QuadRupture.computeGC2">
+<code class="descname">computeGC2</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.computeGC2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.computeGC2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for computing version 2 of the Generalized Coordinate system
+(GC2) by Spudich and Chiou OFR 2015-1028.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Dictionary with keys for each of the GC2-related distances,
+which include &#8216;rx&#8217;, &#8216;ry&#8217;, &#8216;ry0&#8217;, &#8216;U&#8217;, &#8216;T&#8217;.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="shakelib.rupture.utils.html" class="btn btn-neutral float-right" title="shakelib.rupture.utils" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="shakelib.rupture.point_rupture.html" class="btn btn-neutral" title="shakelib.rupture.point_rupture" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'4.0a',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

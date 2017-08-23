@@ -139,9 +139,7 @@ class Rupture(ABC):
 
     def getRuptureContext(self, gmpelist):
         """
-        Returns:
-            An Openquake
-        `RuptureContext <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.RuptureContext>`__.
+        Returns an Openquake `RuptureContext <http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.RuptureContext>`__.
 
         Args:
             gmpelist (list): List of hazardlib GMPE objects.

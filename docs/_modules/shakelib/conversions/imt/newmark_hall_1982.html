@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>shakelib.conversions.imt.newmark_hall_1982 &mdash; shakelib 4.0a documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="shakelib 4.0a documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> shakelib
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../shakelib.html">shakelib</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.conversions.html">shakelib.conversions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../shakelib.conversions.imc.beyer_bommer_2006.html">shakelib.conversions.imc.beyer_bommer_2006</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.conversions.imt.html">shakelib.conversions.imt</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../shakelib.conversions.imt.bommer_alarcon_2006.html">shakelib.conversions.imt.bommer_alarcon_2006</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../shakelib.conversions.imt.newmark_hall_1982.html">shakelib.conversions.imt.newmark_hall_1982</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.correlation.html">shakelib.correlation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.correlation.baker_jayaram_2008.html">shakelib.correlation.baker_jayaram_2008</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.correlation.boore_2003.html">shakelib.correlation.boore_2003</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.correlation.goda_atkinson_2010.html">shakelib.correlation.goda_atkinson_2010</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.correlation.loth_baker_2013.html">shakelib.correlation.loth_baker_2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.directivity.html">shakelib.directivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.directivity.bayless2013.html">shakelib.directivity.bayless2013</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.directivity.rowshandel2013.html">shakelib.directivity.rowshandel2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.gmice.html">shakelib.gmice</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.gmice.wgrw12.html">shakelib.gmice.wgrw12</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.plotting.html">shakelib.plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.plotting.plotrupture.html">shakelib.plotting.plotrupture</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.rupture.html">shakelib.rupture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.rupture.base.html">shakelib.rupture.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.rupture.constants.html">shakelib.rupture.constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.rupture.edge_rupture.html">shakelib.rupture.edge_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.rupture.factory.html">shakelib.rupture.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.rupture.gc2.html">shakelib.rupture.gc2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.rupture.origin.html">shakelib.rupture.origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.rupture.point_rupture.html">shakelib.rupture.point_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.rupture.quad_rupture.html">shakelib.rupture.quad_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.rupture.utils.html">shakelib.rupture.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.distance.html">shakelib.distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.multigmpe.html">shakelib.multigmpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.sites.html">shakelib.sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.station.html">shakelib.station</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.virtualipe.html">shakelib.virtualipe</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../index.html">shakelib</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      
+    <li>shakelib.conversions.imt.newmark_hall_1982</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for shakelib.conversions.imt.newmark_hall_1982</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="NewmarkHall1982"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.newmark_hall_1982.html#shakelib.conversions.imt.newmark_hall_1982.NewmarkHall1982">[docs]</a><span class="k">class</span> <span class="nc">NewmarkHall1982</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for conversion between PGA and PSA10 by Newmark and Hall (1982).</span>
+
+<span class="sd">    - PSA10 stands for spectral acceleration with oscillator period of 1.0 sec</span>
+<span class="sd">    - PGV is peak ground velocity.</span>
+
+<span class="sd">    The conversion factor is 37.27*2.54.</span>
+<span class="sd">    Note that 2.54 is the conversion factor to convert from cm/s to in/s and</span>
+<span class="sd">    37.27 is derived from SA(f) = 1.65*(2*pi*V*f)/386.09, where:</span>
+
+<span class="sd">    - SA(f) is spectral acceleration at frequency f (in g)</span>
+<span class="sd">    - f is the frequency of interest</span>
+<span class="sd">    - V is the velocity</span>
+<span class="sd">    - 1.65 is the N&amp;H amplification factor for velocity at 5% damping</span>
+<span class="sd">    - 386.09 is the acceleration of gravity in inches per second per g</span>
+
+<span class="sd">    The sigma factor was computed from an average sigma value determined</span>
+<span class="sd">    by plotting PGV/PSA10 versus Distance for earthquakes with magnitudes</span>
+<span class="sd">    greater than or equal to 5.0.</span>
+
+<span class="sd">    To do</span>
+<span class="sd">        - Inherit from ConvertIMT class.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Newmark, N. M., &amp; Hall, W. J. (1982). Earthquake spectra and design.</span>
+<span class="sd">        Earthquake Engineering Research Institute, El Cerrito, California.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__lnfact</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">37.27</span> <span class="o">*</span> <span class="mf">2.54</span><span class="p">)</span>
+    <span class="n">__lnsigma</span> <span class="o">=</span> <span class="mf">0.5146578</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NewmarkHall1982.psa102pgv"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.newmark_hall_1982.html#shakelib.conversions.imt.newmark_hall_1982.NewmarkHall1982.psa102pgv">[docs]</a>    <span class="k">def</span> <span class="nf">psa102pgv</span><span class="p">(</span><span class="n">psa10</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert PSA10 (spectral acceleration with oscillator period of 1.0 sec)</span>
+<span class="sd">        to PGV.</span>
+
+<span class="sd">        **Important:** PSA10 and sigma must be logarithmic units.</span>
+
+<span class="sd">        :param psa10:</span>
+<span class="sd">            Numpy array or float of PSA10 values; units must be natural log</span>
+<span class="sd">            of g.</span>
+<span class="sd">        :param sigma:</span>
+<span class="sd">            Numpy array or float of standard deviation of PGV from a GMPE;</span>
+<span class="sd">            units must be natural log.</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            Two arrays</span>
+<span class="sd">                - Array of PGV iwth natural log of cm/s units.</span>
+<span class="sd">                - Array of its standard deviation with natural log units.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pgv</span> <span class="o">=</span> <span class="n">psa10</span> <span class="o">+</span> <span class="n">NewmarkHall1982</span><span class="o">.</span><span class="n">__lnfact</span>
+
+        <span class="n">sigmaTot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
+                           <span class="p">(</span><span class="n">NewmarkHall1982</span><span class="o">.</span><span class="n">__lnsigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">pgv</span><span class="p">,</span> <span class="n">sigmaTot</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NewmarkHall1982.getConversionFactor"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.newmark_hall_1982.html#shakelib.conversions.imt.newmark_hall_1982.NewmarkHall1982.getConversionFactor">[docs]</a>    <span class="k">def</span> <span class="nf">getConversionFactor</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            The Newmark and Hall (1982) multiplicative conversion factor for</span>
+<span class="sd">            convering Sa(1.0) to PGV (cm/s).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">NewmarkHall1982</span><span class="o">.</span><span class="n">__lnfact</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NewmarkHall1982.getLnSigma"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.newmark_hall_1982.html#shakelib.conversions.imt.newmark_hall_1982.NewmarkHall1982.getLnSigma">[docs]</a>    <span class="k">def</span> <span class="nf">getLnSigma</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            The the estimate of the logarithmic standard deviation of the PGV</span>
+<span class="sd">            predicted by Newmark and Hall (1982).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">NewmarkHall1982</span><span class="o">.</span><span class="n">__lnsigma</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'4.0a',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

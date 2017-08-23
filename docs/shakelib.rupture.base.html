@@ -1,0 +1,587 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>shakelib.rupture.base &mdash; shakelib 4.0a documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
+        <link rel="up" title="shakelib.rupture" href="shakelib.rupture.html"/>
+        <link rel="next" title="shakelib.rupture.constants" href="shakelib.rupture.constants.html"/>
+        <link rel="prev" title="shakelib.rupture" href="shakelib.rupture.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> shakelib
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imc.beyer_bommer_2006.html">shakelib.conversions.imc.beyer_bommer_2006</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imt.html">shakelib.conversions.imt</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imt.bommer_alarcon_2006.html">shakelib.conversions.imt.bommer_alarcon_2006</a></li>
+<li class="toctree-l4"><a class="reference internal" href="shakelib.conversions.imt.newmark_hall_1982.html">shakelib.conversions.imt.newmark_hall_1982</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.correlation.html">shakelib.correlation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.baker_jayaram_2008.html">shakelib.correlation.baker_jayaram_2008</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.boore_2003.html">shakelib.correlation.boore_2003</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.goda_atkinson_2010.html">shakelib.correlation.goda_atkinson_2010</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.correlation.loth_baker_2013.html">shakelib.correlation.loth_baker_2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.directivity.html">shakelib.directivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.bayless2013.html">shakelib.directivity.bayless2013</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.rowshandel2013.html">shakelib.directivity.rowshandel2013</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.gmice.html">shakelib.gmice</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.gmice.wgrw12.html">shakelib.gmice.wgrw12</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.plotting.html">shakelib.plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.plotting.plotrupture.html">shakelib.plotting.plotrupture</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="shakelib.rupture.html">shakelib.rupture</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="">shakelib.rupture.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.constants.html">shakelib.rupture.constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.edge_rupture.html">shakelib.rupture.edge_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.factory.html">shakelib.rupture.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.gc2.html">shakelib.rupture.gc2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.origin.html">shakelib.rupture.origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.point_rupture.html">shakelib.rupture.point_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.quad_rupture.html">shakelib.rupture.quad_rupture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.utils.html">shakelib.rupture.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.multigmpe.html">shakelib.multigmpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.sites.html">shakelib.sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.station.html">shakelib.station</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.virtualipe.html">shakelib.virtualipe</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">shakelib</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="shakelib.html">shakelib</a> &raquo;</li>
+      
+          <li><a href="shakelib.rupture.html">shakelib.rupture</a> &raquo;</li>
+      
+    <li>shakelib.rupture.base</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/shakelib.rupture.base.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-shakelib.rupture.base">
+<span id="shakelib-rupture-base"></span><h1>shakelib.rupture.base<a class="headerlink" href="#module-shakelib.rupture.base" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shakelib.rupture.base.Rupture">
+<em class="property">class </em><code class="descclassname">shakelib.rupture.base.</code><code class="descname">Rupture</code><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract base class for ruptures.</p>
+<p>Note on terminology:</p>
+<blockquote>
+<div><ul class="simple">
+<li>There are three Ruptuer subclasses: PointRupture, QuadRupture, and
+EdgeRupture.</li>
+<li>PointRupture represents the rupture as a point source.</li>
+<li>QuadRupture and EdgeRupture are two different finite source
+representations.</li>
+<li>A finite rupture is composed of segments. For QuadRupture, a segment
+is a quadrilaterial; for an EdgeRupture, a segment is a line
+connecting two points.</li>
+<li>Segments are grouped with a common &#8220;group index&#8221;.</li>
+<li>Segments within a group must be continuous.</li>
+<li>The QuadRupture class requires that each segment is a quadrilateral
+with horizontal top and obttom edges.</li>
+<li>The EdgeRupture class allows for arbitrarily complex top and bottom
+edge specification.</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.writeGeoJson">
+<code class="descname">writeGeoJson</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.writeGeoJson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.writeGeoJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the rupture to a GeoJson file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<em>str</em>) &#8211; Name of file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getLength">
+<code class="descname">getLength</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getLength"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getLength" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Rupture length in km.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getWidth">
+<code class="descname">getWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getWidth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getWidth" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Rupture width in km.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getArea">
+<code class="descname">getArea</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getArea"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getArea" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Rupture area in square km.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getStrike">
+<code class="descname">getStrike</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getStrike"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getStrike" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return strike angle. If rupture consists of multiple quadrilaterals,
+the average strike angle, weighted by quad length, is returned.
+Note: for ruptures with quads where the strike angle changes by 180 deg
+due to reverses in dip direction are problematic and not handeled well
+by this algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Strike angle in degrees.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getDip">
+<code class="descname">getDip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getDip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getDip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getDepthToTop">
+<code class="descname">getDepthToTop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getDepthToTop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getDepthToTop" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average dip in degrees.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getQuadrilaterals">
+<code class="descname">getQuadrilaterals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getQuadrilaterals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getQuadrilaterals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to return rupture quadrilaterals. Returns None for
+PointRupture.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getReference">
+<code class="descname">getReference</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getReference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getReference" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Reference info from file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getOrigin">
+<code class="descname">getOrigin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getOrigin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getOrigin" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Origin object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="shakelib.rupture.base.Rupture.lats">
+<code class="descname">lats</code><a class="headerlink" href="#shakelib.rupture.base.Rupture.lats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="shakelib.rupture.base.Rupture.lons">
+<code class="descname">lons</code><a class="headerlink" href="#shakelib.rupture.base.Rupture.lons" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="shakelib.rupture.base.Rupture.depths">
+<code class="descname">depths</code><a class="headerlink" href="#shakelib.rupture.base.Rupture.depths" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.getRuptureContext">
+<code class="descname">getRuptureContext</code><span class="sig-paren">(</span><em>gmpelist</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.getRuptureContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.getRuptureContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an Openquake <a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.RuptureContext">RuptureContext</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gmpelist</strong> (<em>list</em>) &#8211; List of hazardlib GMPE objects.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">RuptureContext object with all known parameters filled in.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.computeRhyp">
+<code class="descname">computeRhyp</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.computeRhyp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.computeRhyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for computing hypocentral distance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Hypocentral distance (km).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.computeRepi">
+<code class="descname">computeRepi</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.computeRepi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.computeRepi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for computing epicentral distance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Epicentral distance (km).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.computeRjb">
+<code class="descname">computeRjb</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.computeRjb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.computeRjb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for computing Joyner-Boore distance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Joyner-Boore distance (km).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.computeRrup">
+<code class="descname">computeRrup</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.computeRrup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.computeRrup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for computing rupture distance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Rupture distance (km).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.computeGC2">
+<code class="descname">computeGC2</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.computeGC2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.computeGC2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for computing version 2 of the Generalized Coordinate system
+(GC2) by Spudich and Chiou OFR 2015-1028.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Dictionary with keys for each of the GC2-related distances,
+which include &#8216;rx&#8217;, &#8216;ry&#8217;, &#8216;ry0&#8217;, &#8216;U&#8217;, &#8216;T&#8217;.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.plot3d">
+<code class="descname">plot3d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.plot3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.plot3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for making a quick 3D wireframe plot of rupture.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.rupture.base.Rupture.map">
+<code class="descname">map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/base.html#Rupture.map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.base.Rupture.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for making a quick map of the fault.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="shakelib.rupture.constants.html" class="btn btn-neutral float-right" title="shakelib.rupture.constants" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="shakelib.rupture.html" class="btn btn-neutral" title="shakelib.rupture" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'4.0a',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

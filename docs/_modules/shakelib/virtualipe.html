@@ -228,7 +228,8 @@
 <span class="sd">            gmice: An instance of a GMICE object.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            A new instance of a VirtualIPE object.</span>
+<span class="sd">            :class:`VirtualIPE`: A new instance of a VirtualIPE object.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span> <span class="o">=</span> <span class="n">cls</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gmpe</span> <span class="o">=</span> <span class="n">gmpe</span>
@@ -264,9 +265,11 @@
 <span class="sd">        Additional subclass argument is &quot;fd&quot;, which is the directivity</span>
 <span class="sd">        amplification factor in natural log units. This is optional,</span>
 <span class="sd">        and must be a numpy array with the same dimentions as the</span>
-<span class="sd">        sites and is added</span>
+<span class="sd">        sites and is added to the ground motions before conversion to</span>
+<span class="sd">        MMI.</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            ndarray, list of ndarray:</span>
 
 <span class="sd">            mmi (ndarray): Ground motions predicted by the MultiGMPE using</span>
 <span class="sd">            the supplied parameters are converted to MMI using the GMICE.</span>
@@ -277,7 +280,7 @@
 <span class="sd">            be any set that the MultiGMPE supports. See the ShakeMap manual</span>
 <span class="sd">            for a detailed discussion of the way the uncertainty is computed.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa</span>
+<span class="sd">        &quot;&quot;&quot;</span> <span class="c1"># noqa</span>
 
         <span class="k">if</span> <span class="n">imt</span> <span class="o">!=</span> <span class="n">MMI</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;imt must be MMI&quot;</span><span class="p">)</span>

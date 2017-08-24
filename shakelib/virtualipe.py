@@ -48,7 +48,8 @@ class VirtualIPE(GMPE):
             gmice: An instance of a GMICE object.
 
         Returns:
-            A new instance of a VirtualIPE object.
+            :class:`VirtualIPE`: A new instance of a VirtualIPE object.
+
         """
         self = cls()
         self.gmpe = gmpe
@@ -84,9 +85,11 @@ class VirtualIPE(GMPE):
         Additional subclass argument is "fd", which is the directivity
         amplification factor in natural log units. This is optional,
         and must be a numpy array with the same dimentions as the
-        sites and is added
+        sites and is added to the ground motions before conversion to
+        MMI.
 
         Returns:
+            ndarray, list of ndarray:
 
             mmi (ndarray): Ground motions predicted by the MultiGMPE using
             the supplied parameters are converted to MMI using the GMICE.
@@ -97,7 +100,7 @@ class VirtualIPE(GMPE):
             be any set that the MultiGMPE supports. See the ShakeMap manual
             for a detailed discussion of the way the uncertainty is computed.
 
-        """  # noqa
+        """ # noqa
 
         if imt != MMI():
             raise ValueError("imt must be MMI")

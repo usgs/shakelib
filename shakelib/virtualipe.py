@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 
 from openquake.hazardlib.gsim.base import GMPE
@@ -29,12 +31,21 @@ class VirtualIPE(GMPE):
 
     """
 
+    #: The OpenQuake IMT this module can produce ('MMI' only).
     DEFINED_FOR_INTENSITY_MEASURE_TYPES = set([MMI])
+    #: The OpenQuake standard deviation types that may be produced (will
+    #: depend on the GMPE provided).
     DEFINED_FOR_STANDARD_DEVIATION_TYPES = None
+    #: Distance measures required (will depend on the GMPE provided).
     REQUIRES_DISTANCES = None
+    #: OpenQuake IMC used (will depend on the GMPE, but "Larger" is 
+    #: typical).
     DEFINED_FOR_INTENSITY_MEASURE_COMPONENT = None
+    #: Determined by the GMPE selected.
     DEFINED_FOR_TECTONIC_REGION_TYPE = None
+    #: Determined by the GMPE selected.
     REQUIRES_RUPTURE_PARAMETERS = None
+    #: Determined by the GMPE selected.
     REQUIRES_SITES_PARAMETERS = None
 
     @classmethod
@@ -66,13 +77,21 @@ class VirtualIPE(GMPE):
             self.imt = SA(1.0)
         else:
             raise ShakeLibException(
-                'The supplied GMPE and GMICE do not use a common IMT'
+                'The supplied GMPE and GMICE do not have a common IMT'
             )
 
         self.DEFINED_FOR_STANDARD_DEVIATION_TYPES = \
             gmpe.DEFINED_FOR_STANDARD_DEVIATION_TYPES.copy()
 
         self.REQUIRES_DISTANCES = gmpe.REQUIRES_DISTANCES.copy()
+        self.REQUIRES_RUPTURE_PARAMETERS = \
+                gmpe.REQUIRES_RUPTURE_PARAMETERS.copy()
+        self.REQUIRES_SITES_PARAMETERS = \
+                gmpe.REQUIRES_SITES_PARAMETERS.copy()
+        self.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT = \
+                copy.copy(gmpe.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT)
+        self.DEFINED_FOR_TECTONIC_REGION_TYPE = \
+                copy.copy(gmpe.DEFINED_FOR_TECTONIC_REGION_TYPE)
 
         return self
 

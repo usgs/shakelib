@@ -34,6 +34,11 @@ required extensive modifications to the original source code. Additional uses of
 ShakeMap, such as for scenario earthquakes and the ShakeMap Atlas, have also
 required ongoing modification of the code. 
 
+Documentation
+-------------
+
+The API docs can be found `here <https://usgs.github.io/shakelib/>`_.
+
 Dependencies
 ------------
 

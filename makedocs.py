@@ -1,16 +1,28 @@
 #!/usr/bin/env python
+"""
+Program to generate API docs from doc strings and put the results
+into the docs directory.
+"""
 
 import argparse
 import os.path
-import shutil
 import sys
-import re
 import tempfile
 from distutils.dir_util import copy_tree
 
 from impactutils.io.cmd import get_command_output
 
 def main(args):
+    """
+    Generate API docs.
+
+    Args:
+        args: Output of argparse. Currently only holds the verbose flag.
+
+    Returns:
+        Nothing. Function will exit upon success or failure.
+
+    """
 
     #-------------------------------------------------------------
     # where should .rst files, Makefile, _build folder be written?
@@ -150,6 +162,9 @@ def main(args):
     #-------------------------------------------------------------
     htmldir = os.path.join(API_DIR, '_build', 'html')
     copy_tree(htmldir, DOC_DIR)
+    nojekyll_file = os.path.join(DOC_DIR, '.nojekyll')
+    res, stdout, stderr = get_command_output('touch %s' % (nojekyll_file))
+
 
 if __name__ == '__main__':
     desc = 'Create API documentation for shakeelib.'

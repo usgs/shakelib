@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
         <link rel="up" title="shakelib" href="shakelib.html"/>
         <link rel="next" title="shakelib.sites" href="shakelib.sites.html"/>
@@ -82,7 +85,8 @@
           
             
             
-                <ul class="current">
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -129,7 +133,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">shakelib.multigmpe</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">shakelib.multigmpe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.sites.html">shakelib.sites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.station.html">shakelib.station</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.virtualipe.html">shakelib.virtualipe</a></li>
@@ -157,7 +161,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -170,8 +174,6 @@
     <li>shakelib.multigmpe</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/shakelib.multigmpe.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -191,7 +193,7 @@
 <p>To do</p>
 <blockquote>
 <div><ul class="simple">
-<li>Allow site to be based on a model that isn&#8217;t a GMPE (e.g.,
+<li>Allow site to be based on a model that isn’t a GMPE (e.g.,
 Borcherdt).</li>
 </ul>
 </div></blockquote>
@@ -245,9 +247,9 @@ Borcherdt).</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>conf</strong> (<em>dict</em>) &#8211; Dictionary of config options.</li>
-<li><strong>filter_imt</strong> (<em>IMT</em>) &#8211; An optional IMT to filter/reweight the GMPE list.</li>
-<li><strong>verbose</strong> (<em>bool</em>) &#8211; Print verbose output for debugging.</li>
+<li><strong>conf</strong> (<em>dict</em>) – Dictionary of config options.</li>
+<li><strong>filter_imt</strong> (<em>IMT</em>) – An optional IMT to filter/reweight the GMPE list.</li>
+<li><strong>verbose</strong> (<em>bool</em>) – Print verbose output for debugging.</li>
 </ul>
 </td>
 </tr>
@@ -267,18 +269,18 @@ Borcherdt).</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>gmpes</strong> (<em>list</em>) &#8211; List of OpenQuake
+<li><strong>gmpes</strong> (<em>list</em>) – List of OpenQuake
 <a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#built-in-gsims">GMPE</a>
 instances.</li>
-<li><strong>weights</strong> (<em>list</em>) &#8211; List of weights; must sum to 1.0.</li>
-<li><strong>imc</strong> &#8211; Requested intensity measure component. Must be one listed
+<li><strong>weights</strong> (<em>list</em>) – List of weights; must sum to 1.0.</li>
+<li><strong>imc</strong> – Requested intensity measure component. Must be one listed
 <a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC">here</a>.
 The amplitudes returned by the GMPEs will be converted to this
-IMT. Default is &#8216;GREATER_OF_TWO_HORIZONTAL&#8217;, which is used by
+IMT. Default is ‘GREATER_OF_TWO_HORIZONTAL’, which is used by
 ShakeMap. See discussion in
 <a class="reference external" href="http://usgs.github.io/shakemap/tg_choice_of_parameters.html#use-of-peak-values-rather-than-mean">this section</a>
 of the ShakeMap manual.</li>
-<li><strong>default_gmpes_for_site</strong> (<em>list</em>) &#8211; <p>Optional list of OpenQuake GMPE instance to use as a site term
+<li><strong>default_gmpes_for_site</strong> (<em>list</em>) – <p>Optional list of OpenQuake GMPE instance to use as a site term
 for any of the GMPEs that do not have a site term.</p>
 <p class="rubric">Notes</p>
 <ul>
@@ -289,10 +291,10 @@ holds responsibiilty for ensuring compatibility.</li>
 hecking the REQUIRES_SITES_PARAMETERS slot for vs30.</li>
 </ul>
 </li>
-<li><strong>default_gmpes_for_site_weights</strong> &#8211; Weights for default_gmpes_for_site.
+<li><strong>default_gmpes_for_site_weights</strong> – Weights for default_gmpes_for_site.
 Must sum to one and be same length as default_gmpes_for_site.
 If None, then weights are set to be equal.</li>
-<li><strong>reference_vs30</strong> &#8211; Reference rock Vs30 in m/s. We do not check that this matches
+<li><strong>reference_vs30</strong> – Reference rock Vs30 in m/s. We do not check that this matches
 the reference rock in the GMPEs so this is the responsibility
 of the user.</li>
 </ul>
@@ -314,11 +316,11 @@ is returned.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sites</strong> (<em>SitesContext</em>) &#8211; Instance of SitesContext.</li>
-<li><strong>rup</strong> (<em>RuptureContext</em>) &#8211; Instance of RuptureContext.</li>
-<li><strong>dists</strong> (<em>DistancesContext</em>) &#8211; Instance of DistancesContext.</li>
-<li><strong>imt</strong> &#8211; An instance openquake.hazardlib.imt.</li>
-<li><strong>default</strong> (<em>bool</em>) &#8211; Boolean of whether or not to return the
+<li><strong>sites</strong> (<em>SitesContext</em>) – Instance of SitesContext.</li>
+<li><strong>rup</strong> (<em>RuptureContext</em>) – Instance of RuptureContext.</li>
+<li><strong>dists</strong> (<em>DistancesContext</em>) – Instance of DistancesContext.</li>
+<li><strong>imt</strong> – An instance openquake.hazardlib.imt.</li>
+<li><strong>default</strong> (<em>bool</em>) – Boolean of whether or not to return the
 amplificaiton factors for the gmpes or default_gmpes_for_site.
 This argument is primarily only intended to be used internally
 for when we just need to access the default amplifications to
@@ -347,8 +349,8 @@ SitesContext to make this easier.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sites</strong> &#8211; 1 An OQ sites context.</li>
-<li><strong>gmpe</strong> &#8211; An OQ GMPE instance.</li>
+<li><strong>sites</strong> – 1 An OQ sites context.</li>
+<li><strong>gmpe</strong> – An OQ GMPE instance.</li>
 </ul>
 </td>
 </tr>
@@ -372,9 +374,9 @@ to a specific IMT. Rescales the weights to sum to one.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gmpes</strong> (<em>list</em>) &#8211; List of GMPE instances.</li>
-<li><strong>wts</strong> (<em>list</em>) &#8211; List of floats indicating the weight of the GMPEs.</li>
-<li><strong>imt</strong> (<em>IMT</em>) &#8211; OQ IMT to filter GMPE list for.</li>
+<li><strong>gmpes</strong> (<em>list</em>) – List of GMPE instances.</li>
+<li><strong>wts</strong> (<em>list</em>) – List of floats indicating the weight of the GMPEs.</li>
+<li><strong>imt</strong> (<em>IMT</em>) – OQ IMT to filter GMPE list for.</li>
 </ul>
 </td>
 </tr>
@@ -396,7 +398,7 @@ to a specific IMT. Rescales the weights to sum to one.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gmpe</strong> (<em>GMPE</em>) &#8211; A GMPE instance.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gmpe</strong> (<em>GMPE</em>) – A GMPE instance.</td>
 </tr>
 </tbody>
 </table>
@@ -409,7 +411,7 @@ to a specific IMT. Rescales the weights to sum to one.</p>
 <dl class="function">
 <dt id="shakelib.multigmpe.get_gmpe_coef_table">
 <code class="descclassname">shakelib.multigmpe.</code><code class="descname">get_gmpe_coef_table</code><span class="sig-paren">(</span><em>gmpe</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/multigmpe.html#get_gmpe_coef_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.multigmpe.get_gmpe_coef_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method for finding the (or &#8220;a&#8221;) GMPE table.</p>
+<dd><p>Method for finding the (or “a”) GMPE table.</p>
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>The reason for the complexity here is that there can be multiple
@@ -423,7 +425,7 @@ tables.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gmpe</strong> (<em>GMPE</em>) &#8211; An OQ GMPE instance.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gmpe</strong> (<em>GMPE</em>) – An OQ GMPE instance.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The associated coefficient table.</td>
 </tr>

@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -184,15 +188,15 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="c1"># third party imports</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo.point</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo.point</span> <span class="k">import</span> <span class="n">Point</span>
 
-<span class="kn">from</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="kn">import</span> <span class="n">latlon2ecef</span>
-<span class="kn">from</span> <span class="nn">impactutils.vectorutils.vector</span> <span class="kn">import</span> <span class="n">Vector</span>
-<span class="kn">from</span> <span class="nn">impactutils.time.ancient_time</span> <span class="kn">import</span> <span class="n">HistoricTime</span>
-<span class="kn">from</span> <span class="nn">shakelib.rupture.base</span> <span class="kn">import</span> <span class="n">Rupture</span>
-<span class="kn">import</span> <span class="nn">shakelib.rupture.utils</span> <span class="kn">as</span> <span class="nn">utils</span>
-<span class="kn">import</span> <span class="nn">shakelib.rupture.gc2</span> <span class="kn">as</span> <span class="nn">gc2</span>
+<span class="kn">from</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="k">import</span> <span class="n">latlon2ecef</span>
+<span class="kn">from</span> <span class="nn">impactutils.vectorutils.vector</span> <span class="k">import</span> <span class="n">Vector</span>
+<span class="kn">from</span> <span class="nn">impactutils.time.ancient_time</span> <span class="k">import</span> <span class="n">HistoricTime</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture.base</span> <span class="k">import</span> <span class="n">Rupture</span>
+<span class="kn">import</span> <span class="nn">shakelib.rupture.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">shakelib.rupture.gc2</span> <span class="k">as</span> <span class="nn">gc2</span>
 
 
 <div class="viewcode-block" id="EdgeRupture"><a class="viewcode-back" href="../../../shakelib.rupture.edge_rupture.html#shakelib.rupture.edge_rupture.EdgeRupture">[docs]</a><span class="k">class</span> <span class="nc">EdgeRupture</span><span class="p">(</span><span class="n">Rupture</span><span class="p">):</span>
@@ -273,9 +277,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span> <span class="o">=</span> <span class="n">reference</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_computeStikeDip</span><span class="p">()</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="EdgeRupture.fromArrays"><a class="viewcode-back" href="../../../shakelib.rupture.edge_rupture.html#shakelib.rupture.edge_rupture.EdgeRupture.fromArrays">[docs]</a>    <span class="k">def</span> <span class="nf">fromArrays</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">toplons</span><span class="p">,</span> <span class="n">toplats</span><span class="p">,</span> <span class="n">topdeps</span><span class="p">,</span> <span class="n">botlons</span><span class="p">,</span> <span class="n">botlats</span><span class="p">,</span> <span class="n">botdeps</span><span class="p">,</span>
-                   <span class="n">origin</span><span class="p">,</span> <span class="n">group_index</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mesh_dx</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeRupture.fromArrays"><a class="viewcode-back" href="../../../shakelib.rupture.edge_rupture.html#shakelib.rupture.edge_rupture.EdgeRupture.fromArrays">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromArrays</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">toplons</span><span class="p">,</span> <span class="n">toplats</span><span class="p">,</span> <span class="n">topdeps</span><span class="p">,</span> <span class="n">botlons</span><span class="p">,</span> <span class="n">botlats</span><span class="p">,</span> <span class="n">botdeps</span><span class="p">,</span>
+                   <span class="n">origin</span><span class="p">,</span> <span class="n">group_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mesh_dx</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Class method to initialize an EdgeRupture class from arrays of</span>
 <span class="sd">        longitude, latitude, and depth along the top and bottom edges.</span>
@@ -303,7 +307,7 @@
         <span class="n">botlons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">botlons</span><span class="p">)</span>
         <span class="n">botlats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">botlats</span><span class="p">)</span>
         <span class="n">botdeps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">botdeps</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">group_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">group_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">group_index</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">group_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">toplons</span><span class="p">)</span>

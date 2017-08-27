@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
         <link rel="up" title="shakelib" href="shakelib.html"/>
         <link rel="prev" title="shakelib.station" href="shakelib.station.html"/> 
@@ -81,7 +84,8 @@
           
             
             
-                <ul class="current">
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -131,7 +135,7 @@
 <li class="toctree-l2"><a class="reference internal" href="shakelib.multigmpe.html">shakelib.multigmpe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.sites.html">shakelib.sites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.station.html">shakelib.station</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">shakelib.virtualipe</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">shakelib.virtualipe</a></li>
 </ul>
 </li>
 </ul>
@@ -156,7 +160,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -169,8 +173,6 @@
     <li>shakelib.virtualipe</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/shakelib.virtualipe.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -204,7 +206,7 @@ equal to their total uncertainty.</p>
 <dl class="attribute">
 <dt id="shakelib.virtualipe.VirtualIPE.DEFINED_FOR_INTENSITY_MEASURE_TYPES">
 <code class="descname">DEFINED_FOR_INTENSITY_MEASURE_TYPES</code><em class="property"> = {&lt;class 'openquake.hazardlib.imt.MMI'&gt;}</em><a class="headerlink" href="#shakelib.virtualipe.VirtualIPE.DEFINED_FOR_INTENSITY_MEASURE_TYPES" title="Permalink to this definition">¶</a></dt>
-<dd><p>The OpenQuake IMT this module can produce (&#8216;MMI&#8217; only).</p>
+<dd><p>The OpenQuake IMT this module can produce (‘MMI’ only).</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -223,7 +225,7 @@ depend on the GMPE provided).</p>
 <dl class="attribute">
 <dt id="shakelib.virtualipe.VirtualIPE.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT">
 <code class="descname">DEFINED_FOR_INTENSITY_MEASURE_COMPONENT</code><em class="property"> = None</em><a class="headerlink" href="#shakelib.virtualipe.VirtualIPE.DEFINED_FOR_INTENSITY_MEASURE_COMPONENT" title="Permalink to this definition">¶</a></dt>
-<dd><p>OpenQuake IMC used (will depend on the GMPE, but &#8220;Larger&#8221; is
+<dd><p>OpenQuake IMC used (will depend on the GMPE, but “Larger” is
 typical).</p>
 </dd></dl>
 
@@ -255,8 +257,8 @@ GMICE. There is no default constructor, you must use this method.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gmpe</strong> &#8211; An instance of the MultiGMPE object.</li>
-<li><strong>gmice</strong> &#8211; An instance of a GMICE object.</li>
+<li><strong>gmpe</strong> – An instance of the MultiGMPE object.</li>
+<li><strong>gmice</strong> – An instance of a GMICE object.</li>
 </ul>
 </td>
 </tr>
@@ -276,7 +278,7 @@ GMICE. There is no default constructor, you must use this method.</p>
 <dd><p>See superclass
 <a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.GroundShakingIntensityModel.get_mean_and_stddevs">method</a>
 for parameter definitions. The only acceptable IMT is MMI.</p>
-<p>Additional subclass argument is &#8220;fd&#8221;, which is the directivity
+<p>Additional subclass argument is “fd”, which is the directivity
 amplification factor in natural log units. This is optional,
 and must be a numpy array with the same dimentions as the
 sites and is added to the ground motions before conversion to
@@ -288,7 +290,7 @@ MMI.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">mmi (ndarray): Ground motions predicted by the MultiGMPE using
 the supplied parameters are converted to MMI using the GMICE.<p>mmi_sd (list of ndarrays): The uncertainty of the combined
 prediction/conversion process. The prediction uncertainty will
-typically be either OpenQuake&#8217;s TOTAL or INTRA_EVENT.  But can
+typically be either OpenQuake’s TOTAL or INTRA_EVENT.  But can
 be any set that the MultiGMPE supports. See the ShakeMap manual
 for a detailed discussion of the way the uncertainty is computed.</p>
 </td>

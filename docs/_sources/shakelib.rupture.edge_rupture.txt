@@ -1,7 +1,0 @@
-shakelib.rupture.edge_rupture
-====================================
-
-.. automodule:: shakelib.rupture.edge_rupture
-    :members:
-    :undoc-members:
-    :show-inheritance:

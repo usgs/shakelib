@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
         <link rel="up" title="shakelib" href="shakelib.html"/>
         <link rel="next" title="shakelib.station" href="shakelib.station.html"/>
@@ -82,7 +85,8 @@
           
             
             
-                <ul class="current">
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -130,7 +134,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.multigmpe.html">shakelib.multigmpe</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">shakelib.sites</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">shakelib.sites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.station.html">shakelib.station</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.virtualipe.html">shakelib.virtualipe</a></li>
 </ul>
@@ -157,7 +161,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -170,8 +174,6 @@
     <li>shakelib.sites</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/shakelib.sites.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -195,12 +197,12 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>vs30grid</strong> &#8211; MapIO Grid2D object containing Vs30 values.</li>
-<li><strong>vs30measured_grid</strong> &#8211; Boolean array indicating whether Vs30 values
+<li><strong>vs30grid</strong> – MapIO Grid2D object containing Vs30 values.</li>
+<li><strong>vs30measured_grid</strong> – Boolean array indicating whether Vs30 values
 were measured or derived (i.e., from topographic slope).</li>
-<li><strong>backarc</strong> &#8211; Boolean array indicating whether site is in the subduction
+<li><strong>backarc</strong> – Boolean array indicating whether site is in the subduction
 <a class="reference external" href="http://earthquake.usgs.gov/learn/glossary/?term=backarc">backarc</a>.</li>
-<li><strong>defaultVs30</strong> &#8211; Default Vs30 value to use in locations where Vs30Grid
+<li><strong>defaultVs30</strong> – Default Vs30 value to use in locations where Vs30Grid
 is not specified.</li>
 </ul>
 </td>
@@ -217,23 +219,23 @@ and Vs30 values.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>xmin</strong> &#8211; X coordinate of left edge of bounds.</li>
-<li><strong>xmax</strong> &#8211; X coordinate of right edge of bounds.</li>
-<li><strong>ymin</strong> &#8211; Y coordinate of bottom edge of bounds.</li>
-<li><strong>ymax</strong> &#8211; Y coordinate of top edge of bounds.</li>
-<li><strong>dx</strong> &#8211; Resolution of desired grid in X direction.</li>
-<li><strong>dy</strong> &#8211; Resolution of desired grid in Y direction.</li>
-<li><strong>defaultVs30</strong> &#8211; Default Vs30 value to use if vs30File not specified.</li>
-<li><strong>vs30File</strong> &#8211; Name of GMT or GDAL format grid file containing Vs30
+<li><strong>xmin</strong> – X coordinate of left edge of bounds.</li>
+<li><strong>xmax</strong> – X coordinate of right edge of bounds.</li>
+<li><strong>ymin</strong> – Y coordinate of bottom edge of bounds.</li>
+<li><strong>ymax</strong> – Y coordinate of top edge of bounds.</li>
+<li><strong>dx</strong> – Resolution of desired grid in X direction.</li>
+<li><strong>dy</strong> – Resolution of desired grid in Y direction.</li>
+<li><strong>defaultVs30</strong> – Default Vs30 value to use if vs30File not specified.</li>
+<li><strong>vs30File</strong> – Name of GMT or GDAL format grid file containing Vs30
 values.</li>
-<li><strong>vs30measured_grid</strong> &#8211; Boolean grid indicating whether Vs30 values were
+<li><strong>vs30measured_grid</strong> – Boolean grid indicating whether Vs30 values were
 measured or derived (i.e., from slope).</li>
-<li><strong>backarc</strong> &#8211; Boolean array indicating whether site is in the subduction
+<li><strong>backarc</strong> – Boolean array indicating whether site is in the subduction
 <a class="reference external" href="http://earthquake.usgs.gov/learn/glossary/?term=backarc">backarc</a>.</li>
-<li><strong>padding</strong> &#8211; Boolean indicating whether or not to pad resulting Vs30
+<li><strong>padding</strong> – Boolean indicating whether or not to pad resulting Vs30
 grid out to edges of input bounds. If False, grid will be
 clipped to the extent of the input file.</li>
-<li><strong>resample</strong> &#8211; Boolean indicating whether or not the grid should be
+<li><strong>resample</strong> – Boolean indicating whether or not the grid should be
 resampled.</li>
 </ul>
 </td>
@@ -252,23 +254,23 @@ and Vs30 values.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cx</strong> &#8211; X coordinate of desired center point.</li>
-<li><strong>cy</strong> &#8211; Y coordinate of desired center point.</li>
-<li><strong>xspan</strong> &#8211; Width of desired grid.</li>
-<li><strong>yspan</strong> &#8211; Height of desired grid.</li>
-<li><strong>dx</strong> &#8211; Resolution of desired grid in X direction.</li>
-<li><strong>dy</strong> &#8211; Resolution of desired grid in Y direction.</li>
-<li><strong>defaultVs30</strong> &#8211; Default Vs30 value to use if vs30File not specified.</li>
-<li><strong>vs30File</strong> &#8211; Name of GMT or GDAL format grid file containing Vs30
+<li><strong>cx</strong> – X coordinate of desired center point.</li>
+<li><strong>cy</strong> – Y coordinate of desired center point.</li>
+<li><strong>xspan</strong> – Width of desired grid.</li>
+<li><strong>yspan</strong> – Height of desired grid.</li>
+<li><strong>dx</strong> – Resolution of desired grid in X direction.</li>
+<li><strong>dy</strong> – Resolution of desired grid in Y direction.</li>
+<li><strong>defaultVs30</strong> – Default Vs30 value to use if vs30File not specified.</li>
+<li><strong>vs30File</strong> – Name of GMT or GDAL format grid file containing Vs30
 values.</li>
-<li><strong>vs30measured_grid</strong> &#8211; Boolean grid indicating whether Vs30 values were
+<li><strong>vs30measured_grid</strong> – Boolean grid indicating whether Vs30 values were
 measured or derived (i.e., from slope).</li>
-<li><strong>backarc</strong> &#8211; Boolean array indicating whether site is in the subduction
+<li><strong>backarc</strong> – Boolean array indicating whether site is in the subduction
 <a class="reference external" href="http://earthquake.usgs.gov/learn/glossary/?term=backarc">backarc</a>.</li>
-<li><strong>padding</strong> &#8211; Boolean indicating whether or not to pad resulting Vs30
+<li><strong>padding</strong> – Boolean indicating whether or not to pad resulting Vs30
 grid out to edges of input bounds. If False, grid will be
 clipped to the extent of the input file.</li>
-<li><strong>resample</strong> &#8211; Boolean indicating whether or not the grid should be
+<li><strong>resample</strong> – Boolean indicating whether or not the grid should be
 resampled.</li>
 </ul>
 </td>
@@ -286,17 +288,17 @@ resampled.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>lldict</strong> &#8211; <p>Either</p>
+<li><strong>lldict</strong> – <p>Either</p>
 <ul>
 <li>None, in which case the SitesContext for the complete Sites
 grid is returned, or</li>
-<li>A location dictionary (elements are &#8216;lats&#8217; and &#8216;lons&#8217; and
+<li>A location dictionary (elements are ‘lats’ and ‘lons’ and
 each is a numpy array). Each element must have the same
 shape. In this case the SitesContext for these locaitons is
 returned.</li>
 </ul>
 </li>
-<li><strong>rock_vs30</strong> &#8211; <p>Either</p>
+<li><strong>rock_vs30</strong> – <p>Either</p>
 <ul>
 <li>None, in which case the SitesContext will reflect the Vs30
 grid in the Sites instance, or</li>
@@ -311,8 +313,7 @@ value.</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">SitesContext object.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ShakeLibException</span></code> &#8211;
-When lat/lon input sequences do not share
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ShakeLibException</span></code> – When lat/lon input sequences do not share
 dimensionality.</p>
 </td>
 </tr>

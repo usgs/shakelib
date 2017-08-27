@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -178,13 +182,15 @@
            <div itemprop="articleBody">
             
   <h1>Source code for shakelib.virtualipe</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
 
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.gsim.base</span> <span class="kn">import</span> <span class="n">GMPE</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.imt</span> <span class="kn">import</span> <span class="n">PGA</span><span class="p">,</span> <span class="n">PGV</span><span class="p">,</span> <span class="n">SA</span><span class="p">,</span> <span class="n">MMI</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib</span> <span class="kn">import</span> <span class="n">const</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">shakelib.utils.exception</span> <span class="kn">import</span> <span class="n">ShakeLibException</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.gsim.base</span> <span class="k">import</span> <span class="n">GMPE</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.imt</span> <span class="k">import</span> <span class="n">PGA</span><span class="p">,</span> <span class="n">PGV</span><span class="p">,</span> <span class="n">SA</span><span class="p">,</span> <span class="n">MMI</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib</span> <span class="k">import</span> <span class="n">const</span>
+
+<span class="kn">from</span> <span class="nn">shakelib.utils.exception</span> <span class="k">import</span> <span class="n">ShakeLibException</span>
 
 
 <div class="viewcode-block" id="VirtualIPE"><a class="viewcode-back" href="../../shakelib.virtualipe.html#shakelib.virtualipe.VirtualIPE">[docs]</a><span class="k">class</span> <span class="nc">VirtualIPE</span><span class="p">(</span><span class="n">GMPE</span><span class="p">):</span>
@@ -213,21 +219,21 @@
     <span class="n">DEFINED_FOR_INTENSITY_MEASURE_TYPES</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">MMI</span><span class="p">])</span>
     <span class="c1">#: The OpenQuake standard deviation types that may be produced (will</span>
     <span class="c1">#: depend on the GMPE provided).</span>
-    <span class="n">DEFINED_FOR_STANDARD_DEVIATION_TYPES</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">DEFINED_FOR_STANDARD_DEVIATION_TYPES</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1">#: Distance measures required (will depend on the GMPE provided).</span>
-    <span class="n">REQUIRES_DISTANCES</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">REQUIRES_DISTANCES</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1">#: OpenQuake IMC used (will depend on the GMPE, but &quot;Larger&quot; is </span>
     <span class="c1">#: typical).</span>
-    <span class="n">DEFINED_FOR_INTENSITY_MEASURE_COMPONENT</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">DEFINED_FOR_INTENSITY_MEASURE_COMPONENT</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1">#: Determined by the GMPE selected.</span>
-    <span class="n">DEFINED_FOR_TECTONIC_REGION_TYPE</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">DEFINED_FOR_TECTONIC_REGION_TYPE</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1">#: Determined by the GMPE selected.</span>
-    <span class="n">REQUIRES_RUPTURE_PARAMETERS</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">REQUIRES_RUPTURE_PARAMETERS</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1">#: Determined by the GMPE selected.</span>
-    <span class="n">REQUIRES_SITES_PARAMETERS</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">REQUIRES_SITES_PARAMETERS</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="VirtualIPE.fromFuncs"><a class="viewcode-back" href="../../shakelib.virtualipe.html#shakelib.virtualipe.VirtualIPE.fromFuncs">[docs]</a>    <span class="k">def</span> <span class="nf">fromFuncs</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">gmpe</span><span class="p">,</span> <span class="n">gmice</span><span class="p">):</span>
+<div class="viewcode-block" id="VirtualIPE.fromFuncs"><a class="viewcode-back" href="../../shakelib.virtualipe.html#shakelib.virtualipe.VirtualIPE.fromFuncs">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromFuncs</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">gmpe</span><span class="p">,</span> <span class="n">gmice</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a new VirtualIPE object with the specified MultiGMPE and</span>
 <span class="sd">        GMICE. There is no default constructor, you must use this method.</span>
@@ -244,7 +250,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gmpe</span> <span class="o">=</span> <span class="n">gmpe</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gmice</span> <span class="o">=</span> <span class="n">gmice</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">gmpe</span><span class="o">.</span><span class="n">ALL_GMPES_HAVE_PGV</span> <span class="ow">is</span> <span class="bp">True</span> <span class="ow">and</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">gmpe</span><span class="o">.</span><span class="n">ALL_GMPES_HAVE_PGV</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span>
                 <span class="n">PGV</span> <span class="ow">in</span> <span class="n">gmice</span><span class="o">.</span><span class="n">DEFINED_FOR_INTENSITY_MEASURE_TYPES</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">imt</span> <span class="o">=</span> <span class="n">PGV</span><span class="p">()</span>
         <span class="k">elif</span> <span class="p">(</span><span class="n">PGA</span> <span class="ow">in</span> <span class="n">gmpe</span><span class="o">.</span><span class="n">DEFINED_FOR_INTENSITY_MEASURE_TYPES</span> <span class="ow">and</span>
@@ -267,15 +273,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">REQUIRES_SITES_PARAMETERS</span> <span class="o">=</span> \
                 <span class="n">gmpe</span><span class="o">.</span><span class="n">REQUIRES_SITES_PARAMETERS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DEFINED_FOR_INTENSITY_MEASURE_COMPONENT</span> <span class="o">=</span> \
-                <span class="n">gmpe</span><span class="o">.</span><span class="n">DEFINED_FOR_INTENSITY_MEASURE_COMPONENT</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">gmpe</span><span class="o">.</span><span class="n">DEFINED_FOR_INTENSITY_MEASURE_COMPONENT</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DEFINED_FOR_TECTONIC_REGION_TYPE</span> <span class="o">=</span> \
-                <span class="n">gmpe</span><span class="o">.</span><span class="n">DEFINED_FOR_TECTONIC_REGION_TYPE</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">DEFINED_FOR_TECTONIC_REGION_TYPE</span> <span class="o">=</span> \
-                <span class="n">gmpe</span><span class="o">.</span><span class="n">DEFINED_FOR_TECTONIC_REGION_TYPE</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">gmpe</span><span class="o">.</span><span class="n">DEFINED_FOR_TECTONIC_REGION_TYPE</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="VirtualIPE.get_mean_and_stddevs"><a class="viewcode-back" href="../../shakelib.virtualipe.html#shakelib.virtualipe.VirtualIPE.get_mean_and_stddevs">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean_and_stddevs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">stddev_types</span><span class="p">,</span> <span class="n">fd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="VirtualIPE.get_mean_and_stddevs"><a class="viewcode-back" href="../../shakelib.virtualipe.html#shakelib.virtualipe.VirtualIPE.get_mean_and_stddevs">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean_and_stddevs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">stddev_types</span><span class="p">,</span> <span class="n">fd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        See superclass</span>
 <span class="sd">        `method &lt;http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#openquake.hazardlib.gsim.base.GroundShakingIntensityModel.get_mean_and_stddevs&gt;`__</span>
@@ -309,7 +313,7 @@
         <span class="n">mgm</span><span class="p">,</span> <span class="n">sdev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gmpe</span><span class="o">.</span><span class="n">get_mean_and_stddevs</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imt</span><span class="p">,</span>
                                                    <span class="n">stddev_types</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">fd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">mgm</span> <span class="o">=</span> <span class="n">mgm</span> <span class="o">+</span> <span class="n">fd</span>
 
         <span class="c1">#</span>
@@ -328,7 +332,7 @@
         <span class="c1"># of the conversion; inter-event uncertainty is not.</span>
         <span class="c1">#</span>
         <span class="n">nsd</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sdev</span><span class="p">)</span>
-        <span class="n">mmi_sd</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsd</span>
+        <span class="n">mmi_sd</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsd</span>
         <span class="n">gm2mi_var</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gmice</span><span class="o">.</span><span class="n">getGM2MIsd</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">imt</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">dmda</span> <span class="o">*=</span> <span class="n">dmda</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsd</span><span class="p">):</span>

@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -179,9 +183,9 @@
             
   <h1>Source code for shakelib.conversions.imc.beyer_bommer_2006</h1><div class="highlight"><pre>
 <span></span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib</span> <span class="kn">import</span> <span class="n">const</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib</span> <span class="k">import</span> <span class="n">const</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
 <div class="viewcode-block" id="BeyerBommer2006"><a class="viewcode-back" href="../../../../shakelib.conversions.imc.beyer_bommer_2006.html#shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006">[docs]</a><span class="k">class</span> <span class="nc">BeyerBommer2006</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -277,8 +281,8 @@
         <span class="n">const</span><span class="o">.</span><span class="n">IMC</span><span class="o">.</span><span class="n">GREATER_OF_TWO_HORIZONTAL</span><span class="p">:</span>
             <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">__sa_col_names</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.07</span><span class="p">,</span> <span class="mf">1.02</span><span class="p">])))}</span>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="BeyerBommer2006.ampIMCtoIMC"><a class="viewcode-back" href="../../../../shakelib.conversions.imc.beyer_bommer_2006.html#shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006.ampIMCtoIMC">[docs]</a>    <span class="k">def</span> <span class="nf">ampIMCtoIMC</span><span class="p">(</span><span class="n">amps</span><span class="p">,</span> <span class="n">imc_in</span><span class="p">,</span> <span class="n">imc_out</span><span class="p">,</span> <span class="n">imt</span><span class="p">):</span>
+<div class="viewcode-block" id="BeyerBommer2006.ampIMCtoIMC"><a class="viewcode-back" href="../../../../shakelib.conversions.imc.beyer_bommer_2006.html#shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006.ampIMCtoIMC">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">ampIMCtoIMC</span><span class="p">(</span><span class="n">amps</span><span class="p">,</span> <span class="n">imc_in</span><span class="p">,</span> <span class="n">imc_out</span><span class="p">,</span> <span class="n">imt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns amps converted from one IMC to another.</span>
 
@@ -307,8 +311,8 @@
 
         <span class="k">return</span> <span class="n">amps</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">numer</span> <span class="o">/</span> <span class="n">denom</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="BeyerBommer2006.sigmaIMCtoIMC"><a class="viewcode-back" href="../../../../shakelib.conversions.imc.beyer_bommer_2006.html#shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006.sigmaIMCtoIMC">[docs]</a>    <span class="k">def</span> <span class="nf">sigmaIMCtoIMC</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span> <span class="n">imc_in</span><span class="p">,</span> <span class="n">imc_out</span><span class="p">,</span> <span class="n">imt</span><span class="p">):</span>
+<div class="viewcode-block" id="BeyerBommer2006.sigmaIMCtoIMC"><a class="viewcode-back" href="../../../../shakelib.conversions.imc.beyer_bommer_2006.html#shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006.sigmaIMCtoIMC">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sigmaIMCtoIMC</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span> <span class="n">imc_in</span><span class="p">,</span> <span class="n">imc_out</span><span class="p">,</span> <span class="n">imt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns standard deviations converted from one IMC to another.</span>
 

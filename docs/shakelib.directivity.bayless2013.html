@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
         <link rel="up" title="shakelib.directivity" href="shakelib.directivity.html"/>
         <link rel="next" title="shakelib.directivity.rowshandel2013" href="shakelib.directivity.rowshandel2013.html"/>
@@ -82,7 +85,8 @@
           
             
             
-                <ul class="current">
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -104,7 +108,7 @@
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="shakelib.directivity.html">shakelib.directivity</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="">shakelib.directivity.bayless2013</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.directivity.bayless2013</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.rowshandel2013.html">shakelib.directivity.rowshandel2013</a></li>
 </ul>
 </li>
@@ -157,7 +161,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -172,8 +176,6 @@
     <li>shakelib.directivity.bayless2013</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/shakelib.directivity.bayless2013.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -215,12 +217,12 @@ DS:  abs(rake) &gt; 60 &amp; abs(rake) &lt; 120</p>
 <p>Bayless and Somerville state that each quadrilateral should have a pseudo-
 hypocenter:</p>
 <blockquote>
-<div>&#8220;Define the pseudo-hypocenter for rupture of successive segments as the
+<div>“Define the pseudo-hypocenter for rupture of successive segments as the
 point on the side edge of the fault segment that is closest to the side
 edge of the previous segment, and that lies half way between the top
 and bottom of the fault. We assume that the fault is segmented along
 strike, not updip. All geometric parameters are computed relative to
-the pseudo-hypocenter.&#8221;</div></blockquote>
+the pseudo-hypocenter.”</div></blockquote>
 <p>To do:</p>
 <blockquote>
 <div><ul class="simple">
@@ -244,12 +246,12 @@ directivity, Seismol. Res. Lett. 68, 199–222.
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>origin</strong> &#8211; Shakemap Origin object.</li>
-<li><strong>rup</strong> &#8211; Shakemap Rupture object.</li>
-<li><strong>lat</strong> &#8211; Numpy array of latitudes.</li>
-<li><strong>lon</strong> &#8211; Numpy array of longitudes.</li>
-<li><strong>depth</strong> &#8211; Numpy array of depths (km); down is positive.</li>
-<li><strong>T</strong> &#8211; Period; Currently, only acceptable values are
+<li><strong>origin</strong> – Shakemap Origin object.</li>
+<li><strong>rup</strong> – Shakemap Rupture object.</li>
+<li><strong>lat</strong> – Numpy array of latitudes.</li>
+<li><strong>lon</strong> – Numpy array of longitudes.</li>
+<li><strong>depth</strong> – Numpy array of depths (km); down is positive.</li>
+<li><strong>T</strong> – Period; Currently, only acceptable values are
 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 7.5, 10.</li>
 </ul>
 </td>

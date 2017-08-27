@@ -1,7 +1,0 @@
-shakelib.correlation.baker_jayaram_2008
-==============================================
-
-.. automodule:: shakelib.correlation.baker_jayaram_2008
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
         <link rel="up" title="shakelib.rupture" href="shakelib.rupture.html"/>
         <link rel="next" title="shakelib.distance" href="shakelib.distance.html"/>
@@ -82,7 +85,8 @@
           
             
             
-                <ul class="current">
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -125,7 +129,7 @@
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.origin.html">shakelib.rupture.origin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.point_rupture.html">shakelib.rupture.point_rupture</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.quad_rupture.html">shakelib.rupture.quad_rupture</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">shakelib.rupture.utils</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.rupture.utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>
@@ -157,7 +161,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -172,8 +176,6 @@
     <li>shakelib.rupture.utils</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/shakelib.rupture.utils.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -193,11 +195,14 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four OQ Points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four OQ Points.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Bool for whether or not the points are planar within tolerance;
-and also the corrected quad where p2 is adjusted to be on the same
-plane as the other points.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Bool for whether or not the points are planar within tolerance;</dt>
+<dd>and also the corrected quad where p2 is adjusted to be on the same
+plane as the other points.</dd>
+</dl>
+</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
@@ -214,7 +219,7 @@ represents the long side.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Width of planar trapezoid.</td>
 </tr>
@@ -233,8 +238,8 @@ represents the long side.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</li>
-<li><strong>dx</strong> (<em>float</em>) &#8211; Target dx in km; used to get nx and ny of mesh, but mesh
+<li><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</li>
+<li><strong>dx</strong> (<em>float</em>) – Target dx in km; used to get nx and ny of mesh, but mesh
 snaps to edges of rupture so actual dx/dy will not actually equal
 this value in general.</li>
 </ul>
@@ -267,16 +272,16 @@ this value in general.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>strike</strong> (<em>float</em>) &#8211; Clockwise angle (deg) from north of the line at the
+<li><strong>strike</strong> (<em>float</em>) – Clockwise angle (deg) from north of the line at the
 intersection of the rupture plane and the horizontal plane.</li>
-<li><strong>dip</strong> (<em>float</em>) &#8211; Angle (deg) between rupture plane and the horizontal plane
+<li><strong>dip</strong> (<em>float</em>) – Angle (deg) between rupture plane and the horizontal plane
 normal to the strike (0-90 using right hand rule).</li>
-<li><strong>rake</strong> (<em>float</em>) &#8211; Direction of motion of the hanging wall relative to the
+<li><strong>rake</strong> (<em>float</em>) – Direction of motion of the hanging wall relative to the
 foot wall, as measured by the angle (deg) from the strike vector.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Unit slip vector in &#8216;local&#8217; N-S, E-W, U-D coordinates.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Unit slip vector in ‘local’ N-S, E-W, U-D coordinates.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Vector</p>
@@ -295,16 +300,16 @@ foot wall, as measured by the angle (deg) from the strike vector.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>strike</strong> (<em>float</em>) &#8211; Clockwise angle (deg) from north of the line at the
+<li><strong>strike</strong> (<em>float</em>) – Clockwise angle (deg) from north of the line at the
 intersection of the rupture plane and the horizontal plane.</li>
-<li><strong>dip</strong> (<em>float</em>) &#8211; Angle (degrees) between rupture plane and the horizontal
+<li><strong>dip</strong> (<em>float</em>) – Angle (degrees) between rupture plane and the horizontal
 plane normal to the strike (0-90 using right hand rule).</li>
-<li><strong>rake</strong> (<em>float</em>) &#8211; Direction of motion of the hanging wall relative to the
+<li><strong>rake</strong> (<em>float</em>) – Direction of motion of the hanging wall relative to the
 foot wall, as measured by the angle (deg) from the strike vector.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Unit slip vector in &#8216;local&#8217; N-S, E-W, U-D coordinates.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Unit slip vector in ‘local’ N-S, E-W, U-D coordinates.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Vector</p>
@@ -323,16 +328,16 @@ foot wall, as measured by the angle (deg) from the strike vector.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>strike</strong> (<em>float</em>) &#8211; Clockwise angle (deg) from north of the line at the
+<li><strong>strike</strong> (<em>float</em>) – Clockwise angle (deg) from north of the line at the
 intersection of the rupture plane and the horizontal plane.</li>
-<li><strong>dip</strong> (<em>float</em>) &#8211; Angle (degrees) between rupture plane and the horizontal
+<li><strong>dip</strong> (<em>float</em>) – Angle (degrees) between rupture plane and the horizontal
 plane normal to the strike (0-90 using right hand rule).</li>
-<li><strong>rake</strong> (<em>float</em>) &#8211; Direction of motion of the hanging wall relative to the
+<li><strong>rake</strong> (<em>float</em>) – Direction of motion of the hanging wall relative to the
 foot wall, as measured by the angle (deg) from the strike vector.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Unit slip vector in &#8216;local&#8217; N-S, E-W, U-D coordinates.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Unit slip vector in ‘local’ N-S, E-W, U-D coordinates.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Vector</p>
@@ -351,7 +356,7 @@ is flipped.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Reversed quadrilateral.</td>
 </tr>
@@ -370,9 +375,9 @@ is flipped.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</li>
-<li><strong>rake</strong> (<em>float</em>) &#8211; Direction of motion of the hanging wall relative to</li>
-<li><strong>foot wall, as measured by the angle</strong> (<em>the</em>) &#8211; </li>
+<li><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</li>
+<li><strong>rake</strong> (<em>float</em>) – Direction of motion of the hanging wall relative to</li>
+<li><strong>foot wall</strong><strong>, </strong><strong>as measured by the angle</strong> (<em>the</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -394,7 +399,7 @@ is flipped.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Length of quadrilateral in km.</td>
 </tr>
@@ -412,7 +417,7 @@ is flipped.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Dip in degrees.</td>
 </tr>
@@ -431,7 +436,7 @@ ECEF coordinates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Normalized normal vector for the quadrilateral in ECEF coords.</td>
 </tr>
@@ -450,7 +455,7 @@ quadrilateral in ECEF coordinates. Top edge assumed to be horizontal.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The unit vector pointing in strike direction in ECEF coords.</td>
 </tr>
@@ -469,7 +474,7 @@ ECEF coordinates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The unit vector pointing down dip in ECEF coords.</td>
 </tr>
@@ -488,10 +493,13 @@ in ECEF coordinates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) &#8211; A quadrilateral; list of four points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>q</strong> (<em>list</em>) – A quadrilateral; list of four points.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Normalized vertical vector for the quadrilateral in ECEF
-coords.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Normalized vertical vector for the quadrilateral in ECEF</dt>
+<dd>coords.</dd>
+</dl>
+</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Vector</td>
 </tr>
@@ -502,16 +510,16 @@ coords.</td>
 <dl class="function">
 <dt id="shakelib.rupture.utils.get_distance_to_plane">
 <code class="descclassname">shakelib.rupture.utils.</code><code class="descname">get_distance_to_plane</code><span class="sig-paren">(</span><em>planepoints</em>, <em>otherpoint</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/utils.html#get_distance_to_plane"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.utils.get_distance_to_plane" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate a point&#8217;s distance to a plane.  Used to figure out if a
+<dd><p>Calculate a point’s distance to a plane.  Used to figure out if a
 quadrilateral points are all co-planar.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>planepoints</strong> (<em>list</em>) &#8211; List of three points (from Vector class) defining a
+<li><strong>planepoints</strong> (<em>list</em>) – List of three points (from Vector class) defining a
 plane.</li>
-<li><strong>otherpoint</strong> (<em>Vector</em>) &#8211; 4th Vector to compare to points defining the
+<li><strong>otherpoint</strong> (<em>Vector</em>) – 4th Vector to compare to points defining the
 plane.</li>
 </ul>
 </td>
@@ -534,7 +542,7 @@ plane.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rake</strong> (<em>float</em>) &#8211; Rake angle in degrees.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rake</strong> (<em>float</em>) – Rake angle in degrees.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Mechanism.</td>
 </tr>

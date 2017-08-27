@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -180,14 +184,14 @@
   <h1>Source code for shakelib.directivity.bayless2013</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">openquake.hazardlib.geo</span> <span class="kn">as</span> <span class="nn">geo</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">openquake.hazardlib.geo</span> <span class="k">as</span> <span class="nn">geo</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 
-<span class="kn">from</span> <span class="nn">shakelib.distance</span> <span class="kn">import</span> <span class="n">get_distance</span>
-<span class="kn">from</span> <span class="nn">shakelib.rupture.utils</span> <span class="kn">import</span> <span class="n">_distance_sq_to_segment</span>
-<span class="kn">import</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="kn">as</span> <span class="nn">ecef</span>
-<span class="kn">from</span> <span class="nn">impactutils.vectorutils.vector</span> <span class="kn">import</span> <span class="n">Vector</span>
+<span class="kn">from</span> <span class="nn">shakelib.distance</span> <span class="k">import</span> <span class="n">get_distance</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture.utils</span> <span class="k">import</span> <span class="n">_distance_sq_to_segment</span>
+<span class="kn">import</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="k">as</span> <span class="nn">ecef</span>
+<span class="kn">from</span> <span class="nn">impactutils.vectorutils.vector</span> <span class="k">import</span> <span class="n">Vector</span>
 
 
 <div class="viewcode-block" id="Bayless2013"><a class="viewcode-back" href="../../../shakelib.directivity.bayless2013.html#shakelib.directivity.bayless2013.Bayless2013">[docs]</a><span class="k">class</span> <span class="nc">Bayless2013</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -375,7 +379,7 @@
         <span class="n">hyp_ecef</span> <span class="o">=</span> <span class="n">Vector</span><span class="o">.</span><span class="n">fromPoint</span><span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">point</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="o">.</span><span class="n">depth</span><span class="p">))</span>
         <span class="c1"># Loop over each quad</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phyp</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phyp</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nq</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nq</span><span class="p">):</span>
             <span class="n">P0</span><span class="p">,</span> <span class="n">P1</span><span class="p">,</span> <span class="n">P2</span><span class="p">,</span> <span class="n">P3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rup</span><span class="o">.</span><span class="n">getQuadrilaterals</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">p0</span> <span class="o">=</span> <span class="n">Vector</span><span class="o">.</span><span class="n">fromPoint</span><span class="p">(</span><span class="n">P0</span><span class="p">)</span>  <span class="c1"># convert to ECEF</span>
@@ -594,7 +598,7 @@
         <span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">e2s_mat</span> <span class="o">*</span> <span class="n">e2s_mat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
         <span class="c1"># Avoid division by zero</span>
-        <span class="n">mag</span><span class="p">[</span><span class="n">mag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-12</span>
+        <span class="n">mag</span><span class="p">[</span><span class="n">mag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">12</span>
         <span class="n">e2s_norm</span> <span class="o">=</span> <span class="n">e2s_mat</span> <span class="o">/</span> <span class="n">mag</span>
 
         <span class="c1"># Dot epicenter-to-site with along-strike vector</span>

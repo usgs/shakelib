@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -181,15 +185,15 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="c1"># stdlib imports</span>
-<span class="kn">from</span> <span class="nn">xml.dom</span> <span class="kn">import</span> <span class="n">minidom</span>
-<span class="kn">import</span> <span class="nn">time</span> <span class="kn">as</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">xml.dom</span> <span class="k">import</span> <span class="n">minidom</span>
+<span class="kn">import</span> <span class="nn">time</span> <span class="k">as</span> <span class="nn">time</span>
 
 <span class="c1"># third party</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo</span> <span class="kn">import</span> <span class="n">point</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo</span> <span class="k">import</span> <span class="n">point</span>
 
-<span class="kn">from</span> <span class="nn">impactutils.time.ancient_time</span> <span class="kn">import</span> <span class="n">HistoricTime</span>
-<span class="kn">from</span> <span class="nn">shakelib.utils.exception</span> <span class="kn">import</span> <span class="n">ShakeLibException</span>
-<span class="kn">from</span> <span class="nn">shakelib.rupture</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">impactutils.time.ancient_time</span> <span class="k">import</span> <span class="n">HistoricTime</span>
+<span class="kn">from</span> <span class="nn">shakelib.utils.exception</span> <span class="k">import</span> <span class="n">ShakeLibException</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture</span> <span class="k">import</span> <span class="n">constants</span>
 
 
 <div class="viewcode-block" id="Origin"><a class="viewcode-back" href="../../../shakelib.rupture.origin.html#shakelib.rupture.origin.Origin">[docs]</a><span class="k">class</span> <span class="nc">Origin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -316,11 +320,11 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rake</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">RAKEDICT</span><span class="p">[</span><span class="s1">&#39;ALL&#39;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rake</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rake</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rake</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Origin.fromFile"><a class="viewcode-back" href="../../../shakelib.rupture.origin.html#shakelib.rupture.origin.Origin.fromFile">[docs]</a>    <span class="k">def</span> <span class="nf">fromFile</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">eventxmlfile</span><span class="p">,</span> <span class="n">sourcefile</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Origin.fromFile"><a class="viewcode-back" href="../../../shakelib.rupture.origin.html#shakelib.rupture.origin.Origin.fromFile">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromFile</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">eventxmlfile</span><span class="p">,</span> <span class="n">sourcefile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Class method to create a Origin object by specifying an event.xml file,</span>
 <span class="sd">        a rupture file, and a source.txt file.</span>
@@ -334,8 +338,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">event</span> <span class="o">=</span> <span class="n">read_event_file</span><span class="p">(</span><span class="n">eventxmlfile</span><span class="p">)</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">if</span> <span class="n">sourcefile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">sourcefile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span> <span class="o">=</span> <span class="n">read_source</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">)</span>
             <span class="n">event</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
@@ -347,7 +351,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">point</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Origin.setMechanism"><a class="viewcode-back" href="../../../shakelib.rupture.origin.html#shakelib.rupture.origin.Origin.setMechanism">[docs]</a>    <span class="k">def</span> <span class="nf">setMechanism</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mech</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">rake</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dip</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Origin.setMechanism"><a class="viewcode-back" href="../../../shakelib.rupture.origin.html#shakelib.rupture.origin.Origin.setMechanism">[docs]</a>    <span class="k">def</span> <span class="nf">setMechanism</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mech</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rake</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the earthquake mechanism manually (overriding any values read</span>
 <span class="sd">        in from event.xml or source.txt. If rake and dip are not specified,</span>
@@ -385,13 +389,13 @@
                 <span class="s1">&#39;Mechanism must be one of: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span>
                     <span class="nb">list</span><span class="p">(</span><span class="n">mechs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
 
-        <span class="k">if</span> <span class="n">dip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">dip</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">dip</span> <span class="o">&gt;</span> <span class="mi">90</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Dip must be in range 0-90 degrees.&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dip</span> <span class="o">=</span> <span class="n">mechs</span><span class="p">[</span><span class="n">mech</span><span class="p">][</span><span class="s1">&#39;dip&#39;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">rake</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rake</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">rake</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">180</span><span class="p">:</span>
                 <span class="n">rake</span> <span class="o">+=</span> <span class="mi">360</span>
             <span class="k">if</span> <span class="n">rake</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">:</span>
@@ -474,11 +478,11 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        dict: Dictionary containing key/value pairs from file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">isFile</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">isFile</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">isFile</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">isFile</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">sourcefile</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>

@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -181,17 +185,17 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="k">import</span> <span class="n">import_module</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.gsim.base</span> <span class="kn">import</span> <span class="n">GMPE</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.imt</span> <span class="kn">import</span> <span class="n">PGA</span><span class="p">,</span> <span class="n">PGV</span><span class="p">,</span> <span class="n">SA</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib</span> <span class="kn">import</span> <span class="n">const</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.gsim.base</span> <span class="k">import</span> <span class="n">GMPE</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.imt</span> <span class="k">import</span> <span class="n">PGA</span><span class="p">,</span> <span class="n">PGV</span><span class="p">,</span> <span class="n">SA</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib</span> <span class="k">import</span> <span class="n">const</span>
 
-<span class="kn">from</span> <span class="nn">shakelib.conversions.imt.newmark_hall_1982</span> <span class="kn">import</span> <span class="n">NewmarkHall1982</span>
-<span class="kn">from</span> <span class="nn">shakelib.conversions.imc.beyer_bommer_2006</span> <span class="kn">import</span> <span class="n">BeyerBommer2006</span>
-<span class="kn">from</span> <span class="nn">shakelib.sites</span> <span class="kn">import</span> <span class="n">Sites</span>
+<span class="kn">from</span> <span class="nn">shakelib.conversions.imt.newmark_hall_1982</span> <span class="k">import</span> <span class="n">NewmarkHall1982</span>
+<span class="kn">from</span> <span class="nn">shakelib.conversions.imc.beyer_bommer_2006</span> <span class="k">import</span> <span class="n">BeyerBommer2006</span>
+<span class="kn">from</span> <span class="nn">shakelib.sites</span> <span class="k">import</span> <span class="n">Sites</span>
 
 
 <div class="viewcode-block" id="MultiGMPE"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE">[docs]</a><span class="k">class</span> <span class="nc">MultiGMPE</span><span class="p">(</span><span class="n">GMPE</span><span class="p">):</span>
@@ -205,13 +209,13 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">DEFINED_FOR_TECTONIC_REGION_TYPE</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">DEFINED_FOR_INTENSITY_MEASURE_TYPES</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">DEFINED_FOR_INTENSITY_MEASURE_COMPONENT</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">DEFINED_FOR_STANDARD_DEVIATION_TYPES</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">REQUIRES_SITES_PARAMETERS</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">REQUIRES_RUPTURE_PARAMETERS</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">REQUIRES_DISTANCES</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">DEFINED_FOR_TECTONIC_REGION_TYPE</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">DEFINED_FOR_INTENSITY_MEASURE_TYPES</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">DEFINED_FOR_INTENSITY_MEASURE_COMPONENT</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">DEFINED_FOR_STANDARD_DEVIATION_TYPES</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">REQUIRES_SITES_PARAMETERS</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">REQUIRES_RUPTURE_PARAMETERS</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">REQUIRES_DISTANCES</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="MultiGMPE.get_mean_and_stddevs"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE.get_mean_and_stddevs">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean_and_stddevs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">stddev_types</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -225,7 +229,7 @@
         <span class="c1"># Check for large-distance cutoff/weights</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;CUTOFF_DISTANCE&#39;</span><span class="p">):</span>
             <span class="n">lnmu_large</span><span class="p">,</span> <span class="n">lnsd_large</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_mean_and_stddevs</span><span class="p">(</span>
-                <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">stddev_types</span><span class="p">,</span> <span class="n">large_dist</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">stddev_types</span><span class="p">,</span> <span class="n">large_dist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="c1"># Stomp on lnmu and lnsd at large distances</span>
             <span class="n">dist_cutoff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CUTOFF_DISTANCE</span>
             <span class="n">lnmu</span><span class="p">[</span><span class="n">dists</span><span class="o">.</span><span class="n">rjb</span> <span class="o">&gt;</span> <span class="n">dist_cutoff</span><span class="p">]</span> <span class="o">=</span> <span class="n">lnmu_large</span><span class="p">[</span><span class="n">dists</span><span class="o">.</span><span class="n">rjb</span> <span class="o">&gt;</span> <span class="n">dist_cutoff</span><span class="p">]</span>
@@ -236,12 +240,12 @@
         <span class="k">return</span> <span class="n">lnmu</span><span class="p">,</span> <span class="n">lnsd</span></div>
 
     <span class="k">def</span> <span class="nf">__get_mean_and_stddevs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">stddev_types</span><span class="p">,</span>
-                               <span class="n">large_dist</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+                               <span class="n">large_dist</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Sort out which set of weights to use</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">large_dist</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">large_dist</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="n">wts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">WEIGHTS</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">wts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">WEIGHTS_LARGE_DISTANCE</span>
@@ -304,24 +308,24 @@
                 <span class="c1"># If IMT is PGV and PGV is not given by the GMPE, then</span>
                 <span class="c1"># convert from PSA10.</span>
                 <span class="c1"># -------------------------------------------------------------</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAS_SITE</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAS_SITE</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                     <span class="n">psa10</span><span class="p">,</span> <span class="n">psa10sd</span> <span class="o">=</span> <span class="n">gmpe</span><span class="o">.</span><span class="n">get_mean_and_stddevs</span><span class="p">(</span>
                         <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">SA</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">stddev_types</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">lamps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_site_factors</span><span class="p">(</span>
-                        <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">SA</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                        <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">SA</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                     <span class="n">psa10</span><span class="p">,</span> <span class="n">psa10sd</span> <span class="o">=</span> <span class="n">gmpe</span><span class="o">.</span><span class="n">get_mean_and_stddevs</span><span class="p">(</span>
                         <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">SA</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">stddev_types</span><span class="p">)</span>
                     <span class="n">psa10</span> <span class="o">=</span> <span class="n">psa10</span> <span class="o">+</span> <span class="n">lamps</span>
 
                 <span class="n">lmean</span><span class="p">,</span> <span class="n">lsd</span> <span class="o">=</span> <span class="n">NewmarkHall1982</span><span class="o">.</span><span class="n">psa102pgv</span><span class="p">(</span><span class="n">psa10</span><span class="p">,</span> <span class="n">psa10sd</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAS_SITE</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAS_SITE</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                     <span class="n">lmean</span><span class="p">,</span> <span class="n">lsd</span> <span class="o">=</span> <span class="n">gmpe</span><span class="o">.</span><span class="n">get_mean_and_stddevs</span><span class="p">(</span>
                         <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">stddev_types</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">lamps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_site_factors</span><span class="p">(</span>
-                        <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                        <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                     <span class="n">lmean</span><span class="p">,</span> <span class="n">lsd</span> <span class="o">=</span> <span class="n">gmpe</span><span class="o">.</span><span class="n">get_mean_and_stddevs</span><span class="p">(</span>
                         <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">stddev_types</span><span class="p">)</span>
                     <span class="n">lmean</span> <span class="o">=</span> <span class="n">lmean</span> <span class="o">+</span> <span class="n">lamps</span>
@@ -368,8 +372,8 @@
 
         <span class="k">return</span> <span class="n">lnmu</span><span class="p">,</span> <span class="n">lnsd</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="MultiGMPE.from_config"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE.from_config">[docs]</a>    <span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">filter_imt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiGMPE.from_config"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE.from_config">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">filter_imt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct a MultiGMPE from a config file.</span>
 
@@ -385,9 +389,9 @@
         <span class="n">IMC</span> <span class="o">=</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;component_modules&#39;</span><span class="p">][</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;interp&#39;</span><span class="p">][</span><span class="s1">&#39;component&#39;</span><span class="p">]]</span>
         <span class="n">selected_gmpe</span> <span class="o">=</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;modeling&#39;</span><span class="p">][</span><span class="s1">&#39;gmpe&#39;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;selected_gmpe: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">selected_gmpe</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;IMC: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">IMC</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selected_gmpe: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">selected_gmpe</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;IMC: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">IMC</span><span class="p">)</span>
 
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Allow for selected_gmpe to be found in either conf[&#39;gmpe_sets&#39;] or</span>
@@ -400,9 +404,9 @@
             <span class="n">selected_gmpe_sets</span> <span class="o">=</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">selected_gmpe</span><span class="p">][</span><span class="s1">&#39;gmpes&#39;</span><span class="p">]</span>
             <span class="n">gmpe_set_weights</span> <span class="o">=</span> \
                 <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">selected_gmpe</span><span class="p">][</span><span class="s1">&#39;weights&#39;</span><span class="p">]]</span>
-            <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;selected_gmpe_sets: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">selected_gmpe_sets</span><span class="p">)</span>
-                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;gmpe_set_weights: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">gmpe_set_weights</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selected_gmpe_sets: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">selected_gmpe_sets</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gmpe_set_weights: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">gmpe_set_weights</span><span class="p">)</span>
 
             <span class="c1"># -----------------------------------------------------------------</span>
             <span class="c1"># If it is a GMPE set, does it contain GMPEs or GMPE sets?</span>
@@ -413,13 +417,13 @@
             <span class="n">set_of_sets</span> <span class="o">=</span> <span class="nb">all</span><span class="p">([</span><span class="n">s</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span>
                                <span class="n">selected_gmpe_sets</span><span class="p">])</span>
 
-            <span class="k">if</span> <span class="n">set_of_sets</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">set_of_sets</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="n">mgmpes</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">selected_gmpe_sets</span><span class="p">:</span>
                     <span class="n">mgmpes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">__mutigmpe_from_gmpe_set</span><span class="p">(</span>
                         <span class="n">conf</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">))</span>
                 <span class="n">out</span> <span class="o">=</span> <span class="n">MultiGMPE</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="n">mgmpes</span><span class="p">,</span> <span class="n">gmpe_set_weights</span><span class="p">,</span> <span class="n">imc</span><span class="o">=</span><span class="n">IMC</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">set_of_gmpes</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">set_of_gmpes</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="n">out</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">__mutigmpe_from_gmpe_set</span><span class="p">(</span>
                     <span class="n">conf</span><span class="p">,</span>
                     <span class="n">selected_gmpe</span><span class="p">,</span>
@@ -441,8 +445,8 @@
         <span class="n">out</span><span class="o">.</span><span class="n">DESCRIPTION</span> <span class="o">=</span> <span class="n">selected_gmpe</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
-    <span class="k">def</span> <span class="nf">__mutigmpe_from_gmpe_set</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="n">filter_imt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                                 <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__mutigmpe_from_gmpe_set</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="n">filter_imt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Private method for constructing a MultiGMPE from a set_name.</span>
 
@@ -465,40 +469,40 @@
         <span class="c1"># Check for large distance GMPEs</span>
         <span class="k">if</span> <span class="s1">&#39;weights_large_dist&#39;</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">][</span><span class="s1">&#39;weights_large_dist&#39;</span><span class="p">]:</span>
-                <span class="n">selected_weights_large_dist</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">selected_weights_large_dist</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">selected_weights_large_dist</span> <span class="o">=</span> \
                     <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span>
                      <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">][</span><span class="s1">&#39;weights_large_dist&#39;</span><span class="p">]]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">selected_weights_large_dist</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">selected_weights_large_dist</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="s1">&#39;dist_cutoff&#39;</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">][</span><span class="s1">&#39;dist_cutoff&#39;</span><span class="p">]):</span>
-                <span class="n">selected_dist_cutoff</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">selected_dist_cutoff</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">selected_dist_cutoff</span> <span class="o">=</span> \
                     <span class="nb">float</span><span class="p">(</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">][</span><span class="s1">&#39;dist_cutoff&#39;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">selected_dist_cutoff</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">selected_dist_cutoff</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="s1">&#39;site_gmpes&#39;</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">][</span><span class="s1">&#39;site_gmpes&#39;</span><span class="p">]:</span>
-                <span class="n">selected_site_gmpes</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">selected_site_gmpes</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">selected_site_gmpes</span> <span class="o">=</span> \
                     <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">][</span><span class="s1">&#39;site_gmpes&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">selected_site_gmpes</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">selected_site_gmpes</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="s1">&#39;weights_site_gmpes&#39;</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">][</span><span class="s1">&#39;weights_site_gmpes&#39;</span><span class="p">]:</span>
-                <span class="n">selected_weights_site_gmpes</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">selected_weights_site_gmpes</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">selected_weights_site_gmpes</span> <span class="o">=</span> \
                     <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_sets&#39;</span><span class="p">][</span><span class="n">set_name</span><span class="p">][</span><span class="s1">&#39;weights_site_gmpes&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">selected_weights_site_gmpes</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">selected_weights_site_gmpes</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Import GMPE modules and initialize classes into list</span>
@@ -512,7 +516,7 @@
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Filter out GMPEs not applicable to this period</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">filter_imt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">filter_imt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">filtered_gmpes</span><span class="p">,</span> <span class="n">filtered_wts</span> <span class="o">=</span> <span class="n">filter_gmpe_list</span><span class="p">(</span>
                 <span class="n">gmpes</span><span class="p">,</span> <span class="n">selected_gmpe_weights</span><span class="p">,</span> <span class="n">filter_imt</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -521,7 +525,7 @@
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Import site GMPEs</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">selected_site_gmpes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">selected_site_gmpes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selected_site_gmpes</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">selected_site_gmpes</span> <span class="o">=</span> <span class="p">[</span><span class="n">selected_site_gmpes</span><span class="p">]</span>
             <span class="n">site_gmpes</span> <span class="o">=</span> <span class="p">[]</span>
@@ -530,28 +534,28 @@
                 <span class="n">tmpclass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;gmpe_modules&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">site_gmpes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpclass</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">site_gmpes</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">site_gmpes</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Filter out site GMPEs not applicable to this period</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">site_gmpes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">filter_imt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">site_gmpes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">filter_imt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">filtered_site_gmpes</span><span class="p">,</span> <span class="n">filtered_site_wts</span> <span class="o">=</span> <span class="n">filter_gmpe_list</span><span class="p">(</span>
                     <span class="n">site_gmpes</span><span class="p">,</span> <span class="n">selected_weights_site_gmpes</span><span class="p">,</span> <span class="n">filter_imt</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">filtered_site_gmpes</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">site_gmpes</span><span class="p">)</span>
                 <span class="n">filtered_site_wts</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">selected_weights_site_gmpes</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">filtered_site_gmpes</span> <span class="o">=</span> <span class="bp">None</span>
-            <span class="n">filtered_site_wts</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">filtered_site_gmpes</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">filtered_site_wts</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Construct MultiGMPE</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;    filtered_gmpes: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filtered_gmpes</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;    filtered_wts: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filtered_wts</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    filtered_gmpes: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filtered_gmpes</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    filtered_wts: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filtered_wts</span><span class="p">)</span>
 
         <span class="n">mgmpe</span> <span class="o">=</span> <span class="n">MultiGMPE</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
             <span class="n">filtered_gmpes</span><span class="p">,</span> <span class="n">filtered_wts</span><span class="p">,</span>
@@ -562,8 +566,8 @@
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Append large-distance info if specified</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">selected_dist_cutoff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">filter_imt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">selected_dist_cutoff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">filter_imt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">filtered_gmpes_ld</span><span class="p">,</span> <span class="n">filtered_wts_ld</span> <span class="o">=</span> <span class="n">filter_gmpe_list</span><span class="p">(</span>
                     <span class="n">gmpes</span><span class="p">,</span> <span class="n">selected_weights_large_dist</span><span class="p">,</span> <span class="n">filter_imt</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -574,11 +578,11 @@
 
         <span class="k">return</span> <span class="n">mgmpe</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="MultiGMPE.from_list"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE.from_list">[docs]</a>    <span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">gmpes</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span>
+<div class="viewcode-block" id="MultiGMPE.from_list"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE.from_list">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">gmpes</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span>
                   <span class="n">imc</span><span class="o">=</span><span class="n">const</span><span class="o">.</span><span class="n">IMC</span><span class="o">.</span><span class="n">GREATER_OF_TWO_HORIZONTAL</span><span class="p">,</span>
-                  <span class="n">default_gmpes_for_site</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                  <span class="n">default_gmpes_for_site_weights</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                  <span class="n">default_gmpes_for_site</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">default_gmpes_for_site_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">reference_vs30</span><span class="o">=</span><span class="mi">760</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct a MultiGMPE instance from lists of GMPEs and weights.</span>
@@ -625,7 +629,7 @@
         <span class="c1"># Check that GMPE weights sum to 1.0:</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
 
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-7</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">7</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Weights must sum to one.&#39;</span><span class="p">)</span>
 
         <span class="c1"># ---------------------------------------------------------------------</span>
@@ -703,26 +707,26 @@
         <span class="c1"># ---------------------------------------------------------------------</span>
 
         <span class="c1"># things to check if default_gmpes_for_site is provided</span>
-        <span class="k">if</span> <span class="n">default_gmpes_for_site</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">default_gmpes_for_site</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># check that default_gmpe_for_site are OQ GMPEs or None</span>
             <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">default_gmpes_for_site</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">GMPE</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> is not a GMPE instance.&quot;</span> <span class="o">%</span> <span class="n">g</span><span class="p">)</span>
 
             <span class="c1"># apply default weights if necessary</span>
-            <span class="k">if</span> <span class="n">default_gmpes_for_site_weights</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">default_gmpes_for_site_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">default_gmpes_for_site</span><span class="p">)</span>
                 <span class="n">default_gmpes_for_site_weights</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="o">/</span> <span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
 
         <span class="c1"># Things to check if one or more GMPE does not have a site term</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">HAS_SITE</span><span class="p">):</span>
             <span class="c1"># Raise an exception if no default site is provided</span>
-            <span class="k">if</span> <span class="n">default_gmpes_for_site</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">default_gmpes_for_site</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Must provide default_gmpes_for_site if one or&#39;</span>
                                 <span class="s1">&#39; more GMPE does not have site term.&#39;</span><span class="p">)</span>
 
             <span class="c1"># If weights are unspecified, use equal weight</span>
-            <span class="k">if</span> <span class="n">default_gmpes_for_site_weights</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">default_gmpes_for_site_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">default_gmpes_for_site_weights</span> <span class="o">=</span> \
                     <span class="p">[</span><span class="mi">1</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">default_gmpes_for_site</span><span class="p">)]</span> <span class="o">*</span> \
                     <span class="nb">len</span><span class="p">(</span><span class="n">default_gmpes_for_site</span><span class="p">)</span>
@@ -767,7 +771,7 @@
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="MultiGMPE.get_site_factors"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE.get_site_factors">[docs]</a>    <span class="k">def</span> <span class="nf">get_site_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiGMPE.get_site_factors"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE.get_site_factors">[docs]</a>    <span class="k">def</span> <span class="nf">get_site_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method for computing site amplification factors from the defalut GMPE</span>
 <span class="sd">        to be applied to GMPEs which do not have a site term.</span>
@@ -800,7 +804,7 @@
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># If default True, construct new MultiGMPE with default GMPE/weights</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">MultiGMPE</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_GMPES_FOR_SITE</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_GMPES_FOR_SITE_WEIGHTS</span><span class="p">,</span>
@@ -823,8 +827,8 @@
 
         <span class="k">return</span> <span class="n">lamps</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="MultiGMPE.set_sites_depth_parameters"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE.set_sites_depth_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_sites_depth_parameters</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="n">gmpe</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiGMPE.set_sites_depth_parameters"><a class="viewcode-back" href="../../shakelib.multigmpe.html#shakelib.multigmpe.MultiGMPE.set_sites_depth_parameters">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_sites_depth_parameters</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="n">gmpe</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Need to select the appropriate z1pt0 value for different GMPEs.</span>
 <span class="sd">        Note that these are required site parameters, so even though</span>

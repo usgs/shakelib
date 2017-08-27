@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
         <link rel="up" title="shakelib.rupture" href="shakelib.rupture.html"/>
         <link rel="next" title="shakelib.rupture.gc2" href="shakelib.rupture.gc2.html"/>
@@ -82,7 +85,8 @@
           
             
             
-                <ul class="current">
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -120,7 +124,7 @@
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.base.html">shakelib.rupture.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.constants.html">shakelib.rupture.constants</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.edge_rupture.html">shakelib.rupture.edge_rupture</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">shakelib.rupture.factory</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.rupture.factory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.gc2.html">shakelib.rupture.gc2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.origin.html">shakelib.rupture.origin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.point_rupture.html">shakelib.rupture.point_rupture</a></li>
@@ -157,7 +161,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -172,8 +176,6 @@
     <li>shakelib.rupture.factory</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/shakelib.rupture.factory.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -190,7 +192,7 @@
 <code class="descclassname">shakelib.rupture.factory.</code><code class="descname">get_rupture</code><span class="sig-paren">(</span><em>origin</em>, <em>file=None</em>, <em>mesh_dx=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/factory.html#get_rupture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.factory.get_rupture" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a module-level function to read in a rupture file. This allows for
 the ShakeMap 3 text file specification or the ShakeMap 4 JSON rupture
-format. The ShakeMap 3 (&#8221;.txt&#8221; extension) only supports QuadRupture style
+format. The ShakeMap 3 (“.txt” extension) only supports QuadRupture style
 rupture representation and so this method will always return a QuadRupture
 instance. The ShakeMap 4 JSON format supports QuadRupture and EdgeRupture
 represenations and so this method detects the rupture class and returns the
@@ -201,11 +203,11 @@ appropriate Rupture subclass instance.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; A ShakeMap origin instance; required because
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) – A ShakeMap origin instance; required because
 hypocentral/epicentral distances are computed from the Rupture
 class.</li>
-<li><strong>file</strong> (<em>srt</em>) &#8211; Path to rupture file (optional).</li>
-<li><strong>mesh_dx</strong> (<em>float</em>) &#8211; Target spacing (in km) for rupture discretization;
+<li><strong>file</strong> (<em>srt</em>) – Path to rupture file (optional).</li>
+<li><strong>mesh_dx</strong> (<em>float</em>) – Target spacing (in km) for rupture discretization;
 default is 0.5 km and it is only used if the rupture file is an
 EdgeRupture.</li>
 </ul>
@@ -228,9 +230,9 @@ GeoJSON dictionary.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>d</strong> (<em>dict</em>) &#8211; Rupture GeoJSON dictionary.</li>
-<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; A ShakeMap origin object.</li>
-<li><strong>mesh_dx</strong> (<em>float</em>) &#8211; Target spacing (in km) for rupture discretization;
+<li><strong>d</strong> (<em>dict</em>) – Rupture GeoJSON dictionary.</li>
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) – A ShakeMap origin object.</li>
+<li><strong>mesh_dx</strong> (<em>float</em>) – Target spacing (in km) for rupture discretization;
 default is 0.5 km and it is only used if the rupture file is an
 EdgeRupture.</li>
 </ul>
@@ -251,13 +253,13 @@ EdgeRupture.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rupturefile</strong> (<em>srt</em>) &#8211; <p>Path to rupture file OR file-like object in GMT
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rupturefile</strong> (<em>srt</em>) – <p>Path to rupture file OR file-like object in GMT
 psxy format, where:</p>
 <blockquote>
 <div><ul class="simple">
 <li>Rupture vertices are space separated lat, lon, depth triplets
 on a single line.</li>
-<li>Rupture groups are separated by lines containing &#8220;&gt;&#8221;</li>
+<li>Rupture groups are separated by lines containing “&gt;”</li>
 <li>Rupture groups must be closed.</li>
 <li>Verticies within a rupture group must start along the top
 edge and move in the strike direction then move to the bottom
@@ -283,7 +285,7 @@ that are common to both QuadRupture and EdgeRupture.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>dict</em>) &#8211; Rupture JSON dictionary.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>dict</em>) – Rupture JSON dictionary.</td>
 </tr>
 </tbody>
 </table>
@@ -303,7 +305,7 @@ that are common to both QuadRupture and EdgeRupture.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>dict</em>) &#8211; Rupture JSON dictionary.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>dict</em>) – Rupture JSON dictionary.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Can the rupture be represented in the QuadRupture class?</td>
 </tr>

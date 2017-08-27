@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -199,8 +203,8 @@
 
     <span class="n">__vfact</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">20.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="mf">9.81</span>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="BommerAlarcon2006.pgv2psa05"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.bommer_alarcon_2006.html#shakelib.conversions.imt.bommer_alarcon_2006.BommerAlarcon2006.pgv2psa05">[docs]</a>    <span class="k">def</span> <span class="nf">pgv2psa05</span><span class="p">(</span><span class="n">pgv</span><span class="p">):</span>
+<div class="viewcode-block" id="BommerAlarcon2006.pgv2psa05"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.bommer_alarcon_2006.html#shakelib.conversions.imt.bommer_alarcon_2006.BommerAlarcon2006.pgv2psa05">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">pgv2psa05</span><span class="p">(</span><span class="n">pgv</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert PGV in cm/s to PSA05 in g.</span>
 <span class="sd">        **Important:** PGV must be linear units.</span>
@@ -214,8 +218,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">pgv</span> <span class="o">/</span> <span class="n">BommerAlarcon2006</span><span class="o">.</span><span class="n">__vfact</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="BommerAlarcon2006.psa052pgv"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.bommer_alarcon_2006.html#shakelib.conversions.imt.bommer_alarcon_2006.BommerAlarcon2006.psa052pgv">[docs]</a>    <span class="k">def</span> <span class="nf">psa052pgv</span><span class="p">(</span><span class="n">psa05</span><span class="p">):</span>
+<div class="viewcode-block" id="BommerAlarcon2006.psa052pgv"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.bommer_alarcon_2006.html#shakelib.conversions.imt.bommer_alarcon_2006.BommerAlarcon2006.psa052pgv">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">psa052pgv</span><span class="p">(</span><span class="n">psa05</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert PSA05 (spectral acceleration with oscillator period of 0.5 sec)</span>
 <span class="sd">        in g to PGV cm/s.</span>
@@ -228,8 +232,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">psa05</span> <span class="o">*</span> <span class="n">BommerAlarcon2006</span><span class="o">.</span><span class="n">__vfact</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="BommerAlarcon2006.getVfact"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.bommer_alarcon_2006.html#shakelib.conversions.imt.bommer_alarcon_2006.BommerAlarcon2006.getVfact">[docs]</a>    <span class="k">def</span> <span class="nf">getVfact</span><span class="p">():</span>
+<div class="viewcode-block" id="BommerAlarcon2006.getVfact"><a class="viewcode-back" href="../../../../shakelib.conversions.imt.bommer_alarcon_2006.html#shakelib.conversions.imt.bommer_alarcon_2006.BommerAlarcon2006.getVfact">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">getVfact</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :returns:</span>
 <span class="sd">            The Bommer and Alarcon (2006) conversion factor.</span>

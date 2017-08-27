@@ -1,7 +1,0 @@
-shakelib.rupture.point_rupture
-=====================================
-
-.. automodule:: shakelib.rupture.point_rupture
-    :members:
-    :undoc-members:
-    :show-inheritance:

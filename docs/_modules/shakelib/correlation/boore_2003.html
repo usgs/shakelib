@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -178,7 +182,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for shakelib.correlation.boore_2003</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
 <div class="viewcode-block" id="Boore2003"><a class="viewcode-back" href="../../../shakelib.correlation.boore_2003.html#shakelib.correlation.boore_2003.Boore2003">[docs]</a><span class="k">class</span> <span class="nc">Boore2003</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -197,8 +201,8 @@
 <span class="sd">        the Seismological Society of America, 93(6), 2737-2751.</span>
 <span class="sd">        `[link] &lt;http://www.bssaonline.org/content/93/6/2737.short&gt;`__</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Boore2003.getSpatialCorrelation"><a class="viewcode-back" href="../../../shakelib.correlation.boore_2003.html#shakelib.correlation.boore_2003.Boore2003.getSpatialCorrelation">[docs]</a>    <span class="k">def</span> <span class="nf">getSpatialCorrelation</span><span class="p">(</span><span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="o">=</span><span class="s1">&#39;PGA&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Boore2003.getSpatialCorrelation"><a class="viewcode-back" href="../../../shakelib.correlation.boore_2003.html#shakelib.correlation.boore_2003.Boore2003.getSpatialCorrelation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">getSpatialCorrelation</span><span class="p">(</span><span class="n">dists</span><span class="p">,</span> <span class="n">imt</span><span class="o">=</span><span class="s1">&#39;PGA&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method for evalulating spatial correlation model.</span>
 

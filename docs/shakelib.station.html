@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
         <link rel="up" title="shakelib" href="shakelib.html"/>
         <link rel="next" title="shakelib.virtualipe" href="shakelib.virtualipe.html"/>
@@ -82,7 +85,8 @@
           
             
             
-                <ul class="current">
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -131,7 +135,7 @@
 <li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.multigmpe.html">shakelib.multigmpe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.sites.html">shakelib.sites</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">shakelib.station</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">shakelib.station</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.virtualipe.html">shakelib.virtualipe</a></li>
 </ul>
 </li>
@@ -157,7 +161,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -170,8 +174,6 @@
     <li>shakelib.station</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/shakelib.station.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -190,9 +192,9 @@
 <p>A class to facilitate reading ShakeMap formatted XML fies of peak
 amplitudes and MMI, and
 produce tables of station data. Seismic stations are considered to
-be &#8216;instrumented&#8217;; MMI data is not instrumented and is indicated
-in the ShakeMap XML with a <code class="docutils literal"><span class="pre">netid</span></code> attribute of &#8220;DYFI,&#8221; &#8220;MMI,&#8221;
-&#8220;INTENSITY,&#8221; or &#8220;CIIM.&#8221;</p>
+be ‘instrumented’; MMI data is not instrumented and is indicated
+in the ShakeMap XML with a <code class="docutils literal"><span class="pre">netid</span></code> attribute of “DYFI,” “MMI,”
+“INTENSITY,” or “CIIM.”</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Typically the user will call the class method <code class="xref py py-meth docutils literal"><span class="pre">fromXML()</span></code>
@@ -210,7 +212,7 @@ station data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dbfile</strong> (<em>str</em>) &#8211; A SQLite database file containing pre-processed
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dbfile</strong> (<em>str</em>) – A SQLite database file containing pre-processed
 station data.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="#shakelib.station.StationList" title="shakelib.station.StationList"><code class="xref py py-class docutils literal"><span class="pre">StationList</span></code></a> object.</td>
@@ -226,9 +228,9 @@ station data.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sql</strong> (<em>str</em>) &#8211; SQL code to create and populate the database</li>
-<li><strong>dbfile</strong> (<em>str</em>) &#8211; The path to a file in which the database will reside.
-The default is &#8216;:memory:&#8217; for an in-memory database.</li>
+<li><strong>sql</strong> (<em>str</em>) – SQL code to create and populate the database</li>
+<li><strong>dbfile</strong> (<em>str</em>) – The path to a file in which the database will reside.
+The default is ‘:memory:’ for an in-memory database.</li>
 </ul>
 </td>
 </tr>
@@ -247,7 +249,7 @@ The default is &#8216;:memory:&#8217; for an in-memory database.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> – </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A string of SQL sufficient to restore and repopulate the
 database.</td>
@@ -266,9 +268,9 @@ files.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xmlfiles</strong> (<em>sequence of str</em>) &#8211; Sequence of ShakeMap XML input files to read.</li>
-<li><strong>dbfile</strong> (<em>str</em>) &#8211; Path to a file into which to write the SQLite database.
-The default is &#8216;:memory:&#8217; for an in-memory database.</li>
+<li><strong>xmlfiles</strong> (<em>sequence of str</em>) – Sequence of ShakeMap XML input files to read.</li>
+<li><strong>dbfile</strong> (<em>str</em>) – Path to a file into which to write the SQLite database.
+The default is ‘:memory:’ for an in-memory database.</li>
 </ul>
 </td>
 </tr>
@@ -293,7 +295,7 @@ files.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>xmlfiles</strong> (<em>sequence of str</em>) &#8211; Sequence of ShakeMap XML input files to read.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>xmlfiles</strong> (<em>sequence of str</em>) – Sequence of ShakeMap XML input files to read.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#shakelib.station.StationList" title="shakelib.station.StationList"><code class="xref py py-class docutils literal"><span class="pre">StationList</span></code></a> object</td>
 </tr>
@@ -309,7 +311,7 @@ files.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> – </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of IMT types</td>
 </tr>
@@ -325,19 +327,19 @@ stations. The keys describe the parameter, the values are Numpy
 arrays of the parameter in question.</p>
 <p>For the standard set of ShakeMap IMTs (mmi, pga, pgv, psa03, psa10,
 psa30), the keys in the dictionary would be:</p>
-<p>&#8216;id&#8217;, &#8216;network&#8217;, &#8216;code&#8217;, &#8216;name&#8217;, &#8216;lat&#8217;, &#8216;lon&#8217;, &#8216;elev&#8217;, &#8216;vs30&#8217;,
-&#8216;instrumented&#8217;, &#8216;PGA&#8217;, &#8216;PGV&#8217;, &#8216;SA(0.3)&#8217;, &#8216;SA(1.0)&#8217;, &#8216;SA(3.0)&#8217;</p>
+<p>‘id’, ‘network’, ‘code’, ‘name’, ‘lat’, ‘lon’, ‘elev’, ‘vs30’,
+‘instrumented’, ‘PGA’, ‘PGV’, ‘SA(0.3)’, ‘SA(1.0)’, ‘SA(3.0)’</p>
 <p>For the non-instrumented dictionary, the keys would be:</p>
-<p>&#8216;id&#8217;, &#8216;network&#8217;, &#8216;code&#8217;, &#8216;name&#8217;, &#8216;lat&#8217;, &#8216;lon&#8217;, &#8216;elev&#8217;, &#8216;vs30&#8217;,
-&#8216;instrumented&#8217;, &#8216;MMI&#8217;</p>
+<p>‘id’, ‘network’, ‘code’, ‘name’, ‘lat’, ‘lon’, ‘elev’, ‘vs30’,
+‘instrumented’, ‘MMI’</p>
 <p>The <strong>id</strong> column is <strong>network</strong> and <strong>code</strong> concatenated with a
-period (&#8221;.&#8221;) between them.</p>
+period (“.”) between them.</p>
 <p>All ground motion units are natural log units. Distances are in km.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>instrumented</strong> (<em>integer</em>) &#8211; Set to 1 (one) if the dictionary is to contain the instrumented
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>instrumented</strong> (<em>integer</em>) – Set to 1 (one) if the dictionary is to contain the instrumented
 stations, or to 0 (zero) if the dictionary is to contain the
 non-instrumented (MMI) stations.</td>
 </tr>

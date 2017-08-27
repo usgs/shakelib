@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -184,14 +188,14 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="c1"># third party imports</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo.point</span> <span class="kn">import</span> <span class="n">Point</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo.utils</span> <span class="kn">import</span> <span class="n">get_orthographic_projection</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo.point</span> <span class="k">import</span> <span class="n">Point</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo.utils</span> <span class="k">import</span> <span class="n">get_orthographic_projection</span>
 
-<span class="kn">from</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="kn">import</span> <span class="n">latlon2ecef</span>
-<span class="kn">from</span> <span class="nn">impactutils.vectorutils.vector</span> <span class="kn">import</span> <span class="n">Vector</span>
-<span class="kn">from</span> <span class="nn">shakelib.utils.exception</span> <span class="kn">import</span> <span class="n">ShakeLibException</span>
-<span class="kn">from</span> <span class="nn">shakelib.rupture</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="k">import</span> <span class="n">latlon2ecef</span>
+<span class="kn">from</span> <span class="nn">impactutils.vectorutils.vector</span> <span class="k">import</span> <span class="n">Vector</span>
+<span class="kn">from</span> <span class="nn">shakelib.utils.exception</span> <span class="k">import</span> <span class="n">ShakeLibException</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture</span> <span class="k">import</span> <span class="n">constants</span>
 
 
 <div class="viewcode-block" id="is_quad"><a class="viewcode-back" href="../../../shakelib.rupture.utils.html#shakelib.rupture.utils.is_quad">[docs]</a><span class="k">def</span> <span class="nf">is_quad</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
@@ -230,9 +234,9 @@
 
     <span class="c1"># Is it close enough?</span>
     <span class="k">if</span> <span class="n">dist</span> <span class="o">/</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">constants</span><span class="o">.</span><span class="n">OFFPLANE_TOLERANCE</span><span class="p">:</span>
-        <span class="n">on_plane</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">on_plane</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">on_plane</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">on_plane</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1"># Fixed quad</span>
     <span class="n">fquad</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="o">.</span><span class="n">toPoint</span><span class="p">(),</span>
@@ -471,8 +475,8 @@
     <span class="n">qlons</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">longitude</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">q</span><span class="p">]</span>
     <span class="n">proj</span> <span class="o">=</span> <span class="n">get_orthographic_projection</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">qlons</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">qlons</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">qlats</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">qlats</span><span class="p">))</span>
-    <span class="n">s1_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s1_local</span><span class="o">.</span><span class="n">x</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s1_local</span><span class="o">.</span><span class="n">y</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">s0_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s0_local</span><span class="o">.</span><span class="n">x</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s0_local</span><span class="o">.</span><span class="n">y</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">s1_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s1_local</span><span class="o">.</span><span class="n">x</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s1_local</span><span class="o">.</span><span class="n">y</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">s0_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s0_local</span><span class="o">.</span><span class="n">x</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s0_local</span><span class="o">.</span><span class="n">y</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">s1_ecef</span> <span class="o">=</span> <span class="n">Vector</span><span class="o">.</span><span class="n">fromTuple</span><span class="p">(</span><span class="n">latlon2ecef</span><span class="p">(</span><span class="n">s1_ll</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s1_ll</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s1_local</span><span class="o">.</span><span class="n">z</span><span class="p">))</span>
     <span class="n">s0_ecef</span> <span class="o">=</span> <span class="n">Vector</span><span class="o">.</span><span class="n">fromTuple</span><span class="p">(</span><span class="n">latlon2ecef</span><span class="p">(</span><span class="n">s0_ll</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s0_ll</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s0_local</span><span class="o">.</span><span class="n">z</span><span class="p">))</span>
     <span class="n">slp_ecef</span> <span class="o">=</span> <span class="p">(</span><span class="n">s1_ecef</span> <span class="o">-</span> <span class="n">s0_ecef</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
@@ -595,7 +599,7 @@
     <span class="k">return</span> <span class="n">v1</span></div>
 
 
-<span class="k">def</span> <span class="nf">_quad_distance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">horizontal</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_quad_distance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">horizontal</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the shortest distance from a set of points to a rupture surface.</span>
 
@@ -779,7 +783,7 @@
 <span class="sd">        str: Mechanism.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mech</span> <span class="o">=</span> <span class="s1">&#39;ALL&#39;</span>
-    <span class="k">if</span> <span class="n">rake</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rake</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">rake</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">180</span> <span class="ow">and</span> <span class="n">rake</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mi">150</span><span class="p">)</span> <span class="ow">or</span> \
            <span class="p">(</span><span class="n">rake</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">30</span> <span class="ow">and</span> <span class="n">rake</span> <span class="o">&lt;=</span> <span class="mi">30</span><span class="p">)</span> <span class="ow">or</span> \
            <span class="p">(</span><span class="n">rake</span> <span class="o">&gt;=</span> <span class="mi">150</span> <span class="ow">and</span> <span class="n">rake</span> <span class="o">&lt;=</span> <span class="mi">180</span><span class="p">):</span>

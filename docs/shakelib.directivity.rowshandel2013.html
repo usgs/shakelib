@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
         <link rel="up" title="shakelib.directivity" href="shakelib.directivity.html"/>
         <link rel="next" title="shakelib.gmice" href="shakelib.gmice.html"/>
@@ -82,7 +85,8 @@
           
             
             
-                <ul class="current">
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -105,7 +109,7 @@
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="shakelib.directivity.html">shakelib.directivity</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="shakelib.directivity.bayless2013.html">shakelib.directivity.bayless2013</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">shakelib.directivity.rowshandel2013</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.directivity.rowshandel2013</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.gmice.html">shakelib.gmice</a><ul>
@@ -157,7 +161,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -172,8 +176,6 @@
     <li>shakelib.directivity.rowshandel2013</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/shakelib.directivity.rowshandel2013.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -191,7 +193,7 @@ also used some coefficients that are unpublished updates by Rowshandel.
 Some of the implementation options are controlled by arguments (e.g.,
 mtype).</p>
 <p>Fd is the directivity function. One of the options is whether or not to
-use the &#8216;centering&#8217; term (the argument is &#8216;centered&#8217; and defaults to
+use the ‘centering’ term (the argument is ‘centered’ and defaults to
 True). If it is True then</p>
 <p>Fd = C1 * (XiPrime - Xic) * LD * DT * WP</p>
 <p>otherwise</p>
@@ -237,25 +239,25 @@ Earthquake Engineering Research Center, Berkeley, CA.
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>origin</strong> &#8211; Origin instance.</li>
-<li><strong>rup</strong> &#8211; Rupture instance.</li>
-<li><strong>lat</strong> (<em>ndarray</em>) &#8211; Numpy array of site latitudes.</li>
-<li><strong>lon</strong> (<em>ndarray</em>) &#8211; Numpy array of site longitudes.</li>
-<li><strong>dep</strong> (<em>ndarray</em>) &#8211; Numpy array of site depths (km); positive down.</li>
-<li><strong>dx</strong> (<em>float</em>) &#8211; Target mesh spacing for subruptures in km. The mesh
+<li><strong>origin</strong> – Origin instance.</li>
+<li><strong>rup</strong> – Rupture instance.</li>
+<li><strong>lat</strong> (<em>ndarray</em>) – Numpy array of site latitudes.</li>
+<li><strong>lon</strong> (<em>ndarray</em>) – Numpy array of site longitudes.</li>
+<li><strong>dep</strong> (<em>ndarray</em>) – Numpy array of site depths (km); positive down.</li>
+<li><strong>dx</strong> (<em>float</em>) – Target mesh spacing for subruptures in km. The mesh
 snaps to the edges of the quadrilaterals so the actual mesh
 spacing will not equal this exactly; spacing in x and y will
 not be equal.</li>
-<li><strong>T</strong> (<em>list</em>) &#8211; List floats (or a float) for periods to compute fd;
+<li><strong>T</strong> (<em>list</em>) – List floats (or a float) for periods to compute fd;
 Currently, only acceptable values are 1, 2, 3, 4, 5, 7.5.</li>
-<li><strong>a_weight</strong> (<em>float</em>) &#8211; Weighting factor for how p-dot-q and s-dot-q are
+<li><strong>a_weight</strong> (<em>float</em>) – Weighting factor for how p-dot-q and s-dot-q are
 averaged; 0 for only p-dot-q (propagation factor) and 1 for
 only s-dot-q (slip factor).</li>
-<li><strong>mtype</strong> (<em>int</em>) &#8211; Either 1 or 2; 1 for adding only positive components
+<li><strong>mtype</strong> (<em>int</em>) – Either 1 or 2; 1 for adding only positive components
 of dot products, 2 for adding all components of dot products.</li>
-<li><strong>simpleDT</strong> (<em>bool</em>) &#8211; Should the simpler DT equation be used? Usually
+<li><strong>simpleDT</strong> (<em>bool</em>) – Should the simpler DT equation be used? Usually
 False.</li>
-<li><strong>centered</strong> (<em>bool</em>) &#8211; Should the centered directivity parameter be used?</li>
+<li><strong>centered</strong> (<em>bool</em>) – Should the centered directivity parameter be used?</li>
 </ul>
 </td>
 </tr>
@@ -272,24 +274,24 @@ a sites instance.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>origin</strong> &#8211; Origin instance.</li>
-<li><strong>rup</strong> &#8211; Rupture instance.</li>
-<li><strong>sites</strong> &#8211; Sites object.</li>
-<li><strong>dx</strong> &#8211; Float for target mesh spacing for subruptures in km. The mesh
+<li><strong>origin</strong> – Origin instance.</li>
+<li><strong>rup</strong> – Rupture instance.</li>
+<li><strong>sites</strong> – Sites object.</li>
+<li><strong>dx</strong> – Float for target mesh spacing for subruptures in km. The mesh
 snaps to the edges of the quadrilaterals so the actual mesh
 spacing will not equal this exactly; spacing in x and y will
 not be equal.</li>
-<li><strong>T</strong> &#8211; Period; Currently, only acceptable values are 1, 2, 3, 4, 5,
+<li><strong>T</strong> – Period; Currently, only acceptable values are 1, 2, 3, 4, 5,
 7.5.</li>
-<li><strong>a_weight</strong> &#8211; Weighting factor for how p-dot-q and s-dot-q are
+<li><strong>a_weight</strong> – Weighting factor for how p-dot-q and s-dot-q are
 averaged; 0 for only p-dot-q (propagation factor) and 1 for
 only s-dot-q (slip factor).</li>
-<li><strong>mtype</strong> &#8211; Integer, either 1 or 2; 1 for adding only positive
+<li><strong>mtype</strong> – Integer, either 1 or 2; 1 for adding only positive
 components of dot products, 2 for adding all components of dot
 products.</li>
-<li><strong>simpleDT</strong> &#8211; Boolean; should the simpler DT equation be used? Usually
+<li><strong>simpleDT</strong> – Boolean; should the simpler DT equation be used? Usually
 False.</li>
-<li><strong>centered</strong> &#8211; Boolean; should the centered directivity parameter be
+<li><strong>centered</strong> – Boolean; should the centered directivity parameter be
 used</li>
 </ul>
 </td>
@@ -322,7 +324,7 @@ used</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of Xi&#8217;; this is the variable that accounts for
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of Xi’; this is the variable that accounts for
 geometric factors in Fd.</td>
 </tr>
 </tbody>

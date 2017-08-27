@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="index.html"/>
         <link rel="up" title="shakelib.rupture" href="shakelib.rupture.html"/>
         <link rel="next" title="shakelib.rupture.utils" href="shakelib.rupture.utils.html"/>
@@ -82,7 +85,8 @@
           
             
             
-                <ul class="current">
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -124,7 +128,7 @@
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.gc2.html">shakelib.rupture.gc2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.origin.html">shakelib.rupture.origin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.point_rupture.html">shakelib.rupture.point_rupture</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">shakelib.rupture.quad_rupture</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.rupture.quad_rupture</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.rupture.utils.html">shakelib.rupture.utils</a></li>
 </ul>
 </li>
@@ -157,7 +161,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -172,8 +176,6 @@
     <li>shakelib.rupture.quad_rupture</li>
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/shakelib.rupture.quad_rupture.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -200,8 +202,8 @@ must match the number of points in the bottom edge.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>d</strong> (<em>dict</em>) &#8211; Rupture GeoJSON dictionary.</li>
-<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; Reference to a ShakeMap Origin object.</li>
+<li><strong>d</strong> (<em>dict</em>) – Rupture GeoJSON dictionary.</li>
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) – Reference to a ShakeMap Origin object.</li>
 </ul>
 </td>
 </tr>
@@ -278,25 +280,25 @@ the top edges and the width and dip of the quadrilateral.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xp0</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p0.</li>
-<li><strong>yp0</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p0.</li>
-<li><strong>xp1</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p1.</li>
-<li><strong>yp1</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p1.</li>
-<li><strong>zp</strong> (<em>array</em>) &#8211; Array or list of depths for each of the top of rupture
+<li><strong>xp0</strong> (<em>array</em>) – Array or list of longitudes (floats) of p0.</li>
+<li><strong>yp0</strong> (<em>array</em>) – Array or list of latitudes (floats) of p0.</li>
+<li><strong>xp1</strong> (<em>array</em>) – Array or list of longitudes (floats) of p1.</li>
+<li><strong>yp1</strong> (<em>array</em>) – Array or list of latitudes (floats) of p1.</li>
+<li><strong>zp</strong> (<em>array</em>) – Array or list of depths for each of the top of rupture
 rectangles (km).</li>
-<li><strong>widths</strong> (<em>array</em>) &#8211; Array of widths for each of rectangle (km).</li>
-<li><strong>dips</strong> (<em>array</em>) &#8211; Array of dips for each of rectangle (degrees).</li>
-<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; Reference to a ShakeMap origin object.</li>
-<li><strong>strike</strong> (<em>array</em>) &#8211; If None then strike is computed from verticies of
+<li><strong>widths</strong> (<em>array</em>) – Array of widths for each of rectangle (km).</li>
+<li><strong>dips</strong> (<em>array</em>) – Array of dips for each of rectangle (degrees).</li>
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) – Reference to a ShakeMap origin object.</li>
+<li><strong>strike</strong> (<em>array</em>) – If None then strike is computed from verticies of
 top edge of each quadrilateral. If a scalar, then all
 quadrilaterals are constructed assuming this strike direction.
 If an array with the same length as the trace coordinates then
 it specifies the strike for each quadrilateral.</li>
-<li><strong>group_index</strong> (<em>list</em>) &#8211; List of integers to indicate group index. If
+<li><strong>group_index</strong> (<em>list</em>) – List of integers to indicate group index. If
 None then each quadrilateral is assumed to be in a different
 group since there is no guarantee that any of them are
 continuous.</li>
-<li><strong>reference</strong> (<em>str</em>) &#8211; String explaining where the rupture definition
+<li><strong>reference</strong> (<em>str</em>) – String explaining where the rupture definition
 came from (publication style reference, etc.).</li>
 </ul>
 </td>
@@ -319,7 +321,7 @@ polygon. This needs to be udpated.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rupturefile</strong> (<em>str</em>) &#8211; Filename of output data file OR file-like
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rupturefile</strong> (<em>str</em>) – Filename of output data file OR file-like
 object.</td>
 </tr>
 </tbody>
@@ -330,12 +332,12 @@ object.</td>
 <dt id="shakelib.rupture.quad_rupture.QuadRupture.fromVertices">
 <em class="property">classmethod </em><code class="descname">fromVertices</code><span class="sig-paren">(</span><em>xp0</em>, <em>yp0</em>, <em>zp0</em>, <em>xp1</em>, <em>yp1</em>, <em>zp1</em>, <em>xp2</em>, <em>yp2</em>, <em>zp2</em>, <em>xp3</em>, <em>yp3</em>, <em>zp3</em>, <em>origin</em>, <em>group_index=None</em>, <em>reference=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/quad_rupture.html#QuadRupture.fromVertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.quad_rupture.QuadRupture.fromVertices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a QuadDrupture instance from the vector of vertices that fully
-define the quadrilaterals. The points p0, ..., p3 are labeled below for
+define the quadrilaterals. The points p0, …, p3 are labeled below for
 a trapezoid:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>   p0--------p1
-  /          |
- /           |
-p3-----------p2
+<div class="highlight-default"><div class="highlight"><pre><span></span>   <span class="n">p0</span><span class="o">--------</span><span class="n">p1</span>
+  <span class="o">/</span>          <span class="o">|</span>
+ <span class="o">/</span>           <span class="o">|</span>
+<span class="n">p3</span><span class="o">-----------</span><span class="n">p2</span>
 </pre></div>
 </div>
 <p>All of the following vector arguments must have the same length.</p>
@@ -344,30 +346,34 @@ p3-----------p2
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xp0</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p0.</li>
-<li><strong>yp0</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p0.</li>
-<li><strong>zp0</strong> (<em>array</em>) &#8211; Array or list of depths (floats) of p0.</li>
-<li><strong>xp1</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p1.</li>
-<li><strong>yp1</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p1.</li>
-<li><strong>zp1</strong> (<em>array</em>) &#8211; Array or list of depths (floats) of p1.</li>
-<li><strong>xp2</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p2.</li>
-<li><strong>yp2</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p2.</li>
-<li><strong>zp2</strong> (<em>array</em>) &#8211; Array or list of depths (floats) of p2.</li>
-<li><strong>xp3</strong> (<em>array</em>) &#8211; Array or list of longitudes (floats) of p3.</li>
-<li><strong>yp3</strong> (<em>array</em>) &#8211; Array or list of latitudes (floats) of p3.</li>
-<li><strong>zp3</strong> (<em>array</em>) &#8211; Array or list of depths (floats) of p3.</li>
-<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) &#8211; Reference to a ShakeMap Origin object.</li>
-<li><strong>group_index</strong> (<em>list</em>) &#8211; List of integers to indicate group index. If
+<li><strong>xp0</strong> (<em>array</em>) – Array or list of longitudes (floats) of p0.</li>
+<li><strong>yp0</strong> (<em>array</em>) – Array or list of latitudes (floats) of p0.</li>
+<li><strong>zp0</strong> (<em>array</em>) – Array or list of depths (floats) of p0.</li>
+<li><strong>xp1</strong> (<em>array</em>) – Array or list of longitudes (floats) of p1.</li>
+<li><strong>yp1</strong> (<em>array</em>) – Array or list of latitudes (floats) of p1.</li>
+<li><strong>zp1</strong> (<em>array</em>) – Array or list of depths (floats) of p1.</li>
+<li><strong>xp2</strong> (<em>array</em>) – Array or list of longitudes (floats) of p2.</li>
+<li><strong>yp2</strong> (<em>array</em>) – Array or list of latitudes (floats) of p2.</li>
+<li><strong>zp2</strong> (<em>array</em>) – Array or list of depths (floats) of p2.</li>
+<li><strong>xp3</strong> (<em>array</em>) – Array or list of longitudes (floats) of p3.</li>
+<li><strong>yp3</strong> (<em>array</em>) – Array or list of latitudes (floats) of p3.</li>
+<li><strong>zp3</strong> (<em>array</em>) – Array or list of depths (floats) of p3.</li>
+<li><strong>origin</strong> (<a class="reference internal" href="shakelib.rupture.origin.html#shakelib.rupture.origin.Origin" title="shakelib.rupture.origin.Origin"><em>Origin</em></a>) – Reference to a ShakeMap Origin object.</li>
+<li><strong>group_index</strong> (<em>list</em>) – List of integers to indicate group index. If
 None then each quadrilateral is assumed to be in a different
 group since there is no guarantee that any of them are
 continuous.</li>
-<li><strong>reference</strong> (<em>str</em>) &#8211; String explaining where the rupture definition
+<li><strong>reference</strong> (<em>str</em>) – String explaining where the rupture definition
 came from (publication style reference, etc.)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">QuadRupture object, where the rupture is modeled as a series of
-trapezoids.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><dl class="docutils">
+<dt>QuadRupture object, where the rupture is modeled as a series of</dt>
+<dd><p class="first last">trapezoids.</p>
+</dd>
+</dl>
+</p>
 </td>
 </tr>
 </tbody>
@@ -382,9 +388,12 @@ trapezoids.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of quadrilaterals where each quad is a tuple of four
-<a class="reference external" href="https://github.com/gem/oq-hazardlib/blob/master/openquake/hazardlib/geo/point.py">Point</a>
-objects.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>List of quadrilaterals where each quad is a tuple of four</dt>
+<dd><a class="reference external" href="https://github.com/gem/oq-hazardlib/blob/master/openquake/hazardlib/geo/point.py">Point</a>
+objects.</dd>
+</dl>
+</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
@@ -482,8 +491,11 @@ segments.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of closed-loop latitude values; disconnected
-segments are separated by nans.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Numpy array of closed-loop latitude values; disconnected</dt>
+<dd>segments are separated by nans.</dd>
+</dl>
+</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array</td>
 </tr>
@@ -501,8 +513,11 @@ segments.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of closed-loop longitude values; disconnected
-segments are separated by nans.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Numpy array of closed-loop longitude values; disconnected</dt>
+<dd>segments are separated by nans.</dd>
+</dl>
+</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array</td>
 </tr>
@@ -520,8 +535,11 @@ segments.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of closed-loop depths; disconnected
-segments are separated by nans.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Numpy array of closed-loop depths; disconnected</dt>
+<dd>segments are separated by nans.</dd>
+</dl>
+</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array</td>
 </tr>
@@ -586,8 +604,11 @@ coordinates. Rupture groups are separated by numpy.NaN values.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">3-tuple of numpy arrays indicating X,Y,Z (lon,lat,depth)
-coordinates.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>3-tuple of numpy arrays indicating X,Y,Z (lon,lat,depth)</dt>
+<dd>coordinates.</dd>
+</dl>
+</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
@@ -620,9 +641,9 @@ coordinates.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
-<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
-<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+<li><strong>lon</strong> (<em>array</em>) – Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) – Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) – Numpy array of depths (km; positive down).</li>
 </ul>
 </td>
 </tr>
@@ -645,9 +666,9 @@ coordinates.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
-<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
-<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+<li><strong>lon</strong> (<em>array</em>) – Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) – Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) – Numpy array of depths (km; positive down).</li>
 </ul>
 </td>
 </tr>
@@ -671,14 +692,18 @@ coordinates.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>lon</strong> (<em>array</em>) &#8211; Numpy array of longitudes.</li>
-<li><strong>lat</strong> (<em>array</em>) &#8211; Numpy array of latitudes.</li>
-<li><strong>depth</strong> (<em>array</em>) &#8211; Numpy array of depths (km; positive down).</li>
+<li><strong>lon</strong> (<em>array</em>) – Numpy array of longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) – Numpy array of latitudes.</li>
+<li><strong>depth</strong> (<em>array</em>) – Numpy array of depths (km; positive down).</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Dictionary with keys for each of the GC2-related distances,
-which include &#8216;rx&#8217;, &#8216;ry&#8217;, &#8216;ry0&#8217;, &#8216;U&#8217;, &#8216;T&#8217;.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
+<dt>Dictionary with keys for each of the GC2-related distances,</dt>
+<dd><p class="first last">which include ‘rx’, ‘ry’, ‘ry0’, ‘U’, ‘T’.</p>
+</dd>
+</dl>
+</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>

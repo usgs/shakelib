@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -226,17 +230,17 @@
 <span class="sd">    `[link] &lt;http://peer.berkeley.edu/publications/peer_reports/reports_2013/webPEER-2013-09-Spudich.pdf&gt;`__</span>
 <span class="sd">&quot;&quot;&quot;</span>  <span class="c1"># noqa</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 
-<span class="kn">import</span> <span class="nn">openquake.hazardlib.geo</span> <span class="kn">as</span> <span class="nn">geo</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo.utils</span> <span class="kn">import</span> <span class="n">get_orthographic_projection</span>
+<span class="kn">import</span> <span class="nn">openquake.hazardlib.geo</span> <span class="k">as</span> <span class="nn">geo</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.geo.utils</span> <span class="k">import</span> <span class="n">get_orthographic_projection</span>
 
-<span class="kn">from</span> <span class="nn">shakelib.rupture</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">shakelib.distance</span> <span class="kn">import</span> <span class="n">get_distance</span>
-<span class="kn">from</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="kn">import</span> <span class="n">latlon2ecef</span>
-<span class="kn">from</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="kn">import</span> <span class="n">ecef2latlon</span>
-<span class="kn">from</span> <span class="nn">impactutils.vectorutils.vector</span> <span class="kn">import</span> <span class="n">Vector</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">shakelib.distance</span> <span class="k">import</span> <span class="n">get_distance</span>
+<span class="kn">from</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="k">import</span> <span class="n">latlon2ecef</span>
+<span class="kn">from</span> <span class="nn">impactutils.vectorutils.ecef</span> <span class="k">import</span> <span class="n">ecef2latlon</span>
+<span class="kn">from</span> <span class="nn">impactutils.vectorutils.vector</span> <span class="k">import</span> <span class="n">Vector</span>
 
 
 <div class="viewcode-block" id="Rowshandel2013"><a class="viewcode-back" href="../../../shakelib.directivity.rowshandel2013.html#shakelib.directivity.rowshandel2013.Rowshandel2013">[docs]</a><span class="k">class</span> <span class="nc">Rowshandel2013</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -246,7 +250,7 @@
     <span class="n">__periods</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">a_weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                 <span class="n">mtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">simpleDT</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+                 <span class="n">mtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">simpleDT</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor for rowshandel2013.</span>
 
@@ -301,9 +305,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__computeFd</span><span class="p">()</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Rowshandel2013.fromSites"><a class="viewcode-back" href="../../../shakelib.directivity.rowshandel2013.html#shakelib.directivity.rowshandel2013.Rowshandel2013.fromSites">[docs]</a>    <span class="k">def</span> <span class="nf">fromSites</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">a_weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                  <span class="n">mtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">simpleDT</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Rowshandel2013.fromSites"><a class="viewcode-back" href="../../../shakelib.directivity.rowshandel2013.html#shakelib.directivity.rowshandel2013.Rowshandel2013.fromSites">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromSites</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">rup</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">a_weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                  <span class="n">mtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">simpleDT</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Construct a rowshandel2013 instance from a sites instance.</span>
 
 <span class="sd">        Class method for constructing a rowshandel2013 instance from</span>
@@ -396,9 +400,9 @@
         <span class="n">xcipc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xi_prime</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xi_c</span>
 
         <span class="c1"># fd is a list with same length as T</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fd</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_T</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_DTlist</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_T</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_WPlist</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fd</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_DTlist</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_WPlist</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_T</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_T</span><span class="p">)):</span>
             <span class="n">period</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">c1sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__c1</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__periods</span> <span class="o">==</span> <span class="n">period</span><span class="p">]</span>
@@ -664,7 +668,7 @@
                 <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">site_y2</span><span class="p">,</span> <span class="n">site_x2</span><span class="p">)</span>
                 <span class="n">axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
                 <span class="n">rmat</span> <span class="o">=</span> <span class="n">_rotation_matrix</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="o">-</span><span class="n">alpha</span><span class="p">)</span>
-                <span class="n">llr</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">top_lat</span><span class="p">)</span>
+                <span class="n">llr</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">top_lat</span><span class="p">)</span>
 
                 <span class="c1"># Apply rotation to each point on trace</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">top_lat</span><span class="p">)):</span>
@@ -818,9 +822,9 @@
     <span class="n">s0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
 
     <span class="c1"># Convert from &#39;local&#39; to geographic coords</span>
-    <span class="n">s1_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">s1mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">],</span> <span class="n">s1mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">d1_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">d1mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">],</span> <span class="n">d1mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">s0_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">s0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">s1_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">s1mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">],</span> <span class="n">s1mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">d1_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">d1mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">],</span> <span class="n">d1mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">s0_ll</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">s0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># And then back to ECEF:</span>
     <span class="n">s1_ecef</span> <span class="o">=</span> <span class="n">latlon2ecef</span><span class="p">(</span><span class="n">s1_ll</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s1_ll</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s1mat</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">])</span>

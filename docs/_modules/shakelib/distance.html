@@ -30,6 +30,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="shakelib 4.0a documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
@@ -80,7 +83,8 @@
           
             
             
-                <ul>
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../shakelib.html">shakelib</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../shakelib.conversions.html">shakelib.conversions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../shakelib.conversions.imc.html">shakelib.conversions.imc</a><ul>
@@ -184,14 +188,14 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="c1"># third party imports</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.gsim.base</span> <span class="kn">import</span> <span class="n">GMPE</span>
-<span class="kn">from</span> <span class="nn">openquake.hazardlib.gsim</span> <span class="kn">import</span> <span class="n">base</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.gsim.base</span> <span class="k">import</span> <span class="n">GMPE</span>
+<span class="kn">from</span> <span class="nn">openquake.hazardlib.gsim</span> <span class="k">import</span> <span class="n">base</span>
 
 <span class="c1"># local imports</span>
-<span class="kn">from</span> <span class="nn">shakelib.utils.exception</span> <span class="kn">import</span> <span class="n">ShakeLibException</span>
-<span class="kn">from</span> <span class="nn">shakelib.rupture.edge_rupture</span> <span class="kn">import</span> <span class="n">EdgeRupture</span>
+<span class="kn">from</span> <span class="nn">shakelib.utils.exception</span> <span class="k">import</span> <span class="n">ShakeLibException</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture.edge_rupture</span> <span class="k">import</span> <span class="n">EdgeRupture</span>
 
 
 <div class="viewcode-block" id="Distance"><a class="viewcode-back" href="../../shakelib.distance.html#shakelib.distance.Distance">[docs]</a><span class="k">class</span> <span class="nc">Distance</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -208,7 +212,7 @@
 <span class="sd">        Report 2015-1028, 20 p., http://dx.doi.org/10.3133/ofr20151028.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gmpe</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">rupture</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gmpe</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">dep</span><span class="p">,</span> <span class="n">rupture</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor for Distance class.</span>
 
@@ -230,8 +234,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_distance_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calcDistanceContext</span><span class="p">(</span>
             <span class="n">gmpe</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">dep</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Distance.fromSites"><a class="viewcode-back" href="../../shakelib.distance.html#shakelib.distance.Distance.fromSites">[docs]</a>    <span class="k">def</span> <span class="nf">fromSites</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">gmpe</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">):</span>
+<div class="viewcode-block" id="Distance.fromSites"><a class="viewcode-back" href="../../shakelib.distance.html#shakelib.distance.Distance.fromSites">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromSites</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">gmpe</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">rup</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convenience class method to construct a Distance object from a sites</span>
 <span class="sd">        object.</span>

@@ -8,8 +8,8 @@ install:
 #    - conda config --set always_yes yes --set changeps1 no
 #    - conda info -a
     - bash install-dependencies.sh -t
-    - conda list
     - source activate shakelib2
+    - conda list
     # Install shakelib
     - python setup.py install
 before_script:

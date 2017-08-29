@@ -4,11 +4,37 @@ echo $PATH
 VENV=shakelib2
 PYVER=3.5
 
+# Is conda installed?
+conda=$(which condas)
+if [ ! "$conda" ] ; then
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    bash miniconda.sh -f -b -p $HOME/miniconda
+    export PATH="$HOME/miniconda/bin:$PATH"
+fi
+
+conda update -q conda
+conda config --prepend channels conda-forge
+conda config --append channels digitalglobe # for rasterio v 1.0a9
+conda config --append channels ioos # for rasterio v 1.0a2
+
 unamestr=`uname`
 if [[ "$unamestr" == 'Linux' ]]; then
     DEPARRAY=(numpy=1.11 scipy=0.19.1 matplotlib=2.0.2 rasterio=1.0a2 pandas=0.20.3 h5py=2.7.0 gdal=2.1.4 pytest=3.2.0 pytest-cov=2.5.1 cartopy=0.15.1 fiona=1.7.8 numexpr=2.6.2 configobj=5.0.6 decorator=4.1.2 versioneer==0.18)
 elif [[ "$unamestr" == 'FreeBSD' ]] || [[ "$unamestr" == 'Darwin' ]]; then
    DEPARRAY=(numpy=1.13.1 scipy=0.19.1 matplotlib=2.0.2 rasterio=1.0a9 pandas=0.20.3 h5py=2.7.0 gdal=2.1.4 pytest=3.2.0 pytest-cov=2.5.1 cartopy=0.15.1 fiona=1.7.8 numexpr=2.6.2 configobj=5.0.6 decorator=4.1.2 versioneer==0.18)
+fi
+
+# Additional deps, not not needed for Travis
+travis=0
+while getopts t FLAG; do
+  case $FLAG in
+    t)
+      travis=1
+      ;;
+  esac
+done
+if [ $travis == 0 ] ; then
+    DEPARRAY+=(ipython=6.1.0 spyder=3.2.1-py35_0 jupyter=1.0.0 seaborn=0.8.0 sphinx=1.6.3)
 fi
 
 # Turn off whatever other virtual environment user might be in

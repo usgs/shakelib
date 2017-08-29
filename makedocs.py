@@ -81,7 +81,7 @@ def main(args):
     res, stdout, stderr = get_command_output('sphinx-build -a -E doc_source docs')
     if not res:
         raise Exception('Could not build HTML for API documentation. - '
-                        'error "%s"' % stderr)
+                        'error "%s"' % stderr.decode())
     if args.verbose:
         print(stdout.decode('utf-8'))
         print(stderr.decode('utf-8'))

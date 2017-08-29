@@ -37,6 +37,8 @@ if [ $travis == 0 ] ; then
     DEPARRAY+=(ipython=6.1.0 spyder=3.2.1-py35_0 jupyter=1.0.0 seaborn=0.8.0 sphinx=1.6.3)
 fi
 
+echo $DEPARRAY
+
 # Turn off whatever other virtual environment user might be in
 source deactivate
 

@@ -12,7 +12,7 @@ if [ ! "$conda" ] ; then
     export PATH="$HOME/miniconda/bin:$PATH"
 fi
 
-conda update -q conda
+conda update -q -y conda
 conda config --prepend channels conda-forge
 conda config --append channels digitalglobe # for rasterio v 1.0a9
 conda config --append channels ioos # for rasterio v 1.0a2
@@ -46,7 +46,7 @@ cd $HOME;
 conda remove --name $VENV --all -y
 cd $CWD
 
-conda create --name $VENV --yes python=$PYVER ${DEPARRAY[*]}
+conda create --name $VENV -y python=$PYVER ${DEPARRAY[*]}
 
 # Activate the new environment
 source activate $VENV

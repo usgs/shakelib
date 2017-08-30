@@ -59,7 +59,7 @@ cd $CWD
 # Create a conda virtual environment
 echo "Creating the $VENV virtual environment"
 echo "with the following dependencies:"
-echo $DEPARRAY
+echo ${DEPARRAY[*]}
 conda create --name $VENV -y python=$PYVER ${DEPARRAY[*]}
 
 # Activate the new environment
@@ -77,9 +77,9 @@ rm openquake.zip
 
 # MapIO and impact-utils
 echo "Installing MapIO..."
-pip -v install https://github.com/usgs/MapIO/archive/master.zip
+pip -q install https://github.com/usgs/MapIO/archive/master.zip
 echo "Installing impact-utils..."
-pip -v install \
+pip -q install \
     https://github.com/usgs/earthquake-impact-utils/archive/master.zip
 
 # This package

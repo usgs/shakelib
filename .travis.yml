@@ -5,12 +5,11 @@ python:
 
 install:
     # Base requirements
-    - which conda
     - bash install.sh -t
     - echo $PATH
+    - export PATH="$HOME/miniconda/bin:$PATH"
     - source activate shakelib2
     - echo $PATH
-    - export PATH="$HOME/miniconda/bin:$PATH"
     - echo $PATH
     - conda list
 #    # Install shakelib

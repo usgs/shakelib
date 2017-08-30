@@ -7,7 +7,7 @@ install:
     # Base requirements
 #    - conda config --set always_yes yes --set changeps1 no
 #    - conda info -a
-    - bash install-dependencies.sh -t
+    - bash install.sh -t
     - source activate shakelib2
     - conda list
 #    # Install shakelib

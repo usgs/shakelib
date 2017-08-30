@@ -57,14 +57,16 @@ conda remove --name $VENV --all -y
 cd $CWD
 
 # Create a conda virtual environment
-echo "Creating a conda virtual environment"
+echo "Creating the $VENV virtual environment"
 echo "with the following dependencies:"
 echo $DEPARRAY
 conda create --name $VENV -y python=$PYVER ${DEPARRAY[*]}
 
 # Activate the new environment
-echo "Activating the virtual environment"
+conda info -e
+echo "Activating the $VENV virtual environment"
 source activate $VENV
+conda info -e
 
 # OpenQuake v2.5.0
 echo "Downloading OpenQuake v2.5.0..."

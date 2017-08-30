@@ -5,6 +5,7 @@ python:
 
 install:
     # Base requirements
+    - which conda
     - bash install.sh -t
     - echo $PATH
     - source activate shakelib2

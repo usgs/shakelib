@@ -86,9 +86,7 @@ pip -q install \
 
 # This package
 echo "Installing shakelib..."
-if [ $travis == 0 ] ; then
-    pip install -e .
-fi
+pip install -e .
 
 # Tell the user they have to activate this environment
 echo "Type 'source activate $VENV' to use this new virtual environment."

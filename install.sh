@@ -92,3 +92,8 @@ fi
 
 # Tell the user they have to activate this environment
 echo "Type 'source activate $VENV' to use this new virtual environment."
+
+echo "which conda:"
+which conda
+
+echo "which python"

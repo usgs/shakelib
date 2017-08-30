@@ -47,8 +47,6 @@ if [ $travis == 0 ] ; then
         sphinx=1.6.3)
 fi
 
-echo $DEPARRAY
-
 # Turn off whatever other virtual environment user might be in
 source deactivate
 
@@ -58,9 +56,14 @@ cd $HOME;
 conda remove --name $VENV --all -y
 cd $CWD
 
+# Create a conda virtual environment
+echo "Creating a conda virtual environment"
+echo "with the following dependencies:"
+echo $DEPARRAY
 conda create --name $VENV -y python=$PYVER ${DEPARRAY[*]}
 
 # Activate the new environment
+echo "Activating the virtual environment"
 source activate $VENV
 
 # OpenQuake v2.5.0

@@ -9,6 +9,7 @@ install:
 #    - conda info -a
     - bash install.sh -t
     - source activate shakelib2
+    - export PATH="$HOME/miniconda/bin:$PATH"
     - echo $PATH
     - conda list
 #    # Install shakelib

@@ -10,8 +10,8 @@ install:
     - bash install-dependencies.sh -t
     - source activate shakelib2
     - conda list
-    # Install shakelib
-    - python setup.py install
+#    # Install shakelib
+#    - python setup.py install
 before_script:
     # This is to take care of Invalid DISPLAY variable
     - "export DISPLAY=:99.0"

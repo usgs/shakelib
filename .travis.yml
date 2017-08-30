@@ -5,10 +5,10 @@ python:
 
 install:
     # Base requirements
-#    - conda config --set always_yes yes --set changeps1 no
-#    - conda info -a
     - bash install.sh -t
+    - echo $PATH
     - source activate shakelib2
+    - echo $PATH
     - export PATH="$HOME/miniconda/bin:$PATH"
     - echo $PATH
     - conda list

@@ -64,9 +64,11 @@ conda create --name $VENV -y python=$PYVER ${DEPARRAY[*]}
 
 # Activate the new environment
 conda info -e
+conda list
 echo "Activating the $VENV virtual environment"
 source activate $VENV
 conda info -e
+conda list
 
 # OpenQuake v2.5.0
 echo "Downloading OpenQuake v2.5.0..."

@@ -39,6 +39,11 @@ Documentation
 
 The API docs can be found `here <https://usgs.github.io/shakelib/>`_.
 
+Installation
+------------
+The `install.sh` script installs this package and all dependencies. It is 
+regularly tested on OSX and Ubuntu. 
+
 Dependencies
 ------------
 

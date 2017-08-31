@@ -6,6 +6,7 @@ python:
 install:
     # Install shakelib and requirements
     - bash install.sh -t
+    - export PATH="$HOME/miniconda/bin:$PATH"
     - source activate shakelib2
 before_script:
     # This is to take care of Invalid DISPLAY variable

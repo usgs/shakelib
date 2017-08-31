@@ -4,16 +4,9 @@ python:
     - "3.5"
 
 install:
-    # Base requirements
+    # Install shakelib and requirements
     - bash install.sh -t
-    - echo $PATH
-    - export PATH="$HOME/miniconda/bin:$PATH"
     - source activate shakelib2
-    - echo $PATH
-    - echo $PATH
-    - conda list
-#    # Install shakelib
-#    - python setup.py install
 before_script:
     # This is to take care of Invalid DISPLAY variable
     - "export DISPLAY=:99.0"

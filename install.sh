@@ -63,12 +63,8 @@ echo ${DEPARRAY[*]}
 conda create --name $VENV -y python=$PYVER ${DEPARRAY[*]}
 
 # Activate the new environment
-conda info -e
-conda list
 echo "Activating the $VENV virtual environment"
 source activate $VENV
-conda info -e
-conda list
 
 # OpenQuake v2.5.0
 echo "Downloading OpenQuake v2.5.0..."
@@ -90,8 +86,3 @@ pip install -e .
 
 # Tell the user they have to activate this environment
 echo "Type 'source activate $VENV' to use this new virtual environment."
-
-echo "which conda:"
-which conda
-
-echo "which python"

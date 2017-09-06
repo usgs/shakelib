@@ -321,6 +321,101 @@ def test_from_config_set_of_gmpes():
     np.testing.assert_allclose(lmean_target, lmean)
 
 
+def test_from_config_set_of_sets_3_sec():
+    # Mock up a minimal config dictionary
+    conf = {
+        'gmpe_modules': {
+            'ASK14': ['AbrahamsonEtAl2014',
+                      'openquake.hazardlib.gsim.abrahamson_2014'],
+            'C03': ['Campbell2003MwNSHMP2008',
+                    'openquake.hazardlib.gsim.campbell_2003'],
+            'Pea11': ['PezeshkEtAl2011NEHRPBC',
+                      'openquake.hazardlib.gsim.pezeshk_2011']
+        },
+        'component_modules': {
+            'RotD50': 'Average Horizontal (GMRotI50)',
+        },
+        'gmpe_sets': {
+            'active_crustal': {
+                'gmpes': ['ASK14'],
+                'weights': [1.0],
+            },
+            'stable_continental': {
+                'gmpes': ['C03', 'Pea11'],
+                'weights': [0.5, 0.5],
+                'weights_large_dist': [0, 1.0],
+                'dist_cutoff': 500,
+                'site_gmpes': ['ASK14'],
+                'weights_site_gmpes': []
+            },
+            'active_crustal_80_stable_continental_20': {
+                'gmpes': ['active_crustal', 'stable_continental'],
+                'weights': [0.8, 0.2]
+            }
+        },
+        'modeling': {
+            'gmpe': 'active_crustal_80_stable_continental_20'
+        },
+        'interp': {
+            'component': 'RotD50'
+        }
+    }
+
+    IMT = imt.SA(3.0)
+    # Get multigmpe from config
+    test = MultiGMPE.from_config(conf, filter_imt=IMT, verbose=True)
+
+    # Compute "by hand"
+    ASK14 = AbrahamsonEtAl2014()
+    C03 = Campbell2003MwNSHMP2008()
+    Pea11 = PezeshkEtAl2011NEHRPBC()
+
+    rctx = RuptureContext()
+    dctx = DistancesContext()
+    sctx = SitesContext()
+    sctx_rock = SitesContext()
+
+    rctx.rake = 0.0
+    rctx.dip = 90.0
+    rctx.ztor = 0.0
+    rctx.mag = 8.0
+    rctx.width = 10.0
+    rctx.hypo_depth = 8.0
+
+    dctx.rjb = np.logspace(1, np.log10(800), 100)
+    dctx.rrup = dctx.rjb
+    dctx.rhypo = dctx.rjb
+    dctx.rx = dctx.rjb
+    dctx.ry0 = dctx.rjb
+
+    sctx.vs30 = np.ones_like(dctx.rjb) * 275.0
+    sctx.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+    sctx_rock.vs30 = np.ones_like(dctx.rjb) * 760.0
+    sctx_rock.vs30measured = np.full_like(dctx.rjb, False, dtype='bool')
+
+    sctx = MultiGMPE.set_sites_depth_parameters(sctx, ASK14)
+    sctx_rock = MultiGMPE.set_sites_depth_parameters(sctx_rock, ASK14)
+
+    lmean_ask14, dummy = ASK14.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_ask14_rock, dummy = ASK14.get_mean_and_stddevs(
+        sctx_rock, rctx, dctx, IMT, [const.StdDev.TOTAL])
+#    lmean_c03, dummy = C03.get_mean_and_stddevs(
+#        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    lmean_pea11, dummy = Pea11.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+
+    lmean_acr = copy.copy(lmean_ask14)
+    lamp = lmean_ask14 - lmean_ask14_rock
+    lmean_scr = 1.0 * (lmean_pea11 + lamp)
+    lmean_scr[dctx.rjb > 500] = (lmean_pea11 + lamp)[dctx.rjb > 500]
+    lmean_target = 0.8 * lmean_acr + 0.2 * lmean_scr
+
+    lmean, sd = test.get_mean_and_stddevs(
+        sctx, rctx, dctx, IMT, [const.StdDev.TOTAL])
+    np.testing.assert_allclose(lmean_target, lmean)
+
+
 def test_from_config_single_gmpe():
     # Mock up a minimal config dictionary
     conf = {
@@ -1368,3 +1463,4 @@ if __name__ == '__main__':
     test_multigmpe_get_sites_depth_parameters()
     test_multigmpe_get_mean_stddevs()
     test_multigmpe_exceptions()
+    test_from_config_set_of_sets_3_sec()

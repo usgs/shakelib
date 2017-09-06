@@ -236,11 +236,11 @@ class MultiGMPE(GMPE):
             if set_of_sets is True:
                 mgmpes = []
                 for s in selected_gmpe_sets:
-                    mgmpes.append(cls.__mutigmpe_from_gmpe_set(
-                        conf, s, verbose=verbose))
+                    mgmpes.append(cls.__multigmpe_from_gmpe_set(
+                        conf, s, filter_imt=filter_imt, verbose=verbose))
                 out = MultiGMPE.from_list(mgmpes, gmpe_set_weights, imc=IMC)
             elif set_of_gmpes is True:
-                out = cls.__mutigmpe_from_gmpe_set(
+                out = cls.__multigmpe_from_gmpe_set(
                     conf,
                     selected_gmpe,
                     filter_imt=filter_imt,
@@ -261,7 +261,7 @@ class MultiGMPE(GMPE):
         out.DESCRIPTION = selected_gmpe
         return out
 
-    def __mutigmpe_from_gmpe_set(conf, set_name, filter_imt=None,
+    def __multigmpe_from_gmpe_set(conf, set_name, filter_imt=None,
                                  verbose=False):
         """
         Private method for constructing a MultiGMPE from a set_name.
@@ -693,6 +693,10 @@ def filter_gmpe_list(gmpes, wts, imt):
         tuple: List of GMPE instances and list of weights.
 
     """
+    if wts is None:
+        n = len(gmpes)
+        wts = [1 / n] * n
+
     per_max = [np.max(get_gmpe_sa_periods(g)) for g in gmpes]
     per_min = [np.min(get_gmpe_sa_periods(g)) for g in gmpes]
     if imt == PGA():

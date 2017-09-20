@@ -10,6 +10,7 @@ shakelib
     shakelib.gmice
     shakelib.plotting
     shakelib.rupture
+    shakelib.utils
 
 Submodules
 

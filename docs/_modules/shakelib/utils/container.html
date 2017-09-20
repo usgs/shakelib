@@ -1,0 +1,601 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>shakelib.utils.container &#8212; shakelib 4.0a documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '4.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for shakelib.utils.container</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># stdlib imports</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">io</span>
+
+<span class="c1"># third party imports</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># local imports</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture.factory</span> <span class="k">import</span> <span class="n">get_rupture</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture.point_rupture</span> <span class="k">import</span> <span class="n">PointRupture</span>
+<span class="kn">from</span> <span class="nn">shakelib.rupture.origin</span> <span class="k">import</span> <span class="n">Origin</span>
+<span class="kn">from</span> <span class="nn">shakelib.station</span> <span class="k">import</span> <span class="n">StationList</span>
+
+<span class="c1"># list of allowed data types in dictionaries</span>
+<span class="n">ALLOWED</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span>
+           <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>
+           <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+           <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
+           <span class="nb">dict</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span>
+           <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="InputContainer"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer">[docs]</a><span class="k">class</span> <span class="nc">InputContainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdfobj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiate an InputContainer from an open h5py File Object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hdfobj:  Open h5py File Object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span> <span class="o">=</span> <span class="n">hdfobj</span>
+
+<div class="viewcode-block" id="InputContainer.loadFromHDF"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.loadFromHDF">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">loadFromHDF</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">hdf_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiate an InputContainer from an HDF5 file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hdf_file: Valid path to HDF5 file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Instance of InputContainer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hdfobj</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">hdf_file</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span>
+        <span class="c1"># probably should do some validating to make sure relevant data exists</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="InputContainer.getFileName"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.getFileName">[docs]</a>    <span class="k">def</span> <span class="nf">getFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the name of the HDF5 file associated with this object..</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (str): Name of the file associated with this object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">filename</span></div>
+
+<div class="viewcode-block" id="InputContainer.loadFromInput"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.loadFromInput">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">loadFromInput</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">eventfile</span><span class="p">,</span> <span class="n">rupturefile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">datafiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version_history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiate an InputContainer from ShakeMap input data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename: Path to HDF5 file that will be created to encapsulate all</span>
+<span class="sd">                input data.</span>
+<span class="sd">            config: Dictionary containing all configuration information</span>
+<span class="sd">                necessary for ShakeMap ground motion and other calculations.</span>
+<span class="sd">            eventfile: Path to ShakeMap event.xml file.</span>
+<span class="sd">            rupturefile: Path to ShakeMap rupture text or JSON file.</span>
+<span class="sd">            datafiles: List of ShakeMap data (DYFI, strong motion) files.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Instance of InputContainer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># ----------------------------------------------------------------------</span>
+        <span class="c1"># open the file for writing, nuke if already exists</span>
+        <span class="c1"># ----------------------------------------------------------------------</span>
+        <span class="n">hdfobj</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span>
+
+        <span class="c1"># ----------------------------------------------------------------------</span>
+        <span class="c1"># The config and event info are mandatory</span>
+        <span class="c1"># write the config dictionary to a config group</span>
+        <span class="c1"># ----------------------------------------------------------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_storeConfig</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="c1"># stash the event.xml in a group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_storeEvent</span><span class="p">(</span><span class="n">eventfile</span><span class="p">)</span>
+
+        <span class="c1"># The rupture and data files are optional</span>
+        <span class="k">if</span> <span class="n">rupturefile</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_storeRupture</span><span class="p">(</span><span class="n">rupturefile</span><span class="p">)</span>
+
+        <span class="c1"># ----------------------------------------------------------------------</span>
+        <span class="c1"># create the stationlist object, then dump its database as a big string</span>
+        <span class="c1"># into the hdf</span>
+        <span class="c1"># ----------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">datafiles</span><span class="p">:</span>
+            <span class="n">station</span> <span class="o">=</span> <span class="n">StationList</span><span class="o">.</span><span class="n">loadFromXML</span><span class="p">(</span><span class="n">datafiles</span><span class="p">,</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stashStationList</span><span class="p">(</span><span class="n">station</span><span class="p">)</span>
+
+        <span class="c1"># ----------------------------------------------------------------------</span>
+        <span class="c1"># Store the version history.</span>
+        <span class="c1"># ----------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">version_history</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_storeHistory</span><span class="p">(</span><span class="n">version_history</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="InputContainer.getConfig"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.getConfig">[docs]</a>    <span class="k">def</span> <span class="nf">getConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the config dictionary that was passed in via input files.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary of configuration information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">_h5group2dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+    <span class="k">def</span> <span class="nf">_storeConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">config_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">)</span>
+        <span class="n">_dict2h5group</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">config_group</span><span class="p">)</span>
+
+<div class="viewcode-block" id="InputContainer.updateConfig"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.updateConfig">[docs]</a>    <span class="k">def</span> <span class="nf">updateConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replaces the existing config dictionary with a new one..</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            config: Dictionary containing all configuration information</span>
+<span class="sd">                necessary for ShakeMap ground motion and other calculations.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            nothing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;config&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_storeConfig</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_storeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eventfile</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">event_string</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">eventfile</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="n">event_string</span> <span class="o">=</span> <span class="n">eventfile</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+        <span class="n">event_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;event&#39;</span><span class="p">)</span>
+        <span class="n">event_group</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;event_string&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event_string</span>
+
+<div class="viewcode-block" id="InputContainer.updateEvent"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.updateEvent">[docs]</a>    <span class="k">def</span> <span class="nf">updateEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eventfile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replaces the existing event XML data with new data from an</span>
+<span class="sd">        event.xml file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            eventfile: Path to ShakeMap event.xml file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            nothing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;event&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;event&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_storeEvent</span><span class="p">(</span><span class="n">eventfile</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_storeRupture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rupturefile</span><span class="p">):</span>
+        <span class="n">rupturedata</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">rupturefile</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">rupture_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;rupture&#39;</span><span class="p">)</span>
+        <span class="n">rupture_group</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;rupture_string&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rupturedata</span>
+
+<div class="viewcode-block" id="InputContainer.updateRupture"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.updateRupture">[docs]</a>    <span class="k">def</span> <span class="nf">updateRupture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rupturefile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replaces the existing rupture data with new data from a</span>
+<span class="sd">        rupture file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rupturefile: Path to ShakeMap rupture text or JSON file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            nothing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;rupture&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;rupture&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_storeRupture</span><span class="p">(</span><span class="n">rupturefile</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="InputContainer.getRupture"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.getRupture">[docs]</a>    <span class="k">def</span> <span class="nf">getRupture</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a Rupture object (PointRupture if no rupture file was</span>
+<span class="sd">        specified.)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Rupture (Point, Edge or Quad Rupture).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getOrigin</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;rupture&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointRupture</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
+
+        <span class="n">ruptext</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;rupture&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;rupture_string&#39;</span><span class="p">]</span>
+        <span class="n">rupio</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">ruptext</span><span class="p">)</span>
+        <span class="n">rupture</span> <span class="o">=</span> <span class="n">get_rupture</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">rupio</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rupture</span></div>
+
+<div class="viewcode-block" id="InputContainer.getStationList"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.getStationList">[docs]</a>    <span class="k">def</span> <span class="nf">getStationList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a StationList object if data files were supplied, or None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            StationList object if data files were supplied, or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;station&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">station_sql</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;station&#39;</span><span class="p">][()]</span>
+        <span class="k">return</span> <span class="n">StationList</span><span class="o">.</span><span class="n">loadFromSQL</span><span class="p">(</span><span class="n">station_sql</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="InputContainer.addData"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.addData">[docs]</a>    <span class="k">def</span> <span class="nf">addData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datafiles</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Append new data to the internal StationList object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            datafiles: List of paths to XML datafiles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;station&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="n">stationlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStationList</span><span class="p">()</span>
+            <span class="n">stationlist</span><span class="o">.</span><span class="n">addData</span><span class="p">(</span><span class="n">datafiles</span><span class="p">)</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;station&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stationlist</span> <span class="o">=</span> <span class="n">StationList</span><span class="o">.</span><span class="n">loadFromXML</span><span class="p">(</span><span class="n">datafiles</span><span class="p">,</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stashStationList</span><span class="p">(</span><span class="n">stationlist</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="InputContainer.stashStationList"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.stashStationList">[docs]</a>    <span class="k">def</span> <span class="nf">stashStationList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">station</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Insert a new StationList object into the data file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            station: StationList object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;station&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">station</span><span class="o">.</span><span class="n">dumpToSQL</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="InputContainer.getHistory"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.getHistory">[docs]</a>    <span class="k">def</span> <span class="nf">getHistory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the history dictionary.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary holding the history list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;version_history&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_h5group2dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;version_history&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">_storeHistory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_history</span><span class="p">):</span>
+        <span class="n">history_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;version_history&#39;</span><span class="p">)</span>
+        <span class="n">_dict2h5group</span><span class="p">(</span><span class="n">version_history</span><span class="p">,</span> <span class="n">history_group</span><span class="p">)</span>
+
+<div class="viewcode-block" id="InputContainer.updateHistory"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.updateHistory">[docs]</a>    <span class="k">def</span> <span class="nf">updateHistory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_history</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;version_history&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;version_history&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_storeHistory</span><span class="p">(</span><span class="n">version_history</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="InputContainer.getOrigin"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.getOrigin">[docs]</a>    <span class="k">def</span> <span class="nf">getOrigin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an Origin object for this earthquake.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Origin object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">origin_file</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="s1">&#39;event&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;event_string&#39;</span><span class="p">])</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="n">Origin</span><span class="o">.</span><span class="n">fromFile</span><span class="p">(</span><span class="n">origin_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">origin</span></div>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="InputContainer.close"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the HDF5 file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="OutputContainer"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer">[docs]</a><span class="k">class</span> <span class="nc">OutputContainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generic hdf5 output container to store metadata and data sets (with or</span>
+<span class="sd">    without associated metadata).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdfobj</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span> <span class="o">=</span> <span class="n">hdfobj</span>
+
+<div class="viewcode-block" id="OutputContainer.loadFromHDF"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.loadFromHDF">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">loadFromHDF</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">hdffile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load an HDF file into the object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hdffile (str):</span>
+<span class="sd">                Path to file to be loaded.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A :class:`OutputContainer` object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hdfobj</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">hdffile</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OutputContainer.createEmpty"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.createEmpty">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">createEmpty</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an empty HDF file/object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename (str):</span>
+<span class="sd">                Path to file to be created.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An empty :class:`OutputContainer` object tied to file</span>
+<span class="sd">            &#39;filename&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">hdfobj</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OutputContainer.addMetadata"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.addMetadata">[docs]</a>    <span class="k">def</span> <span class="nf">addMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;metadata&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a dictionary of metatata as a group.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (dict):</span>
+<span class="sd">                Dictionary to be saved as a group.</span>
+<span class="sd">            name (str)(optional):</span>
+<span class="sd">                The name of the group holding the metadata. The default is</span>
+<span class="sd">                &#39;metadata&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The h5py group holding the metadata.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">mgroup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">_dict2h5group</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mgroup</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mgroup</span></div>
+
+<div class="viewcode-block" id="OutputContainer.getMetadata"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.getMetadata">[docs]</a>    <span class="k">def</span> <span class="nf">getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;metadata&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve a dictionary of metatata from a group.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str)(optional):</span>
+<span class="sd">                The name of the group holding the metadata. The default is</span>
+<span class="sd">                &#39;metadata&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary holding the metadata.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">_h5group2dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="n">name</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="OutputContainer.addData"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.addData">[docs]</a>    <span class="k">def</span> <span class="nf">addData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an array of data (and, optionally, it&#39;s metadata) as a dataset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (array):</span>
+<span class="sd">                Array to be saved as a dataset.</span>
+<span class="sd">            name (str):</span>
+<span class="sd">                The name of the dataset holding the data.</span>
+<span class="sd">            metadata (dict)(optional):</span>
+<span class="sd">                An (optional) dictionary of metadata to be associated with</span>
+<span class="sd">                the dataset. The dictionary must contain only scalars and</span>
+<span class="sd">                numpy arrays.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The h5py dataset holding the data and metadata.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">dset</span></div>
+
+<div class="viewcode-block" id="OutputContainer.getData"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.getData">[docs]</a>    <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve an array of data and any associated metadata from a dataset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str):</span>
+<span class="sd">                The name of the dataset holding the data and metadata.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An array of data and a dictionary of metadata.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">dset</span><span class="p">[()]</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">metadata</span></div>
+
+<div class="viewcode-block" id="OutputContainer.close"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close the HDF5 file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OutputContainer.getIMTlist"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.getIMTlist">[docs]</a>    <span class="k">def</span> <span class="nf">getIMTlist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of IMT grids in the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">imtlist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;PGA&#39;</span><span class="p">,</span> <span class="s1">&#39;PGV&#39;</span><span class="p">,</span> <span class="s1">&#39;MMI&#39;</span><span class="p">)</span> <span class="ow">or</span> \
+               <span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;SA(&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">)):</span>
+                <span class="n">imtlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">imtlist</span></div></div>
+
+<span class="k">def</span> <span class="nf">_dict2h5group</span><span class="p">(</span><span class="n">mydict</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively save dictionaries into groups in an HDF group..</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mydict (dict):</span>
+<span class="sd">            Dictionary of values to save in group or dataset.  Dictionary</span>
+<span class="sd">            can contain objects of the following types: str, unicode, int,</span>
+<span class="sd">            float, long, list, tuple, np. ndarray, dict,</span>
+<span class="sd">            datetime.datetime, collections.OrderedDict</span>
+<span class="sd">        group:</span>
+<span class="sd">            HDF group or dataset in which to storedictionary of data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">        nothing</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">mydict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">tvalue</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tvalue</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ALLOWED</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Unsupported metadata value type &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">tvalue</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">subgroup</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">_dict2h5group</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">subgroup</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">_encode_list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">group</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+
+<span class="k">def</span> <span class="nf">_encode_list</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_encode_list</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">def</span> <span class="nf">_h5group2dict</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively create dictionaries from groups in an HDF file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        group:</span>
+<span class="sd">            HDF5 group object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      Dictionary of metadata (possibly containing other dictionaries).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tdict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># attrs are NOT subgroups</span>
+        <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">tdict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># these are going to be the subgroups</span>
+        <span class="n">tdict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_h5group2dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_convert</span><span class="p">(</span><span class="n">tdict</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_convert</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively convert the bytes elements in a dictionary&#39;s values, lists,</span>
+<span class="sd">    and tuples into ascii.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (dict):</span>
+<span class="sd">            A dictionary.</span>
+
+<span class="sd">    Returns;</span>
+<span class="sd">        A copy of the dictionary with the byte strings converted to ascii.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_convert</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_convert</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_convert</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">shakelib</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../shakelib.html">shakelib</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

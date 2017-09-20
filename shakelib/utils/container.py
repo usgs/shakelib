@@ -50,9 +50,6 @@ class InputContainer(object):
         # probably should do some validating to make sure relevant data exists
         return cls(hdfobj)
 
-    def getFileName(self):
-        return self._hdfobj.filename
-
     @classmethod
     def loadFromInput(cls, filename, config, eventfile, rupturefile=None,
                       datafiles=None, version_history=None):
@@ -107,9 +104,24 @@ class InputContainer(object):
 
         return self
 
+    def getFileName(self):
+        """
+        Return the name of the HDF5 file associated with this object..
+
+        Args:
+            none
+
+        Returns:
+            (str): Name of the file associated with this object.
+        """
+        return self._hdfobj.filename
+
     def getConfig(self):
         """
         Return the config dictionary that was passed in via input files.
+
+        Args:
+            none
 
         Returns:
             Dictionary of configuration information.
@@ -122,6 +134,16 @@ class InputContainer(object):
         _dict2h5group(config, config_group)
 
     def updateConfig(self, config):
+        """
+        Replaces the existing config dictionary with a new one..
+
+        Args:
+            config: Dictionary containing all configuration information
+                necessary for ShakeMap ground motion and other calculations.
+
+        Returns:
+            nothing
+        """
         if 'config' in self._hdfobj:
             del self._hdfobj['config']
         self._storeConfig(config)
@@ -135,6 +157,16 @@ class InputContainer(object):
         event_group.attrs['event_string'] = event_string
 
     def updateEvent(self, eventfile):
+        """
+        Replaces the existing event XML data with new data from an
+        event.xml file.
+
+        Args:
+            eventfile: Path to ShakeMap event.xml file.
+
+        Returns:
+            nothing
+        """
         if 'event' in self._hdfobj:
             del self._hdfobj['event']
         self._storeEvent(eventfile)
@@ -145,6 +177,16 @@ class InputContainer(object):
         rupture_group.attrs['rupture_string'] = rupturedata
 
     def updateRupture(self, rupturefile):
+        """
+        Replaces the existing rupture data with new data from a
+        rupture file.
+
+        Args:
+            rupturefile: Path to ShakeMap rupture text or JSON file.
+
+        Returns:
+            nothing
+        """
         if 'rupture' in self._hdfobj:
             del self._hdfobj['rupture']
         self._storeRupture(rupturefile)

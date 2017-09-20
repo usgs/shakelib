@@ -91,18 +91,6 @@
         <span class="c1"># probably should do some validating to make sure relevant data exists</span>
         <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="InputContainer.getFileName"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.getFileName">[docs]</a>    <span class="k">def</span> <span class="nf">getFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the name of the HDF5 file associated with this object..</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            none</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            (str): Name of the file associated with this object.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">filename</span></div>
-
 <div class="viewcode-block" id="InputContainer.loadFromInput"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.loadFromInput">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">loadFromInput</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">eventfile</span><span class="p">,</span> <span class="n">rupturefile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">datafiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version_history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -156,6 +144,18 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_storeHistory</span><span class="p">(</span><span class="n">version_history</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="InputContainer.getFileName"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.getFileName">[docs]</a>    <span class="k">def</span> <span class="nf">getFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the name of the HDF5 file associated with this object..</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (str): Name of the file associated with this object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="o">.</span><span class="n">filename</span></div>
 
 <div class="viewcode-block" id="InputContainer.getConfig"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.getConfig">[docs]</a>    <span class="k">def</span> <span class="nf">getConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

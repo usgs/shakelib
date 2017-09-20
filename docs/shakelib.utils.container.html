@@ -1,0 +1,481 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>shakelib.utils.container &#8212; shakelib 4.0a documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '4.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="shakelib.utils.exception" href="shakelib.utils.exception.html" />
+    <link rel="prev" title="shakelib.utils" href="shakelib.utils.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-shakelib.utils.container">
+<span id="shakelib-utils-container"></span><h1>shakelib.utils.container<a class="headerlink" href="#module-shakelib.utils.container" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shakelib.utils.container.InputContainer">
+<em class="property">class </em><code class="descclassname">shakelib.utils.container.</code><code class="descname">InputContainer</code><span class="sig-paren">(</span><em>hdfobj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Instantiate an InputContainer from an open h5py File Object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hdfobj</strong> – Open h5py File Object.</td>
+</tr>
+</tbody>
+</table>
+<dl class="classmethod">
+<dt id="shakelib.utils.container.InputContainer.loadFromHDF">
+<em class="property">classmethod </em><code class="descname">loadFromHDF</code><span class="sig-paren">(</span><em>hdf_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.loadFromHDF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.loadFromHDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiate an InputContainer from an HDF5 file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hdf_file</strong> – Valid path to HDF5 file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Instance of InputContainer.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.getFileName">
+<code class="descname">getFileName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.getFileName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.getFileName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the HDF5 file associated with this object..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>none</strong> – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Name of the file associated with this object.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(str)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="shakelib.utils.container.InputContainer.loadFromInput">
+<em class="property">classmethod </em><code class="descname">loadFromInput</code><span class="sig-paren">(</span><em>filename</em>, <em>config</em>, <em>eventfile</em>, <em>rupturefile=None</em>, <em>datafiles=None</em>, <em>version_history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.loadFromInput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.loadFromInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiate an InputContainer from ShakeMap input data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> – Path to HDF5 file that will be created to encapsulate all
+input data.</li>
+<li><strong>config</strong> – Dictionary containing all configuration information
+necessary for ShakeMap ground motion and other calculations.</li>
+<li><strong>eventfile</strong> – Path to ShakeMap event.xml file.</li>
+<li><strong>rupturefile</strong> – Path to ShakeMap rupture text or JSON file.</li>
+<li><strong>datafiles</strong> – List of ShakeMap data (DYFI, strong motion) files.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of InputContainer.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.getConfig">
+<code class="descname">getConfig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.getConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.getConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the config dictionary that was passed in via input files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>none</strong> – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Dictionary of configuration information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.updateConfig">
+<code class="descname">updateConfig</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.updateConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.updateConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the existing config dictionary with a new one..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> – Dictionary containing all configuration information
+necessary for ShakeMap ground motion and other calculations.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.updateEvent">
+<code class="descname">updateEvent</code><span class="sig-paren">(</span><em>eventfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.updateEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.updateEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the existing event XML data with new data from an
+event.xml file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>eventfile</strong> – Path to ShakeMap event.xml file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.updateRupture">
+<code class="descname">updateRupture</code><span class="sig-paren">(</span><em>rupturefile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.updateRupture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.updateRupture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the existing rupture data with new data from a
+rupture file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rupturefile</strong> – Path to ShakeMap rupture text or JSON file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.getRupture">
+<code class="descname">getRupture</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.getRupture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.getRupture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Rupture object (PointRupture if no rupture file was
+specified.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Rupture (Point, Edge or Quad Rupture).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.getStationList">
+<code class="descname">getStationList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.getStationList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.getStationList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a StationList object if data files were supplied, or None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">StationList object if data files were supplied, or None.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.addData">
+<code class="descname">addData</code><span class="sig-paren">(</span><em>datafiles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.addData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.addData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append new data to the internal StationList object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>datafiles</strong> – List of paths to XML datafiles.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.stashStationList">
+<code class="descname">stashStationList</code><span class="sig-paren">(</span><em>station</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.stashStationList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.stashStationList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a new StationList object into the data file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>station</strong> – StationList object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.getHistory">
+<code class="descname">getHistory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.getHistory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.getHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the history dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dictionary holding the history list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.updateHistory">
+<code class="descname">updateHistory</code><span class="sig-paren">(</span><em>version_history</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.updateHistory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.updateHistory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.getOrigin">
+<code class="descname">getOrigin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.getOrigin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.getOrigin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an Origin object for this earthquake.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Origin object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.InputContainer.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#InputContainer.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.InputContainer.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the HDF5 file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="shakelib.utils.container.OutputContainer">
+<em class="property">class </em><code class="descclassname">shakelib.utils.container.</code><code class="descname">OutputContainer</code><span class="sig-paren">(</span><em>hdfobj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#OutputContainer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.OutputContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Generic hdf5 output container to store metadata and data sets (with or
+without associated metadata).</p>
+<dl class="classmethod">
+<dt id="shakelib.utils.container.OutputContainer.loadFromHDF">
+<em class="property">classmethod </em><code class="descname">loadFromHDF</code><span class="sig-paren">(</span><em>hdffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#OutputContainer.loadFromHDF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.OutputContainer.loadFromHDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an HDF file into the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hdffile</strong> (<em>str</em>) – Path to file to be loaded.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="#shakelib.utils.container.OutputContainer" title="shakelib.utils.container.OutputContainer"><code class="xref py py-class docutils literal"><span class="pre">OutputContainer</span></code></a> object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="shakelib.utils.container.OutputContainer.createEmpty">
+<em class="property">classmethod </em><code class="descname">createEmpty</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#OutputContainer.createEmpty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.OutputContainer.createEmpty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an empty HDF file/object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>str</em>) – Path to file to be created.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An empty <a class="reference internal" href="#shakelib.utils.container.OutputContainer" title="shakelib.utils.container.OutputContainer"><code class="xref py py-class docutils literal"><span class="pre">OutputContainer</span></code></a> object tied to file
+‘filename’.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.OutputContainer.addMetadata">
+<code class="descname">addMetadata</code><span class="sig-paren">(</span><em>data</em>, <em>name='metadata'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#OutputContainer.addMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.OutputContainer.addMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a dictionary of metatata as a group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>dict</em>) – Dictionary to be saved as a group.</li>
+<li><strong>name</strong> (<em>str</em><em>)</em><em>(</em><em>optional</em>) – The name of the group holding the metadata. The default is
+‘metadata’.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The h5py group holding the metadata.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.OutputContainer.getMetadata">
+<code class="descname">getMetadata</code><span class="sig-paren">(</span><em>name='metadata'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#OutputContainer.getMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.OutputContainer.getMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a dictionary of metatata from a group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em><em>)</em><em>(</em><em>optional</em>) – The name of the group holding the metadata. The default is
+‘metadata’.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary holding the metadata.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.OutputContainer.addData">
+<code class="descname">addData</code><span class="sig-paren">(</span><em>data</em>, <em>name</em>, <em>metadata=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#OutputContainer.addData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.OutputContainer.addData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an array of data (and, optionally, it’s metadata) as a dataset.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>array</em>) – Array to be saved as a dataset.</li>
+<li><strong>name</strong> (<em>str</em>) – The name of the dataset holding the data.</li>
+<li><strong>metadata</strong> (<em>dict</em><em>)</em><em>(</em><em>optional</em>) – An (optional) dictionary of metadata to be associated with
+the dataset. The dictionary must contain only scalars and
+numpy arrays.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The h5py dataset holding the data and metadata.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.OutputContainer.getData">
+<code class="descname">getData</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#OutputContainer.getData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.OutputContainer.getData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve an array of data and any associated metadata from a dataset.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – The name of the dataset holding the data and metadata.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An array of data and a dictionary of metadata.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.OutputContainer.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#OutputContainer.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.OutputContainer.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the HDF5 file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.utils.container.OutputContainer.getIMTlist">
+<code class="descname">getIMTlist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/container.html#OutputContainer.getIMTlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.container.OutputContainer.getIMTlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of IMT grids in the file.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">shakelib</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="shakelib.html">shakelib</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="shakelib.conversions.html">shakelib.conversions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.correlation.html">shakelib.correlation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.directivity.html">shakelib.directivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.gmice.html">shakelib.gmice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.plotting.html">shakelib.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.rupture.html">shakelib.rupture</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="shakelib.utils.html">shakelib.utils</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.utils.container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.utils.exception.html">shakelib.utils.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.utils.utils.html">shakelib.utils.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.multigmpe.html">shakelib.multigmpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.sites.html">shakelib.sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.station.html">shakelib.station</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shakelib.virtualipe.html">shakelib.virtualipe</a></li>
+</ul>
+</li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

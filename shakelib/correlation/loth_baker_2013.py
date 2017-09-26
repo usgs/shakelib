@@ -94,19 +94,24 @@ class LothBaker2013(object):
 
     def getCorrelation(self, ix1, ix2, h):
         """
+        Compute the correlation between two periods and a separation distance
+        of h.
+
+        The indices (ix1 and ix2) and h must have the same dimensions. The
+        indices may be equal, and there is no restriction on which one is
+        larger. The indices refer to periods in the 'period' argument to the
+        class constructor.
+
         Args:
-            ix1, ix2 (numpy arrays):
-                The indices of the two periods of interest. The indices refer
-                to periods in the 'period' argument to the class constructor.
-                The indices may be equal, and there is no restriction on which
-                one is larger.
-            h (nd array):
+            ix1 (ndarray):
+                The indices of the first period of interest.
+            ix2 (ndarrays):
+                The indices of the second period of interest.
+            h (ndarray):
                 The separation distance between two sites (units of km).
 
-            ix1, ix2, and h must have the same dimensions.
-
         Returns:
-            rho (nd array):
+            ndarray:
                 The predicted correlation coefficient. The output array
                 will have the same shape as the inputs.
 

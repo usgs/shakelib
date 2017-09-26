@@ -135,19 +135,24 @@
 
 <div class="viewcode-block" id="LothBaker2013.getCorrelation"><a class="viewcode-back" href="../../../shakelib.correlation.loth_baker_2013.html#shakelib.correlation.loth_baker_2013.LothBaker2013.getCorrelation">[docs]</a>    <span class="k">def</span> <span class="nf">getCorrelation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the correlation between two periods and a separation distance</span>
+<span class="sd">        of h.</span>
+
+<span class="sd">        The indices (ix1 and ix2) and h must have the same dimensions. The</span>
+<span class="sd">        indices may be equal, and there is no restriction on which one is</span>
+<span class="sd">        larger. The indices refer to periods in the &#39;period&#39; argument to the</span>
+<span class="sd">        class constructor.</span>
+
 <span class="sd">        Args:</span>
-<span class="sd">            ix1, ix2 (numpy arrays):</span>
-<span class="sd">                The indices of the two periods of interest. The indices refer</span>
-<span class="sd">                to periods in the &#39;period&#39; argument to the class constructor.</span>
-<span class="sd">                The indices may be equal, and there is no restriction on which</span>
-<span class="sd">                one is larger.</span>
-<span class="sd">            h (nd array):</span>
+<span class="sd">            ix1 (ndarray):</span>
+<span class="sd">                The indices of the first period of interest.</span>
+<span class="sd">            ix2 (ndarrays):</span>
+<span class="sd">                The indices of the second period of interest.</span>
+<span class="sd">            h (ndarray):</span>
 <span class="sd">                The separation distance between two sites (units of km).</span>
 
-<span class="sd">            ix1, ix2, and h must have the same dimensions.</span>
-
 <span class="sd">        Returns:</span>
-<span class="sd">            rho (nd array):</span>
+<span class="sd">            ndarray:</span>
 <span class="sd">                The predicted correlation coefficient. The output array</span>
 <span class="sd">                will have the same shape as the inputs.</span>
 

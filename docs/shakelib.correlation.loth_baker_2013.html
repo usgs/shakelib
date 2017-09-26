@@ -72,17 +72,20 @@ sorted from smallest to largest.</td>
 <dl class="method">
 <dt id="shakelib.correlation.loth_baker_2013.LothBaker2013.getCorrelation">
 <code class="descname">getCorrelation</code><span class="sig-paren">(</span><em>ix1</em>, <em>ix2</em>, <em>h</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/correlation/loth_baker_2013.html#LothBaker2013.getCorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.correlation.loth_baker_2013.LothBaker2013.getCorrelation" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Compute the correlation between two periods and a separation distance
+of h.</p>
+<p>The indices (ix1 and ix2) and h must have the same dimensions. The
+indices may be equal, and there is no restriction on which one is
+larger. The indices refer to periods in the ‘period’ argument to the
+class constructor.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ix2</strong> (<em>ix1</em><em>,</em>) – The indices of the two periods of interest. The indices refer
-to periods in the ‘period’ argument to the class constructor.
-The indices may be equal, and there is no restriction on which
-one is larger.</li>
-<li><strong>h</strong> (<em>nd array</em>) – The separation distance between two sites (units of km).</li>
-<li><strong>ix2</strong><strong>, </strong><strong>and h must have the same dimensions.</strong> (<em>ix1</em><em>,</em>) – </li>
+<li><strong>ix1</strong> (<em>ndarray</em>) – The indices of the first period of interest.</li>
+<li><strong>ix2</strong> (<em>ndarrays</em>) – The indices of the second period of interest.</li>
+<li><strong>h</strong> (<em>ndarray</em>) – The separation distance between two sites (units of km).</li>
 </ul>
 </td>
 </tr>
@@ -90,7 +93,7 @@ one is larger.</li>
 will have the same shape as the inputs.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">rho (nd array)</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
 </td>
 </tr>
 </tbody>

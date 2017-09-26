@@ -77,7 +77,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span> <span class="o">=</span> <span class="n">hdfobj</span>
 
 <div class="viewcode-block" id="InputContainer.loadFromHDF"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.loadFromHDF">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">loadFromHDF</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">hdf_file</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">loadFromHDF</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">hdf_file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Instantiate an InputContainer from an HDF5 file.</span>
 
@@ -89,10 +89,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">hdfobj</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">hdf_file</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span>
         <span class="c1"># probably should do some validating to make sure relevant data exists</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="InputContainer.loadFromInput"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.InputContainer.loadFromInput">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">loadFromInput</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">eventfile</span><span class="p">,</span> <span class="n">rupturefile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">loadFromInput</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">eventfile</span><span class="p">,</span> <span class="n">rupturefile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">datafiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version_history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Instantiate an InputContainer from ShakeMap input data.</span>
@@ -114,7 +114,7 @@
         <span class="c1"># ----------------------------------------------------------------------</span>
         <span class="n">hdfobj</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span>
 
         <span class="c1"># ----------------------------------------------------------------------</span>
         <span class="c1"># The config and event info are mandatory</span>
@@ -339,7 +339,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span> <span class="o">=</span> <span class="n">hdfobj</span>
 
 <div class="viewcode-block" id="OutputContainer.loadFromHDF"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.loadFromHDF">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">loadFromHDF</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">hdffile</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">loadFromHDF</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">hdffile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load an HDF file into the object.</span>
 
@@ -351,10 +351,10 @@
 <span class="sd">            A :class:`OutputContainer` object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">hdfobj</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">hdffile</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OutputContainer.createEmpty"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.createEmpty">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">createEmpty</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">createEmpty</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an empty HDF file/object.</span>
 
@@ -368,7 +368,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">hdfobj</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">hdfobj</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OutputContainer.addMetadata"><a class="viewcode-back" href="../../../shakelib.utils.container.html#shakelib.utils.container.OutputContainer.addMetadata">[docs]</a>    <span class="k">def</span> <span class="nf">addMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;metadata&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

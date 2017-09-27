@@ -75,7 +75,7 @@ language = 'en'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store'] 
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -101,6 +101,8 @@ html_theme = 'alabaster'
 #
 #html_theme_options = {'collapse_navigation' : False}
 html_theme_options = {
+        'logo': 'shakelib.png',
+        'logo_name': True,
         'github_button': False,
         'github_banner': False,
         'travis_button': False,
@@ -108,6 +110,8 @@ html_theme_options = {
         'show_powered_by': False,
         'show_related': False,
         }
+
+html_favicon = '_static/shakelib.ico'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

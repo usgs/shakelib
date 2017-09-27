@@ -21,6 +21,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/shakelib.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -135,7 +136,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_computeStikeDip</span><span class="p">()</span>
 
 <div class="viewcode-block" id="EdgeRupture.fromArrays"><a class="viewcode-back" href="../../../shakelib.rupture.edge_rupture.html#shakelib.rupture.edge_rupture.EdgeRupture.fromArrays">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">fromArrays</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">toplons</span><span class="p">,</span> <span class="n">toplats</span><span class="p">,</span> <span class="n">topdeps</span><span class="p">,</span> <span class="n">botlons</span><span class="p">,</span> <span class="n">botlats</span><span class="p">,</span> <span class="n">botdeps</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">fromArrays</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">toplons</span><span class="p">,</span> <span class="n">toplats</span><span class="p">,</span> <span class="n">topdeps</span><span class="p">,</span> <span class="n">botlons</span><span class="p">,</span> <span class="n">botlats</span><span class="p">,</span> <span class="n">botdeps</span><span class="p">,</span>
                    <span class="n">origin</span><span class="p">,</span> <span class="n">group_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mesh_dx</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Class method to initialize an EdgeRupture class from arrays of</span>
@@ -200,14 +201,14 @@
              <span class="p">}]}</span>
 
         <span class="c1"># Add origin information to metadata</span>
-        <span class="n">odict</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="vm">__dict__</span>
+        <span class="n">odict</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">__dict__</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">odict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">HistoricTime</span><span class="p">):</span>
                 <span class="n">d</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%SZ&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">d</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">mesh_dx</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">mesh_dx</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EdgeRupture.getLength"><a class="viewcode-back" href="../../../shakelib.rupture.edge_rupture.html#shakelib.rupture.edge_rupture.EdgeRupture.getLength">[docs]</a>    <span class="k">def</span> <span class="nf">getLength</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -729,7 +730,14 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../index.html">shakelib</a></h1>
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/shakelib.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">shakelib</h1>
+    
+  </a>
+</p>
 
 
 

@@ -46,7 +46,7 @@ def main(args):
     #-------------------------------------------------------------
     sys.stderr.write('Building shakelib API documentation (REST)...\n')
     sphinx_cmd = 'sphinx-apidoc -o %s -f -e -l -d 12 -H %s -A "%s"'\
-                 ' -V %s %s' % (API_DIR, PACKAGE, AUTHORS, verstr,
+                 ' -V %s %s shakelib/rupture/gc2\.py' % (API_DIR, PACKAGE, AUTHORS, verstr,
                                 PACKAGE_DIR)
     res, stdout, stderr = get_command_output(sphinx_cmd)
 

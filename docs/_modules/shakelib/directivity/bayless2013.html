@@ -21,6 +21,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/shakelib.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -455,7 +456,7 @@
         <span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">e2s_mat</span> <span class="o">*</span> <span class="n">e2s_mat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
         <span class="c1"># Avoid division by zero</span>
-        <span class="n">mag</span><span class="p">[</span><span class="n">mag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-12</span>
+        <span class="n">mag</span><span class="p">[</span><span class="n">mag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">12</span>
         <span class="n">e2s_norm</span> <span class="o">=</span> <span class="n">e2s_mat</span> <span class="o">/</span> <span class="n">mag</span>
 
         <span class="c1"># Dot epicenter-to-site with along-strike vector</span>
@@ -503,7 +504,14 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../index.html">shakelib</a></h1>
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/shakelib.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">shakelib</h1>
+    
+  </a>
+</p>
 
 
 

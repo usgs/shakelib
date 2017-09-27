@@ -21,6 +21,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/shakelib.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -96,7 +97,7 @@
              <span class="p">}]}</span>
 
         <span class="c1"># Add origin information to metadata</span>
-        <span class="n">odict</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="vm">__dict__</span>
+        <span class="n">odict</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">__dict__</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">odict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">HistoricTime</span><span class="p">):</span>
                 <span class="n">d</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%SZ&#39;</span><span class="p">)</span>
@@ -187,7 +188,7 @@
 <span class="sd">                those predictions. If var is False then just the first element</span>
 <span class="sd">                of the tuple is returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">cdir</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+        <span class="n">cdir</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
         <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span>
 
         <span class="c1"># -------------------</span>
@@ -326,7 +327,7 @@
 <span class="sd">                those predictions. If var is False then just the first element</span>
 <span class="sd">                of the tuple is returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">cdir</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+        <span class="n">cdir</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
         <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span>
 
         <span class="c1"># -------------------</span>
@@ -480,7 +481,14 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../index.html">shakelib</a></h1>
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/shakelib.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">shakelib</h1>
+    
+  </a>
+</p>
 
 
 

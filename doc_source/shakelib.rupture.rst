@@ -9,7 +9,6 @@ Submodules
    shakelib.rupture.constants
    shakelib.rupture.edge_rupture
    shakelib.rupture.factory
-   shakelib.rupture.gc2
    shakelib.rupture.origin
    shakelib.rupture.point_rupture
    shakelib.rupture.quad_rupture

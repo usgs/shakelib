@@ -29,13 +29,9 @@ ALLOWED = [str, int, float, bool, bytes,
            dict, datetime,
            collections.OrderedDict]
 
-class InputContainer():
-
-    def __init__(self,container):
-        
-
+class InputContainer(GridHDFContainer):
     @classmethod
-    def loadFromInput(cls, filename, config, eventfile, rupturefile=None,
+    def createFromInput(cls, filename, config, eventfile, rupturefile=None,
                       datafiles=None, version_history=None):
         """
         Instantiate an InputContainer from ShakeMap input data.
@@ -159,7 +155,7 @@ class InputContainer():
           (dict) Dictionary of configuration information.
         """
         config = None
-        if 'config' in self.getDictionaryNames():
+        if 'config' in self.getDictionaries():
             config = self.getDictionary('config')
         return config
 
@@ -172,7 +168,7 @@ class InputContainer():
 
         """
         rupture_obj = None
-        if 'rupture' in self.getStringNames():
+        if 'rupture' in self.getStrings():
             rupture_data_string = self.getString('rupture')
             rupture_data = json.loads(rupture_data_string)
             origin = self.getOrigin()
@@ -190,7 +186,7 @@ class InputContainer():
           StationList object.
         """
         station = None
-        if 'station_data' in self.getStringNames():
+        if 'station_data' in self.getStrings():
             station_sql = self.getString('station_data')
             station = StationList.loadFromSQL(station_sql)
         return station
@@ -203,7 +199,7 @@ class InputContainer():
           (dict): Dictionary containing version history. ??
         """
         version_dict = None
-        if 'version_history' in self.getDictionaryNames():
+        if 'version_history' in self.getDictionaries():
             version_dict = self.getDictionary('version_history')
         return version_dict
 

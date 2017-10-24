@@ -44,7 +44,7 @@ def test_ss3():
                      'lon': epilon[0],
                      'depth': 10,
                      'mag': magnitude,
-                     'id': 'ss3',
+                     'eventsourcecode': 'ss3',
                      'rake': rake})
 
     rup = QuadRupture.fromTrace(
@@ -326,7 +326,7 @@ def test_ss3_m6():
                      'lon': epilon[0],
                      'depth': 10,
                      'mag': magnitude,
-                     'id': 'ss3',
+                     'eventsourcecode': 'ss3',
                      'rake': rake})
 
     rup = QuadRupture.fromTrace(
@@ -392,7 +392,7 @@ def test_ss3_move_hypo1():
                      'lon': epilon[0],
                      'depth': -1,
                      'mag': magnitude,
-                     'id': 'ss3',
+                     'eventsourcecode': 'ss3',
                      'rake': rake})
 
     rup = QuadRupture.fromTrace(
@@ -442,7 +442,7 @@ def test_ss3_move_hypo1():
              'lon': epilon[0],
              'depth': 1.0,
              'mag': magnitude,
-             'id': '',
+             'eventsourcecode': '',
              'locstring': 'test',
              'type': 'SS',
              'timezone': 'UTC'}
@@ -503,7 +503,7 @@ def test_ss3_m4p5():
                      'lon': epilon[0],
                      'depth': 10,
                      'mag': magnitude,
-                     'id': 'ss3',
+                     'eventsourcecode': 'ss3',
                      'rake': rake})
 
     rup = QuadRupture.fromTrace(
@@ -555,7 +555,7 @@ def test_rv4():
                      'lon': 0,
                      'depth': 0,
                      'mag': 0,
-                     'id': 'rv4',
+                     'eventsourcecode': 'rv4',
                      'rake': rake})
 
     # Rupture
@@ -587,7 +587,7 @@ def test_rv4():
                      'lon': epilon,
                      'depth': epidepth,
                      'mag': magnitude,
-                     'id': 'rv4',
+                     'eventsourcecode': 'rv4',
                      'rake': rake})
 
     x = np.linspace(-50, 50, 11)
@@ -668,7 +668,7 @@ def test_so6():
                      'lon': 0,
                      'depth': 0,
                      'mag': 0,
-                     'id': 'so6',
+                     'eventsourcecode': 'so6',
                      'rake': rake})
 
     # Rupture
@@ -706,7 +706,7 @@ def test_so6():
                      'lon': epilon,
                      'depth': epidepth,
                      'mag': magnitude,
-                     'id': 'so6',
+                     'eventsourcecode': 'so6',
                      'rake': rake})
 
     ruplat = [a.latitude for a in rup.getQuadrilaterals()[0]]

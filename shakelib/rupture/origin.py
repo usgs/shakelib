@@ -23,7 +23,7 @@ class Origin(object):
 
     Event values are:
 
-        - id: the event id.
+        - eventsourcecode: the event id.
         - created: file creation time (Unix epoch - seconds since Jan 1, 1970).
         - lat: hypocenter latitude (decimal degrees; -90 to 90).
         - lon: hypocenter longitude (decimal degrees; -180 to 180).
@@ -74,16 +74,15 @@ class Origin(object):
         # ---------------------------------------------------------------------
         # Check some types, ranges, and defaults
         # ---------------------------------------------------------------------
-        if not type(event['id']) is str:
-            raise Exception('id must be a string.')
-        event['lat'] = float(event['lat'])
+        if not type(event['eventsourcecode']) is str:
+            raise Exception('eventsourcecode must be a string.')
+
         if (event['lat'] > 90) or (event['lat'] < -90):
             raise Exception('lat must be between -90 and 90 degrees.')
-        event['lon'] = float(event['lon'])
+
         if (event['lon'] > 180) or (event['lon'] < -180):
             raise Exception('lat must be between -180 and 180 degrees.')
-        event['depth'] = float(event['depth'])
-        event['mag'] = float(event['mag'])
+
         if 'mech' in event.keys():
             if event['mech'] == '':
                 event['mech'] = constants.DEFAULT_MECH
@@ -98,26 +97,6 @@ class Origin(object):
         else:
             event['mech'] = constants.DEFAULT_MECH
 
-        # ---------------------------------------------------------------------
-        # Special handling of time
-        # ---------------------------------------------------------------------
-        if ('year' in event.keys()) and \
-           ('month' in event.keys()) and \
-           ('day' in event.keys()) and \
-           ('hour' in event.keys()) and \
-           ('second' in event.keys()):
-            year = int(event['year'])
-            month = int(event['month'])
-            day = int(event['day'])
-            hour = int(event['hour'])
-            minute = int(event['minute'])
-            second = float(event['second'])
-            msec = 0  # microsec
-            second = int(second)
-            event['time'] = HistoricTime(
-                year, month, day, hour, minute, second, msec)
-        else:
-            event['time'] = HistoricTime.utcfromtimestamp(int(time.time()))
 
         # ---------------------------------------------------------------------
         # Add keys as class attributes
@@ -258,9 +237,21 @@ def read_event_file(eventxml):
         eventxml (str): Path to event XML file OR file-like object.
 
     Returns:
-       dict: Dictionary with keys as indicated above in earthquake element
-           attributes.
-
+       dict: Dictionary with keys:
+         - eventsourcecode Origin network and origin code (i.e., us2017abcd).
+         - eventsource Origin network ("us").
+         - time Origin time as an HistoricTime object.
+         - lat Origin latitude
+         - lon Origin longitude
+         - depth Origin depth
+         - mag Origin magnitude
+         - created Process time as an HistoricTime object.
+         - locstring Location string
+         - mechanism Moment mechanism, one of:
+           - 'RS' (Reverse)
+           - 'SS' (Strike-Slip)
+           - 'NM' (Normal)
+           - 'ALL' (Undetermined)
     """
 
     # fill in default values for mechanism, rake and dip
@@ -281,7 +272,38 @@ def read_event_file(eventxml):
     xmldict = dict(eq.attributes.items())
     root.unlink()
 
-    return xmldict
+    eqdict = {}
+    eqdict['eventsourcecode'] = xmldict['id']
+    if 'network' in xmldict:
+        eqdict['eventsource'] = xmldict['network']
+    else:
+        eqdict['eventsource'] = 'us' #??
+
+    #look for the productcode attribute
+    if 'productcode' in xmldict:
+        eqdict['productcode'] = xmldict['productcode']
+
+    if not eqdict['eventsourcecode'].startswith(eqdict['eventsource']):
+        eqdict['eventsourcecode'] = eqdict['eventsource'] + eqdict['eventsourcecode']
+    
+    year = int(xmldict['year'])
+    month = int(xmldict['month'])
+    day = int(xmldict['day'])
+    hour = int(xmldict['hour'])
+    minute = int(xmldict['minute'])
+    second = int(xmldict['second'])
+    microseconds = int((second - int(xmldict['second']))*1e6)
+    eqdict['time'] = HistoricTime(year,month,day,hour,minute,second,microseconds)
+    eqdict['lat'] = float(xmldict['lat'])
+    eqdict['lon'] = float(xmldict['lon'])
+    eqdict['depth'] = float(xmldict['depth'])
+    eqdict['mag'] = float(xmldict['mag'])
+    eqdict['created'] = HistoricTime.utcfromtimestamp(int(xmldict['created']))
+    eqdict['locstring'] = xmldict['locstring']
+    
+    if 'mech' in xmldict:
+        eqdict['mech'] = xmldict['mech']
+    return eqdict
 
 
 def read_source(sourcefile):

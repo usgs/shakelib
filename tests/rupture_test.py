@@ -30,7 +30,7 @@ sys.path.insert(0, shakedir)
 
 def test_EdgeRupture():
     # Rupture requires an origin even when not used:
-    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+    origin = Origin({'eventsourcecode': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
 
     file = os.path.join(homedir, 'rupture_data/cascadia.json')
@@ -120,7 +120,7 @@ def test_EdgeRupture():
 
 def test_QuadRupture():
     # Rupture requires an origin even when not used:
-    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+    origin = Origin({'eventsourcecode': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
 
     # First with json file
@@ -241,7 +241,7 @@ def test_rupture_depth(interactive=False):
         widths = np.ones(xp0.shape) * WIDTH
         dips = np.ones(xp0.shape) * DIP
         strike = [strike]
-        origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+        origin = Origin({'eventsourcecode': 'test', 'lat': 0, 'lon': 0,
                          'depth': 5.0, 'mag': 7.0})
         rupture = QuadRupture.fromTrace(
             xp0, yp0, xp1, yp1, zp, widths, dips, origin, strike=strike)
@@ -289,7 +289,7 @@ def test_rupture_depth(interactive=False):
 
 def test_slip():
     # Rupture requires an origin even when not used:
-    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+    origin = Origin({'eventsourcecode': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
     # Make a rupture
     lat0 = np.array([34.1])
@@ -320,7 +320,7 @@ def test_northridge():
     """  # noqa
 
     # Rupture requires an origin even when not used:
-    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+    origin = Origin({'eventsourcecode': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
     rupture = get_rupture(origin, cbuf)
@@ -402,7 +402,7 @@ def test_parse_complicated_rupture():
     40.80199 30.94688 0"""  # noqa
 
     # Rupture requires an origin even when not used:
-    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+    origin = Origin({'eventsourcecode': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
     rupture = get_rupture(origin, cbuf)
@@ -485,7 +485,7 @@ def test_incorrect():
     23.60400 120.97200	17"""  # noqa
 
     # Rupture requires an origin even when not used:
-    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+    origin = Origin({'eventsourcecode': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
     cbuf = io.StringIO(rupture_text)
     with pytest.raises(Exception):
@@ -502,7 +502,7 @@ def test_fromTrace():
     dips = [45.0]
 
     # Rupture requires an origin even when not used:
-    origin = Origin({'id': 'test', 'lat': 0, 'lon': 0,
+    origin = Origin({'eventsourcecode': 'test', 'lat': 0, 'lon': 0,
                      'depth': 5.0, 'mag': 7.0})
     rupture = QuadRupture.fromTrace(
         xp0, yp0, xp1, yp1, zp, widths,

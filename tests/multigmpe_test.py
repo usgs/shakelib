@@ -1206,7 +1206,7 @@ def test_multigmpe_get_mean_stddevs():
     dip = np.array([30.])
 
     event = {'lat': 34.1, 'lon': -118.2, 'depth': 1, 'mag': 6,
-             'id': '', 'locstring': '', 'rake': 30.3,
+             'eventsourcecode': '', 'locstring': '', 'rake': 30.3,
              'time': HistoricTime.utcfromtimestamp(int(time.time())),
              'timezone': 'UTC'}
     origin = Origin(event)

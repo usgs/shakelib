@@ -66,6 +66,8 @@ class InputContainer(GridHDFContainer):
         Args:
           config (dict-like): Dict-like object with configuration information.
         """
+        if 'config' in self.getDictionaries():
+            self.dropDictionary('config')
         self.setDictionary('config',config)
 
     def setEvent(self,event_file):
@@ -92,6 +94,9 @@ class InputContainer(GridHDFContainer):
         if productcode is not None and 'productcode' in event_dict and productcode != event_dict['productcode']:
             msg = 'productcode %s found in %s does not match data directory %s.'
             raise KeyError(msg % (event_dict['productcode'],event_file,productcode))
+
+        if 'event' in self.getDictionaries():
+            self.dropDictionary('event')
         self.setDictionary('event',event_dict)
 
     def setRupture(self,rupture_file):
@@ -108,6 +113,8 @@ class InputContainer(GridHDFContainer):
             rupture_data = text_to_json(rupture_file)
 
         rupture_data_string = json.dumps(rupture_data)
+        if 'rupture' in self.getStrings():
+            self.dropString('rupture')
         self.setString('rupture',rupture_data_string)
 
     def setStationData(self,datafiles):
@@ -121,6 +128,8 @@ class InputContainer(GridHDFContainer):
         """
         station = StationList.loadFromXML(datafiles)
         station_sql = station.dumpToSQL()
+        if 'station_data' in self.getStrings():
+            self.dropString('station_data')
         self.setString('station_data',station_sql)
 
     def addStationData(self,datafiles):
@@ -145,6 +154,8 @@ class InputContainer(GridHDFContainer):
         Args:
           history_dict (dict): Dictionary containing version history. ??
         """
+        if 'version_history' in self.getDictionaries():
+            self.dropDictionary('version_history')
         self.setDictionary('version_history',history_dict)
 
     def getConfig(self):

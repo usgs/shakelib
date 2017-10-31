@@ -136,6 +136,8 @@ class InputContainer(GridHDFContainer):
         station = StationList.loadFromSQL(station_sql)
         station.addData(datafiles)
         station_sql = station.dumpToSQL()
+        if 'station_data' in self.getStrings():
+            self.dropString('station_data')
         self.setString('station_data',station_sql)
 
     def setVersionHistory(self,history_dict):

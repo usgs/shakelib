@@ -252,7 +252,7 @@ class OutputContainer(GridHDFContainer):
     """
     def setIMT(self,imt_name,imt_mean,mean_metadata,
                imt_std,std_metadata,
-               component='maximum',
+               component,
                compression=True):
         """Store IMT mean and standard deviation objects as datasets.
         
@@ -262,7 +262,7 @@ class OutputContainer(GridHDFContainer):
           mean_metadata (dict): Dictionary containing metadata for mean IMT grid.
           imt_std (Grid2D): Grid2D object of IMT standard deviation values to be stored.
           std_metadata (dict): Dictionary containing metadata for mean IMT grid.
-          component (str): Component type, i.e. 'maximum','rotd50',etc.
+          component (str): Component type, i.e. 'Larger','rotd50',etc.
           compression (bool): Boolean indicating whether dataset should be compressed
                               using the gzip algorithm.
 
@@ -295,7 +295,7 @@ class OutputContainer(GridHDFContainer):
 
         return imt_group
 
-    def getIMT(self,imt_name,component='maximum'):
+    def getIMT(self,imt_name,component):
         """
         Retrieve a Grid2D object and any associated metadata from the container.
 
@@ -340,12 +340,12 @@ class OutputContainer(GridHDFContainer):
                     'std_metadata':std_metadata}
         return imt_dict
 
-    def getIMTs(self,component='maximum'):
+    def getIMTs(self,component):
         """
         Return list of names of IMTs matching input component type.
 
         Args:
-          component (str): Name of component ('maximum','rotd50',etc.)
+          component (str): Name of component ('Larger','rotd50',etc.)
 
         Returns:
           (list) List of names of IMTs matching component stored in container.

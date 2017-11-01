@@ -31,6 +31,16 @@ ALLOWED = [str, int, float, bool, bytes,
            collections.OrderedDict]
 
 class InputContainer(GridHDFContainer):
+    """HDF container for Shakemap input data.
+
+    This class provides methods for getting and setting information on:
+     - configuration
+     - event (lat,lon,depth,etc.)
+     - rupture
+     - station data (can also be updated)
+     - version history
+
+    """
     @classmethod
     def createFromInput(cls, filename, config, eventfile, rupturefile=None,
                       datafiles=None, version_history=None):
@@ -231,6 +241,15 @@ class InputContainer(GridHDFContainer):
     
     
 class OutputContainer(GridHDFContainer):
+    """HDF container for Shakemap output data.
+
+    This class provides methods for getting and setting IMT data.
+    The philosophy here is that an IMT consists of both the mean results and
+    the standard deviations of those results, thus getIMT() returns a dictionary
+    with both, plus metadata for each data layer.
+
+
+    """
     def setIMT(self,imt_name,imt_mean,mean_metadata,
                imt_std,std_metadata,
                component='maximum',

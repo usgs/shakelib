@@ -13,7 +13,8 @@ import h5py
 import numpy as np
 from mapio.grid2d import Grid2D
 from mapio.geodict import GeoDict
-from mapio.gridcontainer import GridHDFContainer
+from mapio.gridcontainer import GridHDFContainer,_split_dset_attrs
+from impactutils.io.container import _get_type_list
 
 # local imports
 from shakelib.rupture.factory import get_rupture,text_to_json,json_to_rupture
@@ -229,4 +230,137 @@ class InputContainer(GridHDFContainer):
         return origin
     
     
+class OutputContainer(GridHDFContainer):
+    def setIMT(self,imt_name,imt_mean,mean_metadata,
+               imt_std,std_metadata,
+               component='maximum',
+               compression=True):
+        """Store IMT mean and standard deviation objects as datasets.
+        
+        Args:
+          name (str): Name of the IMT (MMI,PGA,etc.) to be stored.
+          imt_mean (Grid2D): Grid2D object of IMT mean values to be stored.
+          mean_metadata (dict): Dictionary containing metadata for mean IMT grid.
+          imt_std (Grid2D): Grid2D object of IMT standard deviation values to be stored.
+          std_metadata (dict): Dictionary containing metadata for mean IMT grid.
+          component (str): Component type, i.e. 'maximum','rotd50',etc.
+          compression (bool): Boolean indicating whether dataset should be compressed
+                              using the gzip algorithm.
 
+        Returns:
+          HDF Group containing IMT grids and metadata.
+        """
+        #set up the name of the group holding all the information for the IMT
+        group_name = '__imt_%s_%s__' % (imt_name,component)
+        imt_group = self._hdfobj.create_group(group_name)
+
+        #create the data set containing the mean IMT data and metadata
+        mean_name = '__mean_%s_%s__' % (imt_name,component)
+        mean_data = imt_mean.getData()
+        mean_set = imt_group.create_dataset(mean_name,data=mean_data,compression=compression)
+        if mean_metadata is not None:
+            for key,value in mean_metadata.items():
+                mean_set.attrs[key] = value
+        for key,value in imt_mean.getGeoDict().asDict().items():
+            mean_set.attrs[key] = value
+
+        #create the data set containing the std IMT data and metadata
+        std_name = '__std_%s_%s__' % (imt_name,component)
+        std_data = imt_std.getData()
+        std_set = imt_group.create_dataset(std_name,data=std_data,compression=compression)
+        if std_metadata is not None:
+            for key,value in std_metadata.items():
+                std_set.attrs[key] = value
+        for key,value in imt_std.getGeoDict().asDict().items():
+            std_set.attrs[key] = value
+
+        return imt_group
+
+    def getIMT(self,imt_name,component='maximum'):
+        """
+        Retrieve a Grid2D object and any associated metadata from the container.
+
+        Args:
+            name (str):
+                The name of the Grid2D object stored in the container.
+
+        Returns:
+            (dict) Dictionary containing 4 items:
+                   - mean Grid2D object for IMT mean values.
+                   - mean_metadata Dictionary containing any metadata describing mean layer.
+                   - std Grid2D object for IMT standard deviation values.
+                   - std_metadata Dictionary containing any metadata describing standard deviation layer.
+        """
+        group_name = '__imt_%s_%s__' % (imt_name,component)
+        if group_name not in self._hdfobj:
+            raise LookupError('No group called %s in HDF file %s' % (imt_name,self.getFileName()))
+        imt_group = self._hdfobj[group_name]
+
+        #get the mean data and metadata
+        mean_name = '__mean_%s_%s__' % (imt_name,component)
+        mean_dset = imt_group[mean_name]
+        mean_data = mean_dset[()]
+
+        array_metadata,mean_metadata = _split_dset_attrs(mean_dset)
+        mean_geodict = GeoDict(array_metadata)
+        mean_grid = Grid2D(mean_data,mean_geodict)
+
+        #get the std data and metadata
+        std_name = '__std_%s_%s__' % (imt_name,component)
+        std_dset = imt_group[std_name]
+        std_data = std_dset[()]
+
+        array_metadata,std_metadata = _split_dset_attrs(std_dset)
+        std_geodict = GeoDict(array_metadata)
+        std_grid = Grid2D(std_data,std_geodict)
+
+        #create an output dictionary
+        imt_dict = {'mean':mean_grid,
+                    'mean_metadata':mean_metadata,
+                    'std':std_grid,
+                    'std_metadata':std_metadata}
+        return imt_dict
+
+    def getIMTs(self,component='maximum'):
+        """
+        Return list of names of IMTs matching input component type.
+
+        Args:
+          component (str): Name of component ('maximum','rotd50',etc.)
+
+        Returns:
+          (list) List of names of IMTs matching component stored in container.
+        """
+        imt_groups = _get_type_list(self._hdfobj,'imt')
+        comp_groups = []
+        for imt_group in imt_groups:
+            if imt_group.find(component) > -1:
+                comp_groups.append(imt_group.replace('_'+component,''))
+        return comp_groups
+
+    def getComponents(self,imt_name):
+        """
+        Return list of components for given IMT.
+
+        Args:
+          imt_name (str): Name of IMT ('MMI','PGA',etc.)
+
+        Returns:
+          (list) List of names of components for given IMT.
+        """
+        components = _get_type_list(self._hdfobj,'imt_'+imt_name)
+        return components
+
+    def dropIMT(self,imt_name):
+        """
+        Delete IMT datasets from container.
+
+        Args:
+          name (str):
+                The name of the IMT to be deleted.
+
+        """
+        group_name = '__imt_%s_%s__' % (imt_name,component)
+        if group_name not in self._hdfobj:
+            raise LookupError('No group called %s in HDF file %s' % (imt_name,self.getFileName()))
+        del self._hdfobj[group_name]

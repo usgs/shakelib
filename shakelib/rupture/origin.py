@@ -283,9 +283,10 @@ def read_event_file(eventxml):
     if 'productcode' in xmldict:
         eqdict['productcode'] = xmldict['productcode']
 
+    # fix eventsourcecode if not specified correctly
     if not eqdict['eventsourcecode'].startswith(eqdict['eventsource']):
         eqdict['eventsourcecode'] = eqdict['eventsource'] + eqdict['eventsourcecode']
-    
+
     year = int(xmldict['year'])
     month = int(xmldict['month'])
     day = int(xmldict['day'])
@@ -298,7 +299,14 @@ def read_event_file(eventxml):
     eqdict['lon'] = float(xmldict['lon'])
     eqdict['depth'] = float(xmldict['depth'])
     eqdict['mag'] = float(xmldict['mag'])
-    eqdict['created'] = HistoricTime.utcfromtimestamp(int(xmldict['created']))
+
+    # make created field in event.xml optional - set to current UTC time if not
+    # supplied.
+    if 'created' in xmldict:
+        eqdict['created'] = HistoricTime.utcfromtimestamp(int(xmldict['created']))
+    else:
+        eqdict['created'] = HistoricTime.utcnow()
+
     eqdict['locstring'] = xmldict['locstring']
     
     if 'mech' in xmldict:

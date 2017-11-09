@@ -1,5 +1,6 @@
 import os
 import json
+import pkg_resources
 
 import numpy as np
 from shapely.geometry import Polygon, Point
@@ -131,8 +132,8 @@ def is_stable(lon, lat):
 
     """
     p = Point((lon, lat))
-    here = os.path.dirname(os.path.abspath(__file__))
-    pfile = os.path.join(here, 'data', 'cratons.geojson')
+    pfile = pkg_resources.resource_filename('shakelib.utils', 
+            os.path.join('data', 'cratons.geojson'))
     with open(pfile) as f:
         cratons = json.load(f)
     coord_list = cratons['features'][0]['geometry']['coordinates']

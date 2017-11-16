@@ -432,7 +432,7 @@ class StationList(object):
         self.cursor.execute('SELECT imt_type FROM imt')
         return set([z[0] for z in self.cursor.fetchall()])
 
-    def getStationDataframe(self, instrumented):
+    def getStationDictionary(self, instrumented=True):
         """
         Return a dictionary of the instrumented or non-instrumented
         stations. The keys describe the parameter, the values are Numpy
@@ -455,13 +455,13 @@ class StationList(object):
         All ground motion units are natural log units. Distances are in km.
 
         Args:
-            instrumented (integer):
-                Set to 1 (one) if the dictionary is to contain the instrumented
-                stations, or to 0 (zero) if the dictionary is to contain the
+            instrumented (bool):
+                Set to True if the dictionary is to contain the instrumented
+                stations, or to False if the dictionary is to contain the
                 non-instrumented (MMI) stations.
 
         Returns:
-            A dictionary of Numpy arrays.
+            dict: A dictionary of Numpy arrays.
         """
 
         columns = list(TABLES['station'].keys())

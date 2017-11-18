@@ -111,8 +111,8 @@ def rupture_from_dict_and_origin(d, origin, mesh_dx=0.5):
 
 def rupture_from_dict(d):
     """
-    Method returns either a QuadRupture or EdgeRupture object based on a
-    GeoJSON dictionary.
+    Method returns either a Rupture subclass (QuadRupture, EdgeRupture, or 
+    PointRupture) object based on a GeoJSON dictionary.
 
     .. seealso::
         :func:`rupture_from_dict_and_origin`

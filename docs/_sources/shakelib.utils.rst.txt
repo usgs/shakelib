@@ -5,7 +5,8 @@ Submodules
 
 .. toctree::
 
-   shakelib.utils.container
+   shakelib.utils.containers
+   shakelib.utils.distance
    shakelib.utils.exception
    shakelib.utils.utils
 

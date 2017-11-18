@@ -65,7 +65,7 @@
 
 <span class="sd">    Event values are:</span>
 
-<span class="sd">        - id: the event id.</span>
+<span class="sd">        - eventsourcecode: the event id.</span>
 <span class="sd">        - created: file creation time (Unix epoch - seconds since Jan 1, 1970).</span>
 <span class="sd">        - lat: hypocenter latitude (decimal degrees; -90 to 90).</span>
 <span class="sd">        - lon: hypocenter longitude (decimal degrees; -180 to 180).</span>
@@ -116,16 +116,15 @@
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Check some types, ranges, and defaults</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;id must be a string.&#39;</span><span class="p">)</span>
-        <span class="n">event</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;eventsourcecode&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;eventsourcecode must be a string.&#39;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">90</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">90</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;lat must be between -90 and 90 degrees.&#39;</span><span class="p">)</span>
-        <span class="n">event</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">])</span>
+
         <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">180</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;lat must be between -180 and 180 degrees.&#39;</span><span class="p">)</span>
-        <span class="n">event</span><span class="p">[</span><span class="s1">&#39;depth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;depth&#39;</span><span class="p">])</span>
-        <span class="n">event</span><span class="p">[</span><span class="s1">&#39;mag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;mag&#39;</span><span class="p">])</span>
+
         <span class="k">if</span> <span class="s1">&#39;mech&#39;</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s1">&#39;mech&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
                 <span class="n">event</span><span class="p">[</span><span class="s1">&#39;mech&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">DEFAULT_MECH</span>
@@ -140,26 +139,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">event</span><span class="p">[</span><span class="s1">&#39;mech&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">DEFAULT_MECH</span>
 
-        <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="c1"># Special handling of time</span>
-        <span class="c1"># ---------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;year&#39;</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="ow">and</span> \
-           <span class="p">(</span><span class="s1">&#39;month&#39;</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="ow">and</span> \
-           <span class="p">(</span><span class="s1">&#39;day&#39;</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="ow">and</span> \
-           <span class="p">(</span><span class="s1">&#39;hour&#39;</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="ow">and</span> \
-           <span class="p">(</span><span class="s1">&#39;second&#39;</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">])</span>
-            <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">])</span>
-            <span class="n">day</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">])</span>
-            <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">])</span>
-            <span class="n">minute</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;minute&#39;</span><span class="p">])</span>
-            <span class="n">second</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;second&#39;</span><span class="p">])</span>
-            <span class="n">msec</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># microsec</span>
-            <span class="n">second</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">second</span><span class="p">)</span>
-            <span class="n">event</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HistoricTime</span><span class="p">(</span>
-                <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">msec</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">event</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HistoricTime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
 
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># Add keys as class attributes</span>
@@ -182,7 +161,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">rake</span> <span class="o">=</span> <span class="mf">0.0</span>
 
 <div class="viewcode-block" id="Origin.fromFile"><a class="viewcode-back" href="../../../shakelib.rupture.origin.html#shakelib.rupture.origin.Origin.fromFile">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">fromFile</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">eventxmlfile</span><span class="p">,</span> <span class="n">sourcefile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fromFile</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">eventxmlfile</span><span class="p">,</span> <span class="n">sourcefile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Class method to create a Origin object by specifying an event.xml file,</span>
 <span class="sd">        a rupture file, and a source.txt file.</span>
@@ -200,7 +179,7 @@
         <span class="k">if</span> <span class="n">sourcefile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span> <span class="o">=</span> <span class="n">read_source</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">)</span>
             <span class="n">event</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Origin.getHypo"><a class="viewcode-back" href="../../../shakelib.rupture.origin.html#shakelib.rupture.origin.Origin.getHypo">[docs]</a>    <span class="k">def</span> <span class="nf">getHypo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -300,9 +279,21 @@
 <span class="sd">        eventxml (str): Path to event XML file OR file-like object.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">       dict: Dictionary with keys as indicated above in earthquake element</span>
-<span class="sd">           attributes.</span>
-
+<span class="sd">       dict: Dictionary with keys:</span>
+<span class="sd">         - eventsourcecode Origin network and origin code (i.e., us2017abcd).</span>
+<span class="sd">         - eventsource Origin network (&quot;us&quot;).</span>
+<span class="sd">         - time Origin time as an HistoricTime object.</span>
+<span class="sd">         - lat Origin latitude</span>
+<span class="sd">         - lon Origin longitude</span>
+<span class="sd">         - depth Origin depth</span>
+<span class="sd">         - mag Origin magnitude</span>
+<span class="sd">         - created Process time as an HistoricTime object.</span>
+<span class="sd">         - locstring Location string</span>
+<span class="sd">         - mechanism Moment mechanism, one of:</span>
+<span class="sd">           - &#39;RS&#39; (Reverse)</span>
+<span class="sd">           - &#39;SS&#39; (Strike-Slip)</span>
+<span class="sd">           - &#39;NM&#39; (Normal)</span>
+<span class="sd">           - &#39;ALL&#39; (Undetermined)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># fill in default values for mechanism, rake and dip</span>
@@ -323,7 +314,46 @@
     <span class="n">xmldict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="n">root</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">xmldict</span></div>
+    <span class="n">eqdict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;eventsourcecode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;network&#39;</span> <span class="ow">in</span> <span class="n">xmldict</span><span class="p">:</span>
+        <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;eventsource&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;network&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;eventsource&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;us&#39;</span> <span class="c1">#??</span>
+
+    <span class="c1">#look for the productcode attribute</span>
+    <span class="k">if</span> <span class="s1">&#39;productcode&#39;</span> <span class="ow">in</span> <span class="n">xmldict</span><span class="p">:</span>
+        <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;productcode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;productcode&#39;</span><span class="p">]</span>
+
+    <span class="c1"># fix eventsourcecode if not specified correctly</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;eventsourcecode&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;eventsource&#39;</span><span class="p">]):</span>
+        <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;eventsourcecode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;eventsource&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;eventsourcecode&#39;</span><span class="p">]</span>
+
+    <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">])</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">])</span>
+    <span class="n">day</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">])</span>
+    <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">])</span>
+    <span class="n">minute</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;minute&#39;</span><span class="p">])</span>
+    <span class="n">second</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;second&#39;</span><span class="p">])</span>
+    <span class="n">microseconds</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">second</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;second&#39;</span><span class="p">]))</span><span class="o">*</span><span class="mf">1e6</span><span class="p">)</span>
+    <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HistoricTime</span><span class="p">(</span><span class="n">year</span><span class="p">,</span><span class="n">month</span><span class="p">,</span><span class="n">day</span><span class="p">,</span><span class="n">hour</span><span class="p">,</span><span class="n">minute</span><span class="p">,</span><span class="n">second</span><span class="p">,</span><span class="n">microseconds</span><span class="p">)</span>
+    <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">])</span>
+    <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">])</span>
+    <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;depth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;depth&#39;</span><span class="p">])</span>
+    <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;mag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;mag&#39;</span><span class="p">])</span>
+
+    <span class="c1"># make created field in event.xml optional - set to current UTC time if not</span>
+    <span class="c1"># supplied.</span>
+    <span class="k">if</span> <span class="s1">&#39;created&#39;</span> <span class="ow">in</span> <span class="n">xmldict</span><span class="p">:</span>
+        <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;created&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HistoricTime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;created&#39;</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;created&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HistoricTime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+
+    <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;locstring&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;locstring&#39;</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;mech&#39;</span> <span class="ow">in</span> <span class="n">xmldict</span><span class="p">:</span>
+        <span class="n">eqdict</span><span class="p">[</span><span class="s1">&#39;mech&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmldict</span><span class="p">[</span><span class="s1">&#39;mech&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">eqdict</span></div>
 
 
 <div class="viewcode-block" id="read_source"><a class="viewcode-back" href="../../../shakelib.rupture.origin.html#shakelib.rupture.origin.read_source">[docs]</a><span class="k">def</span> <span class="nf">read_source</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">):</span>

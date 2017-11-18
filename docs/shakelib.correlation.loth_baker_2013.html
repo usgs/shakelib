@@ -41,68 +41,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-shakelib.correlation.loth_baker_2013">
-<span id="shakelib-correlation-loth-baker-2013"></span><h1>shakelib.correlation.loth_baker_2013<a class="headerlink" href="#module-shakelib.correlation.loth_baker_2013" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="shakelib.correlation.loth_baker_2013.LothBaker2013">
-<em class="property">class </em><code class="descclassname">shakelib.correlation.loth_baker_2013.</code><code class="descname">LothBaker2013</code><span class="sig-paren">(</span><em>periods</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/correlation/loth_baker_2013.html#LothBaker2013"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.correlation.loth_baker_2013.LothBaker2013" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Created by Christophe Loth, 12/18/2012
-Pythonized and vectorized by C. Bruce Worden, 3/15/2017
-Compute the spatial correlation of epsilons for the NGA ground motion
-models</p>
-<p>The function is strictly empirical, fitted over the range the range
-0.01s &lt;= t1, t2 &lt;= 10s</p>
-<p>Documentation is provided in the following document:
-Loth, C., and Baker, J. W. (2013). “A spatial cross-correlation model of
-ground motion spectral accelerations at multiple periods.”
-Earthquake Engineering &amp; Structural Dynamics, 42, 397-417.</p>
-<p>Create an instance of LB13.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>periods</strong> (<em>numpy.array</em>) – An array of periods that will be requested
-from the function. Values must be [0.01 -&gt; 10.0], and must me
-sorted from smallest to largest.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An instance of <a class="reference internal" href="#shakelib.correlation.loth_baker_2013.LothBaker2013" title="shakelib.correlation.loth_baker_2013.LothBaker2013"><code class="xref py py-class docutils literal"><span class="pre">LothBaker2013</span></code></a>.</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="shakelib.correlation.loth_baker_2013.LothBaker2013.getCorrelation">
-<code class="descname">getCorrelation</code><span class="sig-paren">(</span><em>ix1</em>, <em>ix2</em>, <em>h</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/correlation/loth_baker_2013.html#LothBaker2013.getCorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.correlation.loth_baker_2013.LothBaker2013.getCorrelation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the correlation between two periods and a separation distance
-of h.</p>
-<p>The indices (ix1 and ix2) and h must have the same dimensions. The
-indices may be equal, and there is no restriction on which one is
-larger. The indices refer to periods in the ‘period’ argument to the
-class constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ix1</strong> (<em>ndarray</em>) – The indices of the first period of interest.</li>
-<li><strong>ix2</strong> (<em>ndarrays</em>) – The indices of the second period of interest.</li>
-<li><strong>h</strong> (<em>ndarray</em>) – The separation distance between two sites (units of km).</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The predicted correlation coefficient. The output array
-will have the same shape as the inputs.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="shakelib-correlation-loth-baker-2013">
+<h1>shakelib.correlation.loth_baker_2013<a class="headerlink" href="#shakelib-correlation-loth-baker-2013" title="Permalink to this headline">¶</a></h1>
 </div>
 
 

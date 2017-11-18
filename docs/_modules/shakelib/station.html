@@ -177,7 +177,7 @@
 <span class="c1">#        pass</span>
 
 <div class="viewcode-block" id="StationList.loadFromSQL"><a class="viewcode-back" href="../../shakelib.station.html#shakelib.station.StationList.loadFromSQL">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">loadFromSQL</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">sql</span><span class="p">,</span> <span class="n">dbfile</span><span class="o">=</span><span class="s1">&#39;:memory:&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">loadFromSQL</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">sql</span><span class="p">,</span> <span class="n">dbfile</span><span class="o">=</span><span class="s1">&#39;:memory:&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new object from saved SQL code (see :meth:`dumpToSQL`).</span>
 
@@ -193,7 +193,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">db</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbfile</span><span class="p">)</span>
-        <span class="bp">self</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -212,7 +212,7 @@
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">iterdump</span><span class="p">()))</span></div>
 
 <div class="viewcode-block" id="StationList.loadFromXML"><a class="viewcode-back" href="../../shakelib.station.html#shakelib.station.StationList.loadFromXML">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">loadFromXML</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">xmlfiles</span><span class="p">,</span> <span class="n">dbfile</span><span class="o">=</span><span class="s1">&#39;:memory:&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">loadFromXML</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">xmlfiles</span><span class="p">,</span> <span class="n">dbfile</span><span class="o">=</span><span class="s1">&#39;:memory:&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a StationList object by reading one or more ShakeMap XML input</span>
 <span class="sd">        files.</span>
@@ -230,7 +230,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Create the database and tables</span>
         <span class="n">db</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbfile</span><span class="p">)</span>
-        <span class="bp">self</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_createTables</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">addData</span><span class="p">(</span><span class="n">xmlfiles</span><span class="p">)</span></div>
 
@@ -474,7 +474,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;SELECT imt_type FROM imt&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">set</span><span class="p">([</span><span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()])</span></div>
 
-<div class="viewcode-block" id="StationList.getStationDataframe"><a class="viewcode-back" href="../../shakelib.station.html#shakelib.station.StationList.getStationDataframe">[docs]</a>    <span class="k">def</span> <span class="nf">getStationDataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instrumented</span><span class="p">):</span>
+<div class="viewcode-block" id="StationList.getStationDictionary"><a class="viewcode-back" href="../../shakelib.station.html#shakelib.station.StationList.getStationDictionary">[docs]</a>    <span class="k">def</span> <span class="nf">getStationDictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instrumented</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a dictionary of the instrumented or non-instrumented</span>
 <span class="sd">        stations. The keys describe the parameter, the values are Numpy</span>
@@ -497,13 +497,13 @@
 <span class="sd">        All ground motion units are natural log units. Distances are in km.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            instrumented (integer):</span>
-<span class="sd">                Set to 1 (one) if the dictionary is to contain the instrumented</span>
-<span class="sd">                stations, or to 0 (zero) if the dictionary is to contain the</span>
+<span class="sd">            instrumented (bool):</span>
+<span class="sd">                Set to True if the dictionary is to contain the instrumented</span>
+<span class="sd">                stations, or to False if the dictionary is to contain the</span>
 <span class="sd">                non-instrumented (MMI) stations.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            A dictionary of Numpy arrays.</span>
+<span class="sd">            dict: A dictionary of Numpy arrays.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">TABLES</span><span class="p">[</span><span class="s1">&#39;station&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>

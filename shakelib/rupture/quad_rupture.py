@@ -55,6 +55,14 @@ class QuadRupture(Rupture):
             lat = lat + p_lats + [np.nan]
             dep = dep + p_depths + [np.nan]
 
+        # Add origin information to metadata
+        odict = origin.__dict__
+        for k, v in odict.items():
+            if isinstance(v, HistoricTime):
+                d['metadata'][k] = v.strftime('%Y-%m-%dT%H:%M:%SZ')
+            else:
+                d['metadata'][k] = v
+
         self._geojson = d
         self._lon = lon
         self._lat = lat

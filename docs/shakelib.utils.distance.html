@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>shakelib.utils.utils &#8212; shakelib 4.0a documentation</title>
+    <title>shakelib.utils.distance &#8212; shakelib 4.0a documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -24,8 +24,8 @@
     <link rel="shortcut icon" href="_static/shakelib.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="shakelib.distance" href="shakelib.distance.html" />
-    <link rel="prev" title="shakelib.utils.exception" href="shakelib.utils.exception.html" />
+    <link rel="next" title="shakelib.utils.exception" href="shakelib.utils.exception.html" />
+    <link rel="prev" title="shakelib.utils.containers" href="shakelib.utils.containers.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -41,47 +41,72 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-shakelib.utils.utils">
-<span id="shakelib-utils-utils"></span><h1>shakelib.utils.utils<a class="headerlink" href="#module-shakelib.utils.utils" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-shakelib.utils.distance">
+<span id="shakelib-utils-distance"></span><h1>shakelib.utils.distance<a class="headerlink" href="#module-shakelib.utils.distance" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="shakelib.utils.utils.get_extent">
-<code class="descclassname">shakelib.utils.utils.</code><code class="descname">get_extent</code><span class="sig-paren">(</span><em>rupture</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/utils.html#get_extent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.utils.get_extent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to compute map extent from rupture.</p>
+<dt id="shakelib.utils.distance.geodetic_distance_fast">
+<code class="descclassname">shakelib.utils.distance.</code><code class="descname">geodetic_distance_fast</code><span class="sig-paren">(</span><em>lons1</em>, <em>lats1</em>, <em>lons2</em>, <em>lats2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/distance.html#geodetic_distance_fast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.distance.geodetic_distance_fast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the geodetic distance between two points or two collections
+of points using a formula that is substantially faster than the
+Haversine formula, but is nearly as accurate for distances up to a
+few hundred km.</p>
+<p>Parameters are coordinates in RADIANS. They could be scalar
+float numbers or numpy arrays, in which case they should be either
+the same dimensions (in which case the returned distances will be
+an array of the same shape with point for point distances), or they
+should broadcast together (in which case the returned distances will
+be a matrix of each point in the first set to every point in the
+second set.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rupture</strong> (<a class="reference internal" href="shakelib.rupture.base.html#shakelib.rupture.base.Rupture" title="shakelib.rupture.base.Rupture"><em>Rupture</em></a>) – A ShakeMap Rupture instance.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lons1</strong> (<em>numpy array</em>) – An array of longitudes.</li>
+<li><strong>lats1</strong> (<em>numpy array</em>) – An array of latitudes the same shape as lons1.</li>
+<li><strong>lons2</strong> (<em>numpy array</em>) – An array of longitudes.</li>
+<li><strong>lats2</strong> (<em>numpy array</em>) – An array of latitudes the same shape as lons2.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">lonmin, lonmax, latmin, latmax rounded to the nearest
-arc-minute..</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Distances in km.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(numpy array)</p>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="function">
-<dt id="shakelib.utils.utils.is_stable">
-<code class="descclassname">shakelib.utils.utils.</code><code class="descname">is_stable</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/utils.html#is_stable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.utils.is_stable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine if point is located in the US stable tectonic region. Uses the
-same boundary as the US NSHMP and so this function needs to be modified to
-work outside of the US.</p>
+<dt id="shakelib.utils.distance.geodetic_distance_haversine">
+<code class="descclassname">shakelib.utils.distance.</code><code class="descname">geodetic_distance_haversine</code><span class="sig-paren">(</span><em>lons1</em>, <em>lats1</em>, <em>lons2</em>, <em>lats2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/distance.html#geodetic_distance_haversine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.distance.geodetic_distance_haversine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the geodetic distance between two points or two collections
+of points using the Haversine formula.</p>
+<p>Parameters are coordinates in RADIANS. They could be scalar
+float numbers or numpy arrays, in which case they should be either
+the same dimensions (in which case the returned distances will be
+an array of the same shape with point for point distances), or they
+should broadcast together (in which case the returned distances will
+be a matrix of each point in the first set to every point in the
+second set.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>lon</strong> (<em>float</em>) – Lognitude.</li>
-<li><strong>lat</strong> (<em>float</em>) – Latitude.</li>
+<li><strong>lons1</strong> (<em>numpy array</em>) – An array of longitudes.</li>
+<li><strong>lats1</strong> (<em>numpy array</em>) – An array of latitudes the same shape as lons1.</li>
+<li><strong>lons2</strong> (<em>numpy array</em>) – An array of longitudes.</li>
+<li><strong>lats2</strong> (<em>numpy array</em>) – An array of latitudes the same shape as lons2.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Is the point classified as tectonically stable.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Distances in km.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(numpy array)</p>
 </td>
 </tr>
 </tbody>
@@ -124,9 +149,9 @@ work outside of the US.</p>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.rupture.html">shakelib.rupture</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="shakelib.utils.html">shakelib.utils</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.containers.html">shakelib.utils.containers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="shakelib.utils.distance.html">shakelib.utils.distance</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.utils.distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.exception.html">shakelib.utils.exception</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.utils.utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.utils.utils.html">shakelib.utils.utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.distance.html">shakelib.distance</a></li>

@@ -18,6 +18,7 @@ from shakelib.rupture.origin import Origin
 from shakelib.rupture.quad_rupture import QuadRupture
 from shakelib.rupture.edge_rupture import EdgeRupture
 from shakelib.rupture.factory import get_rupture
+from shakelib.rupture.factory import rupture_from_dict
 
 from shakelib.rupture.utils import get_local_unit_slip_vector
 from shakelib.rupture.utils import get_quad_slip
@@ -26,6 +27,44 @@ from shakelib.rupture.factory import text_to_json
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
+
+
+def test_rupture_from_dict():
+    # Grab an EdgeRupture
+    origin = Origin({'eventsourcecode': 'test', 'lat': 0, 'lon': 0,
+                     'depth': 5.0, 'mag': 7.0})
+
+    file = os.path.join(homedir, 'rupture_data/cascadia.json')
+    rup_original = get_rupture(origin, file)
+    d = rup_original._geojson
+    rup_from_dict = rupture_from_dict(d)
+    assert rup_from_dict._mesh_dx == 0.5
+
+    # Specify mesh_dx
+    rup_original = get_rupture(origin, file, mesh_dx=1.0)
+    d = rup_original._geojson
+    rup_from_dict = rupture_from_dict(d)
+    assert rup_from_dict._mesh_dx == 1.0
+
+    # Quad rupture
+    file = os.path.join(homedir, 'rupture_data/izmit.json')
+    rup_original = get_rupture(origin, file)
+    d = rup_original._geojson
+    rup_from_dict = rupture_from_dict(d)
+    assert rup_from_dict.getArea() == rup_original.getArea()
+    # Note, there's a bit of an inconsistency highlighted here because
+    # magnitude has key 'magnitude' in the izmit file, but 'mag' in
+    # the origin and both get retained.
+
+    # Point rupture
+    origin = Origin({'eventsourcecode': 'test',
+                     'lon': -122.5, 'lat': 37.3,
+                     'depth': 5.0, 'mag': 7.0})
+    rup_original = get_rupture(origin)
+    d = rup_original._geojson
+    rup_from_dict = rupture_from_dict(d)
+    assert rup_from_dict.lats == 37.3
+    assert rup_from_dict.lons == -122.5
 
 
 def test_EdgeRupture():
@@ -525,6 +564,7 @@ def test_fromTrace():
 
 
 if __name__ == "__main__":
+    test_rupture_from_dict()
     test_rupture_depth(interactive=True)
     test_EdgeRupture()
     test_QuadRupture()

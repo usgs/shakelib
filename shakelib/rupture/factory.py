@@ -11,6 +11,7 @@ from openquake.hazardlib.geo.point import Point
 from shakelib.rupture.point_rupture import PointRupture
 from shakelib.rupture.quad_rupture import QuadRupture
 from shakelib.rupture.edge_rupture import EdgeRupture
+from shakelib.rupture.origin import Origin
 from shakelib.rupture import utils
 from shakelib.rupture import constants
 from shakelib.utils.exception import ShakeLibException
@@ -52,7 +53,7 @@ def get_rupture(origin, file=None, mesh_dx=0.5):
             else:
                 d = json.loads(str(file))
 
-            rupt = json_to_rupture(d, origin, mesh_dx=mesh_dx)
+            rupt = rupture_from_dict_and_origin(d, origin, mesh_dx=mesh_dx)
 
         except json.JSONDecodeError:
             # -----------------------------------------------------------------
@@ -60,7 +61,7 @@ def get_rupture(origin, file=None, mesh_dx=0.5):
             # -----------------------------------------------------------------
             try:
                 d = text_to_json(file)
-                rupt = json_to_rupture(d, origin, mesh_dx=mesh_dx)
+                rupt = rupture_from_dict_and_origin(d, origin, mesh_dx=mesh_dx)
             except:
                 raise Exception("Unknown rupture file format.")
     else:
@@ -70,10 +71,19 @@ def get_rupture(origin, file=None, mesh_dx=0.5):
     return rupt
 
 
-def json_to_rupture(d, origin, mesh_dx=0.5):
+def rupture_from_dict_and_origin(d, origin, mesh_dx=0.5):
     """
     Method returns either a QuadRupture or EdgeRupture object based on a
-    GeoJSON dictionary.
+    GeoJSON dictionary and an origin. Note that this is very similar to
+    :func:`rupture_from_dict`, except that method is for
+    constructing the rupture objects from a dict that already contains the
+    origin info in the `metadata` field (e.g., from a dict from a Shakemap
+    container), while this method is for construction of the rupture objects
+    from a GeoJSON dict that does not yet include that information (e.g., from
+    a dict that is read in to initially create the shakemap container, along
+    with an Origin that is derived from `event.xml`).
+
+    .. seealso:: :func:`rupture_from_dict`
 
     Args:
         d (dict): Rupture GeoJSON dictionary.
@@ -95,6 +105,55 @@ def json_to_rupture(d, origin, mesh_dx=0.5):
         rupt = QuadRupture(d, origin)
     else:
         rupt = EdgeRupture(d, origin, mesh_dx=mesh_dx)
+
+    return rupt
+
+
+def rupture_from_dict(d):
+    """
+    Method returns either a QuadRupture or EdgeRupture object based on a
+    GeoJSON dictionary.
+
+    .. seealso::
+        :func:`rupture_from_dict_and_origin`
+
+    Args:
+        d (dict): Rupture GeoJSON dictionary, which must contain origin
+            information in the 'metadata' field.
+
+    Returns:
+        a Rupture subclass.
+
+    """
+    validate_json(d)
+
+    # Construct an origin
+#    origin = Origin({
+#        'lat': d['metadata']['lat'],
+#        'lon': d['metadata']['lon'],
+#        'depth': d['metadata']['depth'],
+#        'mag': d['metadata']['mag'],
+#        'eventsourcecode': d['metadata']['eventsourcecode'],
+#        'time': d['metadata']['time'],
+#        'eventsource': d['metadata']['eventsource'],
+#        'locstring': d['metadata']['locstring'],
+#        'rake': d['metadata']['rake'],
+#        'mech': d['metadata']['mech'],
+#        'created': d['metadata']['created']
+#    })
+    origin = Origin(d['metadata'])
+
+    # What type of rupture is this?
+    geo_type = d['features'][0]['geometry']['type']
+    if geo_type == 'MultiPolygon':
+        # EdgeRupture will have 'mesh_dx' in metadata
+        if 'mesh_dx' in d['metadata']:
+            mesh_dx = d['metadata']['mesh_dx']
+            rupt = EdgeRupture(d, origin, mesh_dx=mesh_dx)
+        else:
+            rupt = QuadRupture(d, origin)
+    elif geo_type == 'Point':
+        rupt = PointRupture(origin)
 
     return rupt
 
@@ -217,8 +276,10 @@ def validate_json(d):
 
     geom = f['geometry']
 
-    if geom['type'] != 'MultiPolygon':
-        raise Exception('Geometry type should be \"MultiPolygon\".')
+    if (geom['type'] != 'MultiPolygon' and
+            geom['type'] != 'Point'):
+        raise Exception('Geometry type should be \"MultiPolygon\" '
+                        'or \"Point\".')
 
     if 'coordinates' not in geom.keys():
         raise Exception('Geometry dictionary should contain \"coordinates\" '
@@ -226,34 +287,35 @@ def validate_json(d):
 
     polygons = geom['coordinates'][0]
 
-    n_polygons = len(polygons)
-    for i in range(n_polygons):
-        p = polygons[i]
-        n_points = len(p)
-        if n_points % 2 == 0:
-            raise Exception('Number of points in polyon must be odd.')
+    if geom['type'] == 'MultiPolygon':
+        n_polygons = len(polygons)
+        for i in range(n_polygons):
+            p = polygons[i]
+            n_points = len(p)
+            if n_points % 2 == 0:
+                raise Exception('Number of points in polyon must be odd.')
 
-        if p[0] != p[-1]:
-            raise Exception('First and last points in polygon must be '
-                            'identical.')
+            if p[0] != p[-1]:
+                raise Exception('First and last points in polygon must be '
+                                'identical.')
 
-        n_pairs = int((n_points - 1) / 2)
-        for j in range(n_pairs):
-            # -----------------------------------------------------------------
-            # Points are paired and in each pair the top is first, as in:
-            #
-            #      _.-P1-._
-            #   P0'        'P2---P3
-            #   |                  \
-            #   P7---P6----P5-------P4
-            #
-            # Pairs: P0-P7, P1-P6, P2-P5, P3-P4
-            # -----------------------------------------------------------------
-            top_depth = p[j][2]
-            bot_depth = p[-(j + 2)][2]
-            if top_depth > bot_depth:
-                raise Exception(
-                    'Top points must be ordered before bottom points.')
+            n_pairs = int((n_points - 1) / 2)
+            for j in range(n_pairs):
+                # -------------------------------------------------------------
+                # Points are paired and in each pair the top is first, as in:
+                #
+                #      _.-P1-._
+                #   P0'        'P2---P3
+                #   |                  \
+                #   P7---P6----P5-------P4
+                #
+                # Pairs: P0-P7, P1-P6, P2-P5, P3-P4
+                # -------------------------------------------------------------
+                top_depth = p[j][2]
+                bot_depth = p[-(j + 2)][2]
+                if top_depth > bot_depth:
+                    raise Exception(
+                        'Top points must be ordered before bottom points.')
 
 
 def is_quadrupture_class(d):

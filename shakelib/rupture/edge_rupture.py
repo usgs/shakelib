@@ -79,6 +79,15 @@ class EdgeRupture(Rupture):
 
         reference = d['features'][0]['properties']['reference']
 
+        # Add origin information to metadata
+        odict = origin.__dict__
+        for k, v in odict.items():
+            if isinstance(v, HistoricTime):
+                d['metadata'][k] = v.strftime('%Y-%m-%dT%H:%M:%SZ')
+            else:
+                d['metadata'][k] = v
+        d['metadata']['mesh_dx'] = mesh_dx
+
         self._geojson = d
 
         self._toplons = np.array(toplons)
@@ -165,6 +174,7 @@ class EdgeRupture(Rupture):
                 d['metadata'][k] = v.strftime('%Y-%m-%dT%H:%M:%SZ')
             else:
                 d['metadata'][k] = v
+        d['metadata']['mesh_dx'] = mesh_dx
 
         return cls(d, origin, mesh_dx)
 

@@ -77,10 +77,21 @@ EdgeRupture.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="shakelib.rupture.factory.json_to_rupture">
-<code class="descclassname">shakelib.rupture.factory.</code><code class="descname">json_to_rupture</code><span class="sig-paren">(</span><em>d</em>, <em>origin</em>, <em>mesh_dx=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/factory.html#json_to_rupture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.factory.json_to_rupture" title="Permalink to this definition">¶</a></dt>
+<dt id="shakelib.rupture.factory.rupture_from_dict_and_origin">
+<code class="descclassname">shakelib.rupture.factory.</code><code class="descname">rupture_from_dict_and_origin</code><span class="sig-paren">(</span><em>d</em>, <em>origin</em>, <em>mesh_dx=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/factory.html#rupture_from_dict_and_origin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.factory.rupture_from_dict_and_origin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method returns either a QuadRupture or EdgeRupture object based on a
-GeoJSON dictionary.</p>
+GeoJSON dictionary and an origin. Note that this is very similar to
+<a class="reference internal" href="#shakelib.rupture.factory.rupture_from_dict" title="shakelib.rupture.factory.rupture_from_dict"><code class="xref py py-func docutils literal"><span class="pre">rupture_from_dict()</span></code></a>, except that method is for
+constructing the rupture objects from a dict that already contains the
+origin info in the <cite>metadata</cite> field (e.g., from a dict from a Shakemap
+container), while this method is for construction of the rupture objects
+from a GeoJSON dict that does not yet include that information (e.g., from
+a dict that is read in to initially create the shakemap container, along
+with an Origin that is derived from <cite>event.xml</cite>).</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#shakelib.rupture.factory.rupture_from_dict" title="shakelib.rupture.factory.rupture_from_dict"><code class="xref py py-func docutils literal"><span class="pre">rupture_from_dict()</span></code></a></p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -96,6 +107,28 @@ EdgeRupture.</li>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a Rupture subclass.</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.rupture.factory.rupture_from_dict">
+<code class="descclassname">shakelib.rupture.factory.</code><code class="descname">rupture_from_dict</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/rupture/factory.html#rupture_from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.rupture.factory.rupture_from_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method returns either a QuadRupture or EdgeRupture object based on a
+GeoJSON dictionary.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#shakelib.rupture.factory.rupture_from_dict_and_origin" title="shakelib.rupture.factory.rupture_from_dict_and_origin"><code class="xref py py-func docutils literal"><span class="pre">rupture_from_dict_and_origin()</span></code></a></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>dict</em>) – Rupture GeoJSON dictionary, which must contain origin
+information in the ‘metadata’ field.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a Rupture subclass.</td>
 </tr>
 </tbody>
 </table>

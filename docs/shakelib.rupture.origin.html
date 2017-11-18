@@ -55,7 +55,7 @@ directory called “source.txt”.</p>
 <p>Event values are:</p>
 <blockquote>
 <div><ul class="simple">
-<li>id: the event id.</li>
+<li>eventsourcecode: the event id.</li>
 <li>created: file creation time (Unix epoch - seconds since Jan 1, 1970).</li>
 <li>lat: hypocenter latitude (decimal degrees; -90 to 90).</li>
 <li>lon: hypocenter longitude (decimal degrees; -180 to 180).</li>
@@ -217,8 +217,24 @@ Input XML format looks like this:</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>eventxml</strong> (<em>str</em>) – Path to event XML file OR file-like object.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>Dictionary with keys as indicated above in earthquake element</dt>
-<dd>attributes.</dd>
+<dt>Dictionary with keys:</dt>
+<dd><ul class="first last simple">
+<li>eventsourcecode Origin network and origin code (i.e., us2017abcd).</li>
+<li>eventsource Origin network (“us”).</li>
+<li>time Origin time as an HistoricTime object.</li>
+<li>lat Origin latitude</li>
+<li>lon Origin longitude</li>
+<li>depth Origin depth</li>
+<li>mag Origin magnitude</li>
+<li>created Process time as an HistoricTime object.</li>
+<li>locstring Location string</li>
+<li>mechanism Moment mechanism, one of:
+- ‘RS’ (Reverse)
+- ‘SS’ (Strike-Slip)
+- ‘NM’ (Normal)
+- ‘ALL’ (Undetermined)</li>
+</ul>
+</dd>
 </dl>
 </td>
 </tr>

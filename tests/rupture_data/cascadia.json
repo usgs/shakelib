@@ -3,14 +3,14 @@
     "metadata": {
         "eventtime": "",
         "eventid": "",
-        "title": "Cascadia Megathrust"
+        "title": "Cascadia Megathrust",
+	"reference": "NSHMP14 file sub0_ch_mid.in"
     },
     "features":[
         {
             "type": "Feature",
             "properties": {
-                "rupture type": "rupture extent",
-		"reference": "NSHMP14 file sub0_ch_mid.in"
+                "rupture type": "rupture extent"
             },
             "geometry": {
 	        "type": "MultiPolygon",

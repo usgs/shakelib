@@ -111,7 +111,7 @@ def rupture_from_dict_and_origin(d, origin, mesh_dx=0.5):
 
 def rupture_from_dict(d):
     """
-    Method returns either a Rupture subclass (QuadRupture, EdgeRupture, or 
+    Method returns either a Rupture subclass (QuadRupture, EdgeRupture, or
     PointRupture) object based on a GeoJSON dictionary.
 
     .. seealso::
@@ -233,13 +233,14 @@ def text_to_json(file):
 
     d = {
         "type": "FeatureCollection",
-        "metadata": {},
+        "metadata": {
+            'reference':reference
+        },
         "features": [
             {
                 "type": "Feature",
                 "properties": {
-                    "rupture type": "rupture extent",
-                    "reference": reference
+                    "rupture type": "rupture extent"
                 },
                 "geometry": {
                     "type": "MultiPolygon",
@@ -265,11 +266,11 @@ def validate_json(d):
     if len(d['features']) != 1:
         raise Exception('JSON file should contain excactly one feature.')
 
-    f = d['features'][0]
+    if 'reference' not in d['metadata'].keys():
+        raise Exception('Json metadata field should contain '
+                        '\"reference\" key.')
 
-    if 'reference' not in f['properties'].keys():
-        raise Exception('Feature property dictionary should contain '
-                        '\"referencey\" key.')
+    f = d['features'][0]
 
     if f['type'] != 'Feature':
         raise Exception('Feature type should be \"Feature\".')

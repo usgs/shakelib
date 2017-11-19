@@ -24,13 +24,14 @@ class PointRupture(Rupture):
         - Provide reasonable default values for rupture parameters.
     """
 
-    def __init__(self, origin, reference=""):
+    def __init__(self, origin, reference="Origin"):
         """
         Constructs a PointRupture instance.
 
         Args:
             origin (Origin): Reference to a ShakeMap Origin instance.
-            reference (str): Citable reference for rupture.
+            reference (str): Citable reference for rupture; in the case of a
+                PointRupture, the 'reference' is probably the origin.
 
         Returns:
             PointRupture instance.
@@ -41,12 +42,13 @@ class PointRupture(Rupture):
         coords = [origin.lon, origin.lat, origin.depth]
 
         d = {"type": "FeatureCollection",
-             "metadata": {},
+             "metadata": {
+                 "reference": reference
+             },
              "features": [{
                  "type": "Feature",
                  "properties": {
-                     "rupture type": "rupture extent",
-                     "reference": reference,
+                     "rupture type": "rupture extent"
                  },
                  "geometry": {
                      "type": "Point",

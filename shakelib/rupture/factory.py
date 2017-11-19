@@ -127,20 +127,6 @@ def rupture_from_dict(d):
     """
     validate_json(d)
 
-    # Construct an origin
-#    origin = Origin({
-#        'lat': d['metadata']['lat'],
-#        'lon': d['metadata']['lon'],
-#        'depth': d['metadata']['depth'],
-#        'mag': d['metadata']['mag'],
-#        'eventsourcecode': d['metadata']['eventsourcecode'],
-#        'time': d['metadata']['time'],
-#        'eventsource': d['metadata']['eventsource'],
-#        'locstring': d['metadata']['locstring'],
-#        'rake': d['metadata']['rake'],
-#        'mech': d['metadata']['mech'],
-#        'created': d['metadata']['created']
-#    })
     origin = Origin(d['metadata'])
 
     # What type of rupture is this?
@@ -342,28 +328,26 @@ def is_quadrupture_class(d):
         p = polygons[i]
         n_points = len(p)
         n_pairs = int((n_points - 1) / 2)
-
-        # Within each polygon, top and bottom edges must be horizontal
-        depths = [pt[2] for pt in p]
-        tops = np.array(depths[0:n_pairs])
-        if not np.isclose(tops[0], tops, rtol=0,
-                          atol=constants.DEPTH_TOL).all():
-            isQuad = False
-        bots = np.array(depths[(n_pairs):-1])
-        if not np.isclose(bots[0], bots, rtol=0,
-                          atol=constants.DEPTH_TOL).all():
-            isQuad = False
-
         n_quads = n_pairs - 1
-        for j in range(n_quads):
-            # Four points of each quad should be co-planar within a tolerance
-            quad = [Point(p[j][0], p[j][1], p[j][2]),
-                    Point(p[j + 1][0], p[j + 1][1], p[j + 1][2]),
-                    Point(p[-(j + 3)][0], p[-(j + 3)][1], p[-(j + 3)][2]),
-                    Point(p[-(j + 2)][0], p[-(j + 2)][1], p[-(j + 2)][2])]
 
+        for k in range(n_quads):
+            # Four points of each quad should be co-planar within a tolerance
+            quad = [Point(p[k][0], p[k][1], p[k][2]),
+                    Point(p[k + 1][0], p[k + 1][1], p[k + 1][2]),
+                    Point(p[-(k + 3)][0], p[-(k + 3)][1], p[-(k + 3)][2]),
+                    Point(p[-(k + 2)][0], p[-(k + 2)][1], p[-(k + 2)][2])]
             test = utils.is_quad(quad)
             if test[0] is False:
+                isQuad = False
+
+            # Within each quad, top and bottom edges must be horizontal
+            tops = np.array([quad[0].depth, quad[1].depth])
+            if not np.isclose(tops[0], tops, rtol=0,
+                              atol=constants.DEPTH_TOL).all():
+                isQuad = False
+            bots = np.array([quad[2].depth, quad[3].depth])
+            if not np.isclose(bots[0], bots, rtol=0,
+                              atol=constants.DEPTH_TOL).all():
                 isQuad = False
 
     return isQuad

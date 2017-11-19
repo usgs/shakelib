@@ -28,7 +28,6 @@ homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
 
-homedir='/Users/emthompson/src/python/shakelib/tests/'
 
 def test_rupture_from_dict():
     # Grab an EdgeRupture

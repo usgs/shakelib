@@ -300,7 +300,7 @@ def validate_json(d):
                 # -------------------------------------------------------------
                 top_depth = p[j][2]
                 bot_depth = p[-(j + 2)][2]
-                if top_depth > bot_depth:
+                if top_depth >= bot_depth:
                     raise Exception(
                         'Top points must be ordered before bottom points.')
 

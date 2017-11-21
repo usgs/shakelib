@@ -68,7 +68,7 @@ class QuadRupture(Rupture):
         self._lat = lat
         self._depth = dep
         self._origin = origin
-        self._reference = d['features'][0]['properties']['reference']
+        self._reference = d['metadata']['reference']
         self._setQuadrilaterals()
 
     def getDepthAtPoint(self, lat, lon):
@@ -360,12 +360,13 @@ class QuadRupture(Rupture):
             coords.append(poly)
 
         d = {"type": "FeatureCollection",
-             "metadata": {},
+             "metadata": {
+                 "reference": reference
+             },
              "features": [{
                  "type": "Feature",
                  "properties": {
-                     "rupture type": "rupture extent",
-                     "reference": reference,
+                     "rupture type": "rupture extent"
                  },
                  "geometry": {
                      "type": "MultiPolygon",
@@ -525,12 +526,13 @@ class QuadRupture(Rupture):
             coords.append(poly)
 
         d = {"type": "FeatureCollection",
-             "metadata": {},
+             "metadata": {
+                 "reference": reference
+             },
              "features": [{
                  "type": "Feature",
                  "properties": {
-                     "rupture type": "rupture extent",
-                     "reference": reference,
+                     "rupture type": "rupture extent"
                  },
                  "geometry": {
                      "type": "MultiPolygon",

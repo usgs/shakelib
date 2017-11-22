@@ -77,7 +77,7 @@ class EdgeRupture(Rupture):
             group_index.extend([g_ind] * n_pairs)
             g_ind = g_ind + 1
 
-        reference = d['features'][0]['properties']['reference']
+        reference = d['metadata']['reference']
 
         # Add origin information to metadata
         odict = origin.__dict__
@@ -154,12 +154,13 @@ class EdgeRupture(Rupture):
             coords.append(poly)
 
         d = {"type": "FeatureCollection",
-             "metadata": {},
+             "metadata": {
+                 "reference": reference
+             },
              "features": [{
                  "type": "Feature",
                  "properties": {
-                     "rupture type": "rupture extent",
-                     "reference": reference,
+                     "rupture type": "rupture extent"
                  },
                  "geometry": {
                      "type": "MultiPolygon",

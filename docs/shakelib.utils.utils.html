@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="shakelib.distance" href="shakelib.distance.html" />
-    <link rel="prev" title="shakelib.utils.exception" href="shakelib.utils.exception.html" />
+    <link rel="prev" title="shakelib.utils.imt_string" href="shakelib.utils.imt_string.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -41,8 +41,53 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="shakelib-utils-utils">
-<h1>shakelib.utils.utils<a class="headerlink" href="#shakelib-utils-utils" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-shakelib.utils.utils">
+<span id="shakelib-utils-utils"></span><h1>shakelib.utils.utils<a class="headerlink" href="#module-shakelib.utils.utils" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="shakelib.utils.utils.get_extent">
+<code class="descclassname">shakelib.utils.utils.</code><code class="descname">get_extent</code><span class="sig-paren">(</span><em>rupture</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/utils.html#get_extent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.utils.get_extent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to compute map extent from rupture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rupture</strong> (<a class="reference internal" href="shakelib.rupture.base.html#shakelib.rupture.base.Rupture" title="shakelib.rupture.base.Rupture"><em>Rupture</em></a>) – A ShakeMap Rupture instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">lonmin, lonmax, latmin, latmax rounded to the nearest
+arc-minute..</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.utils.utils.is_stable">
+<code class="descclassname">shakelib.utils.utils.</code><code class="descname">is_stable</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/utils.html#is_stable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.utils.is_stable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if point is located in the US stable tectonic region. Uses the
+same boundary as the US NSHMP and so this function needs to be modified to
+work outside of the US.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong> (<em>float</em>) – Lognitude.</li>
+<li><strong>lat</strong> (<em>float</em>) – Latitude.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Is the point classified as tectonically stable.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -81,6 +126,7 @@
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.containers.html">shakelib.utils.containers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.distance.html">shakelib.utils.distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.exception.html">shakelib.utils.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.utils.imt_string.html">shakelib.utils.imt_string</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.utils.utils</a></li>
 </ul>
 </li>

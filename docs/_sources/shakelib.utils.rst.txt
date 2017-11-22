@@ -8,6 +8,7 @@ Submodules
    shakelib.utils.containers
    shakelib.utils.distance
    shakelib.utils.exception
+   shakelib.utils.imt_string
    shakelib.utils.utils
 
 Module contents

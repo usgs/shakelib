@@ -47,6 +47,7 @@
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="c1"># third party imports</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -89,16 +90,17 @@
 <span class="sd">        Instantiate an InputContainer from ShakeMap input data.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            filename: Path to HDF5 file that will be created to encapsulate all</span>
+<span class="sd">            filename (str): Path to HDF5 file that will be created to encapsulate all</span>
 <span class="sd">                input data.</span>
-<span class="sd">            config: Dictionary containing all configuration information</span>
+<span class="sd">            config (dict): Dictionary containing all configuration information</span>
 <span class="sd">                necessary for ShakeMap ground motion and other calculations.</span>
-<span class="sd">            eventfile: Path to ShakeMap event.xml file.</span>
-<span class="sd">            rupturefile: Path to ShakeMap rupture text or JSON file.</span>
-<span class="sd">            datafiles: List of ShakeMap data (DYFI, strong motion) files.</span>
+<span class="sd">            eventfile (str): Path to ShakeMap event.xml file.</span>
+<span class="sd">            rupturefile (str): Path to ShakeMap rupture text or JSON file.</span>
+<span class="sd">            datafiles (list): List of ShakeMap data (DYFI, strong motion) files.</span>
+<span class="sd">            version_history (dict): Dictionary containing version history.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Instance of InputContainer.</span>
+<span class="sd">            InputContainer: Instance of InputContainer.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">container</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="n">container</span><span class="o">.</span><span class="n">setConfig</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
@@ -127,7 +129,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Store the information found in an event.xml file as a dictionary.</span>
 
-<span class="sd">        Note:  addEvent will attempt to extract productcode as an attribute of</span>
+<span class="sd">        Note:  setEvent will attempt to extract productcode as an attribute of</span>
 <span class="sd">        the event.xml file earthquake tag.  If this fails, productcode will be</span>
 <span class="sd">        extracted from the directory tree, which should look something like</span>
 <span class="sd">        this:</span>
@@ -140,6 +142,9 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            event_file (str): String path to an event.xml file.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            KeyError: if event_file contains &#39;productcode&#39; and it doesn&#39;t</span>
+<span class="sd">                match the directory name containing the data for a given event.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">event_dict</span> <span class="o">=</span> <span class="n">read_event_file</span><span class="p">(</span><span class="n">event_file</span><span class="p">)</span>
         <span class="n">productcode</span> <span class="o">=</span> <span class="kc">None</span>
@@ -215,7 +220,7 @@
 <span class="sd">        Store a dictionary containing version history in the container.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">          history_dict (dict): Dictionary containing version history. ??</span>
+<span class="sd">            history_dict (dict): Dictionary containing version history. ??</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s1">&#39;version_history&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDictionaries</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dropDictionary</span><span class="p">(</span><span class="s1">&#39;version_history&#39;</span><span class="p">)</span>
@@ -226,7 +231,7 @@
 <span class="sd">        Return the configuration information as a dictionary.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">          (dict) Dictionary of configuration information.</span>
+<span class="sd">            dict: Dictionary of configuration information.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">config</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="s1">&#39;config&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDictionaries</span><span class="p">():</span>
@@ -238,7 +243,7 @@
 <span class="sd">        Get rupture object from data stored in container.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">          (Rupture) An instance of a sub-class of a Rupture object</span>
+<span class="sd">            Rupture: An instance of a sub-class of a Rupture object</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rupture_obj</span> <span class="o">=</span> <span class="kc">None</span>
@@ -257,7 +262,7 @@
 <span class="sd">        Return the StationList object stored in this container.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">          StationList object.</span>
+<span class="sd">          StationList: StationList object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">station</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="s1">&#39;station_data&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStrings</span><span class="p">():</span>
@@ -270,7 +275,7 @@
 <span class="sd">        Return the dictionary containing version history.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">          (dict): Dictionary containing version history. ??</span>
+<span class="sd">          dict: Dictionary containing version history. ??</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">version_dict</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="s1">&#39;version_history&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDictionaries</span><span class="p">():</span>
@@ -282,7 +287,7 @@
 <span class="sd">        Extract an Origin object from the event dictionary stored in container.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">          (Origin) Origin object.</span>
+<span class="sd">          Origin: Origin object.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">event_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDictionary</span><span class="p">(</span><span class="s1">&#39;event&#39;</span><span class="p">)</span>
@@ -354,11 +359,11 @@
 <span class="sd">        Retrieve a Grid2D object and any associated metadata from the container.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            name (str):</span>
+<span class="sd">            imt_name (str):</span>
 <span class="sd">                The name of the Grid2D object stored in the container.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            (dict) Dictionary containing 4 items:</span>
+<span class="sd">            dict: Dictionary containing 4 items:</span>
 <span class="sd">                   - mean Grid2D object for IMT mean values.</span>
 <span class="sd">                   - mean_metadata Dictionary containing any metadata</span>
 <span class="sd">                     describing mean layer.</span>
@@ -366,6 +371,8 @@
 <span class="sd">                   - std_metadata Dictionary containing any metadata describing</span>
 <span class="sd">                     standard deviation layer.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Inside OutputContainer&#39;</span><span class="p">)</span>
         <span class="n">group_name</span> <span class="o">=</span> <span class="s1">&#39;__imt_</span><span class="si">%s</span><span class="s1">_</span><span class="si">%s</span><span class="s1">__&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">imt_name</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">group_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s1">&#39;No group called </span><span class="si">%s</span><span class="s1"> in HDF file </span><span class="si">%s</span><span class="s1">&#39;</span>
@@ -424,7 +431,7 @@
 <span class="sd">          imt_name (str): Name of IMT (&#39;MMI&#39;,&#39;PGA&#39;,etc.)</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">          (list) List of names of components for given IMT.</span>
+<span class="sd">          list: List of names of components for given IMT.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">components</span> <span class="o">=</span> <span class="n">_get_type_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdfobj</span><span class="p">,</span> <span class="s1">&#39;imt_&#39;</span><span class="o">+</span><span class="n">imt_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">components</span></div>

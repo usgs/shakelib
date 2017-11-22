@@ -41,8 +41,154 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="shakelib-conversions-imc-beyer-bommer-2006">
-<h1>shakelib.conversions.imc.beyer_bommer_2006<a class="headerlink" href="#shakelib-conversions-imc-beyer-bommer-2006" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-shakelib.conversions.imc.beyer_bommer_2006">
+<span id="shakelib-conversions-imc-beyer-bommer-2006"></span><h1>shakelib.conversions.imc.beyer_bommer_2006<a class="headerlink" href="#module-shakelib.conversions.imc.beyer_bommer_2006" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006">
+<em class="property">class </em><code class="descclassname">shakelib.conversions.imc.beyer_bommer_2006.</code><code class="descname">BeyerBommer2006</code><a class="reference internal" href="_modules/shakelib/conversions/imc/beyer_bommer_2006.html#BeyerBommer2006"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Implements conversion for various “Intensity Measure
+Components” (IMCs) per Beyer and Bommer (2006).</p>
+<p>IMC equivalencies:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="53%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">OpenQuake</th>
+<th class="head">Beyer &amp; Bommer</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>AVERAGE_HORIZONTAL</td>
+<td>GMxy (Geometric mean)</td>
+</tr>
+<tr class="row-odd"><td>HORIZONTAL</td>
+<td>Random?</td>
+</tr>
+<tr class="row-even"><td>MEDIAN_HORIZONTAL</td>
+<td>AMxy (Arithmetic mean)</td>
+</tr>
+<tr class="row-odd"><td>GMRotI50</td>
+<td>GMRotI50</td>
+</tr>
+<tr class="row-even"><td>RotD50</td>
+<td>GMRotD50</td>
+</tr>
+<tr class="row-odd"><td>RANDOM_HORIZONTAL</td>
+<td>Random</td>
+</tr>
+<tr class="row-even"><td>GREATER_OF_TWO_HORIZONTAL</td>
+<td>Env_xy</td>
+</tr>
+<tr class="row-odd"><td>VERTICAL</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Notes</p>
+<blockquote>
+<div><ul class="simple">
+<li>AVERAGE_HORIZONTAL is the “reference” type.</li>
+<li>The OQ IMC “HORIZONAL” indicates that the horizontal IMC category
+may be ambiguous. In these cases, we are assuming that it is a
+random horizontal component as a default.</li>
+</ul>
+</div></blockquote>
+<p>To do</p>
+<blockquote>
+<div><ul class="simple">
+<li>Inherit from ConvertIMC class.</li>
+</ul>
+</div></blockquote>
+<p>References</p>
+<blockquote>
+<div>Beyer, K., &amp; Bommer, J. J. (2006). Relationships between median values
+and between aleatory variabilities for different definitions of the
+horizontal component of motion. Bulletin of the Seismological Society
+of America, 96(4A), 1512-1522.
+<a class="reference external" href="http://www.bssaonline.org/content/96/4A/1512.short">[link]</a></div></blockquote>
+<dl class="staticmethod">
+<dt id="shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006.ampIMCtoIMC">
+<em class="property">static </em><code class="descname">ampIMCtoIMC</code><span class="sig-paren">(</span><em>amps</em>, <em>imc_in</em>, <em>imc_out</em>, <em>imt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/conversions/imc/beyer_bommer_2006.html#BeyerBommer2006.ampIMCtoIMC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006.ampIMCtoIMC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns amps converted from one IMC to another.</p>
+<p><strong>Important</strong>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Assumes the input amps are in natural log (not linear) space</li>
+<li>IMC type ‘VERTICAL’ is not supported</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>amps</strong> (<em>array</em>) – Numpy array of ground motion amplitudes.</li>
+<li><strong>imc_in</strong> (<em>IMC</em>) – OpenQuake IMC type of the input amp array.
+<a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC">[link]</a></li>
+<li><strong>imc_out</strong> (<em>IMC</em>) – Desired OpenQuake IMC type of the output amps.
+<a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC">[link]</a></li>
+<li><strong>imt</strong> (<em>IMT</em>) – OpenQuake IMT of the input amps (must be one of PGA,
+PGV, or SA).
+<cite>[link] &lt;http://docs.openquake.org/oq-hazardlib/master/imt.html&gt;</cite></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Numpy array of amps converted from imc_in to imc_out.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006.sigmaIMCtoIMC">
+<em class="property">static </em><code class="descname">sigmaIMCtoIMC</code><span class="sig-paren">(</span><em>sigmas</em>, <em>imc_in</em>, <em>imc_out</em>, <em>imt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/conversions/imc/beyer_bommer_2006.html#BeyerBommer2006.sigmaIMCtoIMC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.conversions.imc.beyer_bommer_2006.BeyerBommer2006.sigmaIMCtoIMC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns standard deviations converted from one IMC to another.</p>
+<p><strong>Important</strong>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Assumes the input sigmas are in natural log space</li>
+<li>IMC types ‘VERTICAL’ and ‘HORIZONTAL’ are not supported</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sigmas</strong> (<em>array</em>) – Numpy array of standard deviations.</li>
+<li><strong>imc_in</strong> (<em>IMC</em>) – OpenQuake IMC type of the input sigmas array.
+<a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC">[link]</a></li>
+<li><strong>imc_out</strong> (<em>IMC</em>) – Desired OpenQuake IMC type of the output sigmas.
+<a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/const.html?highlight=imc#openquake.hazardlib.const.IMC">[link]</a></li>
+<li><strong>imt</strong> (<em>IMT</em>) – OpenQuake IMT of the input sigmas (must be one of PGA,
+PGV, or SA) <a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/imt.html">[link]</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
+<dt>Numpy array of standard deviations converted from imc_in to</dt>
+<dd><p class="first last">imc_out.</p>
+</dd>
+</dl>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

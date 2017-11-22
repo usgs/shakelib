@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>shakelib.utils &#8212; shakelib 4.0a documentation</title>
+    <title>shakelib.utils.imt_string &#8212; shakelib 4.0a documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -24,8 +24,8 @@
     <link rel="shortcut icon" href="_static/shakelib.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="shakelib.utils.containers" href="shakelib.utils.containers.html" />
-    <link rel="prev" title="shakelib.rupture.utils" href="shakelib.rupture.utils.html" />
+    <link rel="next" title="shakelib.utils.utils" href="shakelib.utils.utils.html" />
+    <link rel="prev" title="shakelib.utils.exception" href="shakelib.utils.exception.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -41,20 +41,55 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="shakelib-utils">
-<h1>shakelib.utils<a class="headerlink" href="#shakelib-utils" title="Permalink to this headline">¶</a></h1>
-<p>Submodules</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="shakelib.utils.containers.html">shakelib.utils.containers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="shakelib.utils.distance.html">shakelib.utils.distance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="shakelib.utils.exception.html">shakelib.utils.exception</a></li>
-<li class="toctree-l1"><a class="reference internal" href="shakelib.utils.imt_string.html">shakelib.utils.imt_string</a></li>
-<li class="toctree-l1"><a class="reference internal" href="shakelib.utils.utils.html">shakelib.utils.utils</a></li>
-</ul>
+  <div class="section" id="module-shakelib.utils.imt_string">
+<span id="shakelib-utils-imt-string"></span><h1>shakelib.utils.imt_string<a class="headerlink" href="#module-shakelib.utils.imt_string" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="shakelib.utils.imt_string.oq_to_file">
+<code class="descclassname">shakelib.utils.imt_string.</code><code class="descname">oq_to_file</code><span class="sig-paren">(</span><em>oqimt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/imt_string.html#oq_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.imt_string.oq_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert openquake IMT nomenclature to filename friendly form.</p>
+<p>Examples:
+SA(1.0) (Spectral Acceleration at 1 second) -&gt; PSA1p0
+SA(0.3) (Spectral Acceleration at 0.3 second) -&gt; PSA0p3
+SA(15.0) (Spectral Acceleration at 15 seconds) -&gt; PSA15p0
+SA(3) (Spectral Acceleration at 3 seconds) -&gt; PSA3p0
+SA(.5) (Spectral Acceleration at 0.5 seconds) -&gt; PSA0p5</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>oqimt</strong> (<em>str</em>) – Openquake IMT nomenclature string.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Filename friendly IMT string.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.utils.imt_string.file_to_oq">
+<code class="descclassname">shakelib.utils.imt_string.</code><code class="descname">file_to_oq</code><span class="sig-paren">(</span><em>fileimt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/imt_string.html#file_to_oq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.imt_string.file_to_oq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert filename friendly IMT form to openquake form.</p>
+<p>Examples:
+PSA1p0 (Spectral Acceleration at 1 second) -&gt; SA(1.0)
+PSA0p3 (Spectral Acceleration at 0.3 second) -&gt; SA(0.3)
+PSA15p0 (Spectral Acceleration at 15 seconds) -&gt; SA(15.0)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileimt</strong> (<em>str</em>) – Filename friendly IMT string.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Openquake IMT nomenclature string.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<p>Module contents</p>
-<span class="target" id="module-shakelib.utils"></span></div>
 
 
           </div>
@@ -88,11 +123,11 @@
 <li class="toctree-l2"><a class="reference internal" href="shakelib.gmice.html">shakelib.gmice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.plotting.html">shakelib.plotting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shakelib.rupture.html">shakelib.rupture</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">shakelib.utils</a><ul>
+<li class="toctree-l2 current"><a class="reference internal" href="shakelib.utils.html">shakelib.utils</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.containers.html">shakelib.utils.containers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.distance.html">shakelib.utils.distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.exception.html">shakelib.utils.exception</a></li>
-<li class="toctree-l3"><a class="reference internal" href="shakelib.utils.imt_string.html">shakelib.utils.imt_string</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.utils.imt_string</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.utils.html">shakelib.utils.utils</a></li>
 </ul>
 </li>

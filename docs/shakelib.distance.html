@@ -41,8 +41,175 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="shakelib-distance">
-<h1>shakelib.distance<a class="headerlink" href="#shakelib-distance" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-shakelib.distance">
+<span id="shakelib-distance"></span><h1>shakelib.distance<a class="headerlink" href="#module-shakelib.distance" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shakelib.distance.Distance">
+<em class="property">class </em><code class="descclassname">shakelib.distance.</code><code class="descname">Distance</code><span class="sig-paren">(</span><em>gmpe</em>, <em>lon</em>, <em>lat</em>, <em>dep</em>, <em>rupture=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/distance.html#Distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.distance.Distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Class for distance calculations. Primary method is ‘get_distance’. To
+handle multiple segment ruptures, many of the distances are based on the
+Spudich and Chiou (2015) GC2 coordinate system.</p>
+<p class="rubric">References</p>
+<p>Spudich, Paul and Chiou, Brian, 2015, Strike-parallel and strike-normal
+coordinate system around geometrically complicated rupture traces—Use
+by NGA-West2 and further improvements: U.S. Geological Survey Open-File
+Report 2015-1028, 20 p., <a class="reference external" href="http://dx.doi.org/10.3133/ofr20151028">http://dx.doi.org/10.3133/ofr20151028</a>.</p>
+<p>Constructor for Distance class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gmpe</strong> (<em>GMPE</em>) – Concrete subclass of GMPE
+<a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#built-in-gsims">[link]</a>;
+can be individual instance or list of instances.</li>
+<li><strong>lon</strong> (<em>array</em>) – A numpy array of site longitudes.</li>
+<li><strong>lat</strong> (<em>array</em>) – A numpy array of site latitudes.</li>
+<li><strong>dep</strong> (<em>array</em>) – A numpy array of site depths (km); down is positive.</li>
+<li><strong>rupture</strong> (<a class="reference internal" href="shakelib.rupture.base.html#shakelib.rupture.base.Rupture" title="shakelib.rupture.base.Rupture"><em>Rupture</em></a>) – A Shakemap Rupture instance.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Distance object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="classmethod">
+<dt id="shakelib.distance.Distance.fromSites">
+<em class="property">classmethod </em><code class="descname">fromSites</code><span class="sig-paren">(</span><em>gmpe</em>, <em>sites</em>, <em>rup</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/distance.html#Distance.fromSites"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.distance.Distance.fromSites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience class method to construct a Distance object from a sites
+object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gmpe</strong> (<em>GMPE</em>) – Concrete subclass of GMPE
+<a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/gsim/index.html#built-in-gsims">[link]</a>;
+can be individual instance or list of instances.</li>
+<li><strong>sites</strong> (<a class="reference internal" href="shakelib.sites.html#shakelib.sites.Sites" title="shakelib.sites.Sites"><em>Sites</em></a>) – A Shakemap Sites object.</li>
+<li><strong>rup</strong> (<a class="reference internal" href="shakelib.rupture.base.html#shakelib.rupture.base.Rupture" title="shakelib.rupture.base.Rupture"><em>Rupture</em></a>) – A Shakemap Rupture object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Distance object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.distance.Distance.getDistanceContext">
+<code class="descname">getDistanceContext</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/distance.html#Distance.getDistanceContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.distance.Distance.getDistanceContext" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Openquake distance context
+<a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/gsim/index.html?highlight=distancescontext#openquake.hazardlib.gsim.base.DistancesContext">[link]</a>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.distance.get_distance_measures">
+<code class="descclassname">shakelib.distance.</code><code class="descname">get_distance_measures</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/distance.html#get_distance_measures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.distance.get_distance_measures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of strings specifying the distance measure types
+(e.g. “repi”, “rhypo”) available for the “methods” argument to
+get_diistance().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of strings.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.distance.get_distance">
+<code class="descclassname">shakelib.distance.</code><code class="descname">get_distance</code><span class="sig-paren">(</span><em>methods</em>, <em>lat</em>, <em>lon</em>, <em>dep</em>, <em>rupture</em>, <em>dx=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/distance.html#get_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.distance.get_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate distance using any one of a number of distance measures.
+One of quadlist OR hypo must be specified. The following table gives
+the allowed distance strings and a description of each.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">String</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>repi</td>
+<td>Distance to epicenter.</td>
+</tr>
+<tr class="row-odd"><td>rhypo</td>
+<td>Distance to hypocenter.</td>
+</tr>
+<tr class="row-even"><td>rjb</td>
+<td>Joyner-Boore distance; this is closest distance to the
+surface projection of the rupture plane.</td>
+</tr>
+<tr class="row-odd"><td>rrup</td>
+<td>Rupture distance; closest distance to the rupture plane.</td>
+</tr>
+<tr class="row-even"><td>rx</td>
+<td>Strike-normal distance; same as GC2 coordiante T.</td>
+</tr>
+<tr class="row-odd"><td>ry</td>
+<td>Strike-parallel distance; same as GC2 coordiante U, but
+with a shift in origin definition. See Spudich and Chiou
+(2015) <a class="reference external" href="http://dx.doi.org/10.3133/ofr20151028">http://dx.doi.org/10.3133/ofr20151028</a>.</td>
+</tr>
+<tr class="row-even"><td>ry0</td>
+<td>Horizontal distance off the end of the rupture measured
+parallel to strike. Can only be zero or positive. We
+compute this as a function of GC2 coordinate U.</td>
+</tr>
+<tr class="row-odd"><td>U</td>
+<td>GC2 coordinate U.</td>
+</tr>
+<tr class="row-even"><td>T</td>
+<td>GC2 coordinate T.</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>methods</strong> (<em>list</em>) – List of strings (or just a string) of distances to
+compute.</li>
+<li><strong>lat</strong> (<em>array</em>) – A numpy array of latitudes.</li>
+<li><strong>lon</strong> (<em>array</em>) – A numpy array of longidues.</li>
+<li><strong>dep</strong> (<em>array</em>) – A numpy array of depths (km).</li>
+<li><strong>rupture</strong> (<a class="reference internal" href="shakelib.rupture.base.html#shakelib.rupture.base.Rupture" title="shakelib.rupture.base.Rupture"><em>Rupture</em></a>) – A ShakeMap Rupture instance.</li>
+<li><strong>dx</strong> (<em>float</em>) – Mesh spacing for rupture; only used if rupture is an
+EdgeRupture subclass.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dictionary of numpy arrays of distances, size of lon.shape.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 

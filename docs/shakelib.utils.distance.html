@@ -41,8 +41,78 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="shakelib-utils-distance">
-<h1>shakelib.utils.distance<a class="headerlink" href="#shakelib-utils-distance" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-shakelib.utils.distance">
+<span id="shakelib-utils-distance"></span><h1>shakelib.utils.distance<a class="headerlink" href="#module-shakelib.utils.distance" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="shakelib.utils.distance.geodetic_distance_fast">
+<code class="descclassname">shakelib.utils.distance.</code><code class="descname">geodetic_distance_fast</code><span class="sig-paren">(</span><em>lons1</em>, <em>lats1</em>, <em>lons2</em>, <em>lats2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/distance.html#geodetic_distance_fast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.distance.geodetic_distance_fast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the geodetic distance between two points or two collections
+of points using a formula that is substantially faster than the
+Haversine formula, but is nearly as accurate for distances up to a
+few hundred km.</p>
+<p>Parameters are coordinates in RADIANS. They could be scalar
+float numbers or numpy arrays, in which case they should be either
+the same dimensions (in which case the returned distances will be
+an array of the same shape with point for point distances), or they
+should broadcast together (in which case the returned distances will
+be a matrix of each point in the first set to every point in the
+second set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lons1</strong> (<em>numpy array</em>) – An array of longitudes.</li>
+<li><strong>lats1</strong> (<em>numpy array</em>) – An array of latitudes the same shape as lons1.</li>
+<li><strong>lons2</strong> (<em>numpy array</em>) – An array of longitudes.</li>
+<li><strong>lats2</strong> (<em>numpy array</em>) – An array of latitudes the same shape as lons2.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Distances in km.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(numpy array)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="shakelib.utils.distance.geodetic_distance_haversine">
+<code class="descclassname">shakelib.utils.distance.</code><code class="descname">geodetic_distance_haversine</code><span class="sig-paren">(</span><em>lons1</em>, <em>lats1</em>, <em>lons2</em>, <em>lats2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/utils/distance.html#geodetic_distance_haversine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.utils.distance.geodetic_distance_haversine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the geodetic distance between two points or two collections
+of points using the Haversine formula.</p>
+<p>Parameters are coordinates in RADIANS. They could be scalar
+float numbers or numpy arrays, in which case they should be either
+the same dimensions (in which case the returned distances will be
+an array of the same shape with point for point distances), or they
+should broadcast together (in which case the returned distances will
+be a matrix of each point in the first set to every point in the
+second set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lons1</strong> (<em>numpy array</em>) – An array of longitudes.</li>
+<li><strong>lats1</strong> (<em>numpy array</em>) – An array of latitudes the same shape as lons1.</li>
+<li><strong>lons2</strong> (<em>numpy array</em>) – An array of longitudes.</li>
+<li><strong>lats2</strong> (<em>numpy array</em>) – An array of latitudes the same shape as lons2.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Distances in km.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(numpy array)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -81,6 +151,7 @@
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.containers.html">shakelib.utils.containers</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">shakelib.utils.distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.exception.html">shakelib.utils.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shakelib.utils.imt_string.html">shakelib.utils.imt_string</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shakelib.utils.utils.html">shakelib.utils.utils</a></li>
 </ul>
 </li>

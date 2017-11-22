@@ -5,6 +5,7 @@ from datetime import datetime
 import collections
 import os.path
 import json
+import logging
 
 # third party imports
 import numpy as np
@@ -47,16 +48,17 @@ class InputContainer(GridHDFContainer):
         Instantiate an InputContainer from ShakeMap input data.
 
         Args:
-            filename: Path to HDF5 file that will be created to encapsulate all
+            filename (str): Path to HDF5 file that will be created to encapsulate all
                 input data.
-            config: Dictionary containing all configuration information
+            config (dict): Dictionary containing all configuration information
                 necessary for ShakeMap ground motion and other calculations.
-            eventfile: Path to ShakeMap event.xml file.
-            rupturefile: Path to ShakeMap rupture text or JSON file.
-            datafiles: List of ShakeMap data (DYFI, strong motion) files.
+            eventfile (str): Path to ShakeMap event.xml file.
+            rupturefile (str): Path to ShakeMap rupture text or JSON file.
+            datafiles (list): List of ShakeMap data (DYFI, strong motion) files.
+            version_history (dict): Dictionary containing version history.
 
         Returns:
-            Instance of InputContainer.
+            InputContainer: Instance of InputContainer.
         """
         container = cls.create(filename)
         container.setConfig(config)
@@ -85,7 +87,7 @@ class InputContainer(GridHDFContainer):
         """
         Store the information found in an event.xml file as a dictionary.
 
-        Note:  addEvent will attempt to extract productcode as an attribute of
+        Note:  setEvent will attempt to extract productcode as an attribute of
         the event.xml file earthquake tag.  If this fails, productcode will be
         extracted from the directory tree, which should look something like
         this:
@@ -98,6 +100,9 @@ class InputContainer(GridHDFContainer):
 
         Args:
             event_file (str): String path to an event.xml file.
+        Raises:
+            KeyError: if event_file contains 'productcode' and it doesn't
+                match the directory name containing the data for a given event.
         """
         event_dict = read_event_file(event_file)
         productcode = None
@@ -173,7 +178,7 @@ class InputContainer(GridHDFContainer):
         Store a dictionary containing version history in the container.
 
         Args:
-          history_dict (dict): Dictionary containing version history. ??
+            history_dict (dict): Dictionary containing version history. ??
         """
         if 'version_history' in self.getDictionaries():
             self.dropDictionary('version_history')
@@ -184,7 +189,7 @@ class InputContainer(GridHDFContainer):
         Return the configuration information as a dictionary.
 
         Returns:
-          (dict) Dictionary of configuration information.
+            dict: Dictionary of configuration information.
         """
         config = None
         if 'config' in self.getDictionaries():
@@ -196,7 +201,7 @@ class InputContainer(GridHDFContainer):
         Get rupture object from data stored in container.
 
         Returns:
-          (Rupture) An instance of a sub-class of a Rupture object
+            Rupture: An instance of a sub-class of a Rupture object
 
         """
         rupture_obj = None
@@ -215,7 +220,7 @@ class InputContainer(GridHDFContainer):
         Return the StationList object stored in this container.
 
         Returns:
-          StationList object.
+          StationList: StationList object.
         """
         station = None
         if 'station_data' in self.getStrings():
@@ -228,7 +233,7 @@ class InputContainer(GridHDFContainer):
         Return the dictionary containing version history.
 
         Returns:
-          (dict): Dictionary containing version history. ??
+          dict: Dictionary containing version history. ??
         """
         version_dict = None
         if 'version_history' in self.getDictionaries():
@@ -240,7 +245,7 @@ class InputContainer(GridHDFContainer):
         Extract an Origin object from the event dictionary stored in container.
 
         Returns:
-          (Origin) Origin object.
+          Origin: Origin object.
 
         """
         event_dict = self.getDictionary('event')
@@ -312,11 +317,11 @@ class OutputContainer(GridHDFContainer):
         Retrieve a Grid2D object and any associated metadata from the container.
 
         Args:
-            name (str):
+            imt_name (str):
                 The name of the Grid2D object stored in the container.
 
         Returns:
-            (dict) Dictionary containing 4 items:
+            dict: Dictionary containing 4 items:
                    - mean Grid2D object for IMT mean values.
                    - mean_metadata Dictionary containing any metadata
                      describing mean layer.
@@ -324,6 +329,8 @@ class OutputContainer(GridHDFContainer):
                    - std_metadata Dictionary containing any metadata describing
                      standard deviation layer.
         """
+        logger = logging.getLogger()
+        logger.info('Inside OutputContainer')
         group_name = '__imt_%s_%s__' % (imt_name, component)
         if group_name not in self._hdfobj:
             raise LookupError('No group called %s in HDF file %s'
@@ -382,7 +389,7 @@ class OutputContainer(GridHDFContainer):
           imt_name (str): Name of IMT ('MMI','PGA',etc.)
 
         Returns:
-          (list) List of names of components for given IMT.
+          list: List of names of components for given IMT.
         """
         components = _get_type_list(self._hdfobj, 'imt_'+imt_name)
         return components

@@ -41,8 +41,54 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="shakelib-correlation-boore-2003">
-<h1>shakelib.correlation.boore_2003<a class="headerlink" href="#shakelib-correlation-boore-2003" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-shakelib.correlation.boore_2003">
+<span id="shakelib-correlation-boore-2003"></span><h1>shakelib.correlation.boore_2003<a class="headerlink" href="#module-shakelib.correlation.boore_2003" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shakelib.correlation.boore_2003.Boore2003">
+<em class="property">class </em><code class="descclassname">shakelib.correlation.boore_2003.</code><code class="descname">Boore2003</code><a class="reference internal" href="_modules/shakelib/correlation/boore_2003.html#Boore2003"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.correlation.boore_2003.Boore2003" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Implements the correlation model proposed in the appendix of Boore et al.
+(2003).</p>
+<dl class="docutils">
+<dt>To do</dt>
+<dd><ul class="first last simple">
+<li>Inherit from SpatialCorrelation class.</li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Boore, D. M., Gibbs, J. F., Joyner, W. B., Tinsley, J. C., &amp; Ponti, D.
+J. (2003). Estimated ground motion from the 1994 Northridge,
+California, earthquake at the site of the Interstate 10 and La Cienega
+Boulevard bridge collapse, West Los Angeles, California. Bulletin of
+the Seismological Society of America, 93(6), 2737-2751.
+<a class="reference external" href="http://www.bssaonline.org/content/93/6/2737.short">[link]</a></p>
+<dl class="staticmethod">
+<dt id="shakelib.correlation.boore_2003.Boore2003.getSpatialCorrelation">
+<em class="property">static </em><code class="descname">getSpatialCorrelation</code><span class="sig-paren">(</span><em>dists</em>, <em>imt='PGA'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/correlation/boore_2003.html#Boore2003.getSpatialCorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.correlation.boore_2003.Boore2003.getSpatialCorrelation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for evalulating spatial correlation model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dists</strong> (<em>ndarray</em>) – Numpy array of distances (km).</li>
+<li><strong>imt</strong> (<em>string</em>) – Openquake intensity measure type instance string.
+<a class="reference external" href="http://docs.openquake.org/oq-hazardlib/master/imt.html">[link]</a>
+This model was developed specifically for PGA, and so this is
+the default value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Numpy array of correlation values.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

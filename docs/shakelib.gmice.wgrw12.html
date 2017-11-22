@@ -41,8 +41,169 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="shakelib-gmice-wgrw12">
-<h1>shakelib.gmice.wgrw12<a class="headerlink" href="#shakelib-gmice-wgrw12" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-shakelib.gmice.wgrw12">
+<span id="shakelib-gmice-wgrw12"></span><h1>shakelib.gmice.wgrw12<a class="headerlink" href="#module-shakelib.gmice.wgrw12" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shakelib.gmice.wgrw12.WGRW12">
+<em class="property">class </em><code class="descclassname">shakelib.gmice.wgrw12.</code><code class="descname">WGRW12</code><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Implements the ground motion intensity conversion equations (GMICE) of
+Worden et al. (2012).</p>
+<p class="rubric">References</p>
+<p>Worden, C. B., Gerstenberger, M. C., Rhoades, D. A., &amp; Wald, D. J.
+(2012). Probabilistic relationships between ground‐motion parameters
+and modified Mercalli intensity in California. Bulletin of the
+Seismological Society of America, 102(1), 204-221.</p>
+<dl class="attribute">
+<dt id="shakelib.gmice.wgrw12.WGRW12.DEFINED_FOR_INTENSITY_MEASURE_TYPES">
+<code class="descname">DEFINED_FOR_INTENSITY_MEASURE_TYPES</code><em class="property"> = {&lt;class 'openquake.hazardlib.imt.PGA'&gt;, &lt;class 'openquake.hazardlib.imt.PGV'&gt;, &lt;class 'openquake.hazardlib.imt.SA'&gt;}</em><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.DEFINED_FOR_INTENSITY_MEASURE_TYPES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="shakelib.gmice.wgrw12.WGRW12.DEFINED_FOR_SA_PERIODS">
+<code class="descname">DEFINED_FOR_SA_PERIODS</code><em class="property"> = {0.3, 1.0, 3.0}</em><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.DEFINED_FOR_SA_PERIODS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getMIfromGM">
+<code class="descname">getMIfromGM</code><span class="sig-paren">(</span><em>amps</em>, <em>imt</em>, <em>dists=None</em>, <em>mag=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getMIfromGM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getMIfromGM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to compute macroseismic intensity from ground-motion
+intensity. Supported ground-motion IMTs are PGA, PGV and PSA
+at 0.3, 1.0, and 3.0 sec periods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>amps</strong> (<em>ndarray</em>) – Ground motion amplitude; natural log units; g for PGA and
+PSA, cm/s for PGV.</li>
+<li><strong>imt</strong> (<em>OpenQuake IMT</em>) – Type the input amps (must be one of PGA, PGV, or SA).
+Supported SA periods are 0.3, 1.0, and 3.0 sec.
+<cite>[link] &lt;http://docs.openquake.org/oq-hazardlib/master/imt.html&gt;</cite></li>
+<li><strong>dists</strong> (<em>ndarray</em>) – Numpy array of distances from rupture (km).</li>
+<li><strong>mag</strong> (<em>float</em>) – Earthquake magnitude.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">ndarray of Modified Mercalli Intensity and ndarray of
+dMMI / dln(amp) (i.e., the slope of the relationship at the
+point in question).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getGMfromMI">
+<code class="descname">getGMfromMI</code><span class="sig-paren">(</span><em>mmi</em>, <em>imt</em>, <em>dists=None</em>, <em>mag=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getGMfromMI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getGMfromMI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to tcompute ground-motion intensity from macroseismic
+intensity. Supported IMTs are PGA, PGV and PSA for 0.3, 1.0, and
+3.0 sec periods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mmi</strong> (<em>ndarray</em>) – Macroseismic intensity.</li>
+<li><strong>imt</strong> (<em>OpenQuake IMT</em>) – IMT of the requested ground-motions intensities (must be
+one of PGA, PGV, or SA).
+<cite>[link] &lt;http://docs.openquake.org/oq-hazardlib/master/imt.html&gt;</cite></li>
+<li><strong>dists</strong> (<em>ndarray</em>) – Rupture distances (km) to the corresponding MMIs.</li>
+<li><strong>mag</strong> (<em>float</em>) – Earthquake magnitude.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Ndarray of ground motion intensity in natural log of g for PGA
+and PSA, and natural log cm/s for PGV; ndarray of dln(amp) / dMMI
+(i.e., the slope of the relationship at the point in question).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getGM2MIsd">
+<code class="descname">getGM2MIsd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getGM2MIsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getGM2MIsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary of standard deviations for the ground-motion
+to MMI conversion. The keys are the ground motion types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dictionary of GM to MI sigmas (in MMI units).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getMI2GMsd">
+<code class="descname">getMI2GMsd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getMI2GMsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getMI2GMsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary of standard deviations for the MMI
+to ground-motion conversion. The keys are the ground motion
+types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dictionary of MI to GM sigmas (ln(PGM) units).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getName">
+<em class="property">static </em><code class="descname">getName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of this GMICE.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">String containing name of this GMICE.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getScale">
+<em class="property">static </em><code class="descname">getScale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getScale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getScale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the PostScript file containing this GMICE’s
+scale.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Name of GMICE scale file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getMinMax">
+<em class="property">static </em><code class="descname">getMinMax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getMinMax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getMinMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the minimum and maximum MMI values produced by this GMICE.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple of min and max values of GMICE.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shakelib.gmice.wgrw12.WGRW12.getDistanceType">
+<em class="property">static </em><code class="descname">getDistanceType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shakelib/gmice/wgrw12.html#WGRW12.getDistanceType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shakelib.gmice.wgrw12.WGRW12.getDistanceType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 

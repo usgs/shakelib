@@ -1,8 +1,5 @@
-#local imports
+# local imports
 import re
-
-#third party imports
-import numpy as np
 
 def oq_to_file(oqimt):
     """Convert openquake IMT nomenclature to filename friendly form.
@@ -18,22 +15,26 @@ def oq_to_file(oqimt):
         oqimt (str): Openquake IMT nomenclature string.
     Returns:
         str: Filename friendly IMT string.
+    Raises:
+        ValueError: when there is no corresponding filename-friendly
+            IMT representation.
     """
-    if oqimt in ['PGA','PGV','MMI']:
+    if oqimt in ['PGA', 'PGV', 'MMI']:
         return oqimt
     float_pattern = r"[-+]?\d*\.\d+|\d+"
-    periods = re.findall(float_pattern,oqimt)
+    periods = re.findall(float_pattern, oqimt)
     if not len(periods):
-        raise ValueError('IMT string "%s" has no corresponding file-name friendly representation.' % oqimt)
+        fmt = 'IMT string "%s" has no file-name friendly representation.'
+        raise ValueError(fmt % oqimt)
     period = periods[0]
     if period.find('.') < 0:
         integer = period
         fraction = '0'
     else:
-        integer,fraction = period.split('.')
+        integer, fraction = period.split('.')
         if not len(integer):
             integer = '0'
-    fileimt = 'PSA%sp%s' % (integer,fraction)
+    fileimt = 'PSA%sp%s' % (integer, fraction)
     return fileimt
 
 def file_to_oq(fileimt):
@@ -49,8 +50,14 @@ def file_to_oq(fileimt):
     Returns:
         str: Openquake IMT nomenclature string.
     """
-    if fileimt in ['PGA','PGV','MMI']:
+    if fileimt in ['PGA', 'PGV', 'MMI']:
         return fileimt
-    integer,fraction = fileimt.replace('PSA','').split('p')
-    oqimt = 'SA(%s.%s)' % (integer,fraction)
+    if 'p' not in fileimt:
+        fmt = '%s is not a valid filename-friendly IMT string.'
+        raise ValueError(fmt % fileimt)
+    integer, fraction = fileimt.replace('PSA', '').split('p')
+    if not len(fraction):
+        fmt = '%s is not a valid filename-friendly IMT string.'
+        raise ValueError(fmt % fileimt)
+    oqimt = 'SA(%s.%s)' % (integer, fraction)
     return oqimt

@@ -2,7 +2,7 @@
 
 from shakelib.utils.imt_string import oq_to_file, file_to_oq
 
-def test():
+def test_imt():
     assert oq_to_file('SA(1.0)') == 'PSA1p0'
     assert oq_to_file('SA(0.3)') == 'PSA0p3'
     assert oq_to_file('SA(15.0)') == 'PSA15p0'
@@ -30,4 +30,4 @@ def test():
     
 
 if __name__ == '__main__':
-    test()
+    test_imt()

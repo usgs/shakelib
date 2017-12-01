@@ -11,6 +11,7 @@ from impactutils.time.ancient_time import HistoricTime
 from shakelib.utils.exception import ShakeLibException
 from shakelib.rupture import constants
 
+TIMEFMT = '%Y-%m-%dT%H:%M:%SZ'
 
 class Origin(object):
     """
@@ -56,7 +57,9 @@ class Origin(object):
 
         Returns:
             Origin object.
-
+        Raises:
+            ValueError: When input time is not and cannot be converted to 
+                HistoricTime object.
         """
 
         # ---------------------------------------------------------------------
@@ -82,6 +85,15 @@ class Origin(object):
 
         if (event['lon'] > 180) or (event['lon'] < -180):
             raise Exception('lat must be between -180 and 180 degrees.')
+
+        # make sure that time is an HistoricTime instance
+        if 'time' in event:
+            if isinstance(event['time'],str):
+                try:
+                    event['time'] = HistoricTime.strptime(event['time'],TIMEFMT)
+                except ValueError as ve:
+                    fmt = 'Input time string %s cannot be converted to datetime.'
+                    raise ValueError(fmt % event['time'])
 
         if 'mech' in event.keys():
             if event['mech'] == '':

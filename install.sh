@@ -20,15 +20,37 @@ conda config --append channels ioos # for rasterio v 1.0a2
 
 unamestr=`uname`
 if [[ "$unamestr" == 'Linux' ]]; then
-    DEPARRAY=(numpy=1.11 scipy=0.19.1 matplotlib=2.0.2 rasterio=1.0a2 \
-        pandas=0.20.3 h5py=2.7.0 gdal=2.1.4 pytest=3.2.0 pytest-cov=2.5.1 \
-        cartopy=0.15.1 fiona=1.7.8 numexpr=2.6.2 configobj=5.0.6 decorator=4.1.2 \
-        versioneer==0.18)
+    DEPARRAY=(numpy=1.13.3 \
+              scipy=1.0.0 \
+              matplotlib=1.5.3 \
+              rasterio=0.36.0 \
+              pandas=0.21.0 \
+              h5py=2.7.1 \
+              gdal=2.1.4 \
+              pytest=3.2.5 \
+              pytest-cov=2.5.1 \
+              cartopy=0.15.1 \
+              fiona=1.7.10 \
+              numexpr=2.6.2 \
+              configobj=5.0.6 \
+              decorator=4.1.2 \
+              versioneer==0.18)
 elif [[ "$unamestr" == 'FreeBSD' ]] || [[ "$unamestr" == 'Darwin' ]]; then
-    DEPARRAY=(numpy=1.13.1 scipy=0.19.1 matplotlib=2.0.2 rasterio=1.0a9 \
-        pandas=0.20.3 h5py=2.7.0 gdal=2.1.4 pytest=3.2.0 pytest-cov=2.5.1 \
-        cartopy=0.15.1 fiona=1.7.8 numexpr=2.6.2 configobj=5.0.6 decorator=4.1.2 \
-        versioneer==0.18)
+    DEPARRAY=(numpy=1.13.3 \
+              scipy=1.0.0 \
+              matplotlib=1.5.3 \
+              rasterio=0.36.0 \
+              pandas=0.21.0 \
+              h5py=2.7.1 \
+              gdal=2.1.4 \
+              pytest=3.2.5 \
+              pytest-cov=2.5.1 \
+              cartopy=0.15.1 \
+              fiona=1.7.10 \
+              numexpr=2.6.2 \
+              configobj=5.0.6 \
+              decorator=4.1.2 \
+              versioneer==0.18)
 fi
 
 # Is the Travis flag set?
@@ -61,6 +83,11 @@ echo "Creating the $VENV virtual environment"
 echo "with the following dependencies:"
 echo ${DEPARRAY[*]}
 conda create --name $VENV -y python=$PYVER ${DEPARRAY[*]}
+
+if [ $? -ne 0 ]; then
+    echo "Failed to create conda environment.  Resolve any conflicts, then try again."
+    exit
+fi
 
 # Activate the new environment
 echo "Activating the $VENV virtual environment"

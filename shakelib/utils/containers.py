@@ -1,30 +1,26 @@
 #!/usr/bin/env python
 
 # stdlib imports
-from datetime import datetime
-import collections
-import os.path
 import json
 import logging
-import json
 
 # third party imports
-import numpy as np
 from mapio.grid2d import Grid2D
 from mapio.geodict import GeoDict
 from mapio.gridcontainer import GridHDFContainer, _split_dset_attrs
 from impactutils.io.container import _get_type_list
 
 # local imports
-from shakelib.rupture.factory import (text_to_json,
-                                      rupture_from_dict,
+from shakelib.rupture.factory import (rupture_from_dict,
                                       get_rupture,
                                       rupture_from_dict_and_origin)
-from shakelib.rupture.point_rupture import PointRupture
-from shakelib.rupture.origin import Origin, read_event_file
+from shakelib.rupture.origin import Origin
 from shakelib.station import StationList
 
 class ShakeMapContainer(GridHDFContainer):
+    """Parent class for InputShakeMapContainer and OutputShakeMapContainer.
+
+    """
     def setConfig(self, config):
         """
         Add the config as a dictionary to the HDF file.
@@ -43,7 +39,7 @@ class ShakeMapContainer(GridHDFContainer):
         Returns:
             dict: Configuration dictionary.
         Raises:
-            AttributeError: If config dictionary has not been set in 
+            AttributeError: If config dictionary has not been set in
                 the container.
         """
         if 'config' not in self.getDictionaries():
@@ -55,18 +51,18 @@ class ShakeMapContainer(GridHDFContainer):
         """ Store Rupture object in container.
 
         Args:
-            rupture (dict or Rupture): Rupture object (Point,Quad, or Edge) 
+            rupture (dict or Rupture): Rupture object (Point,Quad, or Edge)
                 or dictionary representation of same.
         Raises:
-            TypeError: If input object or dictionary does not 
+            TypeError: If input object or dictionary does not
                 represent a Rupture object.
         """
         if 'rupture' in self.getStrings():
             self.dropString('rupture')
         if isinstance(rupture,dict):
             try:
-                tmp = rupture_from_dict(rupture)
-            except Exception as e:
+                _ = rupture_from_dict(rupture)
+            except Exception:
                 fmt = 'Input dict does not represent a rupture object.'
                 raise TypeError(fmt)
             json_str = json.dumps(rupture)
@@ -80,7 +76,7 @@ class ShakeMapContainer(GridHDFContainer):
         Returns:
             Rupture: Instance of (one of) a Point/Quad/EdgeRupture class.
         Raises:
-            AttributeError: If rupture object has not been set in 
+            AttributeError: If rupture object has not been set in
                 the container.
         """
         rupture_dict = self.getRuptureDict()
@@ -91,10 +87,10 @@ class ShakeMapContainer(GridHDFContainer):
         """ Retrieve Rupture dictionary from container.
 
         Returns:
-            dict: Dictionary representatin of (one of) a 
+            dict: Dictionary representatin of (one of) a
                 Point/Quad/EdgeRupture class.
         Raises:
-            AttributeError: If rupture object has not been set in 
+            AttributeError: If rupture object has not been set in
                 the container.
         """
         if 'rupture' not in self.getStrings():
@@ -124,7 +120,7 @@ class ShakeMapContainer(GridHDFContainer):
         Returns:
             StationList: StationList object.
         Raises:
-            AttributeError: If stationlist object has not been set in 
+            AttributeError: If stationlist object has not been set in
                 the container.
         """
         if 'stations' not in self.getStrings():

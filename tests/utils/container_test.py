@@ -92,7 +92,7 @@ def test_input_container():
         try:
             #this should fail, because we haven't set any station data yet
             station = container3.getStationList()
-        except AttributeError as ae:
+        except AttributeError:
             assert 1 == 1
         rupture = container3.getRuptureObject()
         history = container3.getVersionHistory()

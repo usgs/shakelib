@@ -3,6 +3,9 @@
 from shakelib.utils.imt_string import oq_to_file, file_to_oq
 
 def test_imt():
+    """Test the imt string functions.
+
+    """
     assert oq_to_file('SA(1.0)') == 'PSA1p0'
     assert oq_to_file('SA(0.3)') == 'PSA0p3'
     assert oq_to_file('SA(15.0)') == 'PSA15p0'
@@ -10,7 +13,7 @@ def test_imt():
     assert oq_to_file('SA(.5)') == 'PSA0p5'
 
     try:
-        fileimt = oq_to_file('SA()')
+        _ = oq_to_file('SA()')
     except ValueError as ve:
         assert 1==1
     
@@ -19,12 +22,12 @@ def test_imt():
     assert file_to_oq('PSA15p0') == 'SA(15.0)'
 
     try:
-        oqimt = file_to_oq('PSA2')
+        _ = file_to_oq('PSA2')
     except ValueError as ve:
         assert 1==1
 
     try:
-        oqimt = file_to_oq('PSA2p')
+        _ = file_to_oq('PSA2p')
     except ValueError as ve:
         assert 1==1
     

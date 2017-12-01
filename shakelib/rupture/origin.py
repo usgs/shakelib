@@ -58,7 +58,7 @@ class Origin(object):
         Returns:
             Origin object.
         Raises:
-            ValueError: When input time is not and cannot be converted to 
+            ValueError: When input time is not and cannot be converted to
                 HistoricTime object.
         """
 
@@ -91,7 +91,7 @@ class Origin(object):
             if isinstance(event['time'],str):
                 try:
                     event['time'] = HistoricTime.strptime(event['time'],TIMEFMT)
-                except ValueError as ve:
+                except ValueError:
                     fmt = 'Input time string %s cannot be converted to datetime.'
                     raise ValueError(fmt % event['time'])
 

@@ -1,36 +1,165 @@
 #!/usr/bin/env python
 
 # stdlib imports
-from datetime import datetime
-import collections
-import os.path
 import json
 import logging
 
 # third party imports
-import numpy as np
 from mapio.grid2d import Grid2D
 from mapio.geodict import GeoDict
 from mapio.gridcontainer import GridHDFContainer, _split_dset_attrs
 from impactutils.io.container import _get_type_list
 
 # local imports
-from shakelib.rupture.factory import (text_to_json,
+from shakelib.rupture.factory import (rupture_from_dict,
+                                      get_rupture,
                                       rupture_from_dict_and_origin)
-from shakelib.rupture.point_rupture import PointRupture
-from shakelib.rupture.origin import Origin, read_event_file
+from shakelib.rupture.origin import Origin
 from shakelib.station import StationList
 
-# list of allowed data types in dictionaries
-ALLOWED = [str, int, float, bool, bytes,
-           type(None),
-           list, tuple, np.ndarray,
-           np.float64, np.bool_, np.int64,
-           dict, datetime,
-           collections.OrderedDict]
+class ShakeMapContainer(GridHDFContainer):
+    """Parent class for InputShakeMapContainer and OutputShakeMapContainer.
 
+    """
+    def setConfig(self, config):
+        """
+        Add the config as a dictionary to the HDF file.
 
-class InputContainer(GridHDFContainer):
+        Args:
+            config (dict--like): Dict--like object with configuration
+                information.
+        """
+        if 'config' in self.getDictionaries():
+            self.dropDictionary('config')
+        self.setDictionary('config', config)
+
+    def getConfig(self):
+        """ Retrieve configuration dictionary from container.
+
+        Returns:
+            dict: Configuration dictionary.
+        Raises:
+            AttributeError: If config dictionary has not been set in
+                the container.
+        """
+        if 'config' not in self.getDictionaries():
+            raise AttributeError('Configuration not set in container.')
+        config = self.getDictionary('config')
+        return config
+
+    def setRupture(self,rupture):
+        """ Store Rupture object in container.
+
+        Args:
+            rupture (dict or Rupture): Rupture object (Point,Quad, or Edge)
+                or dictionary representation of same.
+        Raises:
+            TypeError: If input object or dictionary does not
+                represent a Rupture object.
+        """
+        if 'rupture' in self.getStrings():
+            self.dropString('rupture')
+        if isinstance(rupture,dict):
+            try:
+                _ = rupture_from_dict(rupture)
+            except Exception:
+                fmt = 'Input dict does not represent a rupture object.'
+                raise TypeError(fmt)
+            json_str = json.dumps(rupture)
+        else:
+            json_str = json.dumps(rupture._geojson)
+        self.setString('rupture',json_str)
+
+    def getRuptureObject(self):
+        """ Retrieve Rupture object from container.
+
+        Returns:
+            Rupture: Instance of (one of) a Point/Quad/EdgeRupture class.
+        Raises:
+            AttributeError: If rupture object has not been set in
+                the container.
+        """
+        rupture_dict = self.getRuptureDict()
+        rupture = rupture_from_dict(rupture_dict)
+        return rupture
+
+    def getRuptureDict(self):
+        """ Retrieve Rupture dictionary from container.
+
+        Returns:
+            dict: Dictionary representatin of (one of) a
+                Point/Quad/EdgeRupture class.
+        Raises:
+            AttributeError: If rupture object has not been set in
+                the container.
+        """
+        if 'rupture' not in self.getStrings():
+            raise AttributeError('Rupture object not set in container.')
+        rupture_dict = json.loads(self.getString('rupture'))
+        return rupture_dict
+
+    def setStationList(self,stationlist):
+        """ Store StationList object in container.
+
+        Args:
+            stationlist (StationList): StationList object.
+        Raises:
+            TypeError: If input object or dictionary is not a StationList object.
+        """
+        if 'stations' in self.getStrings():
+            self.dropString('stations')
+        if not isinstance(stationlist,StationList):
+            fmt = 'Input object is not a StationList.'
+            raise TypeError(fmt)
+        sql_string = stationlist.dumpToSQL()
+        self.setString('stations',sql_string)
+
+    def getStationList(self):
+        """ Retrieve StationList object from container.
+
+        Returns:
+            StationList: StationList object.
+        Raises:
+            AttributeError: If stationlist object has not been set in
+                the container.
+        """
+        if 'stations' not in self.getStrings():
+            raise AttributeError('StationList object not set in container.')
+        sql_string = self.getString('stations')
+        stationlist = StationList.loadFromSQL(sql_string)
+        return stationlist
+
+    def setVersionHistory(self, history_dict):
+        """
+        Store a dictionary containing version history in the container.
+
+        Args:
+            history_dict (dict): Dictionary containing version history. ??
+        """
+        if 'version_history' in self.getDictionaries():
+            self.dropDictionary('version_history')
+        self.setDictionary('version_history', history_dict)
+
+    def getVersionHistory(self):
+        """
+        Return the dictionary containing version history.
+
+        Returns:
+          dict: Dictionary containing version history, or None.
+        Raises:
+            AttributeError: If version history has not been set in 
+                the container.
+        """
+
+        if 'version_history' not in self.getDictionaries():
+            raise AttributeError('Version history not set in container.')
+        
+        version_dict = self.getDictionary('version_history')
+        return version_dict
+
+    
+
+class ShakeMapInputContainer(ShakeMapContainer):
     """HDF container for Shakemap input data.
 
     This class provides methods for getting and setting information on:
@@ -42,8 +171,8 @@ class InputContainer(GridHDFContainer):
 
     """
     @classmethod
-    def createFromInput(cls, filename, config, eventfile, rupturefile=None,
-                        datafiles=None, version_history=None):
+    def createFromInput(cls, filename, config, eventfile, version_history, rupturefile=None,
+                        datafiles=None):
         """
         Instantiate an InputContainer from ShakeMap input data.
 
@@ -62,84 +191,22 @@ class InputContainer(GridHDFContainer):
         """
         container = cls.create(filename)
         container.setConfig(config)
-        container.setEvent(eventfile)
-        if rupturefile is not None:
-            container.setRupture(rupturefile)
+
+        # create an origin from the event file
+        origin = Origin.fromFile(eventfile)
+
+        # create a rupture object from the origin and the rupture file
+        # (if present).
+        rupture = get_rupture(origin,file=rupturefile)
+
+        # store the rupture object in the container
+        container.setRupture(rupture)
+        
         if datafiles is not None:
             container.setStationData(datafiles)
-        if version_history is not None:
-            container.setVersionHistory(version_history)
+
+        container.setVersionHistory(version_history)
         return container
-
-    def setConfig(self, config):
-        """
-        Add the config as a dictionary to the HDF file.
-
-        Args:
-            config (dict--like): Dict--like object with configuration
-                information.
-        """
-        if 'config' in self.getDictionaries():
-            self.dropDictionary('config')
-        self.setDictionary('config', config)
-
-    def setEvent(self, event_file):
-        """
-        Store the information found in an event.xml file as a dictionary.
-
-        Note:  setEvent will attempt to extract productcode as an attribute of
-        the event.xml file earthquake tag.  If this fails, productcode will be
-        extracted from the directory tree, which should look something like
-        this:
-
-        - ``~/ShakeMap/[PROFILE]/data/[PRODUCTCODE]/current/event.xml``
-
-        where [PROFILE] is the current ShakeMap profile, and [PRODUCTCODE] is
-        something like "us2017abcd".
-
-
-        Args:
-            event_file (str): String path to an event.xml file.
-        Raises:
-            KeyError: if event_file contains 'productcode' and it doesn't
-                match the directory name containing the data for a given event.
-        """
-        event_dict = read_event_file(event_file)
-        productcode = None
-        if 'productcode' not in event_dict:
-            epath, efile = os.path.split(event_file)
-            path_parts = epath.split(os.sep)
-            productcode = path_parts[-2]
-        if (productcode is not None and
-                'productcode' in event_dict and
-                productcode != event_dict['productcode']):
-            msg = ('productcode %s found in %s does not match data '
-                   'directory %s.')
-            raise KeyError(msg % (event_dict['productcode'],
-                                  event_file,
-                                  productcode))
-
-        if 'event' in self.getDictionaries():
-            self.dropDictionary('event')
-        self.setDictionary('event', event_dict)
-
-    def setRupture(self, rupture_file):
-        """
-        Store data found in either JSON or text format rupture file.
-
-        Args:
-            rupture_file (str): File containing either JSON formatted rupture
-                data or older style fault.txt format.
-        """
-        try:
-            rupture_data = json.load(open(rupture_file, 'r'))
-        except json.decoder.JSONDecodeError:
-            rupture_data = text_to_json(rupture_file)
-
-        rupture_data_string = json.dumps(rupture_data)
-        if 'rupture' in self.getStrings():
-            self.dropString('rupture')
-        self.setString('rupture', rupture_data_string)
 
     def setStationData(self, datafiles):
         """
@@ -151,10 +218,7 @@ class InputContainer(GridHDFContainer):
 
         """
         station = StationList.loadFromXML(datafiles)
-        station_sql = station.dumpToSQL()
-        if 'station_data' in self.getStrings():
-            self.dropString('station_data')
-        self.setString('station_data', station_sql)
+        self.setStationList(station)
 
     def addStationData(self, datafiles):
         """
@@ -165,95 +229,39 @@ class InputContainer(GridHDFContainer):
                 motion observations, (macroseismic or instrumented).
 
         """
-        station_sql = self.getString('station_data')
-        station = StationList.loadFromSQL(station_sql)
+        station = self.getStationList()
         station.addData(datafiles)
-        station_sql = station.dumpToSQL()
-        if 'station_data' in self.getStrings():
-            self.dropString('station_data')
-        self.setString('station_data', station_sql)
+        self.setStationList(station)
 
-    def setVersionHistory(self, history_dict):
-        """
-        Store a dictionary containing version history in the container.
+    def updateRupture(self,eventxml = None, rupturefile = None):
+        """Update rupture/origin information in container.
 
         Args:
-            history_dict (dict): Dictionary containing version history. ??
+            eventxml (str): Path to event.xml file.
+            rupturefile (str): Path to rupture file (JSON or txt format).
         """
-        if 'version_history' in self.getDictionaries():
-            self.dropDictionary('version_history')
-        self.setDictionary('version_history', history_dict)
+        if eventxml is None and rupturefile is None:
+            return
 
-    def getConfig(self):
-        """
-        Return the configuration information as a dictionary.
+        # the container is guaranteed to have at least a Point rupture
+        # and the origin.
+        rupture = self.getRuptureObject()
+        origin = rupture.getOrigin()
+        
+        if eventxml is not None:
+            origin = Origin.fromFile(eventxml)
+            if rupturefile is not None:
+                rupture = get_rupture(origin,file=rupturefile)
+            else:
+                rupture_dict = rupture._geojson
+                rupture = rupture_from_dict_and_origin(rupture_dict,origin)
+        else: #no event.xml file, but we do have a rupture file
+            rupture = get_rupture(origin,file=rupturefile)
 
-        Returns:
-            dict: Dictionary of configuration information.
-        """
-        config = None
-        if 'config' in self.getDictionaries():
-            config = self.getDictionary('config')
-        return config
-
-    def getRupture(self):
-        """
-        Get rupture object from data stored in container.
-
-        Returns:
-            Rupture: An instance of a sub-class of a Rupture object
-
-        """
-        rupture_obj = None
-        if 'rupture' in self.getStrings():
-            rupture_data_string = self.getString('rupture')
-            rupture_data = json.loads(rupture_data_string)
-            origin = self.getOrigin()
-            rupture_obj = rupture_from_dict_and_origin(rupture_data, origin)
-        else:
-            origin = self.getOrigin()
-            rupture_obj = PointRupture(origin)
-        return rupture_obj
-
-    def getStationList(self):
-        """
-        Return the StationList object stored in this container.
-
-        Returns:
-          StationList: StationList object.
-        """
-        station = None
-        if 'station_data' in self.getStrings():
-            station_sql = self.getString('station_data')
-            station = StationList.loadFromSQL(station_sql)
-        return station
-
-    def getVersionHistory(self):
-        """
-        Return the dictionary containing version history.
-
-        Returns:
-          dict: Dictionary containing version history. ??
-        """
-        version_dict = None
-        if 'version_history' in self.getDictionaries():
-            version_dict = self.getDictionary('version_history')
-        return version_dict
-
-    def getOrigin(self):
-        """
-        Extract an Origin object from the event dictionary stored in container.
-
-        Returns:
-          Origin: Origin object.
-
-        """
-        event_dict = self.getDictionary('event')
-        origin = Origin(event_dict)
-        return origin
+        self.setRupture(rupture)
 
 
-class OutputContainer(GridHDFContainer):
+class ShakeMapOutputContainer(ShakeMapContainer):
     """HDF container for Shakemap output data.
 
     This class provides methods for getting and setting IMT data.
@@ -286,6 +294,8 @@ class OutputContainer(GridHDFContainer):
         """
         # set up the name of the group holding all the information for the IMT
         group_name = '__imt_%s_%s__' % (imt_name, component)
+        if group_name in self._hdfobj:
+            raise Exception('An IMT group called %s already exists.' % imt_name)
         imt_group = self._hdfobj.create_group(group_name)
 
         # create the data set containing the mean IMT data and metadata

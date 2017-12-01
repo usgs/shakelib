@@ -11,7 +11,8 @@ import time
 import datetime
 import tempfile
 
-from shakelib.utils.containers import InputContainer,OutputContainer
+from shakelib.utils.containers import ShakeMapInputContainer
+from shakelib.utils.containers import ShakeMapOutputContainer
 from shakelib.rupture.point_rupture import PointRupture
 
 from mapio.geodict import GeoDict
@@ -53,24 +54,24 @@ def test_input_container():
         version = 1
         history = {'history': [[timestamp, originator, version]]}
 
-        container = InputContainer.createFromInput(datafile, config, eventfile,
-                                                 datafiles=datafiles,
-                                                 rupturefile=rupturefile,
-                                                 version_history=history)
+        container = ShakeMapInputContainer.createFromInput(datafile,
+                                                           config,
+                                                           eventfile,
+                                                           history,
+                                                           datafiles=datafiles,
+                                                           rupturefile=rupturefile)
         cfile = container.getFileName()
         assert datafile == cfile
         config = container.getConfig()
         station = container.getStationList()
-        origin = container.getOrigin()
-        rupture = container.getRupture()
+        rupture = container.getRuptureObject()
         history = container.getVersionHistory()
         container.close()
 
-        container2 = InputContainer.load(datafile)
+        container2 = ShakeMapInputContainer.load(datafile)
         config2 = container2.getConfig()
         station2 = container2.getStationList()  # noqa
-        origin2 = container2.getOrigin()  # noqa
-        rupture2 = container2.getRupture()  # noqa
+        rupture2 = container2.getRuptureObject()  # noqa
         history2 = container2.getVersionHistory()  # noqa
 
         assert dict_equal(config, config2)
@@ -87,13 +88,15 @@ def test_input_container():
         container2.close()
 
         eventfile.seek(0)
-        container3 = InputContainer.createFromInput(datafile, config, eventfile)
-        station = container3.getStationList()
-        origin = container3.getOrigin()  # noqa
-        rupture = container3.getRupture()
+        container3 = ShakeMapInputContainer.createFromInput(datafile, config, eventfile,{})
+        try:
+            #this should fail, because we haven't set any station data yet
+            station = container3.getStationList()
+        except AttributeError:
+            assert 1 == 1
+        rupture = container3.getRuptureObject()
         history = container3.getVersionHistory()
-        assert station is None
-        assert history is None
+        assert len(history) == 0
         assert isinstance(rupture, PointRupture)
 
         container3.setStationData(datafiles)
@@ -151,7 +154,7 @@ def test_output_container():
     f,datafile = tempfile.mkstemp()
     os.close(f)
     try:
-        container = OutputContainer.create(datafile)
+        container = ShakeMapOutputContainer.create(datafile)
         container.setIMT('mmi',
                          mean_mmi_maximum_grid,mean_mmi_maximum_metadata,
                          std_mmi_maximum_grid,std_mmi_maximum_metadata,

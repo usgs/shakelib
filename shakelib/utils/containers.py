@@ -129,6 +129,38 @@ class ShakeMapContainer(GridHDFContainer):
         stationlist = StationList.loadFromSQL(sql_string)
         return stationlist
 
+    def setStationDict(self, stationdict):
+        """
+        Store (JSON-like) station dictiionary in container.
+
+        Args:
+            stationdict (dict-like): Station dict object.
+        Raises:
+            TypeError: If input object is not a dictionary.
+        """
+        if not isinstance(stationdict, dict):
+            fmt = 'Input object is not a dictionary.'
+            raise TypeError(fmt)
+        if 'stations_dict' in self.getStrings():
+            self.dropStrings('stations_dict')
+        stationstring = json.dumps(stationdict)
+        self.setString('stations_dict', stationstring)
+
+    def getStationDict(self):
+        """
+        Retrieve (JSON-like) station dictionary from container.
+
+        Returns:
+            dict-like: Station dictionary.
+        Raises:
+            AttributeError: If station dictionary has not been set in
+                the container.
+        """
+        if 'stations_dict' not in self.getStrings():
+            raise AttributeError('Station dictionary not set in container.')
+        stations = json.loads(self.getString('stations_dict'))
+        return stations
+
     def setVersionHistory(self, history_dict):
         """
         Store a dictionary containing version history in the container.

@@ -10,6 +10,7 @@ import datetime as dt
 import time
 import datetime
 import tempfile
+import pytest
 
 from shakelib.utils.containers import ShakeMapInputContainer
 from shakelib.utils.containers import ShakeMapOutputContainer
@@ -76,10 +77,10 @@ def test_input_container():
 
         assert dict_equal(config, config2)
         df1 = station.getStationDictionary(instrumented=False)
-        df2 = station.getStationDictionary(instrumented=False)
+        df2 = station2.getStationDictionary(instrumented=False)
         assert dict_equal(df1, df2)
         df1 = station.getStationDictionary(instrumented=True)
-        df2 = station.getStationDictionary(instrumented=True)
+        df2 = station2.getStationDictionary(instrumented=True)
         assert dict_equal(df1, df2)
         assert history['history'][-1][0] == history['history'][-1][0]
         assert history['history'][-1][1] == history['history'][-1][1]
@@ -88,7 +89,10 @@ def test_input_container():
         container2.close()
 
         eventfile.seek(0)
-        container3 = ShakeMapInputContainer.createFromInput(datafile, config, eventfile,{})
+        container3 = ShakeMapInputContainer.createFromInput(datafile, 
+                                                            config, 
+                                                            eventfile, 
+                                                            {})
         try:
             #this should fail, because we haven't set any station data yet
             station = container3.getStationList()
@@ -100,10 +104,29 @@ def test_input_container():
         assert isinstance(rupture, PointRupture)
 
         container3.setStationData(datafiles)
+
+        #
+        # Test the getStationDict() and setStationDict() functions with
+        # some dummy data
+        #
+        config = {'alliance': 'chaotic neutral',
+                  'race': 'Elf',
+                  'armor': 5,
+                  'class': 'Warrior',
+                  'intelligence': 10}
+        with pytest.raises(AttributeError):
+            junk = container3.getStationDict()
+        with pytest.raises(TypeError):
+            container3.setStationDict(None)
+        container3.setStationDict(config)
+        config2 = container3.getStationDict()
+        assert dict_equal(config, config2)
+
     except:
         assert 1==2
     finally:
         os.remove(datafile)
+
 
 def test_output_container():
     geodict = GeoDict.createDictFromBox(-118.5,-114.5,32.1,36.7,0.01,0.02)

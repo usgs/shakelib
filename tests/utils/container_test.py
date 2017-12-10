@@ -11,6 +11,8 @@ import time
 import datetime
 import tempfile
 import pytest
+import random
+import string
 
 from shakelib.utils.containers import ShakeMapInputContainer
 from shakelib.utils.containers import ShakeMapOutputContainer
@@ -22,6 +24,11 @@ from mapio.grid2d import Grid2D
 homedir = os.path.dirname(os.path.abspath(__file__))  # where is this script?
 shakedir = os.path.abspath(os.path.join(homedir, '..', '..'))
 sys.path.insert(0, shakedir)
+
+
+def randomword(length):
+   letters = string.ascii_lowercase
+   return ''.join(random.choice(letters) for i in range(length))
 
 
 def dict_equal(d1, d2):
@@ -178,21 +185,21 @@ def test_output_container():
     os.close(f)
     try:
         container = ShakeMapOutputContainer.create(datafile)
-        container.setIMT('mmi',
+        container.setIMTGrids('mmi',
                          mean_mmi_maximum_grid,mean_mmi_maximum_metadata,
                          std_mmi_maximum_grid,std_mmi_maximum_metadata,
                          component='maximum')
-        container.setIMT('mmi',
+        container.setIMTGrids('mmi',
                          mean_mmi_rotd50_grid,mean_mmi_rotd50_metadata,
                          std_mmi_rotd50_grid,std_mmi_rotd50_metadata,
                          component='rotd50')
-        container.setIMT('pga',
+        container.setIMTGrids('pga',
                          mean_pga_maximum_grid,mean_pga_maximum_metadata,
                          std_pga_maximum_grid,std_pga_maximum_metadata,
                          component='maximum')
 
         #get the maximum MMI imt data
-        mmi_max_dict = container.getIMT('mmi',component='maximum')
+        mmi_max_dict = container.getIMTGrids('mmi',component='maximum')
         np.testing.assert_array_equal(mmi_max_dict['mean'].getData(),
                                       mean_mmi_maximum_data)
         np.testing.assert_array_equal(mmi_max_dict['std'].getData(),
@@ -201,7 +208,7 @@ def test_output_container():
         assert mmi_max_dict['std_metadata'] == std_mmi_maximum_metadata
 
         #get the rotd50 MMI imt data
-        mmi_rot_dict = container.getIMT('mmi',component='rotd50')
+        mmi_rot_dict = container.getIMTGrids('mmi',component='rotd50')
         np.testing.assert_array_equal(mmi_rot_dict['mean'].getData(),
                                       mean_mmi_rotd50_data)
         np.testing.assert_array_equal(mmi_rot_dict['std'].getData(),
@@ -224,9 +231,79 @@ def test_output_container():
     finally:
         os.remove(datafile)
     
-    
+def test_output_arrays():
+
+    f, datafile = tempfile.mkstemp()
+    os.close(f)
+
+    try:
+        container = ShakeMapOutputContainer.create(datafile)
+        #
+        # Test that no data type is set
+        #
+        assert container.getDataType() is None
+
+        #
+        # Make some array data and metadata
+        #
+        mean = np.random.rand(100)
+        std = np.random.rand(100)
+        lats = np.random.rand(100)
+        lons = np.random.rand(100)
+        ids = np.array([randomword(4).encode('ascii') for x in range(100)])
+        metadata = {'units': '%g',
+                    'digits': 4}
+        #
+        # Put the data in the container
+        #
+        container.setIMTArrays('PGA', lons, lats, ids, 
+                               mean, metadata, 
+                               std, metadata, 'Larger')
+        #
+        # Now extract it and compare it to what we put in there
+        #
+        dout = container.getIMTArrays('PGA', 'Larger')
+        assert all(dout['lons'] == lons)
+        assert all(dout['lats'] == lats)
+        assert all(dout['ids'] == ids)
+        assert all(dout['mean'] == mean)
+        assert all(dout['std'] == std)
+        #
+        # Check the data type
+        #
+        assert container.getDataType() == 'points'
+        #
+        # Try raising some exceptions
+        #
+        # Shouldn't be able to find this IMT
+        with pytest.raises(LookupError):
+            junk = container.getIMTArrays('JUNK', 'Larger')
+        # Shapes of inputs not the same
+        with pytest.raises(ValueError):
+            empty = np.array([])
+            container.setIMTArrays('PGV', empty, lats, ids, 
+                                   mean, metadata, 
+                                   std, metadata, 'Larger')
+        # IMT already exists
+        with pytest.raises(ValueError):
+            container.setIMTArrays('PGA', lons, lats, ids, 
+                                   mean, metadata, 
+                                   std, metadata, 'Larger')
+        # Trying to set a grid in a file with points
+        with pytest.raises(TypeError):
+            container.setIMTGrids('PGV', mean, metadata, 
+                                  std, metadata, 'Larger')
+        # Trying to get a grid in a file with points
+        with pytest.raises(TypeError):
+            container.getIMTGrids('PGA', 'Larger')
+
+    except Exception as e:
+        raise(e)
+    finally:
+        os.remove(datafile)
     
         
 if __name__ == '__main__':
     test_input_container()
     test_output_container()
+    test_output_arrays()

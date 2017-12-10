@@ -18,8 +18,8 @@ from shakelib.rupture.origin import Origin
 from shakelib.station import StationList
 
 class ShakeMapContainer(GridHDFContainer):
-    """Parent class for InputShakeMapContainer and OutputShakeMapContainer.
-
+    """
+    Parent class for InputShakeMapContainer and OutputShakeMapContainer.
     """
     def setConfig(self, config):
         """
@@ -34,7 +34,8 @@ class ShakeMapContainer(GridHDFContainer):
         self.setDictionary('config', config)
 
     def getConfig(self):
-        """ Retrieve configuration dictionary from container.
+        """
+        Retrieve configuration dictionary from container.
 
         Returns:
             dict: Configuration dictionary.
@@ -48,7 +49,8 @@ class ShakeMapContainer(GridHDFContainer):
         return config
 
     def setRupture(self,rupture):
-        """ Store Rupture object in container.
+        """
+        Store Rupture object in container.
 
         Args:
             rupture (dict or Rupture): Rupture object (Point,Quad, or Edge)
@@ -71,7 +73,8 @@ class ShakeMapContainer(GridHDFContainer):
         self.setString('rupture',json_str)
 
     def getRuptureObject(self):
-        """ Retrieve Rupture object from container.
+        """
+        Retrieve Rupture object from container.
 
         Returns:
             Rupture: Instance of (one of) a Point/Quad/EdgeRupture class.
@@ -84,7 +87,8 @@ class ShakeMapContainer(GridHDFContainer):
         return rupture
 
     def getRuptureDict(self):
-        """ Retrieve Rupture dictionary from container.
+        """
+        Retrieve Rupture dictionary from container.
 
         Returns:
             dict: Dictionary representatin of (one of) a
@@ -99,7 +103,8 @@ class ShakeMapContainer(GridHDFContainer):
         return rupture_dict
 
     def setStationList(self,stationlist):
-        """ Store StationList object in container.
+        """
+        Store StationList object in container.
 
         Args:
             stationlist (StationList): StationList object.
@@ -115,7 +120,8 @@ class ShakeMapContainer(GridHDFContainer):
         self.setString('stations',sql_string)
 
     def getStationList(self):
-        """ Retrieve StationList object from container.
+        """
+        Retrieve StationList object from container.
 
         Returns:
             StationList: StationList object.
@@ -190,9 +196,9 @@ class ShakeMapContainer(GridHDFContainer):
         return version_dict
 
     
-
 class ShakeMapInputContainer(ShakeMapContainer):
-    """HDF container for Shakemap input data.
+    """
+    HDF container for Shakemap input data.
 
     This class provides methods for getting and setting information on:
      - configuration
@@ -294,7 +300,8 @@ class ShakeMapInputContainer(ShakeMapContainer):
 
 
 class ShakeMapOutputContainer(ShakeMapContainer):
-    """HDF container for Shakemap output data.
+    """
+    HDF container for Shakemap output data.
 
     This class provides methods for getting and setting IMT data.
     The philosophy here is that an IMT consists of both the mean results and
@@ -303,13 +310,63 @@ class ShakeMapOutputContainer(ShakeMapContainer):
 
 
     """
-    def setIMT(self, imt_name, imt_mean, mean_metadata,
-               imt_std, std_metadata, component,
-               compression=True):
-        """Store IMT mean and standard deviation objects as datasets.
+
+    def getDataType(self):
+        """
+        Returns the format of the IMT, Vs30, and distance data stored in 
+        this file: either 'points' or 'grid'. None is returned if no data 
+        have been set.
+
+        Returns:
+            str or None: Either 'grid' or 'points' or None.
+        """
+
+        group_name = '__file_data_type__'
+        if group_name in self._hdfobj:
+            data_type_group = self._hdfobj[group_name]
+            return data_type_group.attrs['data_type']
+        return None
+
+    def setDataType(self, datatype):
+        """
+        Sets the type of the IMT, Vs30, and distance data stored in this
+        file. This function should not be called by the user -- the value
+        will be set by the first call to setIMTGrids() or setIMTArray().
 
         Args:
-            name (str): Name of the IMT (MMI,PGA,etc.) to be stored.
+            (str): Either 'points' or 'grid'.
+
+        Returns:
+            Nothing.
+        """
+
+        if datatype != 'points' and datatype != 'grid':
+            raise TypeError('Trying to set unknown data type: %s' % 
+                            (datatype))
+        group_name = '__file_data_type__'
+        if group_name in self._hdfobj:
+            data_type_group = self._hdfobj[group_name]
+            current_data_type = data_type_group.attrs['data_type']
+            if current_data_type != datatype:
+                raise TypeError(
+                        'Trying to set data type to %s; file already type %s'
+                        % (datatype, current_data_type))
+            #
+            # Data type is already set; don't have to do anything
+            #
+            return
+        data_type_group = self._hdfobj.create_group(group_name)
+        data_type_group.attrs['data_type'] = datatype
+        return
+
+    def setIMTGrids(self, imt_name, imt_mean, mean_metadata,
+                    imt_std, std_metadata, component,
+                    compression=True):
+        """
+        Store IMT mean and standard deviation objects as datasets.
+
+        Args:
+            imt_name (str): Name of the IMT (MMI, PGA, etc.) to be stored.
             imt_mean (Grid2D): Grid2D object of IMT mean values to be stored.
             mean_metadata (dict): Dictionary containing metadata for mean IMT
                 grid.
@@ -324,6 +381,11 @@ class ShakeMapOutputContainer(ShakeMapContainer):
         Returns:
             HDF Group containing IMT grids and metadata.
         """
+
+        if self.getDataType() == 'points':
+            raise TypeError('Setting grid data in a file containing points')
+        self.setDataType('grid')
+
         # set up the name of the group holding all the information for the IMT
         group_name = '__imt_%s_%s__' % (imt_name, component)
         if group_name in self._hdfobj:
@@ -331,9 +393,8 @@ class ShakeMapOutputContainer(ShakeMapContainer):
         imt_group = self._hdfobj.create_group(group_name)
 
         # create the data set containing the mean IMT data and metadata
-        mean_name = '__mean_%s_%s__' % (imt_name, component)
         mean_data = imt_mean.getData()
-        mean_set = imt_group.create_dataset(mean_name, data=mean_data,
+        mean_set = imt_group.create_dataset('mean', data=mean_data,
                                             compression=compression)
         if mean_metadata is not None:
             for key, value in mean_metadata.items():
@@ -342,9 +403,8 @@ class ShakeMapOutputContainer(ShakeMapContainer):
             mean_set.attrs[key] = value
 
         # create the data set containing the std IMT data and metadata
-        std_name = '__std_%s_%s__' % (imt_name, component)
         std_data = imt_std.getData()
-        std_set = imt_group.create_dataset(std_name, data=std_data,
+        std_set = imt_group.create_dataset('std', data=std_data,
                                            compression=compression)
         if std_metadata is not None:
             for key, value in std_metadata.items():
@@ -354,13 +414,13 @@ class ShakeMapOutputContainer(ShakeMapContainer):
 
         return imt_group
 
-    def getIMT(self, imt_name, component):
+    def getIMTGrids(self, imt_name, component):
         """
         Retrieve a Grid2D object and any associated metadata from the container.
 
         Args:
             imt_name (str):
-                The name of the Grid2D object stored in the container.
+                The name of the IMT stored in the container.
 
         Returns:
             dict: Dictionary containing 4 items:
@@ -371,8 +431,10 @@ class ShakeMapOutputContainer(ShakeMapContainer):
                    - std_metadata Dictionary containing any metadata describing
                      standard deviation layer.
         """
-        logger = logging.getLogger()
-        logger.info('Inside OutputContainer')
+
+        if self.getDataType() != 'grid':
+            raise TypeError('Requesting grid data from file containing points')
+
         group_name = '__imt_%s_%s__' % (imt_name, component)
         if group_name not in self._hdfobj:
             raise LookupError('No group called %s in HDF file %s'
@@ -380,8 +442,7 @@ class ShakeMapOutputContainer(ShakeMapContainer):
         imt_group = self._hdfobj[group_name]
 
         # get the mean data and metadata
-        mean_name = '__mean_%s_%s__' % (imt_name, component)
-        mean_dset = imt_group[mean_name]
+        mean_dset = imt_group['mean']
         mean_data = mean_dset[()]
 
         array_metadata, mean_metadata = _split_dset_attrs(mean_dset)
@@ -389,8 +450,7 @@ class ShakeMapOutputContainer(ShakeMapContainer):
         mean_grid = Grid2D(mean_data, mean_geodict)
 
         # get the std data and metadata
-        std_name = '__std_%s_%s__' % (imt_name, component)
-        std_dset = imt_group[std_name]
+        std_dset = imt_group['std']
         std_data = std_dset[()]
 
         array_metadata, std_metadata = _split_dset_attrs(std_dset)
@@ -402,6 +462,142 @@ class ShakeMapOutputContainer(ShakeMapContainer):
             'mean': mean_grid,
             'mean_metadata': mean_metadata,
             'std': std_grid,
+            'std_metadata': std_metadata
+        }
+        return imt_dict
+
+    def setIMTArrays(self, imt_name, lons, lats, ids, 
+                     imt_mean, mean_metadata,
+                     imt_std, std_metadata, 
+                     component, compression=True):
+        """
+        Store IMT mean and standard deviation objects as datasets.
+
+        Args:
+            imt_name (str): Name of the IMT (MMI, PGA, etc.) to be stored.
+            lons (Numpy array): Array of longitudes of the IMT data.
+            lats (Numpy array): Array of latitudes of the IMT data.
+            ids (Numpy array): Array of ID strings corresponding to the 
+                locations given by lons and lats.
+            imt_mean (Numpy array): Array of IMT mean values to be stored.
+            mean_metadata (dict): Dictionary containing metadata for mean IMT
+                grid.
+            imt_std (Numpy array): Array of IMT standard deviation values
+                to be stored.
+            std_metadata (dict): Dictionary containing metadata for mean IMT
+                grid.
+            component (str): Component type, i.e. 'Larger','rotd50',etc.
+            compression (bool): Boolean indicating whether dataset should be
+                compressed using the gzip algorithm.
+
+        Returns:
+            HDF Group containing IMT arrays and metadata.
+        """
+
+        if self.getDataType() == 'grid':
+            raise TypeError('Setting point data in a file containing grids')
+        self.setDataType('points')
+
+        #
+        # Check that all of the arrays are the same
+        # size
+        #
+        if lons.shape != lats.shape or \
+           lons.shape != ids.shape or \
+           lons.shape != imt_mean.shape or \
+           lons.shape != imt_std.shape:
+            raise ValueError('All input arrays must be the same shape')
+
+        # set up the name of the group holding all the information for the IMT
+        group_name = '__imt_%s_%s__' % (imt_name, component)
+        if group_name in self._hdfobj:
+            raise ValueError('An IMT group called %s already exists.' % 
+                            imt_name)
+        imt_group = self._hdfobj.create_group(group_name)
+
+        # create data sets containing the longitudes, latitudes, and ids
+        imt_group.create_dataset('lons', data=lons, compression=compression)
+        imt_group.create_dataset('lats', data=lats, compression=compression)
+        imt_group.create_dataset('ids', data=ids, compression=compression)
+
+        # create the data set containing the mean IMT data and metadata
+        dataset = imt_group.create_dataset('mean', data=imt_mean,
+                                           compression=compression)
+        if mean_metadata is not None:
+            for key, value in mean_metadata.items():
+                dataset.attrs[key] = value
+
+        # create the data set containing the std IMT data and metadata
+        dataset = imt_group.create_dataset('std', data=imt_std,
+                                           compression=compression)
+        if std_metadata is not None:
+            for key, value in std_metadata.items():
+                dataset.attrs[key] = value
+
+        return imt_group
+
+    def getIMTArrays(self, imt_name, component):
+        """
+        Retrieve the arrays and any associated metadata from the container.
+
+        Args:
+            imt_name (str):
+                The name of the IMT stored in the container.
+
+        Returns:
+            dict: Dictionary containing 7 items:
+                   - 'lons': array of longitude coordinates
+                   - 'lats': array of latitude coordinates
+                   - 'ids': array of IDs corresponding to the coordinates
+                   - 'mean': array of IMT mean values.
+                   - 'mean_metadata': Dictionary containing any metadata
+                     describing mean layer.
+                   - 'std': array of IMT standard deviation values.
+                   - 'std_metadata': Dictionary containing any metadata 
+                     describing standard deviation layer.
+        """
+
+        if self.getDataType() != 'points':
+            raise TypeError('Requesting point data from file containing grids')
+
+        group_name = '__imt_%s_%s__' % (imt_name, component)
+        if group_name not in self._hdfobj:
+            raise LookupError('No group called %s in HDF file %s'
+                              % (imt_name, self.getFileName()))
+        imt_group = self._hdfobj[group_name]
+
+        # get the coordinates and ids
+        dset = imt_group['lons']
+        lons = dset[()]
+        dset = imt_group['lats']
+        lats = dset[()]
+        dset = imt_group['ids']
+        ids = dset[()]
+
+        # get the mean data and metadata
+        mean_dset = imt_group['mean']
+        mean_data = mean_dset[()]
+
+        mean_metadata = {}
+        for key in mean_dset.attrs.keys():
+            mean_metadata[key] = mean_dset.attrs[key]
+
+        # get the std data and metadata
+        std_dset = imt_group['std']
+        std_data = std_dset[()]
+
+        std_metadata = {}
+        for key in std_dset.attrs.keys():
+            std_metadata[key] = std_dset.attrs[key]
+
+        # create an output dictionary
+        imt_dict = {
+            'lons': lons,
+            'lats': lats,
+            'ids': ids,
+            'mean': mean_data,
+            'mean_metadata': mean_metadata,
+            'std': std_data,
             'std_metadata': std_metadata
         }
         return imt_dict

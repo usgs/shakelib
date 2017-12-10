@@ -46,7 +46,7 @@ def test_input_container():
                   'armor': 5,
                   'class': 'Warrior',
                   'intelligence': 10}
-        rupturefile = os.path.join(homedir, 'container_data', 
+        rupturefile = os.path.join(homedir, 'container_data',
                                    'Barkaetal02_fault.txt')
         event_text = """<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
     <earthquake id="2008ryan" lat="30.9858" lon="103.3639" mag="7.9" year="2008"
@@ -96,9 +96,9 @@ def test_input_container():
         container2.close()
 
         eventfile.seek(0)
-        container3 = ShakeMapInputContainer.createFromInput(datafile, 
-                                                            config, 
-                                                            eventfile, 
+        container3 = ShakeMapInputContainer.createFromInput(datafile,
+                                                            config,
+                                                            eventfile,
                                                             {})
         try:
             #this should fail, because we haven't set any station data yet
@@ -180,7 +180,7 @@ def test_output_container():
                                 'color':'grey',
                                 'powers':'hunger'}
     std_pga_maximum_grid = Grid2D(std_pga_maximum_data,geodict)
-    
+
     f,datafile = tempfile.mkstemp()
     os.close(f)
     try:
@@ -223,14 +223,11 @@ def test_output_container():
         #get list of components for mmi
         mmi_comps = container.getComponents('mmi')
         assert sorted(mmi_comps) == ['maximum','rotd50']
-
-        
-                             
     except Exception as e:
         raise(e)
     finally:
         os.remove(datafile)
-    
+
 def test_output_arrays():
 
     f, datafile = tempfile.mkstemp()
@@ -256,8 +253,8 @@ def test_output_arrays():
         #
         # Put the data in the container
         #
-        container.setIMTArrays('PGA', lons, lats, ids, 
-                               mean, metadata, 
+        container.setIMTArrays('PGA', lons, lats, ids,
+                               mean, metadata,
                                std, metadata, 'Larger')
         #
         # Now extract it and compare it to what we put in there
@@ -281,17 +278,17 @@ def test_output_arrays():
         # Shapes of inputs not the same
         with pytest.raises(ValueError):
             empty = np.array([])
-            container.setIMTArrays('PGV', empty, lats, ids, 
-                                   mean, metadata, 
+            container.setIMTArrays('PGV', empty, lats, ids,
+                                   mean, metadata,
                                    std, metadata, 'Larger')
         # IMT already exists
         with pytest.raises(ValueError):
-            container.setIMTArrays('PGA', lons, lats, ids, 
-                                   mean, metadata, 
+            container.setIMTArrays('PGA', lons, lats, ids,
+                                   mean, metadata,
                                    std, metadata, 'Larger')
         # Trying to set a grid in a file with points
         with pytest.raises(TypeError):
-            container.setIMTGrids('PGV', mean, metadata, 
+            container.setIMTGrids('PGV', mean, metadata,
                                   std, metadata, 'Larger')
         # Trying to get a grid in a file with points
         with pytest.raises(TypeError):
@@ -301,8 +298,8 @@ def test_output_arrays():
         raise(e)
     finally:
         os.remove(datafile)
-    
-        
+
+
 if __name__ == '__main__':
     test_input_container()
     test_output_container()

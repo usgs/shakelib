@@ -185,17 +185,17 @@ class ShakeMapContainer(GridHDFContainer):
         Returns:
           dict: Dictionary containing version history, or None.
         Raises:
-            AttributeError: If version history has not been set in 
+            AttributeError: If version history has not been set in
                 the container.
         """
 
         if 'version_history' not in self.getDictionaries():
             raise AttributeError('Version history not set in container.')
-        
+
         version_dict = self.getDictionary('version_history')
         return version_dict
 
-    
+
 class ShakeMapInputContainer(ShakeMapContainer):
     """
     HDF container for Shakemap input data.
@@ -239,7 +239,7 @@ class ShakeMapInputContainer(ShakeMapContainer):
 
         # store the rupture object in the container
         container.setRupture(rupture)
-        
+
         if datafiles is not None:
             container.setStationData(datafiles)
 
@@ -285,7 +285,7 @@ class ShakeMapInputContainer(ShakeMapContainer):
         # and the origin.
         rupture = self.getRuptureObject()
         origin = rupture.getOrigin()
-        
+
         if eventxml is not None:
             origin = Origin.fromFile(eventxml)
             if rupturefile is not None:
@@ -313,8 +313,8 @@ class ShakeMapOutputContainer(ShakeMapContainer):
 
     def getDataType(self):
         """
-        Returns the format of the IMT, Vs30, and distance data stored in 
-        this file: either 'points' or 'grid'. None is returned if no data 
+        Returns the format of the IMT, Vs30, and distance data stored in
+        this file: either 'points' or 'grid'. None is returned if no data
         have been set.
 
         Returns:
@@ -341,7 +341,7 @@ class ShakeMapOutputContainer(ShakeMapContainer):
         """
 
         if datatype != 'points' and datatype != 'grid':
-            raise TypeError('Trying to set unknown data type: %s' % 
+            raise TypeError('Trying to set unknown data type: %s' %
                             (datatype))
         group_name = '__file_data_type__'
         if group_name in self._hdfobj:
@@ -466,9 +466,9 @@ class ShakeMapOutputContainer(ShakeMapContainer):
         }
         return imt_dict
 
-    def setIMTArrays(self, imt_name, lons, lats, ids, 
+    def setIMTArrays(self, imt_name, lons, lats, ids,
                      imt_mean, mean_metadata,
-                     imt_std, std_metadata, 
+                     imt_std, std_metadata,
                      component, compression=True):
         """
         Store IMT mean and standard deviation objects as datasets.
@@ -477,7 +477,7 @@ class ShakeMapOutputContainer(ShakeMapContainer):
             imt_name (str): Name of the IMT (MMI, PGA, etc.) to be stored.
             lons (Numpy array): Array of longitudes of the IMT data.
             lats (Numpy array): Array of latitudes of the IMT data.
-            ids (Numpy array): Array of ID strings corresponding to the 
+            ids (Numpy array): Array of ID strings corresponding to the
                 locations given by lons and lats.
             imt_mean (Numpy array): Array of IMT mean values to be stored.
             mean_metadata (dict): Dictionary containing metadata for mean IMT
@@ -511,7 +511,7 @@ class ShakeMapOutputContainer(ShakeMapContainer):
         # set up the name of the group holding all the information for the IMT
         group_name = '__imt_%s_%s__' % (imt_name, component)
         if group_name in self._hdfobj:
-            raise ValueError('An IMT group called %s already exists.' % 
+            raise ValueError('An IMT group called %s already exists.' %
                             imt_name)
         imt_group = self._hdfobj.create_group(group_name)
 
@@ -553,7 +553,7 @@ class ShakeMapOutputContainer(ShakeMapContainer):
                    - 'mean_metadata': Dictionary containing any metadata
                      describing mean layer.
                    - 'std': array of IMT standard deviation values.
-                   - 'std_metadata': Dictionary containing any metadata 
+                   - 'std_metadata': Dictionary containing any metadata
                      describing standard deviation layer.
         """
 
